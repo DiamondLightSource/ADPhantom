@@ -540,6 +540,7 @@ MiroCamera::MiroCamera(const char *portName, const char *ctrlPort, const char *d
   createParam(MIRO_CamTriggerFilterString,         asynParamInt32,         &MIRO_CamTriggerFilter_);
   createParam(MIRO_CamReadySignalString,           asynParamInt32,         &MIRO_CamReadySignal_);
   createParam(MIRO_CamAuxPinString,                asynParamInt32,         &MIRO_CamAuxPin_);
+  createParam(MIRO_CamQuietFanString,              asynParamInt32,         &MIRO_CamQuietFan_);
   createParam(MIRO_SyncClockString,                asynParamInt32,         &MIRO_SyncClock);
   for (index = 0; index < MIRO_NUMBER_OF_CINES; index++){
     createParam(MIRO_CnNameString[index],            asynParamOctet,         &MIRO_CnName_[index]);
@@ -584,6 +585,7 @@ MiroCamera::MiroCamera(const char *portName, const char *ctrlPort, const char *d
   metaArray_.push_back(new MiroMeta("roi_width", "Region of interest pixel width", "c%d.meta.vw", NDAttrInt32, 0x030, 4));
   metaArray_.push_back(new MiroMeta("roi_height", "Region of interest pixel height", "c%d.meta.vh", NDAttrInt32, 0x034, 4));
   metaArray_.push_back(new MiroMeta("aux1_mode", "Auxiliary mode 1", "c%d.cam.aux1mode", NDAttrInt32, 0x0, 0));
+  //metaArray_.push_back(new MiroMeta("fan_quiet", "Fan quiet mode", "c%d.cam.quiet", NDAttrInt32, 0x0, 0));
   metaArray_.push_back(new MiroMeta("first_frame", "First frame number", "c%d.firstfr", NDAttrInt32, 0x010, 4));
   metaArray_.push_back(new MiroMeta("frame_count", "Total frame count", "c%d.frcount", NDAttrInt32, 0x014, 4));
 //  metaArray_.push_back(new MiroMeta("post_trig_frames", "Post trigger frame count", "c%d.lastfr", NDAttrInt32, 0x0, 0));
@@ -1488,6 +1490,8 @@ asynStatus MiroCamera::writeInt32(asynUser *pasynUser, epicsInt32 value)
     status |= setCameraParameter("cam.longready", value);
   } else if (function == MIRO_CamAuxPin_){
     status |= setCameraParameter("cam.aux1mode", value);
+  } else if (function == MIRO_CamQuietFan_){
+    status |= setCameraParameter("cam.quiet", value);
   } else if (function == ADSizeX || function == ADSizeY){
     status |= setCameraResolution();
   } else if (function == MIRO_PostTrigCount_){
@@ -3087,6 +3091,10 @@ asynStatus MiroCamera::updateCameraStatus()
   if (status == asynSuccess){
     // Update the aux pin
     status = this->updateIntegerParameter("cam.aux1mode", MIRO_CamAuxPin_);
+  }
+  if (status == asynSuccess){
+    // Update the quiet mode
+    status = this->updateIntegerParameter("cam.quiet", MIRO_CamQuietFan_);
   }
 
   return status;

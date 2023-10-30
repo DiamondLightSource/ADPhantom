@@ -198,6 +198,8 @@
 #define MIRO_LivePreviewString              "MIRO_LIVE_PREVIEW"
 #define MIRO_SyncClockString                "MIRO_SYNC_CLOCK"
 
+#define MIRO_CamQuietFanString              "MIRO_FAN_QUIET"
+
 #define OLDMAXFILENAME 65 // maximum file path size for the continuous recording
 // to keep compatibility with old setup files
 #define MAXLENDESCRIPTION_OLD 121//maximum length for setup description
@@ -704,6 +706,7 @@ class MiroCamera: public ADDriver
     int MIRO_CamTriggerEdge_;
     int MIRO_CamTriggerFilter_;
     int MIRO_CamReadySignal_;
+    int MIRO_CamQuietFan_;
     int MIRO_CamAuxPin_;
     int MIRO_CnName_[MIRO_NUMBER_OF_CINES];
     int MIRO_CnWidth_[MIRO_NUMBER_OF_CINES];
