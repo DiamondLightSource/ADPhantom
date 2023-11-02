@@ -1708,8 +1708,13 @@ asynStatus MiroCamera::performCSR()
   std::string response;
   asynStatus status = asynSuccess;
 
-  debug(functionName, "Sending command", MIRO_CMD_BLACKREF);
-  status = sendSimpleCommand(MIRO_CMD_BLACKREF, &response);
+  //Disable auto trigger prior to CSR
+  status = setCameraParameter("auto.trigger.mode", 0);
+
+  if( status == asynSuccess){
+    debug(functionName, "Sending command", MIRO_CMD_BLACKREF);
+    status = sendSimpleCommand(MIRO_CMD_BLACKREF, &response);
+  }
 
   return status;
 }
