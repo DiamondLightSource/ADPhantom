@@ -632,16 +632,16 @@ record(bo, "$(P)$(R)QuietFan")
 {
    field(DTYP, "asynInt32")
    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_FAN_QUIET")
-   field(ZNAM, "Off")
-   field(ONAM, "On")
+   field(ZNAM, "Fan On")
+   field(ONAM, "Fan Quiet")
 }
 
 record(bi, "$(P)$(R)QuietFan_RBV")
 {
    field(DTYP, "asynInt32")
    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_FAN_QUIET")
-   field(ZNAM, "Off")
-   field(ONAM, "On")
+   field(ZNAM, "Fan On")
+   field(ONAM, "Fan Quiet")
    field(SCAN, "I/O Intr")
 }
 
@@ -651,6 +651,126 @@ record(longout, "$(P)$(R)SyncClock")
   field(DESC,  "Sync Miro Clock with server")
   field(DTYP,  "asynInt32")
   field(OUT,   "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_SYNC_CLOCK")
+}
+
+################################################################
+###
+### Auto Trigger 
+###
+
+record(ao, "$(P)$(R)AutoTriggerX")
+{
+  field(DTYP, "asynInt32")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_X")
+}
+
+record(ai, "$(P)$(R)AutoTriggerX_RBV")
+{
+  field(DTYP, "asynInt32")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_X")
+  field(SCAN, "I/O Intr")
+}
+
+record(ao, "$(P)$(R)AutoTriggerY")
+{
+  field(DTYP, "asynInt32")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_Y")
+}
+
+record(ai, "$(P)$(R)AutoTriggerY_RBV")
+{
+  field(DTYP, "asynInt32")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_Y")
+  field(SCAN, "I/O Intr")
+}
+
+record(ao, "$(P)$(R)AutoTriggerW")
+{
+  field(DTYP, "asynInt32")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_W")
+  field(DRVL, 1)
+}
+
+record(ai, "$(P)$(R)AutoTriggerW_RBV")
+{
+  field(DTYP, "asynInt32")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_W")
+  field(SCAN, "I/O Intr")
+}
+
+record(ao, "$(P)$(R)AutoTriggerH")
+{
+  field(DTYP, "asynInt32")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_H")
+  field(DRVL, 1)
+}
+
+record(ai, "$(P)$(R)AutoTriggerH_RBV")
+{
+  field(DTYP, "asynInt32")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_H")
+  field(SCAN, "I/O Intr")
+}
+
+record(ao, "$(P)$(R)AutoTriggerThresh")
+{
+  field(DTYP, "asynInt32")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_THRESH")
+  field(DRVH, 100)
+  field(DRVL, 0)
+}
+
+record(ai, "$(P)$(R)AutoTriggerThresh_RBV")
+{
+  field(DTYP, "asynInt32")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_THRESH")
+  field(SCAN, "I/O Intr")
+}
+
+record(ao, "$(P)$(R)AutoTriggerArea")
+{
+  field(DTYP, "asynInt32")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_AREA")
+  field(DRVH, 100)
+  field(DRVL, 0)
+}
+
+record(ai, "$(P)$(R)AutoTriggerArea_RBV")
+{
+  field(DTYP, "asynInt32")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_AREA")
+  field(SCAN, "I/O Intr")
+}
+
+record(ao, "$(P)$(R)AutoTriggerInterval")
+{
+  field(DTYP, "asynInt32")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_INTERVAL")
+  field(DRVL, 1)
+}
+
+record(ai, "$(P)$(R)AutoTriggerInterval_RBV")
+{
+  field(DTYP, "asynInt32")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_INTERVAL")
+  field(SCAN, "I/O Intr")
+}
+
+record(bo, "$(P)$(R)AutoTriggerMode")
+{
+   field(DTYP, "asynInt32")
+   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_MODE")
+   field(ZNAM, "Off")
+   field(ONAM, "On")
+}
+
+record(bi, "$(P)$(R)AutoTriggerMode_RBV")
+{
+   field(DTYP, "asynInt32")
+   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_MODE")
+   field(ZNAM, "Off")
+   field(ONAM, "On")
+   field(SCAN, "I/O Intr")
 }
 
 ########## Disable Redundant areaDetector Fields #########

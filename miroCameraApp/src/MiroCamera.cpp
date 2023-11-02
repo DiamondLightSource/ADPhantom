@@ -542,6 +542,14 @@ MiroCamera::MiroCamera(const char *portName, const char *ctrlPort, const char *d
   createParam(MIRO_CamAuxPinString,                asynParamInt32,         &MIRO_CamAuxPin_);
   createParam(MIRO_CamQuietFanString,              asynParamInt32,         &MIRO_CamQuietFan_);
   createParam(MIRO_SyncClockString,                asynParamInt32,         &MIRO_SyncClock);
+  createParam(MIRO_AutoTriggerXString,             asynParamInt32,         &MIRO_AutoTriggerX_);
+  createParam(MIRO_AutoTriggerYString,             asynParamInt32,         &MIRO_AutoTriggerY_);
+  createParam(MIRO_AutoTriggerWString,             asynParamInt32,         &MIRO_AutoTriggerW_);
+  createParam(MIRO_AutoTriggerHString,             asynParamInt32,         &MIRO_AutoTriggerH_);
+  createParam(MIRO_AutoTriggerThresholdString,     asynParamInt32,         &MIRO_AutoTriggerThreshold_);
+  createParam(MIRO_AutoTriggerAreaString,          asynParamInt32,         &MIRO_AutoTriggerArea_);
+  createParam(MIRO_AutoTriggerIntervalString,      asynParamInt32,         &MIRO_AutoTriggerInterval_);
+  createParam(MIRO_AutoTriggerModeString,          asynParamInt32,         &MIRO_AutoTriggerMode_);
   for (index = 0; index < MIRO_NUMBER_OF_CINES; index++){
     createParam(MIRO_CnNameString[index],            asynParamOctet,         &MIRO_CnName_[index]);
     createParam(MIRO_CnWidthString[index],           asynParamInt32,         &MIRO_CnWidth_[index]);
@@ -1516,6 +1524,22 @@ asynStatus MiroCamera::writeInt32(asynUser *pasynUser, epicsInt32 value)
     std::string response;
     sprintf(command, "setrtc %d", std::time(NULL));
     sendSimpleCommand(command, &response);
+  } else if (function == MIRO_AutoTriggerX_){
+    status |= setCameraParameter("auto.trigger.x", value);
+  } else if (function == MIRO_AutoTriggerY_){
+    status |= setCameraParameter("auto.trigger.y", value);
+  } else if (function == MIRO_AutoTriggerW_){
+    status |= setCameraParameter("auto.trigger.w", value);
+  } else if (function == MIRO_AutoTriggerH_){
+    status |= setCameraParameter("auto.trigger.h", value);
+  } else if (function == MIRO_AutoTriggerThreshold_){
+    status |= setCameraParameter("auto.trigger.threshold", value);
+  } else if (function == MIRO_AutoTriggerArea_){
+    status |= setCameraParameter("auto.trigger.area", value);
+  } else if (function == MIRO_AutoTriggerInterval_){
+    status |= setCameraParameter("auto.trigger.speed", value);
+  } else if (function == MIRO_AutoTriggerMode_){
+    status |= setCameraParameter("auto.trigger.mode", value);
   }
 
   // If the status is bad reset the original value
@@ -3024,6 +3048,38 @@ asynStatus MiroCamera::updateAutoStatus()
   if (status == asynSuccess){
     // Update the sensor temperature
     status = this->updateIntegerParameter("auto.bref_progress", MIRO_CSRCount_);
+  }
+  if (status == asynSuccess){
+  // Update the auto trigger ROI x coordinate
+    status = this->updateIntegerParameter("auto.trigger.x", MIRO_AutoTriggerX_);
+  }
+  if (status == asynSuccess){
+  // Update the auto trigger ROI y coordinate
+    status = this->updateIntegerParameter("auto.trigger.y", MIRO_AutoTriggerY_);
+  }
+  if (status == asynSuccess){
+  // Update the auto trigger ROI width
+    status = this->updateIntegerParameter("auto.trigger.w", MIRO_AutoTriggerW_);
+  }
+  if (status == asynSuccess){
+  // Update the auto trigger ROI height
+    status = this->updateIntegerParameter("auto.trigger.h", MIRO_AutoTriggerH_);
+  }
+  if (status == asynSuccess){
+  // Update the auto trigger threshold parameter
+    status = this->updateIntegerParameter("auto.trigger.threshold", MIRO_AutoTriggerThreshold_);
+  }
+  if (status == asynSuccess){
+  // Update the auto trigger pixel fraction parameter
+    status = this->updateIntegerParameter("auto.trigger.area", MIRO_AutoTriggerArea_);
+  }
+  if (status == asynSuccess){
+  // Update the auto trigger check interval
+    status = this->updateIntegerParameter("auto.trigger.speed", MIRO_AutoTriggerInterval_);
+  }
+  if (status == asynSuccess){
+  // Update the auto trigger mode
+    status = this->updateIntegerParameter("auto.trigger.mode", MIRO_AutoTriggerMode_);
   }
   return status;
 }

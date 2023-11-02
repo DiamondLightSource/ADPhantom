@@ -200,6 +200,15 @@
 
 #define MIRO_CamQuietFanString              "MIRO_FAN_QUIET"
 
+#define MIRO_AutoTriggerXString             "MIRO_AUTOTRIG_X"
+#define MIRO_AutoTriggerYString             "MIRO_AUTOTRIG_Y"
+#define MIRO_AutoTriggerWString             "MIRO_AUTOTRIG_W"
+#define MIRO_AutoTriggerHString             "MIRO_AUTOTRIG_H"
+#define MIRO_AutoTriggerThresholdString     "MIRO_AUTOTRIG_THRESH"
+#define MIRO_AutoTriggerAreaString          "MIRO_AUTOTRIG_AREA"
+#define MIRO_AutoTriggerIntervalString      "MIRO_AUTOTRIG_INTERVAL"
+#define MIRO_AutoTriggerModeString          "MIRO_AUTOTRIG_MODE"
+
 #define OLDMAXFILENAME 65 // maximum file path size for the continuous recording
 // to keep compatibility with old setup files
 #define MAXLENDESCRIPTION_OLD 121//maximum length for setup description
@@ -708,6 +717,14 @@ class MiroCamera: public ADDriver
     int MIRO_CamReadySignal_;
     int MIRO_CamQuietFan_;
     int MIRO_CamAuxPin_;
+    int MIRO_AutoTriggerX_;
+    int MIRO_AutoTriggerY_;
+    int MIRO_AutoTriggerW_;
+    int MIRO_AutoTriggerH_;
+    int MIRO_AutoTriggerThreshold_;
+    int MIRO_AutoTriggerArea_;
+    int MIRO_AutoTriggerInterval_;
+    int MIRO_AutoTriggerMode_;
     int MIRO_CnName_[MIRO_NUMBER_OF_CINES];
     int MIRO_CnWidth_[MIRO_NUMBER_OF_CINES];
     int MIRO_CnHeight_[MIRO_NUMBER_OF_CINES];
