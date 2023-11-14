@@ -201,7 +201,9 @@
 #define MIRO_CamQuietFanString              "MIRO_FAN_QUIET"
 
 #define MIRO_AutoTriggerXString             "MIRO_AUTOTRIG_X"
+#define MIRO_AutoTriggerXZeroedString       "MIRO_AUTOTRIGZEROED_X"
 #define MIRO_AutoTriggerYString             "MIRO_AUTOTRIG_Y"
+#define MIRO_AutoTriggerYZeroedString       "MIRO_AUTOTRIGZEROED_Y"
 #define MIRO_AutoTriggerWString             "MIRO_AUTOTRIG_W"
 #define MIRO_AutoTriggerHString             "MIRO_AUTOTRIG_H"
 #define MIRO_AutoTriggerThresholdString     "MIRO_AUTOTRIG_THRESH"
@@ -612,6 +614,7 @@ class MiroCamera: public ADDriver
     asynStatus updateFlash();
     asynStatus updateFlashFileTable();
     asynStatus updateAutoStatus();
+    asynStatus updateAutoTrigPos();
     asynStatus updateInfoStatus();
     asynStatus updateCameraStatus();
     asynStatus updateDefcStatus();
@@ -718,7 +721,9 @@ class MiroCamera: public ADDriver
     int MIRO_CamQuietFan_;
     int MIRO_CamAuxPin_;
     int MIRO_AutoTriggerX_;
+    int MIRO_AutoTriggerXZeroed_;
     int MIRO_AutoTriggerY_;
+    int MIRO_AutoTriggerYZeroed_;
     int MIRO_AutoTriggerW_;
     int MIRO_AutoTriggerH_;
     int MIRO_AutoTriggerThreshold_;

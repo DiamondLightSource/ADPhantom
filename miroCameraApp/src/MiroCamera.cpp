@@ -543,7 +543,9 @@ MiroCamera::MiroCamera(const char *portName, const char *ctrlPort, const char *d
   createParam(MIRO_CamQuietFanString,              asynParamInt32,         &MIRO_CamQuietFan_);
   createParam(MIRO_SyncClockString,                asynParamInt32,         &MIRO_SyncClock);
   createParam(MIRO_AutoTriggerXString,             asynParamInt32,         &MIRO_AutoTriggerX_);
+  createParam(MIRO_AutoTriggerXZeroedString,       asynParamInt32,         &MIRO_AutoTriggerXZeroed_);
   createParam(MIRO_AutoTriggerYString,             asynParamInt32,         &MIRO_AutoTriggerY_);
+  createParam(MIRO_AutoTriggerYZeroedString,       asynParamInt32,         &MIRO_AutoTriggerYZeroed_);
   createParam(MIRO_AutoTriggerWString,             asynParamInt32,         &MIRO_AutoTriggerW_);
   createParam(MIRO_AutoTriggerHString,             asynParamInt32,         &MIRO_AutoTriggerH_);
   createParam(MIRO_AutoTriggerThresholdString,     asynParamInt32,         &MIRO_AutoTriggerThreshold_);
@@ -3086,6 +3088,47 @@ asynStatus MiroCamera::updateAutoStatus()
   // Update the auto trigger mode
     status = this->updateIntegerParameter("auto.trigger.mode", MIRO_AutoTriggerMode_);
   }
+  if (status == asynSuccess){
+  // Update the auto trigger coordinates corrected such that top left is the origin
+    status = this->updateAutoTrigPos();
+  }
+  return status;
+}
+
+asynStatus MiroCamera::updateAutoTrigPos()
+{
+  const char * functionName = "MiroCamera::updateAutoTrigPos";
+  debug(functionName, "Method called");
+  asynStatus status = asynSuccess;
+
+  int value = 0;
+
+  std::string name = "auto.trigger.x";
+  int paramID = MIRO_AutoTriggerXZeroed_;
+  debug(functionName, "Name", name);
+  debug(functionName, "paramID", MIRO_AutoTriggerXZeroed_);
+  std::string svalue = paramMap_[name].getValue();
+  cleanString(svalue, " ");
+  status = stringToInteger(svalue, value);
+  int res = 0;
+  getIntegerParam(ADSizeX, &res);
+  value += res/2 ;
+  setIntegerParam(MIRO_AutoTriggerXZeroed_, value);
+
+  if (status == asynSuccess){
+    name = "auto.trigger.y";
+    paramID = MIRO_AutoTriggerYZeroed_;
+    debug(functionName, "Name", name);
+    debug(functionName, "paramID", MIRO_AutoTriggerYZeroed_);
+    svalue = paramMap_[name].getValue();
+    cleanString(svalue, " ");
+    status = stringToInteger(svalue, value);
+    res = 0;
+    getIntegerParam(ADSizeY, &res);
+    value += res/2 ;
+    setIntegerParam(MIRO_AutoTriggerYZeroed_, value);
+  }
+
   return status;
 }
 
