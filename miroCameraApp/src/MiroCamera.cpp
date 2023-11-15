@@ -1517,8 +1517,6 @@ asynStatus MiroCamera::writeInt32(asynUser *pasynUser, epicsInt32 value)
     status |= setCameraParameter("auto.filesave", value);
   } else if (function == MIRO_AutoRestart_){
     status |= setCameraParameter("auto.acqrestart", value);
-  } else if (function == MIRO_AutoCSR_){
-    status |= setCameraParameter("auto.bref", value);
   } else if (function == MIRO_EDR_){
     status |= setCameraParameter("defc.edrexp", value);
   } else if (function == MIRO_SyncClock){
@@ -1541,7 +1539,23 @@ asynStatus MiroCamera::writeInt32(asynUser *pasynUser, epicsInt32 value)
   } else if (function == MIRO_AutoTriggerInterval_){
     status |= setCameraParameter("auto.trigger.speed", value);
   } else if (function == MIRO_AutoTriggerMode_){
-    status |= setCameraParameter("auto.trigger.mode", value);
+    if(value !=0){
+      //Disable auto black ref prior to enabling auto trigger
+      status |= setCameraParameter("auto.bref", 0);
+      if(status == asynSuccess) setIntegerParam(MIRO_AutoCSR_, 0);
+    }
+    if(status == asynSuccess){
+      status |= setCameraParameter("auto.trigger.mode", value);
+    }
+  } else if (function == MIRO_AutoCSR_){
+    if( value!=0){
+      //Disable auto trigger prior to enabling auto black ref
+      status |= setCameraParameter("auto.trigger.mode", 0);
+      if (status == asynSuccess) setIntegerParam(MIRO_AutoTriggerMode_, 0);
+    }
+    if (status == asynSuccess){
+      status |= setCameraParameter("auto.bref", value);
+    } 
   }
 
   // If the status is bad reset the original value
@@ -1712,8 +1726,8 @@ asynStatus MiroCamera::performCSR()
 
   //Disable auto trigger prior to CSR
   status = setCameraParameter("auto.trigger.mode", 0);
-
   if( status == asynSuccess){
+    setIntegerParam(MIRO_AutoTriggerMode_, 0);
     debug(functionName, "Sending command", MIRO_CMD_BLACKREF);
     status = sendSimpleCommand(MIRO_CMD_BLACKREF, &response);
   }
