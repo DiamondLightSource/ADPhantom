@@ -24,5 +24,5 @@ phantomCameraDebug("PHANTOM", "all", 1)
 # Final ioc initialisation
 # ------------------------
 
-dbLoadRecords 'db/phantomCamera.db'
+dbLoadRecords 'db/ADPhantom.db'
 iocInit

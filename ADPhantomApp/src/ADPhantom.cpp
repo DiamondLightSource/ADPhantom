@@ -1,6 +1,6 @@
-#include "PhantomCamera.h"
+#include "ADPhantom.h"
 
-const int PhantomCamera::PHANTOM_LinLUT[1024] = {
+const int ADPhantom::PHANTOM_LinLUT[1024] = {
   2, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 17, 18,
   19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 33,
   34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 48,
@@ -67,7 +67,7 @@ const int PhantomCamera::PHANTOM_LinLUT[1024] = {
   4014,4022,4031,4039,4048,4056,4064,4095,4095,4095,4095,4095,4095,4095,4095,4095
 };
 
-const char *PhantomCamera::PHANTOM_CnNameString[] = {
+const char *ADPhantom::PHANTOM_CnNameString[] = {
     "PHANTOM_C0_NAME",
     "PHANTOM_C1_NAME",
     "PHANTOM_C2_NAME",
@@ -87,7 +87,7 @@ const char *PhantomCamera::PHANTOM_CnNameString[] = {
     "PHANTOM_C16_NAME"
 };
 
-const char *PhantomCamera::PHANTOM_CnWidthString[] = {
+const char *ADPhantom::PHANTOM_CnWidthString[] = {
     "PHANTOM_C0_WIDTH",
     "PHANTOM_C1_WIDTH",
     "PHANTOM_C2_WIDTH",
@@ -107,7 +107,7 @@ const char *PhantomCamera::PHANTOM_CnWidthString[] = {
     "PHANTOM_C16_WIDTH"
 };
 
-const char *PhantomCamera::PHANTOM_CnHeightString[] = {
+const char *ADPhantom::PHANTOM_CnHeightString[] = {
     "PHANTOM_C0_HEIGHT",
     "PHANTOM_C1_HEIGHT",
     "PHANTOM_C2_HEIGHT",
@@ -127,7 +127,7 @@ const char *PhantomCamera::PHANTOM_CnHeightString[] = {
     "PHANTOM_C16_HEIGHT"
 };
 
-const char *PhantomCamera::PHANTOM_CnStatusString[] = {
+const char *ADPhantom::PHANTOM_CnStatusString[] = {
     "PHANTOM_C0_STATUS",
     "PHANTOM_C1_STATUS",
     "PHANTOM_C2_STATUS",
@@ -147,7 +147,7 @@ const char *PhantomCamera::PHANTOM_CnStatusString[] = {
     "PHANTOM_C16_STATUS"
 };
 
-const char *PhantomCamera::PHANTOM_CnFrameCountString[] = {
+const char *ADPhantom::PHANTOM_CnFrameCountString[] = {
     "PHANTOM_C0_FR_COUNT",
     "PHANTOM_C1_FR_COUNT",
     "PHANTOM_C2_FR_COUNT",
@@ -167,7 +167,7 @@ const char *PhantomCamera::PHANTOM_CnFrameCountString[] = {
     "PHANTOM_C16_FR_COUNT"
 };
 
-const char *PhantomCamera::PHANTOM_CnFirstFrameString[] = {
+const char *ADPhantom::PHANTOM_CnFirstFrameString[] = {
     "PHANTOM_C0_FIRST_FR",
     "PHANTOM_C1_FIRST_FR",
     "PHANTOM_C2_FIRST_FR",
@@ -187,7 +187,7 @@ const char *PhantomCamera::PHANTOM_CnFirstFrameString[] = {
     "PHANTOM_C16_FIRST_FR"
 };
 
-const char *PhantomCamera::PHANTOM_CnLastFrameString[] = {
+const char *ADPhantom::PHANTOM_CnLastFrameString[] = {
     "PHANTOM_C0_LAST_FR",
     "PHANTOM_C1_LAST_FR",
     "PHANTOM_C2_LAST_FR",
@@ -207,7 +207,7 @@ const char *PhantomCamera::PHANTOM_CnLastFrameString[] = {
     "PHANTOM_C16_LAST_FR"
 };
 
-const char *PhantomCamera::PHANTOM_CnRecordStartString[] = {
+const char *ADPhantom::PHANTOM_CnRecordStartString[] = {
     "PHANTOM_C0_REC_START",
     "PHANTOM_C1_REC_START",
     "PHANTOM_C2_REC_START",
@@ -227,7 +227,7 @@ const char *PhantomCamera::PHANTOM_CnRecordStartString[] = {
     "PHANTOM_C16_REC_START"
 };
 
-const char *PhantomCamera::PHANTOM_CnRecordEndString[] = {
+const char *ADPhantom::PHANTOM_CnRecordEndString[] = {
     "PHANTOM_C0_REC_END",
     "PHANTOM_C1_REC_END",
     "PHANTOM_C2_REC_END",
@@ -247,7 +247,7 @@ const char *PhantomCamera::PHANTOM_CnRecordEndString[] = {
     "PHANTOM_C16_REC_END"
 };
 
-const char *PhantomCamera::PHANTOM_CnRecordString[] = {
+const char *ADPhantom::PHANTOM_CnRecordString[] = {
     "PHANTOM_C0_RECORD",
     "PHANTOM_C1_RECORD",
     "PHANTOM_C2_RECORD",
@@ -267,7 +267,7 @@ const char *PhantomCamera::PHANTOM_CnRecordString[] = {
     "PHANTOM_C16_RECORD"
 };
 
-const char *PhantomCamera::PHANTOM_CnRecordCountString[] = {
+const char *ADPhantom::PHANTOM_CnRecordCountString[] = {
     "PHANTOM_C0_REC_COUNT",
     "PHANTOM_C1_REC_COUNT",
     "PHANTOM_C2_REC_COUNT",
@@ -287,7 +287,7 @@ const char *PhantomCamera::PHANTOM_CnRecordCountString[] = {
     "PHANTOM_C16_REC_COUNT"
 };
 
-const char *PhantomCamera::PHANTOM_CfFileNameString[] = {
+const char *ADPhantom::PHANTOM_CfFileNameString[] = {
     "PHANTOM_CF1_FILE_NAME",
     "PHANTOM_CF2_FILE_NAME",
     "PHANTOM_CF3_FILE_NAME",
@@ -298,7 +298,7 @@ const char *PhantomCamera::PHANTOM_CfFileNameString[] = {
     "PHANTOM_CF8_FILE_NAME"
 };
 
-const char *PhantomCamera::PHANTOM_CfFileSizeString[] = {
+const char *ADPhantom::PHANTOM_CfFileSizeString[] = {
     "PHANTOM_CF1_FILE_SIZE",
     "PHANTOM_CF2_FILE_SIZE",
     "PHANTOM_CF3_FILE_SIZE",
@@ -309,7 +309,7 @@ const char *PhantomCamera::PHANTOM_CfFileSizeString[] = {
     "PHANTOM_CF8_FILE_SIZE"
 };
 
-const char *PhantomCamera::PHANTOM_CfFileDateString[] = {
+const char *ADPhantom::PHANTOM_CfFileDateString[] = {
     "PHANTOM_CF1_FILE_DATE",
     "PHANTOM_CF2_FILE_DATE",
     "PHANTOM_CF3_FILE_DATE",
@@ -325,18 +325,18 @@ const char *PhantomCamera::PHANTOM_CfFileDateString[] = {
  */
 extern "C"
 {
-  int phantomCameraConfig(const char *portName, const char *ctrlPort, const char *dataPort, int maxBuffers, size_t maxMemory, int priority,	int stackSize)
+  int ADPhantomConfig(const char *portName, const char *ctrlPort, const char *dataPort, int maxBuffers, size_t maxMemory, int priority,	int stackSize)
   {
-    new PhantomCamera(portName, ctrlPort, dataPort, maxBuffers, maxMemory, priority, stackSize);
+    new ADPhantom(portName, ctrlPort, dataPort, maxBuffers, maxMemory, priority, stackSize);
     return asynSuccess;
   }
 
   int phantomSetDebugLevel(const char *driver, const char *method, int debug)
   {
-    PhantomCamera *sA;
+    ADPhantom *sA;
     static const char *functionName = "phantomSetDebugLevel";
 
-    sA = (PhantomCamera*)findAsynPortDriver(driver);
+    sA = (ADPhantom*)findAsynPortDriver(driver);
     if (!sA){
       printf("%s: Error: port %s not found.", functionName, driver);
       return -1;
@@ -350,7 +350,7 @@ extern "C"
  */
 static void phantomCameraTaskC(void *drvPvt)
 {
-  PhantomCamera *pPvt = (PhantomCamera *)drvPvt;
+  ADPhantom *pPvt = (ADPhantom *)drvPvt;
   pPvt->phantomCameraTask();
 }
 
@@ -359,7 +359,7 @@ static void phantomCameraTaskC(void *drvPvt)
  */
 static void phantomStatusTaskC(void *drvPvt)
 {
-  PhantomCamera *pPvt = (PhantomCamera *)drvPvt;
+  ADPhantom *pPvt = (ADPhantom *)drvPvt;
   pPvt->phantomStatusTask();
 }
 
@@ -368,7 +368,7 @@ static void phantomStatusTaskC(void *drvPvt)
  */
 static void phantomPreviewTaskC(void *drvPvt)
 {
-  PhantomCamera *pPvt = (PhantomCamera *)drvPvt;
+  ADPhantom *pPvt = (ADPhantom *)drvPvt;
   pPvt->phantomPreviewTask();
 }
 
@@ -377,18 +377,18 @@ static void phantomPreviewTaskC(void *drvPvt)
  */
 static void phantomFlashTaskC(void *drvPvt)
 {
-  PhantomCamera *pPvt = (PhantomCamera *)drvPvt;
+  ADPhantom *pPvt = (ADPhantom *)drvPvt;
   pPvt->phantomFlashTask();
 }
 
 /**
- * phantomCamera destructor
+ * ADPhantom destructor
  */
-PhantomCamera::~PhantomCamera()
+ADPhantom::~ADPhantom()
 {
 }
 
-PhantomCamera::PhantomCamera(const char *portName, const char *ctrlPort, const char *dataPort, int maxBuffers, size_t maxMemory, int priority, int stackSize) :
+ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dataPort, int maxBuffers, size_t maxMemory, int priority, int stackSize) :
 /** 
     Constructor for the ADDriver class. 
 [in]	portNameIn	The name of the asyn port.
@@ -425,7 +425,7 @@ PhantomCamera::PhantomCamera(const char *portName, const char *ctrlPort, const c
            priority,
            stackSize) // thread priority and stack size (0=default)
 {
-  static const char *functionName = "PhantomCamera::PhantomCamera";
+  static const char *functionName = "ADPhantom::ADPhantom";
   int status = asynSuccess;
   int index = 0;
 
@@ -685,10 +685,10 @@ PhantomCamera::PhantomCamera(const char *portName, const char *ctrlPort, const c
 
 }
 
-asynStatus PhantomCamera::makeConnection()
+asynStatus ADPhantom::makeConnection()
 {
   int status = asynSuccess;
-  static const char *functionName = "PhantomCamera::makeConnection";
+  static const char *functionName = "ADPhantom::makeConnection";
   
   status = connect();
   std::cout << "makeConnection(). connection status = " << status << '\n';
@@ -708,10 +708,10 @@ asynStatus PhantomCamera::makeConnection()
   return (asynStatus)status;
 }
 
-asynStatus PhantomCamera::connect()
+asynStatus ADPhantom::connect()
 {
   asynStatus status = asynSuccess;
-  const char *functionName = "PhantomCamera::connect";
+  const char *functionName = "ADPhantom::connect";
 
   // Connect our Asyn user to the low level port that is a parameter to this constructor
   status = asynPortConnect(ctrlPort_, 0, &portUser_, "\n", "\n");
@@ -748,10 +748,10 @@ asynStatus PhantomCamera::connect()
   return status;
 }
 
-asynStatus PhantomCamera::disconnect()
+asynStatus ADPhantom::disconnect()
 {
   asynStatus status = asynSuccess;
-  const char *functionName = "PhantomCamera::disconnect";
+  const char *functionName = "ADPhantom::disconnect";
   int connected = 0;
 
   getIntegerParam(PHANTOMConnected_, &connected);
@@ -771,9 +771,9 @@ asynStatus PhantomCamera::disconnect()
  *  It is started in the class constructor and must not return until the IOC stops.
  *
 */ 
-void PhantomCamera::phantomCameraTask()
+void ADPhantom::phantomCameraTask()
 {
-  static const char *functionName = "PhantomCamera::phantomCameraTask";
+  static const char *functionName = "ADPhantom::phantomCameraTask";
   int status = asynSuccess;
   int acquire = 0;
   int imageMode = 0;
@@ -941,9 +941,9 @@ void PhantomCamera::phantomCameraTask()
   }
 }
 
-void PhantomCamera::phantomStatusTask()
+void ADPhantom::phantomStatusTask()
 {
-  static const char *functionName = "PhantomCamera::phantomStatusTask";
+  static const char *functionName = "ADPhantom::phantomStatusTask";
   int status = asynSuccess;
   int cine = 0;
   char command[PHANTOM_MAX_STRING];
@@ -1011,9 +1011,9 @@ void PhantomCamera::phantomStatusTask()
   }
 }
 
-void PhantomCamera::phantomPreviewTask()
+void ADPhantom::phantomPreviewTask()
 {
-  static const char *functionName = "PhantomCamera::phantomPreviewTask";
+  static const char *functionName = "ADPhantom::phantomPreviewTask";
   int status = asynSuccess;
   int preview = 0;
   std::string response;
@@ -1047,9 +1047,9 @@ void PhantomCamera::phantomPreviewTask()
   }
 }
 
-void PhantomCamera::phantomFlashTask()
+void ADPhantom::phantomFlashTask()
 {
-  static const char *functionName = "PhantomCamera::phantomFlashTask";
+  static const char *functionName = "ADPhantom::phantomFlashTask";
   int status = asynSuccess;
   int formatFlash = 0;
   int deleteFile = 0;
@@ -1089,9 +1089,9 @@ void PhantomCamera::phantomFlashTask()
  * @param inputEos - String input EOS.
  * @param outputEos - String output EOS.
  */
-asynStatus PhantomCamera::asynPortConnect(const char *port, int addr, asynUser **ppasynUser, const char *inputEos, const char *outputEos)
+asynStatus ADPhantom::asynPortConnect(const char *port, int addr, asynUser **ppasynUser, const char *inputEos, const char *outputEos)
 {
-  static const char *functionName = "PhantomCamera::asynPortConnect";
+  static const char *functionName = "ADPhantom::asynPortConnect";
 
   asynStatus status = asynSuccess;
   std::map<std::string, std::string> data;
@@ -1129,9 +1129,9 @@ asynStatus PhantomCamera::asynPortConnect(const char *port, int addr, asynUser *
   return status;
 }
 
-asynStatus PhantomCamera::asynPortDisconnect(asynUser *pasynUser)
+asynStatus ADPhantom::asynPortDisconnect(asynUser *pasynUser)
 {
-  static const char *functionName = "PhantomCamera::asynPortDisconnect";
+  static const char *functionName = "ADPhantom::asynPortDisconnect";
 
   asynStatus status = asynSuccess;
   std::map<std::string, std::string> data;
@@ -1150,9 +1150,9 @@ asynStatus PhantomCamera::asynPortDisconnect(asynUser *pasynUser)
  * Method for sending a simple command (no parameters) that will check the
  * error status and do the right thing.
  */
-asynStatus PhantomCamera::sendSimpleCommand(const std::string& command, std::string *response, double timeout)
+asynStatus ADPhantom::sendSimpleCommand(const std::string& command, std::string *response, double timeout)
 {
-  static const char *functionName = "PhantomCamera::sendSimpleCommand";
+  static const char *functionName = "ADPhantom::sendSimpleCommand";
   asynStatus status = asynSuccess;
 
   debug(functionName, "Sending command", command);
@@ -1180,9 +1180,9 @@ asynStatus PhantomCamera::sendSimpleCommand(const std::string& command, std::str
  * @param response - String response back (OK or ERROR)
  * @param data - Map of data items indexed by name
  */
-asynStatus PhantomCamera::commandResponse(const std::string &command, std::string *response, double timeout)
+asynStatus ADPhantom::commandResponse(const std::string &command, std::string *response, double timeout)
 {
-  static const char *functionName = "PhantomCamera::commandResponse";
+  static const char *functionName = "ADPhantom::commandResponse";
 
   asynStatus status = asynSuccess;
   std::string errorCode = "";
@@ -1209,9 +1209,9 @@ asynStatus PhantomCamera::commandResponse(const std::string &command, std::strin
  * @param command - String command to send.
  * @param response - String response back.
  */
-asynStatus PhantomCamera::asynWriteRead(const char *command, char *response, double timeout)
+asynStatus ADPhantom::asynWriteRead(const char *command, char *response, double timeout)
 {
-  static const char *functionName = "PhantomCamera::asynWriteRead";
+  static const char *functionName = "ADPhantom::asynWriteRead";
 
   asynStatus status = asynSuccess;
   int eomReason;
@@ -1267,7 +1267,7 @@ asynStatus PhantomCamera::asynWriteRead(const char *command, char *response, dou
   return (tot == 0 ? asynError : asynSuccess);
 }
 
-int PhantomCamera::getLocalPortNum(const std::string& driverPort)
+int ADPhantom::getLocalPortNum(const std::string& driverPort)
 {
 // Get local TCP socket port number for asyn port
   FILE *fp;
@@ -1294,7 +1294,7 @@ int PhantomCamera::getLocalPortNum(const std::string& driverPort)
   return (status == 0 ? (int)ntohs(sa.sin_port) : 0);
 }
 
-asynStatus PhantomCamera::cleanString(std::string &str, const std::string &search, int where)
+asynStatus ADPhantom::cleanString(std::string &str, const std::string &search, int where)
 {
   if (str != ""){
     if (where == 0 || where == 1){
@@ -1322,10 +1322,10 @@ asynStatus PhantomCamera::cleanString(std::string &str, const std::string &searc
   * @param nElements - Size of value array
   * @param nIn - Number of elements actually returned 
 
-asynStatus PhantomCamera::readEnum(asynUser *pasynUser, char *strings[], int values[], int severities[], size_t nElements, size_t *nIn)
+asynStatus ADPhantom::readEnum(asynUser *pasynUser, char *strings[], int values[], int severities[], size_t nElements, size_t *nIn)
 {
 
-  const char *functionName = "PhantomCamera::readEnum";
+  const char *functionName = "ADPhantom::readEnum";
   asynStatus status = asynSuccess;
   int function = pasynUser->reason;
   size_t index;
@@ -1380,9 +1380,9 @@ asynStatus PhantomCamera::readEnum(asynUser *pasynUser, char *strings[], int val
  * @param pasynUser - Pointer to the asyn user structure.
  * @param value - The new value to write
  */
-asynStatus PhantomCamera::writeInt32(asynUser *pasynUser, epicsInt32 value)
+asynStatus ADPhantom::writeInt32(asynUser *pasynUser, epicsInt32 value)
 {
-  const char *functionName = "PhantomCamera::writeInt32";
+  const char *functionName = "ADPhantom::writeInt32";
   int status = asynSuccess;
   int function = pasynUser->reason;
   int oldValue;
@@ -1586,9 +1586,9 @@ asynStatus PhantomCamera::writeInt32(asynUser *pasynUser, epicsInt32 value)
  * @param pasynUser - Pointer to the asyn user structure.
  * @param value - The new value to write
 */
-asynStatus PhantomCamera::writeFloat64(asynUser *pasynUser, epicsFloat64 value)
+asynStatus ADPhantom::writeFloat64(asynUser *pasynUser, epicsFloat64 value)
 {
-  const char *functionName = "PhantomCamera::writeFloat64";
+  const char *functionName = "ADPhantom::writeFloat64";
   asynStatus status = asynSuccess;
   int function = pasynUser->reason;
   double oldValue;
@@ -1660,7 +1660,7 @@ asynStatus PhantomCamera::writeFloat64(asynUser *pasynUser, epicsFloat64 value)
   return status;
 }
 
-asynStatus PhantomCamera::writeOctet(asynUser *pasynUser, const char *value, size_t nChars, size_t *nActual)
+asynStatus ADPhantom::writeOctet(asynUser *pasynUser, const char *value, size_t nChars, size_t *nActual)
 {
   int addr=0;
   int function = pasynUser->reason;
@@ -1697,9 +1697,9 @@ asynStatus PhantomCamera::writeOctet(asynUser *pasynUser, const char *value, siz
   return status;
 }
 
-asynStatus PhantomCamera::setCameraResolution()
+asynStatus ADPhantom::setCameraResolution()
 {
-  const char * functionName = "PhantomCamera::setCameraResolution";
+  const char * functionName = "ADPhantom::setCameraResolution";
   char command[PHANTOM_MAX_STRING];
   std::string response;
   int x = 0;
@@ -1718,9 +1718,9 @@ asynStatus PhantomCamera::setCameraResolution()
   return status;
 }
 
-asynStatus PhantomCamera::performCSR()
+asynStatus ADPhantom::performCSR()
 {
-  const char * functionName = "PhantomCamera::performCSR";
+  const char * functionName = "ADPhantom::performCSR";
   std::string response;
   asynStatus status = asynSuccess;
 
@@ -1735,9 +1735,9 @@ asynStatus PhantomCamera::performCSR()
   return status;
 }
 
-asynStatus PhantomCamera::attachToPort(const std::string& portName)
+asynStatus ADPhantom::attachToPort(const std::string& portName)
 {
-  const char * functionName = "PhantomCamera::attachToPort";
+  const char * functionName = "ADPhantom::attachToPort";
   char command[PHANTOM_MAX_STRING];
   std::string response;
   asynStatus status = asynSuccess;
@@ -1752,9 +1752,9 @@ asynStatus PhantomCamera::attachToPort(const std::string& portName)
   return status;
 }
 
-asynStatus PhantomCamera::readoutPreviewData()
+asynStatus ADPhantom::readoutPreviewData()
 {
-  const char * functionName = "PhantomCamera::readoutPreviewData";
+  const char * functionName = "ADPhantom::readoutPreviewData";
   int nBytes = 0;
   std::string response;
   NDArray *pImage;
@@ -1816,9 +1816,9 @@ asynStatus PhantomCamera::readoutPreviewData()
   return status;
 }
 
-asynStatus PhantomCamera::sendSoftwareTrigger()
+asynStatus ADPhantom::sendSoftwareTrigger()
 {
-  const char * functionName = "PhantomCamera::readoutDataStream";
+  const char * functionName = "ADPhantom::readoutDataStream";
   std::string response;
   asynStatus status = asynSuccess;
 
@@ -1828,9 +1828,9 @@ asynStatus PhantomCamera::sendSoftwareTrigger()
   return status;
 }
 
-asynStatus PhantomCamera::downloadCineFile(int cine)
+asynStatus ADPhantom::downloadCineFile(int cine)
 {
-  const char * functionName = "PhantomCamera::downloadCineFile";
+  const char * functionName = "ADPhantom::downloadCineFile";
   int start = 0;
   int end = 0;
   std::string response;
@@ -1855,9 +1855,9 @@ asynStatus PhantomCamera::downloadCineFile(int cine)
   return status;
 }
 
-asynStatus PhantomCamera::saveCineToFlash(int cine)
+asynStatus ADPhantom::saveCineToFlash(int cine)
 {
-  const char * functionName = "PhantomCamera::saveCineToFlash";
+  const char * functionName = "ADPhantom::saveCineToFlash";
   char command[PHANTOM_MAX_STRING];
   std::string response = "";
   asynStatus status = asynSuccess;
@@ -1877,9 +1877,9 @@ asynStatus PhantomCamera::saveCineToFlash(int cine)
   return status;
 }
 
-asynStatus PhantomCamera::saveSettings()
+asynStatus ADPhantom::saveSettings()
 {
-  const char * functionName = "PhantomCamera::saveSettings";
+  const char * functionName = "ADPhantom::saveSettings";
   char command[PHANTOM_MAX_STRING];
   std::string response = "";
   int slot = 1;
@@ -1892,9 +1892,9 @@ asynStatus PhantomCamera::saveSettings()
   return status;
 }
 
-asynStatus PhantomCamera::loadSettings()
+asynStatus ADPhantom::loadSettings()
 {
-  const char * functionName = "PhantomCamera::loadSettings";
+  const char * functionName = "ADPhantom::loadSettings";
   char command[PHANTOM_MAX_STRING];
   std::string response = "";
   int slot = 1;
@@ -1907,9 +1907,9 @@ asynStatus PhantomCamera::loadSettings()
   return status;
 }
 
-asynStatus PhantomCamera::formatFlash()
+asynStatus ADPhantom::formatFlash()
 {
-  const char * functionName = "PhantomCamera::formatFlash";
+  const char * functionName = "ADPhantom::formatFlash";
   std::string response = "";
   asynStatus status = asynSuccess;
 
@@ -1918,9 +1918,9 @@ asynStatus PhantomCamera::formatFlash()
   return status;
 }
 
-asynStatus PhantomCamera::deleteFlashFile()
+asynStatus ADPhantom::deleteFlashFile()
 {
-  const char * functionName = "PhantomCamera::deleteFlashFile";
+  const char * functionName = "ADPhantom::deleteFlashFile";
   char command[PHANTOM_MAX_STRING];
   char filename[PHANTOM_MAX_STRING];
   std::string response = "";
@@ -1944,9 +1944,9 @@ asynStatus PhantomCamera::deleteFlashFile()
   return status;
 }
 
-asynStatus PhantomCamera::selectFlashByIndex(int index)
+asynStatus ADPhantom::selectFlashByIndex(int index)
 {
-  const char * functionName = "PhantomCamera::selectFlashByIndex";
+  const char * functionName = "ADPhantom::selectFlashByIndex";
   char filename[PHANTOM_MAX_STRING];
   asynStatus status = asynSuccess;
 
@@ -1965,9 +1965,9 @@ asynStatus PhantomCamera::selectFlashByIndex(int index)
   return status;
 }
 
-asynStatus PhantomCamera::downloadFlashFile()
+asynStatus ADPhantom::downloadFlashFile()
 {
-  const char * functionName = "PhantomCamera::downloadFlashFile";
+  const char * functionName = "ADPhantom::downloadFlashFile";
   int start = 0;
   int end = 0;
   char filename[PHANTOM_MAX_STRING];
@@ -2025,9 +2025,9 @@ asynStatus PhantomCamera::downloadFlashFile()
   return status;
 }
 
-asynStatus PhantomCamera::downloadFlashHeader(const std::string& filename)
+asynStatus ADPhantom::downloadFlashHeader(const std::string& filename)
 {
-  const char * functionName = "PhantomCamera::downloadFlashHeader";
+  const char * functionName = "ADPhantom::downloadFlashHeader";
   char command[PHANTOM_MAX_STRING];
   std::string response;
   short setupLength = 0;
@@ -2193,9 +2193,9 @@ asynStatus PhantomCamera::downloadFlashHeader(const std::string& filename)
   return status;
 }
 
-asynStatus PhantomCamera::downloadFlashImages(const std::string& filename, int start, int end)
+asynStatus ADPhantom::downloadFlashImages(const std::string& filename, int start, int end)
 {
-  const char * functionName = "PhantomCamera::downloadFlashFile";
+  const char * functionName = "ADPhantom::downloadFlashFile";
   char command[PHANTOM_MAX_STRING];
   std::string response;
   NDArray *pImage;
@@ -2383,7 +2383,7 @@ asynStatus PhantomCamera::downloadFlashImages(const std::string& filename, int s
   return status;
 }
 
-asynStatus PhantomCamera::convert10BitPacketTo12Bit(void *input, void *output)
+asynStatus ADPhantom::convert10BitPacketTo12Bit(void *input, void *output)
 {
   const char * functionName = "convert10BitPacketTo12Bit";
   asynStatus status = asynSuccess;
@@ -2420,9 +2420,9 @@ asynStatus PhantomCamera::convert10BitPacketTo12Bit(void *input, void *output)
   return status;
 }
 
-asynStatus PhantomCamera::readoutTimestamps(int cine, int start, int end)
+asynStatus ADPhantom::readoutTimestamps(int cine, int start, int end)
 {
-  const char * functionName = "PhantomCamera::readoutTimestamps";
+  const char * functionName = "ADPhantom::readoutTimestamps";
   char command[PHANTOM_MAX_STRING];
   int nBytes = 0;
   std::string response;
@@ -2465,9 +2465,9 @@ asynStatus PhantomCamera::readoutTimestamps(int cine, int start, int end)
   return status;
 }
 
-asynStatus PhantomCamera::readoutDataStream(int cine, int start, int end)
+asynStatus ADPhantom::readoutDataStream(int cine, int start, int end)
 {
-  const char * functionName = "PhantomCamera::readoutDataStream";
+  const char * functionName = "ADPhantom::readoutDataStream";
   char command[PHANTOM_MAX_STRING];
   int width = 0;
   int height = 0;
@@ -2655,9 +2655,9 @@ asynStatus PhantomCamera::readoutDataStream(int cine, int start, int end)
   return status;
 }
 
-asynStatus PhantomCamera::readFrame(int bytes)
+asynStatus ADPhantom::readFrame(int bytes)
 {
-  const char * functionName = "PhantomCamera::readFrame";
+  const char * functionName = "ADPhantom::readFrame";
   size_t nread = 0;
   int eomReason = 0;
   std::string response;
@@ -2685,9 +2685,9 @@ asynStatus PhantomCamera::readFrame(int bytes)
   return status;
 }
 
-asynStatus PhantomCamera::updatePreviewCine()
+asynStatus ADPhantom::updatePreviewCine()
 {
-  const char * functionName = "PhantomCamera::updatePreviewCine";
+  const char * functionName = "ADPhantom::updatePreviewCine";
   asynStatus status = asynSuccess;
   std::string param = "";
 
@@ -2716,9 +2716,9 @@ asynStatus PhantomCamera::updatePreviewCine()
   return status;
 }
 
-asynStatus PhantomCamera::updateCine(int cine)
+asynStatus ADPhantom::updateCine(int cine)
 {
-  const char * functionName = "PhantomCamera::updateCine";
+  const char * functionName = "ADPhantom::updateCine";
   asynStatus status = asynSuccess;
   std::string param = "";
   char cmd[MAX_STRING_SIZE];
@@ -2802,9 +2802,9 @@ asynStatus PhantomCamera::updateCine(int cine)
   return status;
 }
 
-asynStatus PhantomCamera::selectCine(int cine)
+asynStatus ADPhantom::selectCine(int cine)
 {
-  const char * functionName = "PhantomCamera::selectCine";
+  const char * functionName = "ADPhantom::selectCine";
   asynStatus status = asynSuccess;
   char command[256];
   std::string param = "";
@@ -2878,9 +2878,9 @@ asynStatus PhantomCamera::selectCine(int cine)
   return status;
 }
 
-asynStatus PhantomCamera::setPartition(int count)
+asynStatus ADPhantom::setPartition(int count)
 {
-  const char * functionName = "PhantomCamera::setPartition";
+  const char * functionName = "ADPhantom::setPartition";
   asynStatus status = asynSuccess;
   char command[256];
   std::string response = "";
@@ -2906,9 +2906,9 @@ asynStatus PhantomCamera::setPartition(int count)
   return status;
 }
 
-asynStatus PhantomCamera::updateFlash()
+asynStatus ADPhantom::updateFlash()
 {
-  const char * functionName = "PhantomCamera::updateFlash";
+  const char * functionName = "ADPhantom::updateFlash";
   asynStatus status = asynSuccess;
   std::string data;
   std::vector<std::string> names;
@@ -3006,9 +3006,9 @@ asynStatus PhantomCamera::updateFlash()
   return status;
 }
 
-asynStatus PhantomCamera::updateFlashFileTable()
+asynStatus ADPhantom::updateFlashFileTable()
 {
-  const char * functionName = "PhantomCamera::updateFlashFileTable";
+  const char * functionName = "ADPhantom::updateFlashFileTable";
   asynStatus status = asynSuccess;
 
   debug(functionName, "Number of files", (int)fileInfoSet_.size());
@@ -3044,9 +3044,9 @@ asynStatus PhantomCamera::updateFlashFileTable()
   return status;
 }
 
-asynStatus PhantomCamera::updateAutoStatus()
+asynStatus ADPhantom::updateAutoStatus()
 {
-  const char * functionName = "PhantomCamera::updateAutotatus";
+  const char * functionName = "ADPhantom::updateAutotatus";
   asynStatus status = asynSuccess;
 
   debug(functionName, "Method called");
@@ -3109,9 +3109,9 @@ asynStatus PhantomCamera::updateAutoStatus()
   return status;
 }
 
-asynStatus PhantomCamera::updateAutoTrigPos()
+asynStatus ADPhantom::updateAutoTrigPos()
 {
-  const char * functionName = "PhantomCamera::updateAutoTrigPos";
+  const char * functionName = "ADPhantom::updateAutoTrigPos";
   debug(functionName, "Method called");
   asynStatus status = asynSuccess;
 
@@ -3146,9 +3146,9 @@ asynStatus PhantomCamera::updateAutoTrigPos()
   return status;
 }
 
-asynStatus PhantomCamera::updateInfoStatus()
+asynStatus ADPhantom::updateInfoStatus()
 {
-  const char * functionName = "PhantomCamera::updateInfoStatus";
+  const char * functionName = "ADPhantom::updateInfoStatus";
   asynStatus status = asynSuccess;
 
   debug(functionName, "Method called");
@@ -3176,9 +3176,9 @@ asynStatus PhantomCamera::updateInfoStatus()
   return status;
 }
 
-asynStatus PhantomCamera::updateCameraStatus()
+asynStatus ADPhantom::updateCameraStatus()
 {
-  const char * functionName = "PhantomCamera::updateCameraStatus";
+  const char * functionName = "ADPhantom::updateCameraStatus";
   asynStatus status = asynSuccess;
 
   debug(functionName, "Method called");
@@ -3218,9 +3218,9 @@ asynStatus PhantomCamera::updateCameraStatus()
   return status;
 }
 
-asynStatus PhantomCamera::updateDefcStatus()
+asynStatus ADPhantom::updateDefcStatus()
 {
-  const char * functionName = "PhantomCamera::updateDefcStatus";
+  const char * functionName = "ADPhantom::updateDefcStatus";
   std::string param = "";
   asynStatus status = asynSuccess;
 
@@ -3283,9 +3283,9 @@ asynStatus PhantomCamera::updateDefcStatus()
   return status;
 }
 
-asynStatus PhantomCamera::updateMetaStatus()
+asynStatus ADPhantom::updateMetaStatus()
 {
-  const char * functionName = "PhantomCamera::updateMetaStatus";
+  const char * functionName = "ADPhantom::updateMetaStatus";
   std::string param = "";
   asynStatus status = asynSuccess;
 
@@ -3302,9 +3302,9 @@ asynStatus PhantomCamera::updateMetaStatus()
   return status;
 }
 
-asynStatus PhantomCamera::updateIntegerParameter(const std::string& name, int paramID)
+asynStatus ADPhantom::updateIntegerParameter(const std::string& name, int paramID)
 {
-  const char * functionName = "PhantomCamera::updateIntegerParameter";
+  const char * functionName = "ADPhantom::updateIntegerParameter";
   asynStatus status = asynSuccess;
   int value = 0;
 
@@ -3318,9 +3318,9 @@ asynStatus PhantomCamera::updateIntegerParameter(const std::string& name, int pa
   return status;
 }
 
-asynStatus PhantomCamera::updateStringParameter(const std::string& name, int paramID)
+asynStatus ADPhantom::updateStringParameter(const std::string& name, int paramID)
 {
-  const char * functionName = "PhantomCamera::updateStringParameter";
+  const char * functionName = "ADPhantom::updateStringParameter";
   asynStatus status = asynSuccess;
 
   debug(functionName, "Name", name);
@@ -3330,9 +3330,9 @@ asynStatus PhantomCamera::updateStringParameter(const std::string& name, int par
   return status;
 }
 
-asynStatus PhantomCamera::getCameraDataStruc(const std::string& strucName, std::map<std::string, phantomVal>& params)
+asynStatus ADPhantom::getCameraDataStruc(const std::string& strucName, std::map<std::string, phantomVal>& params)
 {
-  const char * functionName = "PhantomCamera::getCameraDataStruc";
+  const char * functionName = "ADPhantom::getCameraDataStruc";
   asynStatus status = asynSuccess;
   std::string data;
   std::string cmd = PHANTOM_CMD_GET_VALUE;
@@ -3355,9 +3355,9 @@ asynStatus PhantomCamera::getCameraDataStruc(const std::string& strucName, std::
   return status;  
 }
 
-asynStatus PhantomCamera::getCameraParameter(const std::string& name, int &value)
+asynStatus ADPhantom::getCameraParameter(const std::string& name, int &value)
 {
-  const char * functionName = "PhantomCamera::getCameraParameter";
+  const char * functionName = "ADPhantom::getCameraParameter";
   asynStatus status = asynSuccess;
   std::string data;
   std::string cmd = PHANTOM_CMD_GET_VALUE;
@@ -3376,9 +3376,9 @@ asynStatus PhantomCamera::getCameraParameter(const std::string& name, int &value
   return status;
 }
 
-asynStatus PhantomCamera::getCameraParameter(const std::string& name, double &value)
+asynStatus ADPhantom::getCameraParameter(const std::string& name, double &value)
 {
-  const char * functionName = "PhantomCamera::getCameraParameter";
+  const char * functionName = "ADPhantom::getCameraParameter";
   asynStatus status = asynSuccess;
   std::string data;
   std::string cmd = PHANTOM_CMD_GET_VALUE;
@@ -3391,9 +3391,9 @@ asynStatus PhantomCamera::getCameraParameter(const std::string& name, double &va
   return status;
 }
 
-asynStatus PhantomCamera::getCameraParameter(const std::string& name, std::string &value)
+asynStatus ADPhantom::getCameraParameter(const std::string& name, std::string &value)
 {
-  const char * functionName = "PhantomCamera::getCameraParameter";
+  const char * functionName = "ADPhantom::getCameraParameter";
   asynStatus status = asynSuccess;
   std::string data;
   std::string cmd = PHANTOM_CMD_GET_VALUE;
@@ -3407,9 +3407,9 @@ asynStatus PhantomCamera::getCameraParameter(const std::string& name, std::strin
   return status;
 }
 
-asynStatus PhantomCamera::getCameraParameter(const std::string& name, bool &value)
+asynStatus ADPhantom::getCameraParameter(const std::string& name, bool &value)
 {
-  const char * functionName = "PhantomCamera::getCameraParameter (bool)";
+  const char * functionName = "ADPhantom::getCameraParameter (bool)";
   asynStatus status = asynSuccess;
   std::string data;
   std::string cmd = PHANTOM_CMD_GET_VALUE;
@@ -3429,9 +3429,9 @@ asynStatus PhantomCamera::getCameraParameter(const std::string& name, bool &valu
   return status;
 }
 
-asynStatus PhantomCamera::setCameraParameter(const std::string& name, int value)
+asynStatus ADPhantom::setCameraParameter(const std::string& name, int value)
 {
-  const char * functionName = "PhantomCamera::setCameraParameter";
+  const char * functionName = "ADPhantom::setCameraParameter";
   asynStatus status = asynSuccess;
   std::string data;
   std::string cmd = PHANTOM_CMD_SET_VALUE;
@@ -3444,9 +3444,9 @@ asynStatus PhantomCamera::setCameraParameter(const std::string& name, int value)
   return status;
 }
 
-asynStatus PhantomCamera::setCameraParameter(const std::string& name, double value)
+asynStatus ADPhantom::setCameraParameter(const std::string& name, double value)
 {
-  const char * functionName = "PhantomCamera::setCameraParameter";
+  const char * functionName = "ADPhantom::setCameraParameter";
   asynStatus status = asynSuccess;
   std::string data;
   std::string cmd = PHANTOM_CMD_SET_VALUE;
@@ -3459,9 +3459,9 @@ asynStatus PhantomCamera::setCameraParameter(const std::string& name, double val
   return status;
 }
 
-asynStatus PhantomCamera::setCameraParameter(const std::string& name, std::string value)
+asynStatus ADPhantom::setCameraParameter(const std::string& name, std::string value)
 {
-  const char * functionName = "PhantomCamera::setCameraParameter";
+  const char * functionName = "ADPhantom::setCameraParameter";
   asynStatus status = asynSuccess;
   std::string data;
   std::string cmd = PHANTOM_CMD_SET_VALUE;
@@ -3472,9 +3472,9 @@ asynStatus PhantomCamera::setCameraParameter(const std::string& name, std::strin
   return status;
 }
 
-asynStatus PhantomCamera::cineStates(const std::string& states, int &mask)
+asynStatus ADPhantom::cineStates(const std::string& states, int &mask)
 {
-  const char * functionName = "PhantomCamera::cineStates";
+  const char * functionName = "ADPhantom::cineStates";
   asynStatus status = asynSuccess;
   mask = 0;
 
@@ -3512,7 +3512,7 @@ asynStatus PhantomCamera::cineStates(const std::string& states, int &mask)
   return status;
 }
 
-bool PhantomCamera::checkState(const std::string &state, const std::string &item)
+bool ADPhantom::checkState(const std::string &state, const std::string &item)
 {
   bool found = false;
   // Clean up from the front of the string
@@ -3522,9 +3522,9 @@ bool PhantomCamera::checkState(const std::string &state, const std::string &item
   return found;
 }
 
-asynStatus PhantomCamera::stringToInteger(const std::string& name, int &value)
+asynStatus ADPhantom::stringToInteger(const std::string& name, int &value)
 {
-  const char * functionName = "PhantomCamera::stringToInteger";
+  const char * functionName = "ADPhantom::stringToInteger";
   asynStatus status = asynSuccess;
 
   std::stringstream integerValueStream(name);
@@ -3536,9 +3536,9 @@ asynStatus PhantomCamera::stringToInteger(const std::string& name, int &value)
   return status;
 }
 
-asynStatus PhantomCamera::stringToDouble(const std::string& name, double &value)
+asynStatus ADPhantom::stringToDouble(const std::string& name, double &value)
 {
-  const char * functionName = "PhantomCamera::stringToDouble";
+  const char * functionName = "ADPhantom::stringToDouble";
   asynStatus status = asynSuccess;
 
   std::stringstream doubleValueStream(name);
@@ -3550,9 +3550,9 @@ asynStatus PhantomCamera::stringToDouble(const std::string& name, double &value)
   return status;
 }
 
-asynStatus PhantomCamera::readIntegerData(std::map<std::string, std::string> data, const std::string& name, int &value)
+asynStatus ADPhantom::readIntegerData(std::map<std::string, std::string> data, const std::string& name, int &value)
 {
-  const char * functionName = "PhantomCamera::readIntegerData";
+  const char * functionName = "ADPhantom::readIntegerData";
   asynStatus status = asynSuccess;
 
   std::stringstream integerValueStream(data[name]);
@@ -3564,9 +3564,9 @@ asynStatus PhantomCamera::readIntegerData(std::map<std::string, std::string> dat
   return status;
 }
 
-asynStatus PhantomCamera::readDoubleData(std::map<std::string, std::string> data, const std::string& name, double &value)
+asynStatus ADPhantom::readDoubleData(std::map<std::string, std::string> data, const std::string& name, double &value)
 {
-  const char * functionName = "PhantomCamera::readDoubleData";
+  const char * functionName = "ADPhantom::readDoubleData";
   asynStatus status = asynSuccess;
 
   std::stringstream doubleValueStream(data[name]);
@@ -3579,52 +3579,52 @@ asynStatus PhantomCamera::readDoubleData(std::map<std::string, std::string> data
 }
 
 
-asynStatus PhantomCamera::initDebugger(int initDebug)
+asynStatus ADPhantom::initDebugger(int initDebug)
 {
   // Set all debugging levels to initialised value
   debugLevel("all", initDebug);
   return asynSuccess;
 }
 
-asynStatus PhantomCamera::debugLevel(const std::string& method, int onOff)
+asynStatus ADPhantom::debugLevel(const std::string& method, int onOff)
 {
   if (method == "all"){
-    debugMap_["PhantomCamera::PhantomCamera"]               = onOff;
-    debugMap_["PhantomCamera::phantomCameraTask"]           = onOff;
-    debugMap_["PhantomCamera::phantomPreviewTask"]          = onOff;
-    debugMap_["PhantomCamera::readoutPreviewData"]       = onOff;
-    debugMap_["PhantomCamera::readFrame"]                = onOff;
-    debugMap_["PhantomCamera::downloadFlashFile"]        = onOff;
-    debugMap_["PhantomCamera::connect"]                  = onOff;    
-    debugMap_["PhantomCamera::readEnum"]                 = onOff;
-    debugMap_["PhantomCamera::writeInt32"]               = onOff;
-    debugMap_["PhantomCamera::writeFloat64"]             = onOff;
-    debugMap_["PhantomCamera::validateSpectrum"]         = onOff;
-    debugMap_["PhantomCamera::defineSpectrumFAT"]        = onOff;
-    debugMap_["PhantomCamera::defineSpectrumSFAT"]       = onOff;
-    debugMap_["PhantomCamera::defineSpectrumFRR"]        = onOff;
-    debugMap_["PhantomCamera::defineSpectrumFE"]         = onOff;
-    debugMap_["PhantomCamera::readAcquisitionData"]      = onOff;
-    debugMap_["PhantomCamera::sendSimpleCommand"]        = onOff;
-    debugMap_["PhantomCamera::getCameraDataStruc"]       = onOff;
-    debugMap_["PhantomCamera::setupEPICSParameters"]     = onOff;
-    debugMap_["PhantomCamera::readoutDataStream"]        = onOff;
-    debugMap_["PhantomCamera::getCameraParameterType"]   = onOff;
-    debugMap_["PhantomCamera::getCameraParameter"]       = onOff;
-    debugMap_["PhantomCamera::readIntegerData"]          = onOff;
-    debugMap_["PhantomCamera::readDoubleData"]           = onOff;
-    debugMap_["PhantomCamera::readRunModes"]             = onOff;
-    debugMap_["PhantomCamera::asynPortConnect"]          = onOff;
-    debugMap_["PhantomCamera::commandResponse"]          = onOff;
-    debugMap_["PhantomCamera::asynWriteRead"]            = onOff;
-    debugMap_["PhantomCamera::cineStates"]               = onOff;
+    debugMap_["ADPhantom::ADPhantom"]               = onOff;
+    debugMap_["ADPhantom::phantomCameraTask"]           = onOff;
+    debugMap_["ADPhantom::phantomPreviewTask"]          = onOff;
+    debugMap_["ADPhantom::readoutPreviewData"]       = onOff;
+    debugMap_["ADPhantom::readFrame"]                = onOff;
+    debugMap_["ADPhantom::downloadFlashFile"]        = onOff;
+    debugMap_["ADPhantom::connect"]                  = onOff;    
+    debugMap_["ADPhantom::readEnum"]                 = onOff;
+    debugMap_["ADPhantom::writeInt32"]               = onOff;
+    debugMap_["ADPhantom::writeFloat64"]             = onOff;
+    debugMap_["ADPhantom::validateSpectrum"]         = onOff;
+    debugMap_["ADPhantom::defineSpectrumFAT"]        = onOff;
+    debugMap_["ADPhantom::defineSpectrumSFAT"]       = onOff;
+    debugMap_["ADPhantom::defineSpectrumFRR"]        = onOff;
+    debugMap_["ADPhantom::defineSpectrumFE"]         = onOff;
+    debugMap_["ADPhantom::readAcquisitionData"]      = onOff;
+    debugMap_["ADPhantom::sendSimpleCommand"]        = onOff;
+    debugMap_["ADPhantom::getCameraDataStruc"]       = onOff;
+    debugMap_["ADPhantom::setupEPICSParameters"]     = onOff;
+    debugMap_["ADPhantom::readoutDataStream"]        = onOff;
+    debugMap_["ADPhantom::getCameraParameterType"]   = onOff;
+    debugMap_["ADPhantom::getCameraParameter"]       = onOff;
+    debugMap_["ADPhantom::readIntegerData"]          = onOff;
+    debugMap_["ADPhantom::readDoubleData"]           = onOff;
+    debugMap_["ADPhantom::readRunModes"]             = onOff;
+    debugMap_["ADPhantom::asynPortConnect"]          = onOff;
+    debugMap_["ADPhantom::commandResponse"]          = onOff;
+    debugMap_["ADPhantom::asynWriteRead"]            = onOff;
+    debugMap_["ADPhantom::cineStates"]               = onOff;
   } else {
     debugMap_[method] = onOff;
   }
   return asynSuccess;
 }
 
-asynStatus PhantomCamera::debug(const std::string& method, const std::string& msg)
+asynStatus ADPhantom::debug(const std::string& method, const std::string& msg)
 {
   // First check for the debug entry in the debug map
   if (debugMap_.count(method) == 1){
@@ -3637,7 +3637,7 @@ asynStatus PhantomCamera::debug(const std::string& method, const std::string& ms
   return asynSuccess;
 }
 
-asynStatus PhantomCamera::debug(const std::string& method, const std::string& msg, int value)
+asynStatus ADPhantom::debug(const std::string& method, const std::string& msg, int value)
 {
   // First check for the debug entry in the debug map
   if (debugMap_.count(method) == 1){
@@ -3650,7 +3650,7 @@ asynStatus PhantomCamera::debug(const std::string& method, const std::string& ms
   return asynSuccess;
 }
 
-asynStatus PhantomCamera::debug(const std::string& method, const std::string& msg, double value)
+asynStatus ADPhantom::debug(const std::string& method, const std::string& msg, double value)
 {
   // First check for the debug entry in the debug map
   if (debugMap_.count(method) == 1){
@@ -3663,7 +3663,7 @@ asynStatus PhantomCamera::debug(const std::string& method, const std::string& ms
   return asynSuccess;
 }
 
-asynStatus PhantomCamera::debug(const std::string& method, const std::string& msg, const std::string& value)
+asynStatus ADPhantom::debug(const std::string& method, const std::string& msg, const std::string& value)
 {
   // First check for the debug entry in the debug map
   if (debugMap_.count(method) == 1){
@@ -3680,7 +3680,7 @@ asynStatus PhantomCamera::debug(const std::string& method, const std::string& ms
   return asynSuccess;
 }
 
-asynStatus PhantomCamera::debug(const std::string& method, const std::string& msg, std::map<std::string, std::string> value)
+asynStatus ADPhantom::debug(const std::string& method, const std::string& msg, std::map<std::string, std::string> value)
 {
   std::map<std::string, std::string>::iterator iter;
 
@@ -3701,50 +3701,50 @@ asynStatus PhantomCamera::debug(const std::string& method, const std::string& ms
 }
 
 // Code required for iocsh registration of the PHANTOM camera
-static const iocshArg phantomCameraConfigArg0 = {"portName", iocshArgString};
-static const iocshArg phantomCameraConfigArg1 = {"Control Port Name", iocshArgString};
-static const iocshArg phantomCameraConfigArg2 = {"Data Port Name", iocshArgString};
-static const iocshArg phantomCameraConfigArg3 = {"Max number of NDArray buffers", iocshArgInt};
-static const iocshArg phantomCameraConfigArg4 = {"maxMemory", iocshArgInt};
-static const iocshArg phantomCameraConfigArg5 = {"priority", iocshArgInt};
-static const iocshArg phantomCameraConfigArg6 = {"stackSize", iocshArgInt};
+static const iocshArg ADPhantomConfigArg0 = {"portName", iocshArgString};
+static const iocshArg ADPhantomConfigArg1 = {"Control Port Name", iocshArgString};
+static const iocshArg ADPhantomConfigArg2 = {"Data Port Name", iocshArgString};
+static const iocshArg ADPhantomConfigArg3 = {"Max number of NDArray buffers", iocshArgInt};
+static const iocshArg ADPhantomConfigArg4 = {"maxMemory", iocshArgInt};
+static const iocshArg ADPhantomConfigArg5 = {"priority", iocshArgInt};
+static const iocshArg ADPhantomConfigArg6 = {"stackSize", iocshArgInt};
 
-static const iocshArg * const phantomCameraConfigArgs[] =  {&phantomCameraConfigArg0,
-                                                            &phantomCameraConfigArg1,
-                                                            &phantomCameraConfigArg2,
-                                                            &phantomCameraConfigArg3,
-                                                            &phantomCameraConfigArg4,
-                                                            &phantomCameraConfigArg5,
-                                                            &phantomCameraConfigArg6};
+static const iocshArg * const ADPhantomConfigArgs[] =  {&ADPhantomConfigArg0,
+                                                            &ADPhantomConfigArg1,
+                                                            &ADPhantomConfigArg2,
+                                                            &ADPhantomConfigArg3,
+                                                            &ADPhantomConfigArg4,
+                                                            &ADPhantomConfigArg5,
+                                                            &ADPhantomConfigArg6};
 
-static const iocshFuncDef configPhantomCamera = {"phantomCameraConfig", 7, phantomCameraConfigArgs};
+static const iocshFuncDef configADPhantom = {"ADPhantomConfig", 7, ADPhantomConfigArgs};
 
-static void configPhantomCameraCallFunc(const iocshArgBuf *args)
+static void configADPhantomCallFunc(const iocshArgBuf *args)
 {
-    phantomCameraConfig(args[0].sval, args[1].sval, args[2].sval, args[3].ival, args[4].ival, args[5].ival, args[6].ival);
+    ADPhantomConfig(args[0].sval, args[1].sval, args[2].sval, args[3].ival, args[4].ival, args[5].ival, args[6].ival);
 }
 
 // Code required for setting the debug level of the PHANTOM camera
-static const iocshArg phantomCameraDebugArg0 = {"port name", iocshArgString};
-static const iocshArg phantomCameraDebugArg1 = {"method name", iocshArgString};
-static const iocshArg phantomCameraDebugArg2 = {"debug on or off", iocshArgInt};
+static const iocshArg ADPhantomDebugArg0 = {"port name", iocshArgString};
+static const iocshArg ADPhantomDebugArg1 = {"method name", iocshArgString};
+static const iocshArg ADPhantomDebugArg2 = {"debug on or off", iocshArgInt};
 
-static const iocshArg * const phantomCameraDebugArgs[] =  {&phantomCameraDebugArg0,
-                                                           &phantomCameraDebugArg1,
-                                                           &phantomCameraDebugArg2};
+static const iocshArg * const ADPhantomDebugArgs[] =  {&ADPhantomDebugArg0,
+                                                           &ADPhantomDebugArg1,
+                                                           &ADPhantomDebugArg2};
 
-static const iocshFuncDef debugPhantomCamera = {"phantomCameraDebug", 3, phantomCameraDebugArgs};
+static const iocshFuncDef debugADPhantom = {"ADPhantomDebug", 3, ADPhantomDebugArgs};
 
-static void debugPhantomCameraCallFunc(const iocshArgBuf *args)
+static void debugADPhantomCallFunc(const iocshArgBuf *args)
 {
     phantomSetDebugLevel(args[0].sval, args[1].sval, args[2].ival);
 }
 
-static void phantomCameraRegister(void)
+static void ADPhantomRegister(void)
 {
-    iocshRegister(&configPhantomCamera, configPhantomCameraCallFunc);
-    iocshRegister(&debugPhantomCamera, debugPhantomCameraCallFunc);
+    iocshRegister(&configADPhantom, configADPhantomCallFunc);
+    iocshRegister(&debugADPhantom, debugADPhantomCallFunc);
 }
 
-epicsExportRegistrar(phantomCameraRegister);
+epicsExportRegistrar(ADPhantomRegister);
 

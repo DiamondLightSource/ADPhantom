@@ -1,23 +1,23 @@
 #include <iostream>
 #include <vector>
 #include <map>
-#include <PhantomCamera.h>
+#include <ADPhantom.h>
 using namespace std;
 
 
-   phantomCameraInfo info;
-   phantomCameraHw hw;
-   phantomCameraMeta meta;
-   phantomCameraCam cam;
-   phantomCameraAuto cameraAuto;
-   phantomCameraEth eth;
-   phantomCameraVideo video;
-   phantomCameraIrig irig;
-   phantomCameraMag mag;
-   phantomCameraCf cf;
-   phantomCameraUsets usets;
-   phantomCameraDefc defc;
-   phantomCameraCine cine;
+   ADPhantomInfo info;
+   ADPhantomHw hw;
+   ADPhantomMeta meta;
+   ADPhantomCam cam;
+   ADPhantomAuto cameraAuto;
+   ADPhantomEth eth;
+   ADPhantomVideo video;
+   ADPhantomIrig irig;
+   ADPhantomMag mag;
+   ADPhantomCf cf;
+   ADPhantomUsets usets;
+   ADPhantomDefc defc;
+   ADPhantomCine cine;
 
 
 int getIntParam(std::map<string, phantomVal> phantomParams, const string name)

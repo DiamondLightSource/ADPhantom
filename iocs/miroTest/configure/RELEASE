@@ -31,12 +31,12 @@ ASYN         = $(SUPPORT)/asyn/4-26
 BUSY         = $(SUPPORT)/busy/1-6-1
 CALC         = $(SUPPORT)/calc/3-1
 FFMPEGSERVER = $(SUPPORT)/ffmpegServer/3-0dls0-11
-PHANTOMCAMERA   = $(WORK)/ADPhantom
+ADPHANTOM   = $(WORK)/ADPhantom
 
 #ASYN         = $(SUPPORT)/asyn/4-26
 #AREADETECTOR = $(SUPPORT)/ADCore/2-4dls6
 #BUSY         = $(SUPPORT)/busy/1-6-1
-#PHANTOMCAMERA   = $(WORK)/ADPhantom
+#ADPHANTOM   = $(WORK)/ADPhantom
 
 # EPICS_BASE usually appears last so other apps can override stuff:
 EPICS_BASE   = /dls_sw/epics/R3.14.12.3/base

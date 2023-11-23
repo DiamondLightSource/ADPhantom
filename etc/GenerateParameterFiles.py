@@ -3,7 +3,7 @@ import sys
 if __name__ == "__main__":
 
     log_file_loc = "../documentation/logs/"
-    out_file_loc = "../phantomCameraApp/src/"
+    out_file_loc = "../ADPhantomApp/src/"
     filenames = ["c1Struc.log","defcStruc.log","hwStruc.log","autoStruc.log", "cfStruc.log","camStruc.log","infoStruc.log"]
 
     of1 = open(out_file_loc + "phantomParamCreateCalls.h", 'w')

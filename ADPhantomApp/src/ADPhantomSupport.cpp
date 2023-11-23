@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
-#include <PhantomCamera.h>
+#include <ADPhantom.h>
 using namespace std;
 
 // '<' and '==' operator functions for use with phantomVal type map

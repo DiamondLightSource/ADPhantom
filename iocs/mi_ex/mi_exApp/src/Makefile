@@ -9,7 +9,7 @@ include $(TOP)/configure/CONFIG
 PROD_IOC = mi_ex
 DBD += mi_ex.dbd
 mi_ex_DBD += base.dbd
-mi_ex_DBD += phantomCameraSupport.dbd
+mi_ex_DBD += ADPhantomSupport.dbd
 mi_ex_DBD += asyn.dbd
 mi_ex_DBD += drvAsynIPPort.dbd
 mi_ex_DBD += busySupport.dbd

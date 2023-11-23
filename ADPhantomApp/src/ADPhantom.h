@@ -571,11 +571,11 @@ public:
   }
 };
 
-class PhantomCamera: public ADDriver
+class ADPhantom: public ADDriver
 {
   public:
-    PhantomCamera(const char *portName, const char *ctrlPort, const char *dataPort, int maxBuffers, size_t maxMemory, int priority, int stackSize);
-    virtual ~PhantomCamera();
+    ADPhantom(const char *portName, const char *ctrlPort, const char *dataPort, int maxBuffers, size_t maxMemory, int priority, int stackSize);
+    virtual ~ADPhantom();
     void phantomCameraTask();
     void phantomStatusTask();
     void phantomPreviewTask();

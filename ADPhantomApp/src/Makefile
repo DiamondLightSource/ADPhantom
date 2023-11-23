@@ -9,16 +9,16 @@ include $(TOP)/configure/CONFIG
 LIBRARY_IOC += phantom
 PROD += createParamIncludes
 
-DBD += phantomCameraSupport.dbd
+DBD += ADPhantomSupport.dbd
 
 # The following are compiled and added to the support library
 HDEPENDS = YES
 
 createParamIncludes_SRCS += createParamIncludes.cpp
-createParamIncludes_SRCS += phantomCameraSupport.cpp
+createParamIncludes_SRCS += ADPhantomSupport.cpp
 
 phantom_SRCS += PhantomCamera.cpp
-phantom_SRCS += phantomCameraSupport.cpp
+phantom_SRCS += ADPhantomSupport.cpp
 
 phantom_LIBS += asyn
 phantom_LIBS += ADBase
