@@ -1,2 +1,2 @@
-registrar("phantomCameraRegister")
+registrar("ADPhantomRegister")
 

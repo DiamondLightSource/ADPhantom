@@ -17,7 +17,7 @@ HDEPENDS = YES
 createParamIncludes_SRCS += createParamIncludes.cpp
 createParamIncludes_SRCS += ADPhantomSupport.cpp
 
-phantom_SRCS += PhantomCamera.cpp
+phantom_SRCS += ADPhantom.cpp
 phantom_SRCS += ADPhantomSupport.cpp
 
 phantom_LIBS += asyn
