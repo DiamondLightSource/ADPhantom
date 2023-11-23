@@ -18,7 +18,7 @@ else
 fi
 EDMDATAFILES="${EDMDATAFILES}${TOP}/data"
 EDMDATAFILES="${EDMDATAFILES}:/dls_sw/prod/R3.14.12.3/support/ADCore/2-4dls1/data"
-EDMDATAFILES="${EDMDATAFILES}:/home/gnx91527/work/epics/miro/miroCamera/data"
+EDMDATAFILES="${EDMDATAFILES}:/home/gnx91527/work/epics/phantom/phantomCamera/data"
 EDMDATAFILES="${EDMDATAFILES}:/dls_sw/prod/R3.14.12.3/support/ADExample/2-0-1dls1/data"
 EDMDATAFILES="${EDMDATAFILES}:/dls_sw/prod/R3.14.12.3/support/adUtil/2-7/data"
 EDMDATAFILES="${EDMDATAFILES}:/dls_sw/prod/R3.14.12.3/support/ffmpegServer/3-0dls0-6/data"

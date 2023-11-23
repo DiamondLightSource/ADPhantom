@@ -1,30 +1,30 @@
 #include <iostream>
 #include <vector>
 #include <map>
-#include <MiroCamera.h>
+#include <PhantomCamera.h>
 using namespace std;
 
 
-   miroCameraInfo info;
-   miroCameraHw hw;
-   miroCameraMeta meta;
-   miroCameraCam cam;
-   miroCameraAuto cameraAuto;
-   miroCameraEth eth;
-   miroCameraVideo video;
-   miroCameraIrig irig;
-   miroCameraMag mag;
-   miroCameraCf cf;
-   miroCameraUsets usets;
-   miroCameraDefc defc;
-   miroCameraCine cine;
+   phantomCameraInfo info;
+   phantomCameraHw hw;
+   phantomCameraMeta meta;
+   phantomCameraCam cam;
+   phantomCameraAuto cameraAuto;
+   phantomCameraEth eth;
+   phantomCameraVideo video;
+   phantomCameraIrig irig;
+   phantomCameraMag mag;
+   phantomCameraCf cf;
+   phantomCameraUsets usets;
+   phantomCameraDefc defc;
+   phantomCameraCine cine;
 
 
-int getIntParam(std::map<string, miroVal> miroParams, const string name)
+int getIntParam(std::map<string, phantomVal> phantomParams, const string name)
 {
-  miroVal value;
-  value = miroParams[name];
-  if (value.getType()==MIROTypeInteger) 
+  phantomVal value;
+  value = phantomParams[name];
+  if (value.getType()==PHANTOMTypeInteger) 
     return atoi((value.getValue()).c_str());
   else 
     return 0;
@@ -36,12 +36,12 @@ int main()
                       "cfStruc.log","camStruc.log","infoStruc.log" };
   int numFile;
   unsigned int j;
-  miroVal miroDat;
+  phantomVal phantomDat;
  
   std::string cameraDataIn;
   vector<string> names;
-  vector<miroVal> values;
-  std::map<string, miroVal> miroParams;
+  vector<phantomVal> values;
+  std::map<string, phantomVal> phantomParams;
 
   char* pPath;
   std::string sfilePath;
@@ -65,18 +65,18 @@ int main()
     parseDataStruc(iline, names, values);
     cout << "Total " << names.size() << " data items. File read = " <<  fileName[numFile] << '\n';
     for (j=0; j < names.size(); j++ ) {
-      miroParams[names[j]] = values[j];  // Store in a Map structure
+      phantomParams[names[j]] = values[j];  // Store in a Map structure
     }
   }
 
-   FILE *fp1 = fopen("miroParamCreateCalls.h","w");
-   FILE *fp2 = fopen("miroParamDefines.h","w");
-   FILE *fp3 = fopen("miroParamVarDecl.h","w");
+   FILE *fp1 = fopen("phantomParamCreateCalls.h","w");
+   FILE *fp2 = fopen("phantomParamDefines.h","w");
+   FILE *fp3 = fopen("phantomParamVarDecl.h","w");
    std::string parVarName ="";
    std::string parDefString ="";
 // Iterate through the map structure, printing out all the [name,value+type]   
-    std::map<string, miroVal>::iterator mt;
-    for(mt = miroParams.begin(); mt != miroParams.end(); ++mt) {
+    std::map<string, phantomVal>::iterator mt;
+    for(mt = phantomParams.begin(); mt != phantomParams.end(); ++mt) {
       cout << mt->first << "," << (mt->second).getValue()  << "," << (mt->second).getType() << "\n";
       std::string paramName = mt->first;
       parVarName = "";
@@ -94,25 +94,25 @@ int main()
         else
           parDefString.push_back(toupper(paramName.at(i)));
       }
-      MIROValueType_t mtype = (mt->second).getType();
+      PHANTOMValueType_t mtype = (mt->second).getType();
       std::string sAsynType = "asynParamInt32";
-      if (mtype == MIROTypeFloat) {
+      if (mtype == PHANTOMTypeFloat) {
         sAsynType = "asynParamFloat64";
       }
-      else if (mtype == MIROTypeString) {
+      else if (mtype == PHANTOMTypeString) {
         sAsynType = "asynParamOctet";
       }
-      fprintf(fp1, "createParam(MIRO%s, %s, &MIRO%s_);\n", parVarName.c_str(), sAsynType.c_str(), 
+      fprintf(fp1, "createParam(PHANTOM%s, %s, &PHANTOM%s_);\n", parVarName.c_str(), sAsynType.c_str(), 
                                                            parVarName.c_str());
-      fprintf(fp2, "#define    MIRO%s  \"MIRO_%s\"\n", parVarName.c_str(),parDefString.c_str());
-      fprintf(fp3, "int MIRO%s_;\n", parVarName.c_str());
+      fprintf(fp2, "#define    PHANTOM%s  \"PHANTOM_%s\"\n", parVarName.c_str(),parDefString.c_str());
+      fprintf(fp3, "int PHANTOM%s_;\n", parVarName.c_str());
     }
     fclose(fp1); fclose(fp2); fclose(fp3);
  
-    info.model = miroParams["info.model"].getValue();
+    info.model = phantomParams["info.model"].getValue();
     cout << "info.model = " << info.model << '\n';
-    cout << "info.cinemem = " << getIntParam(miroParams, "info.cinemem") << '\n';
-    info.vbatt = atof((miroParams["info.vbatt"].getValue()).c_str());
+    cout << "info.cinemem = " << getIntParam(phantomParams, "info.cinemem") << '\n';
+    info.vbatt = atof((phantomParams["info.vbatt"].getValue()).c_str());
     cout << "info.vbatt = " << info.vbatt << '\n';
   return 0;
 }

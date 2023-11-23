@@ -9,7 +9,7 @@ include $(TOP)/configure/CONFIG
 PROD_IOC = mi_ex
 DBD += mi_ex.dbd
 mi_ex_DBD += base.dbd
-mi_ex_DBD += miroCameraSupport.dbd
+mi_ex_DBD += phantomCameraSupport.dbd
 mi_ex_DBD += asyn.dbd
 mi_ex_DBD += drvAsynIPPort.dbd
 mi_ex_DBD += busySupport.dbd
@@ -18,7 +18,7 @@ mi_ex_DBD += NDPluginSupport.dbd
 mi_ex_DBD += calcSupport.dbd
 mi_ex_DBD += ffmpegServer.dbd
 mi_ex_SRCS += mi_ex_registerRecordDeviceDriver.cpp
-mi_ex_LIBS += miro
+mi_ex_LIBS += phantom
 mi_ex_LIBS += ffmpegServer
 mi_ex_LIBS += avdevice
 mi_ex_LIBS += avformat

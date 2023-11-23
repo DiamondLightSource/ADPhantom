@@ -6,7 +6,7 @@
 record(mbbi, "$(P)$(R)CFState_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF_STATE")
+   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF_STATE")
    field(ZRST, "Unplugged")
    field(ZRVL, "0")
    field(ONST, "Removed")
@@ -26,7 +26,7 @@ record(longin, "$(P)$(R)CFAction_RBV")
 {
   field(DESC, "Number of active requests")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF_ACTION")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF_ACTION")
   field(SCAN, "I/O Intr")
 }
 
@@ -34,7 +34,7 @@ record(longin, "$(P)$(R)CFSize_RBV")
 {
   field(DESC, "Size of flash in bytes")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF_SIZE")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF_SIZE")
   field(SCAN, "I/O Intr")
 }
 
@@ -42,7 +42,7 @@ record(longin, "$(P)$(R)CFUsed_RBV")
 {
   field(DESC, "Size of used flash memory in bytes")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF_USED")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF_USED")
   field(SCAN, "I/O Intr")
 }
 
@@ -50,14 +50,14 @@ record(longin, "$(P)$(R)CFProgress_RBV")
 {
   field(DESC, "Current action progress countdown")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF_PROGRESS")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF_PROGRESS")
   field(SCAN, "I/O Intr")
 }
 
 record(mbbi, "$(P)$(R)CFError_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF_ERROR")
+   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF_ERROR")
    field(ZRST, "No Error")
    field(ZRVL, "0")
    field(ONST, "Device mount failed")
@@ -79,27 +79,27 @@ record(longin, "$(P)$(R)CFNumFiles_RBV")
 {
   field(DESC, "Number of saved files")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF_NUM_FILES")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF_NUM_FILES")
   field(SCAN, "I/O Intr")
 }
 
 record(longin, "$(P)$(R)CFMaxPages_RBV")
 {
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF_MAX_PAGES")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF_MAX_PAGES")
   field(SCAN, "I/O Intr")
 }
 
 record(longout, "$(P)$(R)CFCurrentPage")
 {
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF_CUR_PAGE")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF_CUR_PAGE")
 }
 
 record(longin, "$(P)$(R)CFCurrentPage_RBV")
 {
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF_CUR_PAGE")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF_CUR_PAGE")
   field(SCAN, "I/O Intr")
 }
 
@@ -121,7 +121,7 @@ record(waveform, "$(P)$(R)CFFileName")
 {
   field(DESC, "Selected flash filename")
   field(DTYP, "asynOctetWrite")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF_FILENAME")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF_FILENAME")
   field(FTVL, "CHAR")
   field(NELM, "1000")
 }
@@ -130,7 +130,7 @@ record(waveform, "$(P)$(R)CFFileName_RBV")
 {
   field(DESC, "Selected flash filename")
   field(DTYP, "asynOctetRead")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF_FILENAME")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF_FILENAME")
   field(FTVL, "CHAR")
   field(NELM, "1000")
   field(SCAN, "I/O Intr")
@@ -139,19 +139,19 @@ record(waveform, "$(P)$(R)CFFileName_RBV")
 record(longout, "$(P)$(R)CFSelectIndex")
 {
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CFS_INDEX")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CFS_INDEX")
 }
 
 record(longout, "$(P)$(R)CFFormat")
 {
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF_FORMAT")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF_FORMAT")
 }
 
 record(longin, "$(P)$(R)CFFormat_RBV")
 {
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF_FORMAT")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF_FORMAT")
   field(SCAN, "I/O Intr")
 }
 
@@ -159,7 +159,7 @@ record(waveform, "$(P)$(R)FlashName1_RBV")
 {
   field(DESC, "Flash file name")
   field(DTYP, "asynOctetRead")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF1_FILE_NAME")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF1_FILE_NAME")
   field(FTVL, "CHAR")
   field(NELM, "1000")
   field(SCAN, "I/O Intr")
@@ -169,7 +169,7 @@ record(waveform, "$(P)$(R)FlashSize1_RBV")
 {
   field(DESC, "Flash file size")
   field(DTYP, "asynOctetRead")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF1_FILE_SIZE")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF1_FILE_SIZE")
   field(FTVL, "CHAR")
   field(NELM, "1000")
   field(SCAN, "I/O Intr")
@@ -179,7 +179,7 @@ record(waveform, "$(P)$(R)FlashDate1_RBV")
 {
   field(DESC, "Flash file date")
   field(DTYP, "asynOctetRead")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF1_FILE_DATE")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF1_FILE_DATE")
   field(FTVL, "CHAR")
   field(NELM, "1000")
   field(SCAN, "I/O Intr")
@@ -189,7 +189,7 @@ record(waveform, "$(P)$(R)FlashName2_RBV")
 {
   field(DESC, "Flash file name")
   field(DTYP, "asynOctetRead")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF2_FILE_NAME")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF2_FILE_NAME")
   field(FTVL, "CHAR")
   field(NELM, "1000")
   field(SCAN, "I/O Intr")
@@ -199,7 +199,7 @@ record(waveform, "$(P)$(R)FlashSize2_RBV")
 {
   field(DESC, "Flash file size")
   field(DTYP, "asynOctetRead")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF2_FILE_SIZE")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF2_FILE_SIZE")
   field(FTVL, "CHAR")
   field(NELM, "1000")
   field(SCAN, "I/O Intr")
@@ -209,7 +209,7 @@ record(waveform, "$(P)$(R)FlashDate2_RBV")
 {
   field(DESC, "Flash file date")
   field(DTYP, "asynOctetRead")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF2_FILE_DATE")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF2_FILE_DATE")
   field(FTVL, "CHAR")
   field(NELM, "1000")
   field(SCAN, "I/O Intr")
@@ -219,7 +219,7 @@ record(waveform, "$(P)$(R)FlashName3_RBV")
 {
   field(DESC, "Flash file name")
   field(DTYP, "asynOctetRead")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF3_FILE_NAME")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF3_FILE_NAME")
   field(FTVL, "CHAR")
   field(NELM, "1000")
   field(SCAN, "I/O Intr")
@@ -229,7 +229,7 @@ record(waveform, "$(P)$(R)FlashSize3_RBV")
 {
   field(DESC, "Flash file size")
   field(DTYP, "asynOctetRead")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF3_FILE_SIZE")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF3_FILE_SIZE")
   field(FTVL, "CHAR")
   field(NELM, "1000")
   field(SCAN, "I/O Intr")
@@ -239,7 +239,7 @@ record(waveform, "$(P)$(R)FlashDate3_RBV")
 {
   field(DESC, "Flash file date")
   field(DTYP, "asynOctetRead")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF3_FILE_DATE")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF3_FILE_DATE")
   field(FTVL, "CHAR")
   field(NELM, "1000")
   field(SCAN, "I/O Intr")
@@ -249,7 +249,7 @@ record(waveform, "$(P)$(R)FlashName4_RBV")
 {
   field(DESC, "Flash file name")
   field(DTYP, "asynOctetRead")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF4_FILE_NAME")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF4_FILE_NAME")
   field(FTVL, "CHAR")
   field(NELM, "1000")
   field(SCAN, "I/O Intr")
@@ -259,7 +259,7 @@ record(waveform, "$(P)$(R)FlashSize4_RBV")
 {
   field(DESC, "Flash file size")
   field(DTYP, "asynOctetRead")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF4_FILE_SIZE")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF4_FILE_SIZE")
   field(FTVL, "CHAR")
   field(NELM, "1000")
   field(SCAN, "I/O Intr")
@@ -269,7 +269,7 @@ record(waveform, "$(P)$(R)FlashDate4_RBV")
 {
   field(DESC, "Flash file date")
   field(DTYP, "asynOctetRead")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF4_FILE_DATE")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF4_FILE_DATE")
   field(FTVL, "CHAR")
   field(NELM, "1000")
   field(SCAN, "I/O Intr")
@@ -279,7 +279,7 @@ record(waveform, "$(P)$(R)FlashName5_RBV")
 {
   field(DESC, "Flash file name")
   field(DTYP, "asynOctetRead")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF5_FILE_NAME")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF5_FILE_NAME")
   field(FTVL, "CHAR")
   field(NELM, "1000")
   field(SCAN, "I/O Intr")
@@ -289,7 +289,7 @@ record(waveform, "$(P)$(R)FlashSize5_RBV")
 {
   field(DESC, "Flash file size")
   field(DTYP, "asynOctetRead")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF5_FILE_SIZE")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF5_FILE_SIZE")
   field(FTVL, "CHAR")
   field(NELM, "1000")
   field(SCAN, "I/O Intr")
@@ -299,7 +299,7 @@ record(waveform, "$(P)$(R)FlashDate5_RBV")
 {
   field(DESC, "Flash file date")
   field(DTYP, "asynOctetRead")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF5_FILE_DATE")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF5_FILE_DATE")
   field(FTVL, "CHAR")
   field(NELM, "1000")
   field(SCAN, "I/O Intr")
@@ -309,7 +309,7 @@ record(waveform, "$(P)$(R)FlashName6_RBV")
 {
   field(DESC, "Flash file name")
   field(DTYP, "asynOctetRead")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF6_FILE_NAME")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF6_FILE_NAME")
   field(FTVL, "CHAR")
   field(NELM, "1000")
   field(SCAN, "I/O Intr")
@@ -319,7 +319,7 @@ record(waveform, "$(P)$(R)FlashSize6_RBV")
 {
   field(DESC, "Flash file size")
   field(DTYP, "asynOctetRead")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF6_FILE_SIZE")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF6_FILE_SIZE")
   field(FTVL, "CHAR")
   field(NELM, "1000")
   field(SCAN, "I/O Intr")
@@ -329,7 +329,7 @@ record(waveform, "$(P)$(R)FlashDate6_RBV")
 {
   field(DESC, "Flash file date")
   field(DTYP, "asynOctetRead")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF6_FILE_DATE")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF6_FILE_DATE")
   field(FTVL, "CHAR")
   field(NELM, "1000")
   field(SCAN, "I/O Intr")
@@ -339,7 +339,7 @@ record(waveform, "$(P)$(R)FlashName7_RBV")
 {
   field(DESC, "Flash file name")
   field(DTYP, "asynOctetRead")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF7_FILE_NAME")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF7_FILE_NAME")
   field(FTVL, "CHAR")
   field(NELM, "1000")
   field(SCAN, "I/O Intr")
@@ -349,7 +349,7 @@ record(waveform, "$(P)$(R)FlashSize7_RBV")
 {
   field(DESC, "Flash file size")
   field(DTYP, "asynOctetRead")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF7_FILE_SIZE")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF7_FILE_SIZE")
   field(FTVL, "CHAR")
   field(NELM, "1000")
   field(SCAN, "I/O Intr")
@@ -359,7 +359,7 @@ record(waveform, "$(P)$(R)FlashDate7_RBV")
 {
   field(DESC, "Flash file date")
   field(DTYP, "asynOctetRead")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF7_FILE_DATE")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF7_FILE_DATE")
   field(FTVL, "CHAR")
   field(NELM, "1000")
   field(SCAN, "I/O Intr")
@@ -369,7 +369,7 @@ record(waveform, "$(P)$(R)FlashName8_RBV")
 {
   field(DESC, "Flash file name")
   field(DTYP, "asynOctetRead")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF8_FILE_NAME")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF8_FILE_NAME")
   field(FTVL, "CHAR")
   field(NELM, "1000")
   field(SCAN, "I/O Intr")
@@ -379,7 +379,7 @@ record(waveform, "$(P)$(R)FlashSize8_RBV")
 {
   field(DESC, "Flash file size")
   field(DTYP, "asynOctetRead")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF8_FILE_SIZE")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF8_FILE_SIZE")
   field(FTVL, "CHAR")
   field(NELM, "1000")
   field(SCAN, "I/O Intr")
@@ -389,7 +389,7 @@ record(waveform, "$(P)$(R)FlashDate8_RBV")
 {
   field(DESC, "Flash file date")
   field(DTYP, "asynOctetRead")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CF8_FILE_DATE")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CF8_FILE_DATE")
   field(FTVL, "CHAR")
   field(NELM, "1000")
   field(SCAN, "I/O Intr")
@@ -403,14 +403,14 @@ record(waveform, "$(P)$(R)FlashDate8_RBV")
 record(longout, "$(P)$(R)CFSDeleteFile")
 {
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CFS_DELETE")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CFS_DELETE")
 }
 
 record(longin, "$(P)$(R)CFSWidth_RBV")
 {
   field(DESC, "Width of selected CF file")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CFS_WIDTH")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CFS_WIDTH")
   field(SCAN, "I/O Intr")
 }
 
@@ -419,7 +419,7 @@ record(longin, "$(P)$(R)CFSHeight_RBV")
 {
   field(DESC, "Height of selected CF file")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CFS_HEIGHT")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CFS_HEIGHT")
   field(SCAN, "I/O Intr")
 }
 
@@ -427,7 +427,7 @@ record(longin, "$(P)$(R)CFSFrameCount_RBV")
 {
   field(DESC, "Count of selected CF file")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CFS_FR_COUNT")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CFS_FR_COUNT")
   field(SCAN, "I/O Intr")
 }
 
@@ -435,7 +435,7 @@ record(longin, "$(P)$(R)CFSFirstFrame_RBV")
 {
   field(DESC, "First frame of selected CF file")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CFS_FIRST_FR")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CFS_FIRST_FR")
   field(SCAN, "I/O Intr")
 }
 
@@ -443,7 +443,7 @@ record(longin, "$(P)$(R)CFSLastFrame_RBV")
 {
   field(DESC, "Last frame of selected CF file")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CFS_LAST_FR")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CFS_LAST_FR")
   field(SCAN, "I/O Intr")
 }
 
@@ -453,14 +453,14 @@ record(longout, "$(P)$(R)CFSRecordStart")
 {
   field(DESC, "Record starting frame")
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CFS_REC_START")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CFS_REC_START")
 }
 
 record(longin, "$(P)$(R)CFSRecordStart_RBV")
 {
   field(DESC, "Record starting frame")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CFS_REC_START")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CFS_REC_START")
   field(SCAN, "I/O Intr")
 }
 
@@ -470,14 +470,14 @@ record(longout, "$(P)$(R)CFSRecordEnd")
 {
   field(DESC, "Record ending frame")
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CFS_REC_END")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CFS_REC_END")
 }
 
 record(longin, "$(P)$(R)CFSRecordEnd_RBV")
 {
   field(DESC, "Record ending frame")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CFS_REC_END")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CFS_REC_END")
   field(SCAN, "I/O Intr")
 }
 
@@ -487,14 +487,14 @@ record(longout, "$(P)$(R)CFSRecord")
 {
   field(DESC, "Start the recording")
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CFS_RECORD")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CFS_RECORD")
 }
 
 record(longin, "$(P)$(R)CFSRecordCount_RBV")
 {
   field(DESC, "Count of downloading CF file")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CFS_REC_COUNT")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CFS_REC_COUNT")
   field(SCAN, "I/O Intr")
 }
 

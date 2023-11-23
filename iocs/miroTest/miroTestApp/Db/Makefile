@@ -10,7 +10,7 @@ include $(TOP)/configure/CONFIG
 #----------------------------------------------------
 # Create and install (or just install)
 # databases, templates, substitutions like this
-DB += miroCamera.db
+DB += phantomCamera.db
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

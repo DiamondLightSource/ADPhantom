@@ -10,7 +10,7 @@ record(waveform, "$(P)$(R)C$(CINE):Name_RBV")
 {
   field(DESC, "Cine $(CINE) name")
   field(DTYP, "asynOctetRead")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_C$(CINE)_NAME")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_C$(CINE)_NAME")
   field(FTVL, "CHAR")
   field(NELM, "1000")
   field(SCAN, "I/O Intr")
@@ -22,7 +22,7 @@ record(longin, "$(P)$(R)C$(CINE):Width_RBV")
 {
   field(DESC, "Cine $(CINE) width")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_C$(CINE)_WIDTH")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_C$(CINE)_WIDTH")
   field(SCAN, "I/O Intr")
 }
 
@@ -32,7 +32,7 @@ record(longin, "$(P)$(R)C$(CINE):Height_RBV")
 {
   field(DESC, "Cine $(CINE) height")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_C$(CINE)_HEIGHT")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_C$(CINE)_HEIGHT")
   field(SCAN, "I/O Intr")
 }
 
@@ -42,7 +42,7 @@ record(longin, "$(P)$(R)C$(CINE):FrameCount_RBV")
 {
   field(DESC, "Cine $(CINE) frame count")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_C$(CINE)_FR_COUNT")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_C$(CINE)_FR_COUNT")
   field(SCAN, "I/O Intr")
 }
 
@@ -52,7 +52,7 @@ record(longin, "$(P)$(R)C$(CINE):FirstFrame_RBV")
 {
   field(DESC, "Cine $(CINE) first frame")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_C$(CINE)_FIRST_FR")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_C$(CINE)_FIRST_FR")
   field(SCAN, "I/O Intr")
 }
 
@@ -62,7 +62,7 @@ record(longin, "$(P)$(R)C$(CINE):LastFrame_RBV")
 {
   field(DESC, "Cine $(CINE) last frame")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_C$(CINE)_LAST_FR")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_C$(CINE)_LAST_FR")
   field(SCAN, "I/O Intr")
 }
 
@@ -72,7 +72,7 @@ record(longin, "$(P)$(R)C$(CINE):RecordStart_RBV")
 {
   field(DESC, "Cine $(CINE) record starting frame")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_C$(CINE)_REC_START")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_C$(CINE)_REC_START")
   field(SCAN, "I/O Intr")
 }
 
@@ -82,7 +82,7 @@ record(longin, "$(P)$(R)C$(CINE):RecordEnd_RBV")
 {
   field(DESC, "Cine $(CINE) record ending frame")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_C$(CINE)_REC_END")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_C$(CINE)_REC_END")
   field(SCAN, "I/O Intr")
 }
 
@@ -91,7 +91,7 @@ record(longin, "$(P)$(R)C$(CINE):RecordEnd_RBV")
 record(longin, "$(P)$(R)C$(CINE):RecordCount_RBV") {
   field(DTYP, "asynInt32")
   field(SCAN, "I/O Intr")
-  field(INP, "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_C$(CINE)_REC_COUNT")
+  field(INP, "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_C$(CINE)_REC_COUNT")
 }
 
 ### Cine State
@@ -99,7 +99,7 @@ record(longin, "$(P)$(R)C$(CINE):RecordCount_RBV") {
 record(longin, "$(P)$(R)C$(CINE):StateRaw") {
   field(DTYP, "asynInt32")
   field(SCAN, "I/O Intr")
-  field(INP, "@asyn($(PORT),$(ADDR))MIRO_C$(CINE)_STATUS")
+  field(INP, "@asyn($(PORT),$(ADDR))PHANTOM_C$(CINE)_STATUS")
   field(FLNK, "$(P)$(R)C$(CINE):State_RBV")
 }
 

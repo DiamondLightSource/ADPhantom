@@ -6,30 +6,30 @@ from iocbuilder.modules.ADCore import ADCore, ADBaseTemplate, NDFileTemplate, ma
 
 
 
-class miroCineTemplate(AutoSubstitution):
-    TemplateFile="miroCine.template"
+class phantomCineTemplate(AutoSubstitution):
+    TemplateFile="phantomCine.template"
 
-class miroFlashTemplate(AutoSubstitution):
-    TemplateFile="miroFlash.template"
+class phantomFlashTemplate(AutoSubstitution):
+    TemplateFile="phantomFlash.template"
 
 @includesTemplates(ADBaseTemplate, NDFileTemplate)
-class miroCameraTemplate (AutoSubstitution):
-    TemplateFile = 'miroCamera.template'
+class phantomCameraTemplate (AutoSubstitution):
+    TemplateFile = 'phantomCamera.template'
 
-class miroLoadedFirst(Device):
+class phantomLoadedFirst(Device):
     # Make sure our library gets included by dependent IOCs
-    LibFileList = ['miro']
+    LibFileList = ['phantom']
     
     # This seems to be necessary
     AutoInstantiate = True
 
 # Main class for the opto device
-class miroCamera(AsynPort):
+class ADPhantom(AsynPort):
     # We depend upon ADCore
-    Dependencies = (miroLoadedFirst, ADCore)
+    Dependencies = (phantomLoadedFirst, ADCore)
 
     # Make sure our DBD file gets used or created
-    DbdFileList = ['miroCameraSupport']
+    DbdFileList = ['ADPhantomSupport']
     UniqueName = "PORT"
 
     def __init__(self, PORT, P="P", R="R", ADDR=0, TIMEOUT=1000, CTRLPORT="CTRLPORT", DATAPORT="DATAPORT", CINE=0, **args):
@@ -52,25 +52,25 @@ class miroCamera(AsynPort):
         self.__dict__.update(locals())
 
         # Make an instance of our template
-        makeTemplateInstance(miroCameraTemplate, locals(), args)
-        # makeDb = miroCameraTemplate(P=P, R=R, PORT=PORT, ADDR=ADDR, TIMEOUT=TIMEOUT)
+        makeTemplateInstance(phantomCameraTemplate, locals(), args)
+        # makeDb = phantomCameraTemplate(P=P, R=R, PORT=PORT, ADDR=ADDR, TIMEOUT=TIMEOUT)
         for i in range(1,17):
-            makeDb = miroCineTemplate(P=P, R=R, PORT=PORT, ADDR=ADDR, TIMEOUT=TIMEOUT, CINE=i)
+            makeDb = phantomCineTemplate(P=P, R=R, PORT=PORT, ADDR=ADDR, TIMEOUT=TIMEOUT, CINE=i)
 
 
     
     def InitialiseOnce(self):
         # Print some description of what we're doing in the startup script
-        print "# Driver for MiroCamera"
+        print "# Driver for ADPhantom"
         
     def Initialise(self):
         # Print the command to create the device in the startup script
         print "# Create driver"
-        print "# miroCameraConfig(const char *portName, const char *ctrlPort, const char *dataPort, int maxBuffers, size_t maxMemory, int priority,  int stackSize)"
-        print "miroCameraConfig(\"{0}\",\"{1}\",\"{2}\", 0, 0, 0,  0)".format(self.PORT, self.CTRLPORT, self.DATAPORT)
+        print "# ADPhantomConfig(const char *portName, const char *ctrlPort, const char *dataPort, int maxBuffers, size_t maxMemory, int priority,  int stackSize)"
+        print "ADPhantomConfig(\"{0}\",\"{1}\",\"{2}\", 0, 0, 0,  0)".format(self.PORT, self.CTRLPORT, self.DATAPORT)
     
     # tell xmlbuilder what args to supply
-    ArgInfo = ADBaseTemplate.ArgInfo + miroCameraTemplate.ArgInfo + makeArgInfo(__init__,
+    ArgInfo = ADBaseTemplate.ArgInfo + phantomCameraTemplate.ArgInfo + makeArgInfo(__init__,
         PORT    = Simple("Port name for the detector", str),
         P       = Simple("Device prefix", str),
         R       = Simple("Device suffix", str),
