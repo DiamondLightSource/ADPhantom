@@ -201,9 +201,7 @@
 #define PHANTOM_CamQuietFanString              "PHANTOM_FAN_QUIET"
 
 #define PHANTOM_AutoTriggerXString             "PHANTOM_AUTOTRIG_X"
-#define PHANTOM_AutoTriggerXZeroedString       "PHANTOM_AUTOTRIGZEROED_X"
 #define PHANTOM_AutoTriggerYString             "PHANTOM_AUTOTRIG_Y"
-#define PHANTOM_AutoTriggerYZeroedString       "PHANTOM_AUTOTRIGZEROED_Y"
 #define PHANTOM_AutoTriggerWString             "PHANTOM_AUTOTRIG_W"
 #define PHANTOM_AutoTriggerHString             "PHANTOM_AUTOTRIG_H"
 #define PHANTOM_AutoTriggerThresholdString     "PHANTOM_AUTOTRIG_THRESH"
@@ -721,9 +719,7 @@ class ADPhantom: public ADDriver
     int PHANTOM_CamQuietFan_;
     int PHANTOM_CamAuxPin_;
     int PHANTOM_AutoTriggerX_;
-    int PHANTOM_AutoTriggerXZeroed_;
     int PHANTOM_AutoTriggerY_;
-    int PHANTOM_AutoTriggerYZeroed_;
     int PHANTOM_AutoTriggerW_;
     int PHANTOM_AutoTriggerH_;
     int PHANTOM_AutoTriggerThreshold_;

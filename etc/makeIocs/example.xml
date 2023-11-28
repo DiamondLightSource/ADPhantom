@@ -51,8 +51,8 @@
 	<EPICS_BASE.dbpf pv="BL12I-EA-DET-38:TIFF:NDArrayPort" value="phantom.roi"/>
 	<EPICS_BASE.dbpf pv="BL12I-EA-DET-38:OVER:1:SizeXLink.DOL" value="BL12I-EA-DET-38:CAM:AutoTriggerW_RBV CP"/>
 	<EPICS_BASE.dbpf pv="BL12I-EA-DET-38:OVER:1:SizeYLink.DOL" value="BL12I-EA-DET-38:CAM:AutoTriggerH_RBV CP"/>
-	<EPICS_BASE.dbpf pv="BL12I-EA-DET-38:OVER:1:CenterXLink.DOL" value="BL12I-EA-DET-38:CAM:AutoTriggerXZeroed_RBV CP"/>
-	<EPICS_BASE.dbpf pv="BL12I-EA-DET-38:OVER:1:CenterYLink.DOL" value="BL12I-EA-DET-38:CAM:AutoTriggerYZeroed_RBV CP"/>
+	<EPICS_BASE.dbpf pv="BL12I-EA-DET-38:OVER:1:CenterXLink.DOL" value="BL12I-EA-DET-38:CAM:AutoTriggerX_RBV CP"/>
+	<EPICS_BASE.dbpf pv="BL12I-EA-DET-38:OVER:1:CenterYLink.DOL" value="BL12I-EA-DET-38:CAM:AutoTriggerY_RBV CP"/>
 	<EPICS_BASE.dbpf pv="BL12I-EA-DET-38:OVER:1:WidthX" value="2"/>
 	<EPICS_BASE.dbpf pv="BL12I-EA-DET-38:OVER:1:WidthY" value="2"/>
 	<EPICS_BASE.dbpf pv="BL12I-EA-DET-38:OVER:1:Use.DOL" value="BL12I-EA-DET-38:CAM:AutoTriggerMode_RBV"/>
