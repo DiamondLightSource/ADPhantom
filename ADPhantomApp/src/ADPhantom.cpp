@@ -1056,7 +1056,9 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   createParam(PHANTOM_CamTriggerEdgeString,           asynParamInt32,         &PHANTOM_CamTriggerEdge_);
   createParam(PHANTOM_CamTriggerFilterString,         asynParamInt32,         &PHANTOM_CamTriggerFilter_);
   createParam(PHANTOM_CamReadySignalString,           asynParamInt32,         &PHANTOM_CamReadySignal_);
-  createParam(PHANTOM_CamAuxPinString,                asynParamInt32,         &PHANTOM_CamAuxPin_);
+  createParam(PHANTOM_CamAux1PinString,               asynParamInt32,         &PHANTOM_CamAux1Pin_);
+  createParam(PHANTOM_CamAux2PinString,               asynParamInt32,         &PHANTOM_CamAux2Pin_);
+  createParam(PHANTOM_CamAux4PinString,               asynParamInt32,         &PHANTOM_CamAux4Pin_);
   createParam(PHANTOM_CamQuietFanString,              asynParamInt32,         &PHANTOM_CamQuietFan_);
   createParam(PHANTOM_SyncClockString,                asynParamInt32,         &PHANTOM_SyncClock);
   createParam(PHANTOM_AutoTriggerXString,             asynParamInt32,         &PHANTOM_AutoTriggerX_);
@@ -1989,8 +1991,12 @@ asynStatus ADPhantom::writeInt32(asynUser *pasynUser, epicsInt32 value)
     status |= setCameraParameter("cam.trigfilt", value);
   } else if (function == PHANTOM_CamReadySignal_){
     status |= setCameraParameter("cam.longready", value);
-  } else if (function == PHANTOM_CamAuxPin_){
+  } else if (function == PHANTOM_CamAux1Pin_){
     status |= setCameraParameter("cam.aux1mode", value);
+  } else if (function == PHANTOM_CamAux2Pin_){
+    status |= setCameraParameter("cam.aux2mode", value);
+  } else if (function == PHANTOM_CamAux4Pin_){
+    status |= setCameraParameter("cam.aux4mode", value);
   } else if (function == PHANTOM_CamQuietFan_){
     status |= setCameraParameter("cam.quiet", value);
   } else if (function == ADSizeX || function == ADSizeY){
@@ -3698,8 +3704,16 @@ asynStatus ADPhantom::updateCameraStatus()
     status = this->updateIntegerParameter("cam.longready", PHANTOM_CamReadySignal_);
   }
   if (status == asynSuccess){
-    // Update the aux pin
-    status = this->updateIntegerParameter("cam.aux1mode", PHANTOM_CamAuxPin_);
+    // Update the aux1 pin
+    status = this->updateIntegerParameter("cam.aux1mode", PHANTOM_CamAux1Pin_);
+  }
+  if (status == asynSuccess){
+    // Update the aux2 pin
+    status = this->updateIntegerParameter("cam.aux2mode", PHANTOM_CamAux2Pin_);
+  }
+  if (status == asynSuccess){
+    // Update the aux4 pin
+    status = this->updateIntegerParameter("cam.aux4mode", PHANTOM_CamAux4Pin_);
   }
   if (status == asynSuccess){
     // Update the quiet mode

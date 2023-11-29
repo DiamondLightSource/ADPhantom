@@ -193,7 +193,9 @@
 #define PHANTOM_CamTriggerEdgeString           "PHANTOM_TRIGGER_EDGE"
 #define PHANTOM_CamTriggerFilterString         "PHANTOM_TRIGGER_FILTER"
 #define PHANTOM_CamReadySignalString           "PHANTOM_READY_SIGNAL"
-#define PHANTOM_CamAuxPinString                "PHANTOM_AUX_PIN"
+#define PHANTOM_CamAux1PinString               "PHANTOM_AUX1_PIN"
+#define PHANTOM_CamAux2PinString               "PHANTOM_AUX2_PIN"
+#define PHANTOM_CamAux4PinString               "PHANTOM_AUX4_PIN"
 
 #define PHANTOM_LivePreviewString              "PHANTOM_LIVE_PREVIEW"
 #define PHANTOM_SyncClockString                "PHANTOM_SYNC_CLOCK"
@@ -719,7 +721,9 @@ class ADPhantom: public ADDriver
     int PHANTOM_CamTriggerFilter_;
     int PHANTOM_CamReadySignal_;
     int PHANTOM_CamQuietFan_;
-    int PHANTOM_CamAuxPin_;
+    int PHANTOM_CamAux1Pin_;
+    int PHANTOM_CamAux2Pin_;
+    int PHANTOM_CamAux4Pin_;
     int PHANTOM_AutoTriggerX_;
     int PHANTOM_AutoTriggerXZeroed_;
     int PHANTOM_AutoTriggerY_;
