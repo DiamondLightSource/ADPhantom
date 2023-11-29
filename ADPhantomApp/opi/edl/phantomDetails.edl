@@ -3,10 +3,10 @@ beginScreenProperties
 major 4
 minor 0
 release 1
-x 256
-y 140
-w 1070
-h 386
+x 545
+y 238
+w 1189
+h 478
 font "arial-bold-r-12.0"
 ctlFont "arial-bold-r-12.0"
 btnFont "arial-bold-r-12.0"
@@ -34,7 +34,7 @@ release 0
 x 0
 y 0
 w 1060
-h 385
+h 410
 lineColor index 5
 fill
 fillColor index 5
@@ -47,7 +47,7 @@ major 4
 minor 0
 release 0
 x 10
-y 325
+y 350
 w 1030
 h 50
 lineColor index 14
@@ -64,7 +64,7 @@ release 0
 x 355
 y 20
 w 685
-h 290
+h 315
 lineColor index 14
 fill
 fillColor index 3
@@ -79,7 +79,7 @@ release 0
 x 10
 y 20
 w 330
-h 290
+h 315
 lineColor index 14
 fill
 fillColor index 3
@@ -93,7 +93,7 @@ minor 1
 release 1
 x 10
 y 10
-w 104
+w 2
 h 13
 font "arial-medium-r-12.0"
 fgColor index 14
@@ -132,7 +132,7 @@ minor 1
 release 1
 x 25
 y 35
-w 161
+w 163
 h 13
 font "arial-bold-r-12.0"
 fgColor index 14
@@ -171,7 +171,7 @@ minor 1
 release 1
 x 25
 y 60
-w 165
+w 168
 h 13
 font "arial-bold-r-12.0"
 fgColor index 14
@@ -210,7 +210,7 @@ minor 1
 release 1
 x 25
 y 85
-w 156
+w 157
 h 13
 font "arial-bold-r-12.0"
 fgColor index 14
@@ -249,7 +249,7 @@ minor 1
 release 1
 x 25
 y 110
-w 86
+w 87
 h 13
 font "arial-bold-r-12.0"
 fgColor index 14
@@ -268,7 +268,7 @@ major 10
 minor 0
 release 0
 x 235
-y 155
+y 180
 w 85
 h 20
 controlPv "$(P)$(R)ExtSyncType_RBV"
@@ -287,7 +287,7 @@ major 10
 minor 0
 release 0
 x 235
-y 180
+y 205
 w 85
 h 20
 controlPv "$(P)$(R)FrameDelay_RBV"
@@ -306,7 +306,7 @@ major 10
 minor 0
 release 0
 x 235
-y 205
+y 230
 w 85
 h 20
 controlPv "$(P)$(R)TriggerEdge_RBV"
@@ -325,7 +325,7 @@ major 10
 minor 0
 release 0
 x 235
-y 230
+y 255
 w 85
 h 20
 controlPv "$(P)$(R)TriggerFilter_RBV"
@@ -344,7 +344,7 @@ major 10
 minor 0
 release 0
 x 235
-y 255
+y 280
 w 85
 h 20
 controlPv "$(P)$(R)ReadySignal_RBV"
@@ -363,10 +363,10 @@ major 10
 minor 0
 release 0
 x 235
-y 280
+y 305
 w 85
 h 20
-controlPv "$(P)$(R)AuxPinMode_RBV"
+controlPv "$(P)$(R)Aux1PinMode_RBV"
 fgColor index 16
 fgAlarm
 bgColor index 10
@@ -382,7 +382,7 @@ major 4
 minor 0
 release 0
 x 135
-y 155
+y 180
 w 95
 h 20
 fgColor index 25
@@ -402,7 +402,7 @@ major 4
 minor 0
 release 0
 x 135
-y 205
+y 230
 w 95
 h 20
 fgColor index 25
@@ -422,7 +422,7 @@ major 4
 minor 0
 release 0
 x 135
-y 255
+y 280
 w 95
 h 20
 fgColor index 25
@@ -442,7 +442,7 @@ major 4
 minor 0
 release 0
 x 135
-y 280
+y 305
 w 95
 h 20
 fgColor index 25
@@ -450,8 +450,8 @@ bgColor index 3
 inconsistentColor index 0
 topShadowColor index 1
 botShadowColor index 11
-controlPv "$(P)$(R)AuxPinMode"
-indicatorPv "$(P)$(R)AuxPinMode_RBV"
+controlPv "$(P)$(R)Aux1PinMode"
+indicatorPv "$(P)$(R)Aux1PinMode_RBV"
 font "arial-bold-r-12.0"
 endObjectProperties
 
@@ -462,7 +462,7 @@ major 10
 minor 0
 release 0
 x 540
-y 270
+y 280
 w 65
 h 20
 controlPv "$(P)$(R)CineCount_RBV"
@@ -481,7 +481,7 @@ major 4
 minor 1
 release 1
 x 390
-y 275
+y 285
 w 127
 h 13
 font "arial-bold-r-12.0"
@@ -501,7 +501,7 @@ major 4
 minor 4
 release 0
 x 655
-y 265
+y 280
 w 105
 h 25
 fgColor index 20
@@ -524,7 +524,7 @@ major 10
 minor 0
 release 0
 x 135
-y 180
+y 205
 w 95
 h 20
 controlPv "$(P)$(R)FrameDelay"
@@ -542,7 +542,7 @@ major 10
 minor 0
 release 0
 x 135
-y 230
+y 255
 w 95
 h 20
 controlPv "$(P)$(R)TriggerFilter"
@@ -560,8 +560,8 @@ major 4
 minor 1
 release 1
 x 25
-y 160
-w 83
+y 185
+w 80
 h 13
 font "arial-bold-r-12.0"
 fgColor index 14
@@ -580,8 +580,8 @@ major 4
 minor 1
 release 1
 x 25
-y 185
-w 101
+y 210
+w 102
 h 13
 font "arial-bold-r-12.0"
 fgColor index 14
@@ -600,8 +600,8 @@ major 4
 minor 1
 release 1
 x 25
-y 210
-w 77
+y 235
+w 75
 h 13
 font "arial-bold-r-12.0"
 fgColor index 14
@@ -620,8 +620,8 @@ major 4
 minor 1
 release 1
 x 25
-y 235
-w 104
+y 260
+w 106
 h 13
 font "arial-bold-r-12.0"
 fgColor index 14
@@ -640,8 +640,8 @@ major 4
 minor 1
 release 1
 x 25
-y 260
-w 81
+y 285
+w 76
 h 13
 font "arial-bold-r-12.0"
 fgColor index 14
@@ -660,15 +660,15 @@ major 4
 minor 1
 release 1
 x 25
-y 285
-w 83
+y 310
+w 89
 h 13
 font "arial-bold-r-12.0"
 fgColor index 14
 bgColor index 3
 useDisplayBg
 value {
-  "Aux Pin Mode"
+  "Aux1 Pin Mode"
 }
 autoSize
 endObjectProperties
@@ -2401,7 +2401,7 @@ minor 1
 release 1
 x 355
 y 10
-w 70
+w 2
 h 13
 font "arial-medium-r-12.0"
 fgColor index 14
@@ -2750,7 +2750,7 @@ major 10
 minor 0
 release 0
 x 235
-y 130
+y 155
 w 85
 h 20
 controlPv "$(P)$(R)EDR_RBV"
@@ -2769,7 +2769,7 @@ major 10
 minor 0
 release 0
 x 135
-y 130
+y 155
 w 95
 h 20
 controlPv "$(P)$(R)EDR"
@@ -2787,8 +2787,8 @@ major 4
 minor 1
 release 1
 x 25
-y 135
-w 53
+y 160
+w 52
 h 13
 font "arial-bold-r-12.0"
 fgColor index 14
@@ -3137,7 +3137,7 @@ major 10
 minor 0
 release 0
 x 265
-y 340
+y 365
 w 85
 h 20
 controlPv "$(P)$(R)SettingsSlot_RBV"
@@ -3156,7 +3156,7 @@ major 4
 minor 0
 release 0
 x 165
-y 340
+y 365
 w 95
 h 20
 fgColor index 25
@@ -3176,8 +3176,8 @@ major 4
 minor 1
 release 1
 x 40
-y 345
-w 107
+y 370
+w 104
 h 13
 font "arial-bold-r-12.0"
 fgColor index 14
@@ -3196,7 +3196,7 @@ major 4
 minor 1
 release 0
 x 360
-y 340
+y 365
 w 105
 h 20
 fgColor index 25
@@ -3219,7 +3219,7 @@ major 4
 minor 1
 release 0
 x 475
-y 340
+y 365
 w 105
 h 20
 fgColor index 25
@@ -3243,7 +3243,7 @@ minor 1
 release 1
 x 10
 y 315
-w 61
+w 2
 h 13
 font "arial-medium-r-12.0"
 fgColor index 14
@@ -3262,7 +3262,7 @@ major 4
 minor 1
 release 0
 x 625
-y 340
+y 365
 w 105
 h 20
 fgColor index 25
@@ -3276,5 +3276,64 @@ onLabel "Sync Clock"
 offLabel "Sync Clock"
 3d
 font "arial-bold-r-12.0"
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 25
+y 135
+w 94
+h 13
+font "arial-bold-r-12.0"
+fgColor index 14
+bgColor index 3
+useDisplayBg
+value {
+  "Fan Quiet Mode"
+}
+autoSize
+endObjectProperties
+
+# (Menu Button)
+object activeMenuButtonClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 135
+y 130
+w 95
+h 20
+fgColor index 25
+bgColor index 3
+inconsistentColor index 0
+topShadowColor index 1
+botShadowColor index 11
+controlPv "$(P)$(R)QuietFan"
+indicatorPv "$(P)$(R)QuietFan_RBV"
+font "arial-bold-r-12.0"
+endObjectProperties
+
+# (Textupdate)
+object TextupdateClass
+beginObjectProperties
+major 10
+minor 0
+release 0
+x 235
+y 130
+w 85
+h 20
+controlPv "$(P)$(R)QuietFan_RBV"
+fgColor index 16
+fgAlarm
+bgColor index 10
+fill
+font "arial-bold-r-12.0"
+fontAlign "center"
 endObjectProperties
 
