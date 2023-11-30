@@ -3,10 +3,10 @@ beginScreenProperties
 major 4
 minor 0
 release 1
-x 241
-y 336
-w 720
-h 350
+x 370
+y 366
+w 1085
+h 670
 font "arial-bold-r-12.0"
 ctlFont "arial-bold-r-12.0"
 btnFont "arial-bold-r-12.0"
@@ -33,8 +33,8 @@ minor 0
 release 0
 x 0
 y 0
-w 720
-h 350
+w 1085
+h 670
 lineColor index 5
 fill
 fillColor index 5
@@ -48,8 +48,8 @@ minor 0
 release 0
 x 10
 y 20
-w 685
-h 315
+w 1060
+h 635
 lineColor index 14
 fill
 fillColor index 3
@@ -61,8 +61,8 @@ beginObjectProperties
 major 10
 minor 0
 release 0
-x 195
-y 280
+x 190
+y 610
 w 65
 h 20
 controlPv "$(P)$(R)CineCount_RBV"
@@ -80,8 +80,8 @@ beginObjectProperties
 major 4
 minor 1
 release 1
-x 45
-y 285
+x 40
+y 615
 w 127
 h 13
 font "arial-bold-r-12.0"
@@ -100,8 +100,8 @@ beginObjectProperties
 major 4
 minor 4
 release 0
-x 310
-y 277
+x 305
+y 605
 w 105
 h 25
 fgColor index 20
@@ -983,7 +983,7 @@ beginObjectProperties
 major 4
 minor 1
 release 1
-x 440
+x 450
 y 35
 w 50
 h 20
@@ -1004,7 +1004,7 @@ beginObjectProperties
 major 4
 minor 1
 release 1
-x 490
+x 500
 y 35
 w 50
 h 20
@@ -1025,7 +1025,7 @@ beginObjectProperties
 major 4
 minor 1
 release 1
-x 360
+x 370
 y 35
 w 80
 h 20
@@ -1046,7 +1046,7 @@ beginObjectProperties
 major 4
 minor 1
 release 1
-x 540
+x 550
 y 35
 w 50
 h 20
@@ -1067,8 +1067,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 365
-y 60
+x 20
+y 260
 w 215
 h 20
 
@@ -1080,8 +1080,8 @@ beginObjectProperties
 major 4
 minor 4
 release 0
-x 364
-y 60
+x 19
+y 260
 w 70
 h 20
 fgColor index 14
@@ -1106,8 +1106,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 449
-y 65
+x 104
+y 265
 w 30
 h 15
 controlPv "$(P)$(R)C9:State_RBV.B0"
@@ -1124,8 +1124,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 499
-y 65
+x 154
+y 265
 w 30
 h 15
 controlPv "$(P)$(R)C9:State_RBV.B1"
@@ -1142,8 +1142,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 549
-y 65
+x 204
+y 265
 w 30
 h 15
 controlPv "$(P)$(R)C9:State_RBV.B4"
@@ -1164,8 +1164,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 365
-y 85
+x 20
+y 285
 w 215
 h 20
 
@@ -1177,8 +1177,8 @@ beginObjectProperties
 major 4
 minor 4
 release 0
-x 364
-y 85
+x 19
+y 285
 w 70
 h 20
 fgColor index 14
@@ -1203,8 +1203,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 449
-y 90
+x 104
+y 290
 w 30
 h 15
 controlPv "$(P)$(R)C10:State_RBV.B0"
@@ -1221,8 +1221,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 499
-y 90
+x 154
+y 290
 w 30
 h 15
 controlPv "$(P)$(R)C10:State_RBV.B1"
@@ -1239,8 +1239,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 549
-y 90
+x 204
+y 290
 w 30
 h 15
 controlPv "$(P)$(R)C10:State_RBV.B4"
@@ -1261,8 +1261,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 365
-y 110
+x 20
+y 310
 w 215
 h 20
 
@@ -1274,8 +1274,8 @@ beginObjectProperties
 major 4
 minor 4
 release 0
-x 364
-y 110
+x 19
+y 310
 w 70
 h 20
 fgColor index 14
@@ -1300,8 +1300,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 449
-y 115
+x 104
+y 315
 w 30
 h 15
 controlPv "$(P)$(R)C11:State_RBV.B0"
@@ -1318,8 +1318,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 499
-y 115
+x 154
+y 315
 w 30
 h 15
 controlPv "$(P)$(R)C11:State_RBV.B1"
@@ -1336,8 +1336,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 549
-y 115
+x 204
+y 315
 w 30
 h 15
 controlPv "$(P)$(R)C11:State_RBV.B4"
@@ -1358,8 +1358,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 365
-y 135
+x 20
+y 335
 w 215
 h 20
 
@@ -1371,8 +1371,8 @@ beginObjectProperties
 major 4
 minor 4
 release 0
-x 364
-y 135
+x 19
+y 335
 w 70
 h 20
 fgColor index 14
@@ -1397,8 +1397,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 449
-y 140
+x 104
+y 340
 w 30
 h 15
 controlPv "$(P)$(R)C12:State_RBV.B0"
@@ -1415,8 +1415,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 499
-y 140
+x 154
+y 340
 w 30
 h 15
 controlPv "$(P)$(R)C12:State_RBV.B1"
@@ -1433,8 +1433,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 549
-y 140
+x 204
+y 340
 w 30
 h 15
 controlPv "$(P)$(R)C12:State_RBV.B4"
@@ -1455,8 +1455,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 365
-y 160
+x 20
+y 360
 w 215
 h 20
 
@@ -1468,8 +1468,8 @@ beginObjectProperties
 major 4
 minor 4
 release 0
-x 364
-y 160
+x 19
+y 360
 w 70
 h 20
 fgColor index 14
@@ -1494,8 +1494,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 449
-y 165
+x 104
+y 365
 w 30
 h 15
 controlPv "$(P)$(R)C13:State_RBV.B0"
@@ -1512,8 +1512,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 499
-y 165
+x 154
+y 365
 w 30
 h 15
 controlPv "$(P)$(R)C13:State_RBV.B1"
@@ -1530,8 +1530,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 549
-y 165
+x 204
+y 365
 w 30
 h 15
 controlPv "$(P)$(R)C13:State_RBV.B4"
@@ -1552,8 +1552,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 365
-y 185
+x 20
+y 385
 w 215
 h 20
 
@@ -1565,8 +1565,8 @@ beginObjectProperties
 major 4
 minor 4
 release 0
-x 364
-y 185
+x 19
+y 385
 w 70
 h 20
 fgColor index 14
@@ -1591,8 +1591,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 449
-y 190
+x 104
+y 390
 w 30
 h 15
 controlPv "$(P)$(R)C14:State_RBV.B0"
@@ -1609,8 +1609,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 499
-y 190
+x 154
+y 390
 w 30
 h 15
 controlPv "$(P)$(R)C14:State_RBV.B1"
@@ -1627,8 +1627,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 549
-y 190
+x 204
+y 390
 w 30
 h 15
 controlPv "$(P)$(R)C14:State_RBV.B4"
@@ -1649,8 +1649,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 365
-y 210
+x 20
+y 410
 w 215
 h 20
 
@@ -1662,8 +1662,8 @@ beginObjectProperties
 major 4
 minor 4
 release 0
-x 364
-y 210
+x 19
+y 410
 w 70
 h 20
 fgColor index 14
@@ -1688,8 +1688,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 449
-y 215
+x 104
+y 415
 w 30
 h 15
 controlPv "$(P)$(R)C15:State_RBV.B0"
@@ -1706,8 +1706,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 499
-y 215
+x 154
+y 415
 w 30
 h 15
 controlPv "$(P)$(R)C15:State_RBV.B1"
@@ -1724,8 +1724,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 549
-y 215
+x 204
+y 415
 w 30
 h 15
 controlPv "$(P)$(R)C15:State_RBV.B4"
@@ -1746,8 +1746,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 365
-y 235
+x 20
+y 435
 w 215
 h 20
 
@@ -1759,8 +1759,8 @@ beginObjectProperties
 major 4
 minor 4
 release 0
-x 364
-y 235
+x 19
+y 435
 w 70
 h 20
 fgColor index 14
@@ -1785,8 +1785,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 449
-y 240
+x 104
+y 440
 w 30
 h 15
 controlPv "$(P)$(R)C16:State_RBV.B0"
@@ -1803,8 +1803,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 499
-y 240
+x 154
+y 440
 w 30
 h 15
 controlPv "$(P)$(R)C16:State_RBV.B1"
@@ -1821,8 +1821,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 549
-y 240
+x 204
+y 440
 w 30
 h 15
 controlPv "$(P)$(R)C16:State_RBV.B4"
@@ -2008,7 +2008,7 @@ beginObjectProperties
 major 4
 minor 1
 release 1
-x 590
+x 600
 y 35
 w 50
 h 20
@@ -2029,8 +2029,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 600
-y 65
+x 255
+y 265
 w 30
 h 15
 controlPv "$(P)$(R)C9:State_RBV.B9"
@@ -2047,8 +2047,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 600
-y 90
+x 255
+y 290
 w 30
 h 15
 controlPv "$(P)$(R)C10:State_RBV.B9"
@@ -2065,8 +2065,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 600
-y 115
+x 255
+y 315
 w 30
 h 15
 controlPv "$(P)$(R)C11:State_RBV.B9"
@@ -2083,8 +2083,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 600
-y 140
+x 255
+y 340
 w 30
 h 15
 controlPv "$(P)$(R)C12:State_RBV.B9"
@@ -2101,8 +2101,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 600
-y 165
+x 255
+y 365
 w 30
 h 15
 controlPv "$(P)$(R)C13:State_RBV.B9"
@@ -2119,8 +2119,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 600
-y 190
+x 255
+y 390
 w 30
 h 15
 controlPv "$(P)$(R)C14:State_RBV.B9"
@@ -2137,8 +2137,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 600
-y 215
+x 255
+y 415
 w 30
 h 15
 controlPv "$(P)$(R)C15:State_RBV.B9"
@@ -2155,8 +2155,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 600
-y 240
+x 255
+y 440
 w 30
 h 15
 controlPv "$(P)$(R)C16:State_RBV.B9"
@@ -2212,7 +2212,7 @@ beginObjectProperties
 major 4
 minor 1
 release 1
-x 640
+x 650
 y 35
 w 50
 h 20
@@ -2359,8 +2359,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 650
-y 65
+x 305
+y 265
 w 30
 h 15
 controlPv "$(P)$(R)C9:State_RBV.B8"
@@ -2377,8 +2377,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 650
-y 90
+x 305
+y 290
 w 30
 h 15
 controlPv "$(P)$(R)C10:State_RBV.B8"
@@ -2395,8 +2395,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 650
-y 115
+x 305
+y 315
 w 30
 h 15
 controlPv "$(P)$(R)C11:State_RBV.B8"
@@ -2413,8 +2413,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 650
-y 140
+x 305
+y 340
 w 30
 h 15
 controlPv "$(P)$(R)C12:State_RBV.B8"
@@ -2431,8 +2431,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 650
-y 165
+x 305
+y 365
 w 30
 h 15
 controlPv "$(P)$(R)C13:State_RBV.B8"
@@ -2449,8 +2449,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 650
-y 190
+x 305
+y 390
 w 30
 h 15
 controlPv "$(P)$(R)C14:State_RBV.B8"
@@ -2467,8 +2467,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 650
-y 215
+x 305
+y 415
 w 30
 h 15
 controlPv "$(P)$(R)C15:State_RBV.B8"
@@ -2485,11 +2485,6388 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 650
-y 240
+x 305
+y 440
 w 30
 h 15
 controlPv "$(P)$(R)C16:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 20
+y 460
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 19
+y 460
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 17"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=17"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 104
+y 465
+w 30
+h 15
+controlPv "$(P)$(R)C17:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 154
+y 465
+w 30
+h 15
+controlPv "$(P)$(R)C17:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 204
+y 465
+w 30
+h 15
+controlPv "$(P)$(R)C17:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 20
+y 485
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 19
+y 485
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 18"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=18"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 104
+y 490
+w 30
+h 15
+controlPv "$(P)$(R)C18:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 154
+y 490
+w 30
+h 15
+controlPv "$(P)$(R)C18:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 204
+y 490
+w 30
+h 15
+controlPv "$(P)$(R)C18:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 20
+y 510
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 19
+y 510
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 19"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=19"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 104
+y 515
+w 30
+h 15
+controlPv "$(P)$(R)C19:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 154
+y 515
+w 30
+h 15
+controlPv "$(P)$(R)C19:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 204
+y 515
+w 30
+h 15
+controlPv "$(P)$(R)C19:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 20
+y 535
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 19
+y 535
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 20"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=20"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 104
+y 540
+w 30
+h 15
+controlPv "$(P)$(R)C20:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 154
+y 540
+w 30
+h 15
+controlPv "$(P)$(R)C20:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 204
+y 540
+w 30
+h 15
+controlPv "$(P)$(R)C20:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 20
+y 560
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 19
+y 560
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 21"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=21"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 104
+y 565
+w 30
+h 15
+controlPv "$(P)$(R)C21:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 154
+y 565
+w 30
+h 15
+controlPv "$(P)$(R)C21:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 204
+y 565
+w 30
+h 15
+controlPv "$(P)$(R)C21:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 255
+y 465
+w 30
+h 15
+controlPv "$(P)$(R)C17:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 255
+y 490
+w 30
+h 15
+controlPv "$(P)$(R)C18:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 255
+y 515
+w 30
+h 15
+controlPv "$(P)$(R)C19:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 255
+y 540
+w 30
+h 15
+controlPv "$(P)$(R)C20:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 255
+y 565
+w 30
+h 15
+controlPv "$(P)$(R)C21:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 305
+y 465
+w 30
+h 15
+controlPv "$(P)$(R)C17:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 305
+y 490
+w 30
+h 15
+controlPv "$(P)$(R)C18:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 305
+y 515
+w 30
+h 15
+controlPv "$(P)$(R)C19:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 305
+y 540
+w 30
+h 15
+controlPv "$(P)$(R)C20:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 305
+y 565
+w 30
+h 15
+controlPv "$(P)$(R)C21:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 375
+y 60
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 374
+y 60
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 22"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=22"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 459
+y 65
+w 30
+h 15
+controlPv "$(P)$(R)C22:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 509
+y 65
+w 30
+h 15
+controlPv "$(P)$(R)C22:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 559
+y 65
+w 30
+h 15
+controlPv "$(P)$(R)C22:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 375
+y 85
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 374
+y 85
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 23"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=23"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 459
+y 90
+w 30
+h 15
+controlPv "$(P)$(R)C23:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 509
+y 90
+w 30
+h 15
+controlPv "$(P)$(R)C23:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 559
+y 90
+w 30
+h 15
+controlPv "$(P)$(R)C23:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 375
+y 110
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 374
+y 110
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 24"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=24"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 459
+y 115
+w 30
+h 15
+controlPv "$(P)$(R)C24:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 509
+y 115
+w 30
+h 15
+controlPv "$(P)$(R)C24:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 559
+y 115
+w 30
+h 15
+controlPv "$(P)$(R)C24:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 375
+y 135
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 374
+y 135
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 25"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=25"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 459
+y 140
+w 30
+h 15
+controlPv "$(P)$(R)C25:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 509
+y 140
+w 30
+h 15
+controlPv "$(P)$(R)C25:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 559
+y 140
+w 30
+h 15
+controlPv "$(P)$(R)C25:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 375
+y 160
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 374
+y 160
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 26"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=26"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 459
+y 165
+w 30
+h 15
+controlPv "$(P)$(R)C26:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 509
+y 165
+w 30
+h 15
+controlPv "$(P)$(R)C26:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 559
+y 165
+w 30
+h 15
+controlPv "$(P)$(R)C26:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 375
+y 185
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 374
+y 185
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 27"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=27"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 459
+y 190
+w 30
+h 15
+controlPv "$(P)$(R)C27:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 509
+y 190
+w 30
+h 15
+controlPv "$(P)$(R)C27:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 559
+y 190
+w 30
+h 15
+controlPv "$(P)$(R)C27:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 375
+y 210
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 374
+y 210
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 28"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=28"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 459
+y 215
+w 30
+h 15
+controlPv "$(P)$(R)C28:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 509
+y 215
+w 30
+h 15
+controlPv "$(P)$(R)C28:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 559
+y 215
+w 30
+h 15
+controlPv "$(P)$(R)C28:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 375
+y 235
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 374
+y 235
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 29"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=29"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 459
+y 240
+w 30
+h 15
+controlPv "$(P)$(R)C29:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 509
+y 240
+w 30
+h 15
+controlPv "$(P)$(R)C29:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 559
+y 240
+w 30
+h 15
+controlPv "$(P)$(R)C29:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 375
+y 260
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 374
+y 260
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 30"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=30"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 459
+y 265
+w 30
+h 15
+controlPv "$(P)$(R)C30:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 509
+y 265
+w 30
+h 15
+controlPv "$(P)$(R)C30:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 559
+y 265
+w 30
+h 15
+controlPv "$(P)$(R)C30:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 375
+y 285
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 374
+y 285
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 31"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=31"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 459
+y 290
+w 30
+h 15
+controlPv "$(P)$(R)C31:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 509
+y 290
+w 30
+h 15
+controlPv "$(P)$(R)C31:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 559
+y 290
+w 30
+h 15
+controlPv "$(P)$(R)C31:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 375
+y 310
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 374
+y 310
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 32"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=32"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 459
+y 315
+w 30
+h 15
+controlPv "$(P)$(R)C32:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 509
+y 315
+w 30
+h 15
+controlPv "$(P)$(R)C32:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 559
+y 315
+w 30
+h 15
+controlPv "$(P)$(R)C32:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 375
+y 335
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 374
+y 335
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 33"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=33"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 459
+y 340
+w 30
+h 15
+controlPv "$(P)$(R)C33:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 509
+y 340
+w 30
+h 15
+controlPv "$(P)$(R)C33:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 559
+y 340
+w 30
+h 15
+controlPv "$(P)$(R)C33:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 375
+y 360
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 374
+y 360
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 34"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=34"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 459
+y 365
+w 30
+h 15
+controlPv "$(P)$(R)C34:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 509
+y 365
+w 30
+h 15
+controlPv "$(P)$(R)C34:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 559
+y 365
+w 30
+h 15
+controlPv "$(P)$(R)C34:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 375
+y 385
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 374
+y 385
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 35"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=35"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 459
+y 390
+w 30
+h 15
+controlPv "$(P)$(R)C35:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 509
+y 390
+w 30
+h 15
+controlPv "$(P)$(R)C35:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 559
+y 390
+w 30
+h 15
+controlPv "$(P)$(R)C35:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 375
+y 410
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 374
+y 410
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 36"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=36"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 459
+y 415
+w 30
+h 15
+controlPv "$(P)$(R)C36:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 509
+y 415
+w 30
+h 15
+controlPv "$(P)$(R)C36:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 559
+y 415
+w 30
+h 15
+controlPv "$(P)$(R)C36:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 375
+y 435
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 374
+y 435
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 37"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=37"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 459
+y 440
+w 30
+h 15
+controlPv "$(P)$(R)C37:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 509
+y 440
+w 30
+h 15
+controlPv "$(P)$(R)C37:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 559
+y 440
+w 30
+h 15
+controlPv "$(P)$(R)C37:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 610
+y 65
+w 30
+h 15
+controlPv "$(P)$(R)C22:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 610
+y 90
+w 30
+h 15
+controlPv "$(P)$(R)C23:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 610
+y 115
+w 30
+h 15
+controlPv "$(P)$(R)C24:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 610
+y 140
+w 30
+h 15
+controlPv "$(P)$(R)C25:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 610
+y 165
+w 30
+h 15
+controlPv "$(P)$(R)C26:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 610
+y 190
+w 30
+h 15
+controlPv "$(P)$(R)C27:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 610
+y 215
+w 30
+h 15
+controlPv "$(P)$(R)C28:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 610
+y 240
+w 30
+h 15
+controlPv "$(P)$(R)C29:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 610
+y 265
+w 30
+h 15
+controlPv "$(P)$(R)C30:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 610
+y 290
+w 30
+h 15
+controlPv "$(P)$(R)C31:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 610
+y 315
+w 30
+h 15
+controlPv "$(P)$(R)C32:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 610
+y 340
+w 30
+h 15
+controlPv "$(P)$(R)C33:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 610
+y 365
+w 30
+h 15
+controlPv "$(P)$(R)C34:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 610
+y 390
+w 30
+h 15
+controlPv "$(P)$(R)C35:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 610
+y 415
+w 30
+h 15
+controlPv "$(P)$(R)C36:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 610
+y 440
+w 30
+h 15
+controlPv "$(P)$(R)C37:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 660
+y 65
+w 30
+h 15
+controlPv "$(P)$(R)C22:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 660
+y 90
+w 30
+h 15
+controlPv "$(P)$(R)C23:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 660
+y 115
+w 30
+h 15
+controlPv "$(P)$(R)C24:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 660
+y 140
+w 30
+h 15
+controlPv "$(P)$(R)C25:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 660
+y 165
+w 30
+h 15
+controlPv "$(P)$(R)C26:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 660
+y 190
+w 30
+h 15
+controlPv "$(P)$(R)C27:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 660
+y 215
+w 30
+h 15
+controlPv "$(P)$(R)C28:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 660
+y 240
+w 30
+h 15
+controlPv "$(P)$(R)C29:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 660
+y 265
+w 30
+h 15
+controlPv "$(P)$(R)C30:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 660
+y 290
+w 30
+h 15
+controlPv "$(P)$(R)C31:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 660
+y 315
+w 30
+h 15
+controlPv "$(P)$(R)C32:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 660
+y 340
+w 30
+h 15
+controlPv "$(P)$(R)C33:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 660
+y 365
+w 30
+h 15
+controlPv "$(P)$(R)C34:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 660
+y 390
+w 30
+h 15
+controlPv "$(P)$(R)C35:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 660
+y 415
+w 30
+h 15
+controlPv "$(P)$(R)C36:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 660
+y 440
+w 30
+h 15
+controlPv "$(P)$(R)C37:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 375
+y 460
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 374
+y 460
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 38"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=38"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 459
+y 465
+w 30
+h 15
+controlPv "$(P)$(R)C38:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 509
+y 465
+w 30
+h 15
+controlPv "$(P)$(R)C38:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 559
+y 465
+w 30
+h 15
+controlPv "$(P)$(R)C38:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 375
+y 485
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 374
+y 485
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 39"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=39"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 459
+y 490
+w 30
+h 15
+controlPv "$(P)$(R)C39:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 509
+y 490
+w 30
+h 15
+controlPv "$(P)$(R)C39:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 559
+y 490
+w 30
+h 15
+controlPv "$(P)$(R)C39:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 375
+y 510
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 374
+y 510
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 40"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=40"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 459
+y 515
+w 30
+h 15
+controlPv "$(P)$(R)C40:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 509
+y 515
+w 30
+h 15
+controlPv "$(P)$(R)C40:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 559
+y 515
+w 30
+h 15
+controlPv "$(P)$(R)C40:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 375
+y 535
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 374
+y 535
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 41"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=41"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 459
+y 540
+w 30
+h 15
+controlPv "$(P)$(R)C41:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 509
+y 540
+w 30
+h 15
+controlPv "$(P)$(R)C41:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 559
+y 540
+w 30
+h 15
+controlPv "$(P)$(R)C41:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 375
+y 560
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 374
+y 560
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 42"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=42"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 459
+y 565
+w 30
+h 15
+controlPv "$(P)$(R)C42:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 509
+y 565
+w 30
+h 15
+controlPv "$(P)$(R)C42:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 559
+y 565
+w 30
+h 15
+controlPv "$(P)$(R)C42:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 610
+y 465
+w 30
+h 15
+controlPv "$(P)$(R)C38:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 610
+y 490
+w 30
+h 15
+controlPv "$(P)$(R)C39:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 610
+y 515
+w 30
+h 15
+controlPv "$(P)$(R)C40:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 610
+y 540
+w 30
+h 15
+controlPv "$(P)$(R)C41:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 610
+y 565
+w 30
+h 15
+controlPv "$(P)$(R)C42:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 660
+y 465
+w 30
+h 15
+controlPv "$(P)$(R)C38:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 660
+y 490
+w 30
+h 15
+controlPv "$(P)$(R)C39:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 660
+y 515
+w 30
+h 15
+controlPv "$(P)$(R)C40:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 660
+y 540
+w 30
+h 15
+controlPv "$(P)$(R)C41:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 660
+y 565
+w 30
+h 15
+controlPv "$(P)$(R)C42:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 805
+y 35
+w 50
+h 20
+font "arial-bold-r-12.0"
+fontAlign "center"
+fgColor index 14
+bgColor index 3
+useDisplayBg
+value {
+  "Invalid"
+}
+border
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 855
+y 35
+w 50
+h 20
+font "arial-bold-r-12.0"
+fontAlign "center"
+fgColor index 14
+bgColor index 3
+useDisplayBg
+value {
+  "Valid"
+}
+border
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 725
+y 35
+w 80
+h 20
+font "arial-bold-r-12.0"
+fontAlign "center"
+fgColor index 14
+bgColor index 3
+useDisplayBg
+value {
+  "Cine"
+}
+border
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 905
+y 35
+w 50
+h 20
+font "arial-bold-r-12.0"
+fontAlign "center"
+fgColor index 14
+bgColor index 3
+useDisplayBg
+value {
+  "Ready"
+}
+border
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 955
+y 35
+w 50
+h 20
+font "arial-bold-r-12.0"
+fontAlign "center"
+fgColor index 14
+bgColor index 3
+useDisplayBg
+value {
+  "Saved"
+}
+border
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 1005
+y 35
+w 50
+h 20
+font "arial-bold-r-12.0"
+fontAlign "center"
+fgColor index 14
+bgColor index 3
+useDisplayBg
+value {
+  "Active"
+}
+border
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 730
+y 60
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 729
+y 60
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 43"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=43"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 814
+y 65
+w 30
+h 15
+controlPv "$(P)$(R)C43:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 864
+y 65
+w 30
+h 15
+controlPv "$(P)$(R)C43:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 914
+y 65
+w 30
+h 15
+controlPv "$(P)$(R)C43:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 730
+y 85
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 729
+y 85
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 44"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=44"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 814
+y 90
+w 30
+h 15
+controlPv "$(P)$(R)C44:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 864
+y 90
+w 30
+h 15
+controlPv "$(P)$(R)C44:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 914
+y 90
+w 30
+h 15
+controlPv "$(P)$(R)C44:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 730
+y 110
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 729
+y 110
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 45"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=45"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 814
+y 115
+w 30
+h 15
+controlPv "$(P)$(R)C45:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 864
+y 115
+w 30
+h 15
+controlPv "$(P)$(R)C45:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 914
+y 115
+w 30
+h 15
+controlPv "$(P)$(R)C45:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 730
+y 135
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 729
+y 135
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 46"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=46"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 814
+y 140
+w 30
+h 15
+controlPv "$(P)$(R)C46:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 864
+y 140
+w 30
+h 15
+controlPv "$(P)$(R)C46:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 914
+y 140
+w 30
+h 15
+controlPv "$(P)$(R)C46:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 730
+y 160
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 729
+y 160
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 47"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=47"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 814
+y 165
+w 30
+h 15
+controlPv "$(P)$(R)C47:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 864
+y 165
+w 30
+h 15
+controlPv "$(P)$(R)C47:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 914
+y 165
+w 30
+h 15
+controlPv "$(P)$(R)C47:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 730
+y 185
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 729
+y 185
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 48"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=48"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 814
+y 190
+w 30
+h 15
+controlPv "$(P)$(R)C48:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 864
+y 190
+w 30
+h 15
+controlPv "$(P)$(R)C48:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 914
+y 190
+w 30
+h 15
+controlPv "$(P)$(R)C48:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 730
+y 210
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 729
+y 210
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 49"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=49"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 814
+y 215
+w 30
+h 15
+controlPv "$(P)$(R)C49:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 864
+y 215
+w 30
+h 15
+controlPv "$(P)$(R)C49:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 914
+y 215
+w 30
+h 15
+controlPv "$(P)$(R)C49:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 730
+y 235
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 729
+y 235
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 50"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=50"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 814
+y 240
+w 30
+h 15
+controlPv "$(P)$(R)C50:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 864
+y 240
+w 30
+h 15
+controlPv "$(P)$(R)C50:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 914
+y 240
+w 30
+h 15
+controlPv "$(P)$(R)C50:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 730
+y 260
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 729
+y 260
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 51"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=51"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 814
+y 265
+w 30
+h 15
+controlPv "$(P)$(R)C51:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 864
+y 265
+w 30
+h 15
+controlPv "$(P)$(R)C51:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 914
+y 265
+w 30
+h 15
+controlPv "$(P)$(R)C51:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 730
+y 285
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 729
+y 285
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 52"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=52"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 814
+y 290
+w 30
+h 15
+controlPv "$(P)$(R)C52:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 864
+y 290
+w 30
+h 15
+controlPv "$(P)$(R)C52:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 914
+y 290
+w 30
+h 15
+controlPv "$(P)$(R)C52:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 730
+y 310
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 729
+y 310
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 53"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=53"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 814
+y 315
+w 30
+h 15
+controlPv "$(P)$(R)C53:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 864
+y 315
+w 30
+h 15
+controlPv "$(P)$(R)C53:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 914
+y 315
+w 30
+h 15
+controlPv "$(P)$(R)C53:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 730
+y 335
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 729
+y 335
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 54"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=54"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 814
+y 340
+w 30
+h 15
+controlPv "$(P)$(R)C54:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 864
+y 340
+w 30
+h 15
+controlPv "$(P)$(R)C54:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 914
+y 340
+w 30
+h 15
+controlPv "$(P)$(R)C54:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 730
+y 360
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 729
+y 360
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 55"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=55"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 814
+y 365
+w 30
+h 15
+controlPv "$(P)$(R)C55:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 864
+y 365
+w 30
+h 15
+controlPv "$(P)$(R)C55:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 914
+y 365
+w 30
+h 15
+controlPv "$(P)$(R)C55:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 730
+y 385
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 729
+y 385
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 56"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=56"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 814
+y 390
+w 30
+h 15
+controlPv "$(P)$(R)C56:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 864
+y 390
+w 30
+h 15
+controlPv "$(P)$(R)C56:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 914
+y 390
+w 30
+h 15
+controlPv "$(P)$(R)C56:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 730
+y 410
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 729
+y 410
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 57"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=57"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 814
+y 415
+w 30
+h 15
+controlPv "$(P)$(R)C57:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 864
+y 415
+w 30
+h 15
+controlPv "$(P)$(R)C57:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 914
+y 415
+w 30
+h 15
+controlPv "$(P)$(R)C57:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 730
+y 435
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 729
+y 435
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 58"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=58"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 814
+y 440
+w 30
+h 15
+controlPv "$(P)$(R)C58:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 864
+y 440
+w 30
+h 15
+controlPv "$(P)$(R)C58:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 914
+y 440
+w 30
+h 15
+controlPv "$(P)$(R)C58:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 965
+y 65
+w 30
+h 15
+controlPv "$(P)$(R)C43:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 965
+y 90
+w 30
+h 15
+controlPv "$(P)$(R)C44:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 965
+y 115
+w 30
+h 15
+controlPv "$(P)$(R)C45:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 965
+y 140
+w 30
+h 15
+controlPv "$(P)$(R)C46:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 965
+y 165
+w 30
+h 15
+controlPv "$(P)$(R)C47:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 965
+y 190
+w 30
+h 15
+controlPv "$(P)$(R)C48:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 965
+y 215
+w 30
+h 15
+controlPv "$(P)$(R)C49:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 965
+y 240
+w 30
+h 15
+controlPv "$(P)$(R)C50:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 965
+y 265
+w 30
+h 15
+controlPv "$(P)$(R)C51:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 965
+y 290
+w 30
+h 15
+controlPv "$(P)$(R)C52:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 965
+y 315
+w 30
+h 15
+controlPv "$(P)$(R)C53:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 965
+y 340
+w 30
+h 15
+controlPv "$(P)$(R)C54:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 965
+y 365
+w 30
+h 15
+controlPv "$(P)$(R)C55:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 965
+y 390
+w 30
+h 15
+controlPv "$(P)$(R)C56:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 965
+y 415
+w 30
+h 15
+controlPv "$(P)$(R)C57:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 965
+y 440
+w 30
+h 15
+controlPv "$(P)$(R)C58:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 1015
+y 65
+w 30
+h 15
+controlPv "$(P)$(R)C43:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 1015
+y 90
+w 30
+h 15
+controlPv "$(P)$(R)C44:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 1015
+y 115
+w 30
+h 15
+controlPv "$(P)$(R)C45:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 1015
+y 140
+w 30
+h 15
+controlPv "$(P)$(R)C46:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 1015
+y 165
+w 30
+h 15
+controlPv "$(P)$(R)C47:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 1015
+y 190
+w 30
+h 15
+controlPv "$(P)$(R)C48:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 1015
+y 215
+w 30
+h 15
+controlPv "$(P)$(R)C49:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 1015
+y 240
+w 30
+h 15
+controlPv "$(P)$(R)C50:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 1015
+y 265
+w 30
+h 15
+controlPv "$(P)$(R)C51:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 1015
+y 290
+w 30
+h 15
+controlPv "$(P)$(R)C52:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 1015
+y 315
+w 30
+h 15
+controlPv "$(P)$(R)C53:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 1015
+y 340
+w 30
+h 15
+controlPv "$(P)$(R)C54:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 1015
+y 365
+w 30
+h 15
+controlPv "$(P)$(R)C55:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 1015
+y 390
+w 30
+h 15
+controlPv "$(P)$(R)C56:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 1015
+y 415
+w 30
+h 15
+controlPv "$(P)$(R)C57:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 1015
+y 440
+w 30
+h 15
+controlPv "$(P)$(R)C58:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 730
+y 460
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 730
+y 460
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 59"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=59"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 814
+y 465
+w 30
+h 15
+controlPv "$(P)$(R)C59:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 864
+y 465
+w 30
+h 15
+controlPv "$(P)$(R)C59:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 914
+y 465
+w 30
+h 15
+controlPv "$(P)$(R)C59:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 730
+y 485
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 729
+y 485
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 60"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=60"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 814
+y 490
+w 30
+h 15
+controlPv "$(P)$(R)C60:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 864
+y 490
+w 30
+h 15
+controlPv "$(P)$(R)C60:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 914
+y 490
+w 30
+h 15
+controlPv "$(P)$(R)C60:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 730
+y 510
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 729
+y 510
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 61"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=61"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 814
+y 515
+w 30
+h 15
+controlPv "$(P)$(R)C61:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 864
+y 515
+w 30
+h 15
+controlPv "$(P)$(R)C61:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 914
+y 515
+w 30
+h 15
+controlPv "$(P)$(R)C61:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 730
+y 535
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 729
+y 535
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 62"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=62"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 814
+y 540
+w 30
+h 15
+controlPv "$(P)$(R)C62:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 864
+y 540
+w 30
+h 15
+controlPv "$(P)$(R)C62:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 914
+y 540
+w 30
+h 15
+controlPv "$(P)$(R)C62:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 730
+y 560
+w 215
+h 20
+
+beginGroup
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 729
+y 560
+w 70
+h 20
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Cine 63"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomCineDetails"
+}
+symbols {
+  0 "cine=63"
+}
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 814
+y 565
+w 30
+h 15
+controlPv "$(P)$(R)C63:State_RBV.B0"
+lineColor index 14
+onColor index 20
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 864
+y 565
+w 30
+h 15
+controlPv "$(P)$(R)C63:State_RBV.B1"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 914
+y 565
+w 30
+h 15
+controlPv "$(P)$(R)C63:State_RBV.B4"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+endGroup
+
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 965
+y 465
+w 30
+h 15
+controlPv "$(P)$(R)C59:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 965
+y 490
+w 30
+h 15
+controlPv "$(P)$(R)C60:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 965
+y 515
+w 30
+h 15
+controlPv "$(P)$(R)C61:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 965
+y 540
+w 30
+h 15
+controlPv "$(P)$(R)C62:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 965
+y 565
+w 30
+h 15
+controlPv "$(P)$(R)C63:State_RBV.B9"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 1015
+y 465
+w 30
+h 15
+controlPv "$(P)$(R)C59:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 1015
+y 490
+w 30
+h 15
+controlPv "$(P)$(R)C60:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 1015
+y 515
+w 30
+h 15
+controlPv "$(P)$(R)C61:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 1015
+y 540
+w 30
+h 15
+controlPv "$(P)$(R)C62:State_RBV.B8"
+lineColor index 14
+onColor index 15
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 1015
+y 565
+w 30
+h 15
+controlPv "$(P)$(R)C63:State_RBV.B8"
 lineColor index 14
 onColor index 15
 offColor index 19
