@@ -34,7 +34,7 @@ const std::string stringTokens[] = {
 "audio"  /* The camera supports audio i/o. */
 };	
 
-   struct miroCameraInfo
+   struct ADPhantomInfo
    {
    /* Sensor information */
    unsigned int sensor;        /* Type of sensor used */
@@ -98,15 +98,15 @@ const std::string stringTokens[] = {
    unsigned int genlockstat;   /* State of genlock system */
    };
    
-   struct miroCameraHw
+   struct ADPhantomHw
    {
    };
    
-   struct miroCameraMeta
+   struct ADPhantomMeta
    {
    };
    
-   struct miroCameraCam
+   struct ADPhantomCam
    {
    unsigned int syncimg;      /* Frame sync mode */
    unsigned int frdelay;      /* Delay between the sync reference time and start of exposure, in ns. */
@@ -141,7 +141,7 @@ const std::string stringTokens[] = {
    unsigned int mode;       /* Operating mode of the autotrigger */
    };
    
-   struct miroCameraAuto
+   struct ADPhantomAuto
    {
    unsigned int videoplay;      /* play back cine immediately after the recording ends */
    unsigned int flashsave;      /* save cine to a cinemag */
@@ -157,7 +157,7 @@ const std::string stringTokens[] = {
    autoTrigger trigger;         /* Image-based autotrigger data structure */
    };
    
-   struct miroCameraEth
+   struct ADPhantomEth
    {
    std::string ip;                /* IP address */ 
    std::string netmask;           /* Network mask */ 
@@ -169,15 +169,15 @@ const std::string stringTokens[] = {
    std::string xbroadcast;        /* Broadcast mask for the 10GE */ 
    };
    
-   struct miroCameraVideo
+   struct ADPhantomVideo
    {
    };
    
-   struct miroCameraIrig
+   struct ADPhantomIrig
    {
    };
    
-   struct miroCameraMag     /* Cinemag Structure */
+   struct ADPhantomMag     /* Cinemag Structure */
    {
    unsigned int state;         /* Status of the cinemag subsystem (see below) */
    unsigned int progress;      /* Progress indicator for various operations  */
@@ -207,11 +207,11 @@ const std::string stringTokens[] = {
 #define magStateInsertNotCinemag 12
 #define magStateInslotNotCinemag 13
 
-   struct miroCameraCf
+   struct ADPhantomCf
    {
    };
    
-   struct miroCameraUsets
+   struct ADPhantomUsets
    {
    };
    
@@ -226,7 +226,7 @@ const std::string stringTokens[] = {
 /*   int oh;     Enable software scale (Already have 'oh': ERROR IN PROTOCOL MANUAL?) */
    };
        
-   struct miroCameraDefc
+   struct ADPhantomDefc
    {
     unsigned int res;         /* Image size in pixels */
     float rate;               /* Frame rate in pictures per second */
@@ -246,7 +246,7 @@ const std::string stringTokens[] = {
     defcMeta meta;
    };
    
-   struct miroCameraCine
+   struct ADPhantomCine
    {
    };
 

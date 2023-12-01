@@ -1,4 +1,4 @@
-file miroCamera.template {
+file phantomCamera.template {
 pattern{ P, R , PORT, ADDR, TIMEOUT}
-{ "test:", "ioc:" , "MIRO", 0, 1}
+{ "test:", "ioc:" , "PHANTOM", 0, 1}
 }

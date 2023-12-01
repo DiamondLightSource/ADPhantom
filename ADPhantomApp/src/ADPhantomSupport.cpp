@@ -2,15 +2,15 @@
 #include <iostream>
 #include <vector>
 #include <map>
-#include <MiroCamera.h>
+#include <ADPhantom.h>
 using namespace std;
 
-// '<' and '==' operator functions for use with miroVal type map
-bool operator<(const miroVal& m1, const miroVal& m2)
+// '<' and '==' operator functions for use with phantomVal type map
+bool operator<(const phantomVal& m1, const phantomVal& m2)
 {
   return (m1.value < m2.value) ? true : false;
 }
-bool operator==(const miroVal& m1, const miroVal& m2)
+bool operator==(const phantomVal& m1, const phantomVal& m2)
 {
   return (m1.value == m2.value) ? true : false;
 }
@@ -95,7 +95,7 @@ bool repeatTerm(const std::string instring)
     return false;
 }
 
-MIROValueType_t miroType(const string str)
+PHANTOMValueType_t phantomType(const string str)
 // Returns the type of the value, determined by examining the contents
 // The recognised types are defined in the camera protocol document
 {
@@ -106,12 +106,12 @@ MIROValueType_t miroType(const string str)
   
 // assume string type if contains quotation mark
   if (hstring.find('"') != std::string::npos) {
-      return MIROTypeString;
+      return PHANTOMTypeString;
     }
 // Flag list contains both '{' and '}'  
   if ( (hstring.find('{') != std::string::npos) &&
        (hstring.find('}') != std::string::npos) )
-      return MIROTypeFlags;
+      return PHANTOMTypeFlags;
     
    stripControl(hstring, " \t\n\r\f\v"); // Can now remove embedded spaces etc.
 
@@ -121,45 +121,45 @@ MIROValueType_t miroType(const string str)
     char hxstring[256];
     strncpy(hxstring, testhex.c_str(), 256);
     if (strspn(hxstring, "1234567890abcdefABCDEF") == strlen(hxstring))
-     return MIROTypeHex;
+     return PHANTOMTypeHex;
   }
 
   strncpy(cstring, hstring.c_str(), 256);  // string as C char array
 // Resolution type is of form 123x456; containing only 'x', space and decimal digits
   if ( (sscanf(cstring, "%ux%u", &i, &i) == 2) &&
        (strspn(cstring, " 1234567890x") == strlen(cstring)) )
-    return MIROTypeRes;
+    return PHANTOMTypeRes;
 // Integer contains only decimal digits and sign
-  if (strspn(cstring, "+-1234567890") == strlen(cstring)) return MIROTypeInteger;
+  if (strspn(cstring, "+-1234567890") == strlen(cstring)) return PHANTOMTypeInteger;
 // Float must contain a '.' and at least 1 digit; only allowed decimal digits and sign
   if ((hstring.find('.') != std::string::npos) && 
       (strspn(cstring, "+-1234567890.") == strlen(cstring)) &&
       (hstring.size() > 1) )
-     return MIROTypeFloat;
+     return PHANTOMTypeFloat;
 // nothing matched  
-  return MIROTypeUnknown;
+  return PHANTOMTypeUnknown;
 }
 
-void addDataItem(vector<string>& strucName, vector<miroVal>& value, const string itemname, const string valstring)
+void addDataItem(vector<string>& strucName, vector<phantomVal>& value, const string itemname, const string valstring)
 {
 // Add new vector item: item name and value string/type  
-  miroVal mv;
+  phantomVal mv;
   string s, i, v;
-  MIROValueType_t mt;
+  PHANTOMValueType_t mt;
 
   i = itemname;
   strucName.push_back(stripChar(i, ' '));  // Remove spaces in name when adding item
   v = valstring;
   s = ltrim(v);
-  mt = miroType(s);
-  if (mt == MIROTypeString) s = stripChar(s, '"');  // Strip quotes from strings
-  mv.setValue(s);          // Set string value and type in miroVal object
+  mt = phantomType(s);
+  if (mt == PHANTOMTypeString) s = stripChar(s, '"');  // Strip quotes from strings
+  mv.setValue(s);          // Set string value and type in phantomVal object
   mv.setType(mt);
-  value.push_back(mv);     // Add miroVal object as new vector item
+  value.push_back(mv);     // Add phantomVal object as new vector item
 }
 
 
-void parseDataStruc(const string& str, vector<string>& strucName, vector<miroVal>& value)
+void parseDataStruc(const string& str, vector<string>& strucName, vector<phantomVal>& value)
 {
   string::iterator it;
   string valstring, instring, itemname;

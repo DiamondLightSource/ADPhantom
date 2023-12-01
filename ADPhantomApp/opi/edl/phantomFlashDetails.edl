@@ -646,7 +646,7 @@ buttonLabel "Format"
 numPvs 4
 numDsps 1
 displayFileName {
-  0 "miroFormatFlashConfirm"
+  0 "phantomFormatFlashConfirm"
 }
 endObjectProperties
 

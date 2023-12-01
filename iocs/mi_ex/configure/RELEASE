@@ -14,6 +14,6 @@ ASYN         = $(SUPPORT)/asyn/4-26
 BUSY         = $(SUPPORT)/busy/1-6-1
 CALC         = $(SUPPORT)/calc/3-1
 FFMPEGSERVER = $(SUPPORT)/ffmpegServer/3-0dls0-11
-MIROCAMERA   = $(WORK)/miroCamera
+ADPHANTOM   = $(WORK)/ADPhantom
 # EPICS Base appears last
 EPICS_BASE   = /dls_sw/epics/R3.14.12.3/base

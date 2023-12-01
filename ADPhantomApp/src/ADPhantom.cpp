@@ -1,6 +1,6 @@
-#include "MiroCamera.h"
+#include "ADPhantom.h"
 
-const int MiroCamera::MIRO_LinLUT[1024] = {
+const int ADPhantom::PHANTOM_LinLUT[1024] = {
   2, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 17, 18,
   19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 33,
   34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 48,
@@ -67,257 +67,257 @@ const int MiroCamera::MIRO_LinLUT[1024] = {
   4014,4022,4031,4039,4048,4056,4064,4095,4095,4095,4095,4095,4095,4095,4095,4095
 };
 
-const char *MiroCamera::MIRO_CnNameString[] = {
-    "MIRO_C0_NAME",
-    "MIRO_C1_NAME",
-    "MIRO_C2_NAME",
-    "MIRO_C3_NAME",
-    "MIRO_C4_NAME",
-    "MIRO_C5_NAME",
-    "MIRO_C6_NAME",
-    "MIRO_C7_NAME",
-    "MIRO_C8_NAME",
-    "MIRO_C9_NAME",
-    "MIRO_C10_NAME",
-    "MIRO_C11_NAME",
-    "MIRO_C12_NAME",
-    "MIRO_C13_NAME",
-    "MIRO_C14_NAME",
-    "MIRO_C15_NAME",
-    "MIRO_C16_NAME"
+const char *ADPhantom::PHANTOM_CnNameString[] = {
+    "PHANTOM_C0_NAME",
+    "PHANTOM_C1_NAME",
+    "PHANTOM_C2_NAME",
+    "PHANTOM_C3_NAME",
+    "PHANTOM_C4_NAME",
+    "PHANTOM_C5_NAME",
+    "PHANTOM_C6_NAME",
+    "PHANTOM_C7_NAME",
+    "PHANTOM_C8_NAME",
+    "PHANTOM_C9_NAME",
+    "PHANTOM_C10_NAME",
+    "PHANTOM_C11_NAME",
+    "PHANTOM_C12_NAME",
+    "PHANTOM_C13_NAME",
+    "PHANTOM_C14_NAME",
+    "PHANTOM_C15_NAME",
+    "PHANTOM_C16_NAME"
 };
 
-const char *MiroCamera::MIRO_CnWidthString[] = {
-    "MIRO_C0_WIDTH",
-    "MIRO_C1_WIDTH",
-    "MIRO_C2_WIDTH",
-    "MIRO_C3_WIDTH",
-    "MIRO_C4_WIDTH",
-    "MIRO_C5_WIDTH",
-    "MIRO_C6_WIDTH",
-    "MIRO_C7_WIDTH",
-    "MIRO_C8_WIDTH",
-    "MIRO_C9_WIDTH",
-    "MIRO_C10_WIDTH",
-    "MIRO_C11_WIDTH",
-    "MIRO_C12_WIDTH",
-    "MIRO_C13_WIDTH",
-    "MIRO_C14_WIDTH",
-    "MIRO_C15_WIDTH",
-    "MIRO_C16_WIDTH"
+const char *ADPhantom::PHANTOM_CnWidthString[] = {
+    "PHANTOM_C0_WIDTH",
+    "PHANTOM_C1_WIDTH",
+    "PHANTOM_C2_WIDTH",
+    "PHANTOM_C3_WIDTH",
+    "PHANTOM_C4_WIDTH",
+    "PHANTOM_C5_WIDTH",
+    "PHANTOM_C6_WIDTH",
+    "PHANTOM_C7_WIDTH",
+    "PHANTOM_C8_WIDTH",
+    "PHANTOM_C9_WIDTH",
+    "PHANTOM_C10_WIDTH",
+    "PHANTOM_C11_WIDTH",
+    "PHANTOM_C12_WIDTH",
+    "PHANTOM_C13_WIDTH",
+    "PHANTOM_C14_WIDTH",
+    "PHANTOM_C15_WIDTH",
+    "PHANTOM_C16_WIDTH"
 };
 
-const char *MiroCamera::MIRO_CnHeightString[] = {
-    "MIRO_C0_HEIGHT",
-    "MIRO_C1_HEIGHT",
-    "MIRO_C2_HEIGHT",
-    "MIRO_C3_HEIGHT",
-    "MIRO_C4_HEIGHT",
-    "MIRO_C5_HEIGHT",
-    "MIRO_C6_HEIGHT",
-    "MIRO_C7_HEIGHT",
-    "MIRO_C8_HEIGHT",
-    "MIRO_C9_HEIGHT",
-    "MIRO_C10_HEIGHT",
-    "MIRO_C11_HEIGHT",
-    "MIRO_C12_HEIGHT",
-    "MIRO_C13_HEIGHT",
-    "MIRO_C14_HEIGHT",
-    "MIRO_C15_HEIGHT",
-    "MIRO_C16_HEIGHT"
+const char *ADPhantom::PHANTOM_CnHeightString[] = {
+    "PHANTOM_C0_HEIGHT",
+    "PHANTOM_C1_HEIGHT",
+    "PHANTOM_C2_HEIGHT",
+    "PHANTOM_C3_HEIGHT",
+    "PHANTOM_C4_HEIGHT",
+    "PHANTOM_C5_HEIGHT",
+    "PHANTOM_C6_HEIGHT",
+    "PHANTOM_C7_HEIGHT",
+    "PHANTOM_C8_HEIGHT",
+    "PHANTOM_C9_HEIGHT",
+    "PHANTOM_C10_HEIGHT",
+    "PHANTOM_C11_HEIGHT",
+    "PHANTOM_C12_HEIGHT",
+    "PHANTOM_C13_HEIGHT",
+    "PHANTOM_C14_HEIGHT",
+    "PHANTOM_C15_HEIGHT",
+    "PHANTOM_C16_HEIGHT"
 };
 
-const char *MiroCamera::MIRO_CnStatusString[] = {
-    "MIRO_C0_STATUS",
-    "MIRO_C1_STATUS",
-    "MIRO_C2_STATUS",
-    "MIRO_C3_STATUS",
-    "MIRO_C4_STATUS",
-    "MIRO_C5_STATUS",
-    "MIRO_C6_STATUS",
-    "MIRO_C7_STATUS",
-    "MIRO_C8_STATUS",
-    "MIRO_C9_STATUS",
-    "MIRO_C10_STATUS",
-    "MIRO_C11_STATUS",
-    "MIRO_C12_STATUS",
-    "MIRO_C13_STATUS",
-    "MIRO_C14_STATUS",
-    "MIRO_C15_STATUS",
-    "MIRO_C16_STATUS"
+const char *ADPhantom::PHANTOM_CnStatusString[] = {
+    "PHANTOM_C0_STATUS",
+    "PHANTOM_C1_STATUS",
+    "PHANTOM_C2_STATUS",
+    "PHANTOM_C3_STATUS",
+    "PHANTOM_C4_STATUS",
+    "PHANTOM_C5_STATUS",
+    "PHANTOM_C6_STATUS",
+    "PHANTOM_C7_STATUS",
+    "PHANTOM_C8_STATUS",
+    "PHANTOM_C9_STATUS",
+    "PHANTOM_C10_STATUS",
+    "PHANTOM_C11_STATUS",
+    "PHANTOM_C12_STATUS",
+    "PHANTOM_C13_STATUS",
+    "PHANTOM_C14_STATUS",
+    "PHANTOM_C15_STATUS",
+    "PHANTOM_C16_STATUS"
 };
 
-const char *MiroCamera::MIRO_CnFrameCountString[] = {
-    "MIRO_C0_FR_COUNT",
-    "MIRO_C1_FR_COUNT",
-    "MIRO_C2_FR_COUNT",
-    "MIRO_C3_FR_COUNT",
-    "MIRO_C4_FR_COUNT",
-    "MIRO_C5_FR_COUNT",
-    "MIRO_C6_FR_COUNT",
-    "MIRO_C7_FR_COUNT",
-    "MIRO_C8_FR_COUNT",
-    "MIRO_C9_FR_COUNT",
-    "MIRO_C10_FR_COUNT",
-    "MIRO_C11_FR_COUNT",
-    "MIRO_C12_FR_COUNT",
-    "MIRO_C13_FR_COUNT",
-    "MIRO_C14_FR_COUNT",
-    "MIRO_C15_FR_COUNT",
-    "MIRO_C16_FR_COUNT"
+const char *ADPhantom::PHANTOM_CnFrameCountString[] = {
+    "PHANTOM_C0_FR_COUNT",
+    "PHANTOM_C1_FR_COUNT",
+    "PHANTOM_C2_FR_COUNT",
+    "PHANTOM_C3_FR_COUNT",
+    "PHANTOM_C4_FR_COUNT",
+    "PHANTOM_C5_FR_COUNT",
+    "PHANTOM_C6_FR_COUNT",
+    "PHANTOM_C7_FR_COUNT",
+    "PHANTOM_C8_FR_COUNT",
+    "PHANTOM_C9_FR_COUNT",
+    "PHANTOM_C10_FR_COUNT",
+    "PHANTOM_C11_FR_COUNT",
+    "PHANTOM_C12_FR_COUNT",
+    "PHANTOM_C13_FR_COUNT",
+    "PHANTOM_C14_FR_COUNT",
+    "PHANTOM_C15_FR_COUNT",
+    "PHANTOM_C16_FR_COUNT"
 };
 
-const char *MiroCamera::MIRO_CnFirstFrameString[] = {
-    "MIRO_C0_FIRST_FR",
-    "MIRO_C1_FIRST_FR",
-    "MIRO_C2_FIRST_FR",
-    "MIRO_C3_FIRST_FR",
-    "MIRO_C4_FIRST_FR",
-    "MIRO_C5_FIRST_FR",
-    "MIRO_C6_FIRST_FR",
-    "MIRO_C7_FIRST_FR",
-    "MIRO_C8_FIRST_FR",
-    "MIRO_C9_FIRST_FR",
-    "MIRO_C10_FIRST_FR",
-    "MIRO_C11_FIRST_FR",
-    "MIRO_C12_FIRST_FR",
-    "MIRO_C13_FIRST_FR",
-    "MIRO_C14_FIRST_FR",
-    "MIRO_C15_FIRST_FR",
-    "MIRO_C16_FIRST_FR"
+const char *ADPhantom::PHANTOM_CnFirstFrameString[] = {
+    "PHANTOM_C0_FIRST_FR",
+    "PHANTOM_C1_FIRST_FR",
+    "PHANTOM_C2_FIRST_FR",
+    "PHANTOM_C3_FIRST_FR",
+    "PHANTOM_C4_FIRST_FR",
+    "PHANTOM_C5_FIRST_FR",
+    "PHANTOM_C6_FIRST_FR",
+    "PHANTOM_C7_FIRST_FR",
+    "PHANTOM_C8_FIRST_FR",
+    "PHANTOM_C9_FIRST_FR",
+    "PHANTOM_C10_FIRST_FR",
+    "PHANTOM_C11_FIRST_FR",
+    "PHANTOM_C12_FIRST_FR",
+    "PHANTOM_C13_FIRST_FR",
+    "PHANTOM_C14_FIRST_FR",
+    "PHANTOM_C15_FIRST_FR",
+    "PHANTOM_C16_FIRST_FR"
 };
 
-const char *MiroCamera::MIRO_CnLastFrameString[] = {
-    "MIRO_C0_LAST_FR",
-    "MIRO_C1_LAST_FR",
-    "MIRO_C2_LAST_FR",
-    "MIRO_C3_LAST_FR",
-    "MIRO_C4_LAST_FR",
-    "MIRO_C5_LAST_FR",
-    "MIRO_C6_LAST_FR",
-    "MIRO_C7_LAST_FR",
-    "MIRO_C8_LAST_FR",
-    "MIRO_C9_LAST_FR",
-    "MIRO_C10_LAST_FR",
-    "MIRO_C11_LAST_FR",
-    "MIRO_C12_LAST_FR",
-    "MIRO_C13_LAST_FR",
-    "MIRO_C14_LAST_FR",
-    "MIRO_C15_LAST_FR",
-    "MIRO_C16_LAST_FR"
+const char *ADPhantom::PHANTOM_CnLastFrameString[] = {
+    "PHANTOM_C0_LAST_FR",
+    "PHANTOM_C1_LAST_FR",
+    "PHANTOM_C2_LAST_FR",
+    "PHANTOM_C3_LAST_FR",
+    "PHANTOM_C4_LAST_FR",
+    "PHANTOM_C5_LAST_FR",
+    "PHANTOM_C6_LAST_FR",
+    "PHANTOM_C7_LAST_FR",
+    "PHANTOM_C8_LAST_FR",
+    "PHANTOM_C9_LAST_FR",
+    "PHANTOM_C10_LAST_FR",
+    "PHANTOM_C11_LAST_FR",
+    "PHANTOM_C12_LAST_FR",
+    "PHANTOM_C13_LAST_FR",
+    "PHANTOM_C14_LAST_FR",
+    "PHANTOM_C15_LAST_FR",
+    "PHANTOM_C16_LAST_FR"
 };
 
-const char *MiroCamera::MIRO_CnRecordStartString[] = {
-    "MIRO_C0_REC_START",
-    "MIRO_C1_REC_START",
-    "MIRO_C2_REC_START",
-    "MIRO_C3_REC_START",
-    "MIRO_C4_REC_START",
-    "MIRO_C5_REC_START",
-    "MIRO_C6_REC_START",
-    "MIRO_C7_REC_START",
-    "MIRO_C8_REC_START",
-    "MIRO_C9_REC_START",
-    "MIRO_C10_REC_START",
-    "MIRO_C11_REC_START",
-    "MIRO_C12_REC_START",
-    "MIRO_C13_REC_START",
-    "MIRO_C14_REC_START",
-    "MIRO_C15_REC_START",
-    "MIRO_C16_REC_START"
+const char *ADPhantom::PHANTOM_CnRecordStartString[] = {
+    "PHANTOM_C0_REC_START",
+    "PHANTOM_C1_REC_START",
+    "PHANTOM_C2_REC_START",
+    "PHANTOM_C3_REC_START",
+    "PHANTOM_C4_REC_START",
+    "PHANTOM_C5_REC_START",
+    "PHANTOM_C6_REC_START",
+    "PHANTOM_C7_REC_START",
+    "PHANTOM_C8_REC_START",
+    "PHANTOM_C9_REC_START",
+    "PHANTOM_C10_REC_START",
+    "PHANTOM_C11_REC_START",
+    "PHANTOM_C12_REC_START",
+    "PHANTOM_C13_REC_START",
+    "PHANTOM_C14_REC_START",
+    "PHANTOM_C15_REC_START",
+    "PHANTOM_C16_REC_START"
 };
 
-const char *MiroCamera::MIRO_CnRecordEndString[] = {
-    "MIRO_C0_REC_END",
-    "MIRO_C1_REC_END",
-    "MIRO_C2_REC_END",
-    "MIRO_C3_REC_END",
-    "MIRO_C4_REC_END",
-    "MIRO_C5_REC_END",
-    "MIRO_C6_REC_END",
-    "MIRO_C7_REC_END",
-    "MIRO_C8_REC_END",
-    "MIRO_C9_REC_END",
-    "MIRO_C10_REC_END",
-    "MIRO_C11_REC_END",
-    "MIRO_C12_REC_END",
-    "MIRO_C13_REC_END",
-    "MIRO_C14_REC_END",
-    "MIRO_C15_REC_END",
-    "MIRO_C16_REC_END"
+const char *ADPhantom::PHANTOM_CnRecordEndString[] = {
+    "PHANTOM_C0_REC_END",
+    "PHANTOM_C1_REC_END",
+    "PHANTOM_C2_REC_END",
+    "PHANTOM_C3_REC_END",
+    "PHANTOM_C4_REC_END",
+    "PHANTOM_C5_REC_END",
+    "PHANTOM_C6_REC_END",
+    "PHANTOM_C7_REC_END",
+    "PHANTOM_C8_REC_END",
+    "PHANTOM_C9_REC_END",
+    "PHANTOM_C10_REC_END",
+    "PHANTOM_C11_REC_END",
+    "PHANTOM_C12_REC_END",
+    "PHANTOM_C13_REC_END",
+    "PHANTOM_C14_REC_END",
+    "PHANTOM_C15_REC_END",
+    "PHANTOM_C16_REC_END"
 };
 
-const char *MiroCamera::MIRO_CnRecordString[] = {
-    "MIRO_C0_RECORD",
-    "MIRO_C1_RECORD",
-    "MIRO_C2_RECORD",
-    "MIRO_C3_RECORD",
-    "MIRO_C4_RECORD",
-    "MIRO_C5_RECORD",
-    "MIRO_C6_RECORD",
-    "MIRO_C7_RECORD",
-    "MIRO_C8_RECORD",
-    "MIRO_C9_RECORD",
-    "MIRO_C10_RECORD",
-    "MIRO_C11_RECORD",
-    "MIRO_C12_RECORD",
-    "MIRO_C13_RECORD",
-    "MIRO_C14_RECORD",
-    "MIRO_C15_RECORD",
-    "MIRO_C16_RECORD"
+const char *ADPhantom::PHANTOM_CnRecordString[] = {
+    "PHANTOM_C0_RECORD",
+    "PHANTOM_C1_RECORD",
+    "PHANTOM_C2_RECORD",
+    "PHANTOM_C3_RECORD",
+    "PHANTOM_C4_RECORD",
+    "PHANTOM_C5_RECORD",
+    "PHANTOM_C6_RECORD",
+    "PHANTOM_C7_RECORD",
+    "PHANTOM_C8_RECORD",
+    "PHANTOM_C9_RECORD",
+    "PHANTOM_C10_RECORD",
+    "PHANTOM_C11_RECORD",
+    "PHANTOM_C12_RECORD",
+    "PHANTOM_C13_RECORD",
+    "PHANTOM_C14_RECORD",
+    "PHANTOM_C15_RECORD",
+    "PHANTOM_C16_RECORD"
 };
 
-const char *MiroCamera::MIRO_CnRecordCountString[] = {
-    "MIRO_C0_REC_COUNT",
-    "MIRO_C1_REC_COUNT",
-    "MIRO_C2_REC_COUNT",
-    "MIRO_C3_REC_COUNT",
-    "MIRO_C4_REC_COUNT",
-    "MIRO_C5_REC_COUNT",
-    "MIRO_C6_REC_COUNT",
-    "MIRO_C7_REC_COUNT",
-    "MIRO_C8_REC_COUNT",
-    "MIRO_C9_REC_COUNT",
-    "MIRO_C10_REC_COUNT",
-    "MIRO_C11_REC_COUNT",
-    "MIRO_C12_REC_COUNT",
-    "MIRO_C13_REC_COUNT",
-    "MIRO_C14_REC_COUNT",
-    "MIRO_C15_REC_COUNT",
-    "MIRO_C16_REC_COUNT"
+const char *ADPhantom::PHANTOM_CnRecordCountString[] = {
+    "PHANTOM_C0_REC_COUNT",
+    "PHANTOM_C1_REC_COUNT",
+    "PHANTOM_C2_REC_COUNT",
+    "PHANTOM_C3_REC_COUNT",
+    "PHANTOM_C4_REC_COUNT",
+    "PHANTOM_C5_REC_COUNT",
+    "PHANTOM_C6_REC_COUNT",
+    "PHANTOM_C7_REC_COUNT",
+    "PHANTOM_C8_REC_COUNT",
+    "PHANTOM_C9_REC_COUNT",
+    "PHANTOM_C10_REC_COUNT",
+    "PHANTOM_C11_REC_COUNT",
+    "PHANTOM_C12_REC_COUNT",
+    "PHANTOM_C13_REC_COUNT",
+    "PHANTOM_C14_REC_COUNT",
+    "PHANTOM_C15_REC_COUNT",
+    "PHANTOM_C16_REC_COUNT"
 };
 
-const char *MiroCamera::MIRO_CfFileNameString[] = {
-    "MIRO_CF1_FILE_NAME",
-    "MIRO_CF2_FILE_NAME",
-    "MIRO_CF3_FILE_NAME",
-    "MIRO_CF4_FILE_NAME",
-    "MIRO_CF5_FILE_NAME",
-    "MIRO_CF6_FILE_NAME",
-    "MIRO_CF7_FILE_NAME",
-    "MIRO_CF8_FILE_NAME"
+const char *ADPhantom::PHANTOM_CfFileNameString[] = {
+    "PHANTOM_CF1_FILE_NAME",
+    "PHANTOM_CF2_FILE_NAME",
+    "PHANTOM_CF3_FILE_NAME",
+    "PHANTOM_CF4_FILE_NAME",
+    "PHANTOM_CF5_FILE_NAME",
+    "PHANTOM_CF6_FILE_NAME",
+    "PHANTOM_CF7_FILE_NAME",
+    "PHANTOM_CF8_FILE_NAME"
 };
 
-const char *MiroCamera::MIRO_CfFileSizeString[] = {
-    "MIRO_CF1_FILE_SIZE",
-    "MIRO_CF2_FILE_SIZE",
-    "MIRO_CF3_FILE_SIZE",
-    "MIRO_CF4_FILE_SIZE",
-    "MIRO_CF5_FILE_SIZE",
-    "MIRO_CF6_FILE_SIZE",
-    "MIRO_CF7_FILE_SIZE",
-    "MIRO_CF8_FILE_SIZE"
+const char *ADPhantom::PHANTOM_CfFileSizeString[] = {
+    "PHANTOM_CF1_FILE_SIZE",
+    "PHANTOM_CF2_FILE_SIZE",
+    "PHANTOM_CF3_FILE_SIZE",
+    "PHANTOM_CF4_FILE_SIZE",
+    "PHANTOM_CF5_FILE_SIZE",
+    "PHANTOM_CF6_FILE_SIZE",
+    "PHANTOM_CF7_FILE_SIZE",
+    "PHANTOM_CF8_FILE_SIZE"
 };
 
-const char *MiroCamera::MIRO_CfFileDateString[] = {
-    "MIRO_CF1_FILE_DATE",
-    "MIRO_CF2_FILE_DATE",
-    "MIRO_CF3_FILE_DATE",
-    "MIRO_CF4_FILE_DATE",
-    "MIRO_CF5_FILE_DATE",
-    "MIRO_CF6_FILE_DATE",
-    "MIRO_CF7_FILE_DATE",
-    "MIRO_CF8_FILE_DATE"
+const char *ADPhantom::PHANTOM_CfFileDateString[] = {
+    "PHANTOM_CF1_FILE_DATE",
+    "PHANTOM_CF2_FILE_DATE",
+    "PHANTOM_CF3_FILE_DATE",
+    "PHANTOM_CF4_FILE_DATE",
+    "PHANTOM_CF5_FILE_DATE",
+    "PHANTOM_CF6_FILE_DATE",
+    "PHANTOM_CF7_FILE_DATE",
+    "PHANTOM_CF8_FILE_DATE"
 };
 
 /**
@@ -325,18 +325,18 @@ const char *MiroCamera::MIRO_CfFileDateString[] = {
  */
 extern "C"
 {
-  int miroCameraConfig(const char *portName, const char *ctrlPort, const char *dataPort, int maxBuffers, size_t maxMemory, int priority,	int stackSize)
+  int ADPhantomConfig(const char *portName, const char *ctrlPort, const char *dataPort, int maxBuffers, size_t maxMemory, int priority,	int stackSize)
   {
-    new MiroCamera(portName, ctrlPort, dataPort, maxBuffers, maxMemory, priority, stackSize);
+    new ADPhantom(portName, ctrlPort, dataPort, maxBuffers, maxMemory, priority, stackSize);
     return asynSuccess;
   }
 
-  int miroSetDebugLevel(const char *driver, const char *method, int debug)
+  int phantomSetDebugLevel(const char *driver, const char *method, int debug)
   {
-    MiroCamera *sA;
-    static const char *functionName = "miroSetDebugLevel";
+    ADPhantom *sA;
+    static const char *functionName = "phantomSetDebugLevel";
 
-    sA = (MiroCamera*)findAsynPortDriver(driver);
+    sA = (ADPhantom*)findAsynPortDriver(driver);
     if (!sA){
       printf("%s: Error: port %s not found.", functionName, driver);
       return -1;
@@ -348,47 +348,47 @@ extern "C"
 /**
  * Function to run the camera task within a separate thread in C++
  */
-static void miroCameraTaskC(void *drvPvt)
+static void phantomCameraTaskC(void *drvPvt)
 {
-  MiroCamera *pPvt = (MiroCamera *)drvPvt;
-  pPvt->miroCameraTask();
+  ADPhantom *pPvt = (ADPhantom *)drvPvt;
+  pPvt->phantomCameraTask();
 }
 
 /**
  * Function to run the status task within a separate thread in C++
  */
-static void miroStatusTaskC(void *drvPvt)
+static void phantomStatusTaskC(void *drvPvt)
 {
-  MiroCamera *pPvt = (MiroCamera *)drvPvt;
-  pPvt->miroStatusTask();
+  ADPhantom *pPvt = (ADPhantom *)drvPvt;
+  pPvt->phantomStatusTask();
 }
 
 /**
  * Function to run the camera task within a separate thread in C++
  */
-static void miroPreviewTaskC(void *drvPvt)
+static void phantomPreviewTaskC(void *drvPvt)
 {
-  MiroCamera *pPvt = (MiroCamera *)drvPvt;
-  pPvt->miroPreviewTask();
+  ADPhantom *pPvt = (ADPhantom *)drvPvt;
+  pPvt->phantomPreviewTask();
 }
 
 /**
  * Function to run the flash delete and format task within a separate thread in C++
  */
-static void miroFlashTaskC(void *drvPvt)
+static void phantomFlashTaskC(void *drvPvt)
 {
-  MiroCamera *pPvt = (MiroCamera *)drvPvt;
-  pPvt->miroFlashTask();
+  ADPhantom *pPvt = (ADPhantom *)drvPvt;
+  pPvt->phantomFlashTask();
 }
 
 /**
- * miroCamera destructor
+ * ADPhantom destructor
  */
-MiroCamera::~MiroCamera()
+ADPhantom::~ADPhantom()
 {
 }
 
-MiroCamera::MiroCamera(const char *portName, const char *ctrlPort, const char *dataPort, int maxBuffers, size_t maxMemory, int priority, int stackSize) :
+ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dataPort, int maxBuffers, size_t maxMemory, int priority, int stackSize) :
 /** 
     Constructor for the ADDriver class. 
 [in]	portNameIn	The name of the asyn port.
@@ -415,7 +415,7 @@ MiroCamera::MiroCamera(const char *portName, const char *ctrlPort, const char *d
 */
   ADDriver(portName,
            1,
-           NUM_MIRO_PARAMS,
+           NUM_PHANTOM_PARAMS,
            maxBuffers,
            maxMemory,
            asynEnumMask | asynFloat64ArrayMask,
@@ -425,7 +425,7 @@ MiroCamera::MiroCamera(const char *portName, const char *ctrlPort, const char *d
            priority,
            stackSize) // thread priority and stack size (0=default)
 {
-  static const char *functionName = "MiroCamera::MiroCamera";
+  static const char *functionName = "ADPhantom::ADPhantom";
   int status = asynSuccess;
   int index = 0;
 
@@ -441,172 +441,172 @@ MiroCamera::MiroCamera(const char *portName, const char *ctrlPort, const char *d
   strcpy(ctrlPort_, ctrlPort);
   strcpy(dataPort_, dataPort);
   
-  // Create the epicsEvents for signalling to the MIRO task when acquisition starts
+  // Create the epicsEvents for signalling to the PHANTOM task when acquisition starts
   this->startEventId_ = epicsEventCreate(epicsEventEmpty);
   if (!this->startEventId_){
     debug(functionName, "epicsEventCreate failure for start event");
     status = asynError;
   }
 
-  // Create the epicsEvents for signalling to the MIRO Analyser task when acquisition stops
+  // Create the epicsEvents for signalling to the PHANTOM Analyser task when acquisition stops
   this->stopEventId_ = epicsEventCreate(epicsEventEmpty);
   if (!this->stopEventId_){
     debug(functionName, "epicsEventCreate failure for stop event");
     status = asynError;
   }
 
-  // Create the epicsEvents for signalling to the MIRO task when acquisition starts
+  // Create the epicsEvents for signalling to the PHANTOM task when acquisition starts
   this->startPreviewEventId_ = epicsEventCreate(epicsEventEmpty);
   if (!this->startPreviewEventId_){
     debug(functionName, "epicsEventCreate failure for start preview event");
     status = asynError;
   }
 
-  // Create the epicsEvents for signalling to the MIRO Analyser task when acquisition stops
+  // Create the epicsEvents for signalling to the PHANTOM Analyser task when acquisition stops
   this->stopPreviewEventId_ = epicsEventCreate(epicsEventEmpty);
   if (!this->stopPreviewEventId_){
     debug(functionName, "epicsEventCreate failure for stop preview event");
     status = asynError;
   }
 
-  // Create the epicsEvents for signalling to the MIRO flash task when format or file delete occurs
+  // Create the epicsEvents for signalling to the PHANTOM flash task when format or file delete occurs
   this->flashEventId_ = epicsEventCreate(epicsEventEmpty);
   if (!this->flashEventId_){
     debug(functionName, "epicsEventCreate failure to create flash event");
     status = asynError;
   }
 
-  // Create all MIRO parameters
-  createParam(MIROConnectString,                   asynParamInt32,         &MIROConnect_);
-  createParam(MIROConnectedString,                 asynParamInt32,         &MIROConnected_);
-  createParam(MIRO_AcquireStateString,             asynParamInt32,         &MIRO_AcquireState_);
-  createParam(MIRO_SoftwareTriggerString,          asynParamInt32,         &MIRO_SoftwareTrigger_);
-  createParam(MIRO_PerformCSRString,               asynParamInt32,         &MIRO_PerformCSR_);
-  createParam(MIRO_CSRCountString,                 asynParamInt32,         &MIRO_CSRCount_);
-  createParam(MIRO_SettingsSlotString,             asynParamInt32,         &MIRO_SettingsSlot_);
-  createParam(MIRO_SettingsSaveString,             asynParamInt32,         &MIRO_SettingsSave_);
-  createParam(MIRO_SettingsLoadString,             asynParamInt32,         &MIRO_SettingsLoad_);
-  createParam(MIRO_AutoSaveString,                 asynParamInt32,         &MIRO_AutoSave_);
-  createParam(MIRO_AutoRestartString,              asynParamInt32,         &MIRO_AutoRestart_);
-  createParam(MIRO_AutoCSRString,                  asynParamInt32,         &MIRO_AutoCSR_);
-  createParam(MIRO_PostTrigCountString,            asynParamInt32,         &MIRO_PostTrigCount_);
-  createParam(MIRO_TotalFrameCountString,          asynParamInt32,         &MIRO_TotalFrameCount_);
-  createParam(MIRO_MaxFrameCountString,            asynParamInt32,         &MIRO_MaxFrameCount_);
-  createParam(MIRO_SelectedCineString,             asynParamInt32,         &MIRO_SelectedCine_);
-  createParam(MIRO_CineNameString,                 asynParamOctet,         &MIRO_CineName_);
-  createParam(MIRO_CineWidthString,                asynParamInt32,         &MIRO_CineWidth_);
-  createParam(MIRO_CineHeightString,               asynParamInt32,         &MIRO_CineHeight_);
-  createParam(MIRO_CineFrameCountString,           asynParamInt32,         &MIRO_CineFrameCount_);
-  createParam(MIRO_CineFirstFrameString,           asynParamInt32,         &MIRO_CineFirstFrame_);
-  createParam(MIRO_CineLastFrameString,            asynParamInt32,         &MIRO_CineLastFrame_);
-  createParam(MIRO_CineRecordStartString,          asynParamInt32,         &MIRO_CineRecordStart_);
-  createParam(MIRO_CineRecordEndString,            asynParamInt32,         &MIRO_CineRecordEnd_);
-  createParam(MIRO_CineRecordString,               asynParamInt32,         &MIRO_CineRecord_);
-  createParam(MIRO_CineRecordCountString,          asynParamInt32,         &MIRO_CineRecordCount_);
-  createParam(MIRO_CineSaveCFString,               asynParamInt32,         &MIRO_CineSaveCF_);
-  createParam(MIRO_LivePreviewString,              asynParamInt32,         &MIRO_LivePreview_);
-  createParam(MIRO_SetPartitionString,             asynParamInt32,         &MIRO_SetPartition_);
-  createParam(MIRO_GetCineCountString,             asynParamInt32,         &MIRO_GetCineCount_);
-  createParam(MIRO_CFStateString,                  asynParamInt32,         &MIRO_CFState_);
-  createParam(MIRO_CFActionString,                 asynParamInt32,         &MIRO_CFAction_);
-  createParam(MIRO_CFSizeString,                   asynParamInt32,         &MIRO_CFSize_);
-  createParam(MIRO_CFUsedString,                   asynParamInt32,         &MIRO_CFUsed_);
-  createParam(MIRO_CFProgressString,               asynParamInt32,         &MIRO_CFProgress_);
-  createParam(MIRO_CFErrorString,                  asynParamInt32,         &MIRO_CFError_);
-  createParam(MIRO_CFNumFilesString,               asynParamInt32,         &MIRO_CFNumFiles_);
-  createParam(MIRO_CFFormatString,                 asynParamInt32,         &MIRO_CFFormat_);
-  createParam(MIRO_CFMaxPagesString,               asynParamInt32,         &MIRO_CFMaxPages_);
-  createParam(MIRO_CFCurPageString,                asynParamInt32,         &MIRO_CFCurPage_);
-  createParam(MIRO_CFFileNameString,               asynParamOctet,         &MIRO_CFFileName_);
-  createParam(MIRO_CFSIndexString,                 asynParamInt32,         &MIRO_CFSIndex_);
-  createParam(MIRO_CFSWidthString,                 asynParamInt32,         &MIRO_CFSWidth_);
-  createParam(MIRO_CFSHeightString,                asynParamInt32,         &MIRO_CFSHeight_);
-  createParam(MIRO_CFSFrameCountString,            asynParamInt32,         &MIRO_CFSFrameCount_);
-  createParam(MIRO_CFSFirstFrameString,            asynParamInt32,         &MIRO_CFSFirstFrame_);
-  createParam(MIRO_CFSLastFrameString,             asynParamInt32,         &MIRO_CFSLastFrame_);
-  createParam(MIRO_CFSRecordStartString,           asynParamInt32,         &MIRO_CFSRecordStart_);
-  createParam(MIRO_CFSRecordEndString,             asynParamInt32,         &MIRO_CFSRecordEnd_);
-  createParam(MIRO_CFSRecordString,                asynParamInt32,         &MIRO_CFSRecord_);
-  createParam(MIRO_CFSRecordCountString,           asynParamInt32,         &MIRO_CFSRecordCount_);
-  createParam(MIRO_CFSFileDeleteString,            asynParamInt32,         &MIRO_CFSFileDelete_);
-  createParam(MIRO_InfoSensorTempString,           asynParamInt32,         &MIRO_InfoSensorTemp_);
-  createParam(MIRO_InfoThermoPowerString,          asynParamInt32,         &MIRO_InfoThermoPower_);
-  createParam(MIRO_InfoCameraTempString,           asynParamInt32,         &MIRO_InfoCameraTemp_);
-  createParam(MIRO_InfoFanPowerString,             asynParamInt32,         &MIRO_InfoFanPower_);
-  createParam(MIRO_EDRString,                      asynParamInt32,         &MIRO_EDR_);
-  createParam(MIRO_CamExtSyncString,               asynParamInt32,         &MIRO_CamExtSync_);
-  createParam(MIRO_CamFrameDelayString,            asynParamInt32,         &MIRO_CamFrameDelay_);
-  createParam(MIRO_CamTriggerEdgeString,           asynParamInt32,         &MIRO_CamTriggerEdge_);
-  createParam(MIRO_CamTriggerFilterString,         asynParamInt32,         &MIRO_CamTriggerFilter_);
-  createParam(MIRO_CamReadySignalString,           asynParamInt32,         &MIRO_CamReadySignal_);
-  createParam(MIRO_CamAuxPinString,                asynParamInt32,         &MIRO_CamAuxPin_);
-  createParam(MIRO_CamQuietFanString,              asynParamInt32,         &MIRO_CamQuietFan_);
-  createParam(MIRO_SyncClockString,                asynParamInt32,         &MIRO_SyncClock);
-  createParam(MIRO_AutoTriggerXString,             asynParamInt32,         &MIRO_AutoTriggerX_);
-  createParam(MIRO_AutoTriggerXZeroedString,       asynParamInt32,         &MIRO_AutoTriggerXZeroed_);
-  createParam(MIRO_AutoTriggerYString,             asynParamInt32,         &MIRO_AutoTriggerY_);
-  createParam(MIRO_AutoTriggerYZeroedString,       asynParamInt32,         &MIRO_AutoTriggerYZeroed_);
-  createParam(MIRO_AutoTriggerWString,             asynParamInt32,         &MIRO_AutoTriggerW_);
-  createParam(MIRO_AutoTriggerHString,             asynParamInt32,         &MIRO_AutoTriggerH_);
-  createParam(MIRO_AutoTriggerThresholdString,     asynParamInt32,         &MIRO_AutoTriggerThreshold_);
-  createParam(MIRO_AutoTriggerAreaString,          asynParamInt32,         &MIRO_AutoTriggerArea_);
-  createParam(MIRO_AutoTriggerIntervalString,      asynParamInt32,         &MIRO_AutoTriggerInterval_);
-  createParam(MIRO_AutoTriggerModeString,          asynParamInt32,         &MIRO_AutoTriggerMode_);
-  for (index = 0; index < MIRO_NUMBER_OF_CINES; index++){
-    createParam(MIRO_CnNameString[index],            asynParamOctet,         &MIRO_CnName_[index]);
-    createParam(MIRO_CnWidthString[index],           asynParamInt32,         &MIRO_CnWidth_[index]);
-    createParam(MIRO_CnHeightString[index],          asynParamInt32,         &MIRO_CnHeight_[index]);
-    createParam(MIRO_CnStatusString[index],          asynParamInt32,         &MIRO_CnStatus_[index]);
-    createParam(MIRO_CnFrameCountString[index],      asynParamInt32,         &MIRO_CnFrameCount_[index]);
-    createParam(MIRO_CnFirstFrameString[index],      asynParamInt32,         &MIRO_CnFirstFrame_[index]);
-    createParam(MIRO_CnLastFrameString[index],       asynParamInt32,         &MIRO_CnLastFrame_[index]);
-    createParam(MIRO_CnRecordStartString[index],     asynParamInt32,         &MIRO_CnRecordStart_[index]);
-    createParam(MIRO_CnRecordEndString[index],       asynParamInt32,         &MIRO_CnRecordEnd_[index]);
-    createParam(MIRO_CnRecordString[index],          asynParamInt32,         &MIRO_CnRecord_[index]);
-    createParam(MIRO_CnRecordCountString[index],     asynParamInt32,         &MIRO_CnRecordCount_[index]);
+  // Create all PHANTOM parameters
+  createParam(PHANTOMConnectString,                   asynParamInt32,         &PHANTOMConnect_);
+  createParam(PHANTOMConnectedString,                 asynParamInt32,         &PHANTOMConnected_);
+  createParam(PHANTOM_AcquireStateString,             asynParamInt32,         &PHANTOM_AcquireState_);
+  createParam(PHANTOM_SoftwareTriggerString,          asynParamInt32,         &PHANTOM_SoftwareTrigger_);
+  createParam(PHANTOM_PerformCSRString,               asynParamInt32,         &PHANTOM_PerformCSR_);
+  createParam(PHANTOM_CSRCountString,                 asynParamInt32,         &PHANTOM_CSRCount_);
+  createParam(PHANTOM_SettingsSlotString,             asynParamInt32,         &PHANTOM_SettingsSlot_);
+  createParam(PHANTOM_SettingsSaveString,             asynParamInt32,         &PHANTOM_SettingsSave_);
+  createParam(PHANTOM_SettingsLoadString,             asynParamInt32,         &PHANTOM_SettingsLoad_);
+  createParam(PHANTOM_AutoSaveString,                 asynParamInt32,         &PHANTOM_AutoSave_);
+  createParam(PHANTOM_AutoRestartString,              asynParamInt32,         &PHANTOM_AutoRestart_);
+  createParam(PHANTOM_AutoCSRString,                  asynParamInt32,         &PHANTOM_AutoCSR_);
+  createParam(PHANTOM_PostTrigCountString,            asynParamInt32,         &PHANTOM_PostTrigCount_);
+  createParam(PHANTOM_TotalFrameCountString,          asynParamInt32,         &PHANTOM_TotalFrameCount_);
+  createParam(PHANTOM_MaxFrameCountString,            asynParamInt32,         &PHANTOM_MaxFrameCount_);
+  createParam(PHANTOM_SelectedCineString,             asynParamInt32,         &PHANTOM_SelectedCine_);
+  createParam(PHANTOM_CineNameString,                 asynParamOctet,         &PHANTOM_CineName_);
+  createParam(PHANTOM_CineWidthString,                asynParamInt32,         &PHANTOM_CineWidth_);
+  createParam(PHANTOM_CineHeightString,               asynParamInt32,         &PHANTOM_CineHeight_);
+  createParam(PHANTOM_CineFrameCountString,           asynParamInt32,         &PHANTOM_CineFrameCount_);
+  createParam(PHANTOM_CineFirstFrameString,           asynParamInt32,         &PHANTOM_CineFirstFrame_);
+  createParam(PHANTOM_CineLastFrameString,            asynParamInt32,         &PHANTOM_CineLastFrame_);
+  createParam(PHANTOM_CineRecordStartString,          asynParamInt32,         &PHANTOM_CineRecordStart_);
+  createParam(PHANTOM_CineRecordEndString,            asynParamInt32,         &PHANTOM_CineRecordEnd_);
+  createParam(PHANTOM_CineRecordString,               asynParamInt32,         &PHANTOM_CineRecord_);
+  createParam(PHANTOM_CineRecordCountString,          asynParamInt32,         &PHANTOM_CineRecordCount_);
+  createParam(PHANTOM_CineSaveCFString,               asynParamInt32,         &PHANTOM_CineSaveCF_);
+  createParam(PHANTOM_LivePreviewString,              asynParamInt32,         &PHANTOM_LivePreview_);
+  createParam(PHANTOM_SetPartitionString,             asynParamInt32,         &PHANTOM_SetPartition_);
+  createParam(PHANTOM_GetCineCountString,             asynParamInt32,         &PHANTOM_GetCineCount_);
+  createParam(PHANTOM_CFStateString,                  asynParamInt32,         &PHANTOM_CFState_);
+  createParam(PHANTOM_CFActionString,                 asynParamInt32,         &PHANTOM_CFAction_);
+  createParam(PHANTOM_CFSizeString,                   asynParamInt32,         &PHANTOM_CFSize_);
+  createParam(PHANTOM_CFUsedString,                   asynParamInt32,         &PHANTOM_CFUsed_);
+  createParam(PHANTOM_CFProgressString,               asynParamInt32,         &PHANTOM_CFProgress_);
+  createParam(PHANTOM_CFErrorString,                  asynParamInt32,         &PHANTOM_CFError_);
+  createParam(PHANTOM_CFNumFilesString,               asynParamInt32,         &PHANTOM_CFNumFiles_);
+  createParam(PHANTOM_CFFormatString,                 asynParamInt32,         &PHANTOM_CFFormat_);
+  createParam(PHANTOM_CFMaxPagesString,               asynParamInt32,         &PHANTOM_CFMaxPages_);
+  createParam(PHANTOM_CFCurPageString,                asynParamInt32,         &PHANTOM_CFCurPage_);
+  createParam(PHANTOM_CFFileNameString,               asynParamOctet,         &PHANTOM_CFFileName_);
+  createParam(PHANTOM_CFSIndexString,                 asynParamInt32,         &PHANTOM_CFSIndex_);
+  createParam(PHANTOM_CFSWidthString,                 asynParamInt32,         &PHANTOM_CFSWidth_);
+  createParam(PHANTOM_CFSHeightString,                asynParamInt32,         &PHANTOM_CFSHeight_);
+  createParam(PHANTOM_CFSFrameCountString,            asynParamInt32,         &PHANTOM_CFSFrameCount_);
+  createParam(PHANTOM_CFSFirstFrameString,            asynParamInt32,         &PHANTOM_CFSFirstFrame_);
+  createParam(PHANTOM_CFSLastFrameString,             asynParamInt32,         &PHANTOM_CFSLastFrame_);
+  createParam(PHANTOM_CFSRecordStartString,           asynParamInt32,         &PHANTOM_CFSRecordStart_);
+  createParam(PHANTOM_CFSRecordEndString,             asynParamInt32,         &PHANTOM_CFSRecordEnd_);
+  createParam(PHANTOM_CFSRecordString,                asynParamInt32,         &PHANTOM_CFSRecord_);
+  createParam(PHANTOM_CFSRecordCountString,           asynParamInt32,         &PHANTOM_CFSRecordCount_);
+  createParam(PHANTOM_CFSFileDeleteString,            asynParamInt32,         &PHANTOM_CFSFileDelete_);
+  createParam(PHANTOM_InfoSensorTempString,           asynParamInt32,         &PHANTOM_InfoSensorTemp_);
+  createParam(PHANTOM_InfoThermoPowerString,          asynParamInt32,         &PHANTOM_InfoThermoPower_);
+  createParam(PHANTOM_InfoCameraTempString,           asynParamInt32,         &PHANTOM_InfoCameraTemp_);
+  createParam(PHANTOM_InfoFanPowerString,             asynParamInt32,         &PHANTOM_InfoFanPower_);
+  createParam(PHANTOM_EDRString,                      asynParamInt32,         &PHANTOM_EDR_);
+  createParam(PHANTOM_CamExtSyncString,               asynParamInt32,         &PHANTOM_CamExtSync_);
+  createParam(PHANTOM_CamFrameDelayString,            asynParamInt32,         &PHANTOM_CamFrameDelay_);
+  createParam(PHANTOM_CamTriggerEdgeString,           asynParamInt32,         &PHANTOM_CamTriggerEdge_);
+  createParam(PHANTOM_CamTriggerFilterString,         asynParamInt32,         &PHANTOM_CamTriggerFilter_);
+  createParam(PHANTOM_CamReadySignalString,           asynParamInt32,         &PHANTOM_CamReadySignal_);
+  createParam(PHANTOM_CamAuxPinString,                asynParamInt32,         &PHANTOM_CamAuxPin_);
+  createParam(PHANTOM_CamQuietFanString,              asynParamInt32,         &PHANTOM_CamQuietFan_);
+  createParam(PHANTOM_SyncClockString,                asynParamInt32,         &PHANTOM_SyncClock);
+  createParam(PHANTOM_AutoTriggerXString,             asynParamInt32,         &PHANTOM_AutoTriggerX_);
+  createParam(PHANTOM_AutoTriggerXZeroedString,       asynParamInt32,         &PHANTOM_AutoTriggerXZeroed_);
+  createParam(PHANTOM_AutoTriggerYString,             asynParamInt32,         &PHANTOM_AutoTriggerY_);
+  createParam(PHANTOM_AutoTriggerYZeroedString,       asynParamInt32,         &PHANTOM_AutoTriggerYZeroed_);
+  createParam(PHANTOM_AutoTriggerWString,             asynParamInt32,         &PHANTOM_AutoTriggerW_);
+  createParam(PHANTOM_AutoTriggerHString,             asynParamInt32,         &PHANTOM_AutoTriggerH_);
+  createParam(PHANTOM_AutoTriggerThresholdString,     asynParamInt32,         &PHANTOM_AutoTriggerThreshold_);
+  createParam(PHANTOM_AutoTriggerAreaString,          asynParamInt32,         &PHANTOM_AutoTriggerArea_);
+  createParam(PHANTOM_AutoTriggerIntervalString,      asynParamInt32,         &PHANTOM_AutoTriggerInterval_);
+  createParam(PHANTOM_AutoTriggerModeString,          asynParamInt32,         &PHANTOM_AutoTriggerMode_);
+  for (index = 0; index < PHANTOM_NUMBER_OF_CINES; index++){
+    createParam(PHANTOM_CnNameString[index],            asynParamOctet,         &PHANTOM_CnName_[index]);
+    createParam(PHANTOM_CnWidthString[index],           asynParamInt32,         &PHANTOM_CnWidth_[index]);
+    createParam(PHANTOM_CnHeightString[index],          asynParamInt32,         &PHANTOM_CnHeight_[index]);
+    createParam(PHANTOM_CnStatusString[index],          asynParamInt32,         &PHANTOM_CnStatus_[index]);
+    createParam(PHANTOM_CnFrameCountString[index],      asynParamInt32,         &PHANTOM_CnFrameCount_[index]);
+    createParam(PHANTOM_CnFirstFrameString[index],      asynParamInt32,         &PHANTOM_CnFirstFrame_[index]);
+    createParam(PHANTOM_CnLastFrameString[index],       asynParamInt32,         &PHANTOM_CnLastFrame_[index]);
+    createParam(PHANTOM_CnRecordStartString[index],     asynParamInt32,         &PHANTOM_CnRecordStart_[index]);
+    createParam(PHANTOM_CnRecordEndString[index],       asynParamInt32,         &PHANTOM_CnRecordEnd_[index]);
+    createParam(PHANTOM_CnRecordString[index],          asynParamInt32,         &PHANTOM_CnRecord_[index]);
+    createParam(PHANTOM_CnRecordCountString[index],     asynParamInt32,         &PHANTOM_CnRecordCount_[index]);
   }
-  for (index = 0; index < MIRO_NUMBER_OF_FLASH_FILES; index++){
-    createParam(MIRO_CfFileNameString[index],        asynParamOctet,         &MIRO_CfFileName_[index]);
-    createParam(MIRO_CfFileSizeString[index],        asynParamOctet,         &MIRO_CfFileSize_[index]);
-    createParam(MIRO_CfFileDateString[index],        asynParamOctet,         &MIRO_CfFileDate_[index]);
+  for (index = 0; index < PHANTOM_NUMBER_OF_FLASH_FILES; index++){
+    createParam(PHANTOM_CfFileNameString[index],        asynParamOctet,         &PHANTOM_CfFileName_[index]);
+    createParam(PHANTOM_CfFileSizeString[index],        asynParamOctet,         &PHANTOM_CfFileSize_[index]);
+    createParam(PHANTOM_CfFileDateString[index],        asynParamOctet,         &PHANTOM_CfFileDate_[index]);
   }
  
-  // Initialise MIRO parameters
-  setIntegerParam(MIROConnected_, 0);
-  setIntegerParam(MIRO_TotalFrameCount_, 0);
-  setIntegerParam(MIRO_AcquireState_, 0);
+  // Initialise PHANTOM parameters
+  setIntegerParam(PHANTOMConnected_, 0);
+  setIntegerParam(PHANTOM_TotalFrameCount_, 0);
+  setIntegerParam(PHANTOM_AcquireState_, 0);
   setIntegerParam(ADSizeX, 1280);
   setIntegerParam(ADSizeY, 800);
-  setIntegerParam(MIRO_LivePreview_, 0);
-  setIntegerParam(MIRO_SelectedCine_, 1);
+  setIntegerParam(PHANTOM_LivePreview_, 0);
+  setIntegerParam(PHANTOM_SelectedCine_, 1);
   setStringParam(ADManufacturer,  "Vision Research");
-  setStringParam(MIRO_CFFileName_,  "");
-  setIntegerParam(MIRO_SettingsSlot_,  1);
+  setStringParam(PHANTOM_CFFileName_,  "");
+  setIntegerParam(PHANTOM_SettingsSlot_,  1);
 
   // Initialise meta data to save
-  metaArray_.push_back(new MiroMeta("exposure", "Camera exposure time", "c%d.exp", NDAttrInt32, 0x674, 4));
-  metaArray_.push_back(new MiroMeta("rate", "Camera frame rate", "c%d.rate", NDAttrInt32, 0x354, 4));
-  metaArray_.push_back(new MiroMeta("trigger_secs", "Trigger time (seconds since 1970)", "c%d.trigtime.secs", NDAttrInt32, 0x028, 4));
-  metaArray_.push_back(new MiroMeta("trigger_usecs", "Trigger time fraction (micro seconds)", "c%d.trigtime.frac", NDAttrInt32, 0x024, 4));
-  metaArray_.push_back(new MiroMeta("label", "Label of data capture", "c%d.meta.name", NDAttrString, 0x1B9C, 256));
-  metaArray_.push_back(new MiroMeta("trigger_polarity", "1 = Rising Edge, 0 = Falling Edge", "c%d.cam.trigpol", NDAttrInt32, 0x1690, 4));
-  metaArray_.push_back(new MiroMeta("trigger_filter", "Trigger filter time (us)", "c%d.cam.trigfilt", NDAttrInt32, 0x1694, 4));
-  metaArray_.push_back(new MiroMeta("fsync", "Frame sync mode", "c%d.cam.syncimg", NDAttrInt32, 0x065, 1));
-  metaArray_.push_back(new MiroMeta("roi_width", "Region of interest pixel width", "c%d.meta.vw", NDAttrInt32, 0x030, 4));
-  metaArray_.push_back(new MiroMeta("roi_height", "Region of interest pixel height", "c%d.meta.vh", NDAttrInt32, 0x034, 4));
-  metaArray_.push_back(new MiroMeta("aux1_mode", "Auxiliary mode 1", "c%d.cam.aux1mode", NDAttrInt32, 0x0, 0));
-  //metaArray_.push_back(new MiroMeta("fan_quiet", "Fan quiet mode", "c%d.cam.quiet", NDAttrInt32, 0x0, 0));
-  metaArray_.push_back(new MiroMeta("first_frame", "First frame number", "c%d.firstfr", NDAttrInt32, 0x010, 4));
-  metaArray_.push_back(new MiroMeta("frame_count", "Total frame count", "c%d.frcount", NDAttrInt32, 0x014, 4));
-//  metaArray_.push_back(new MiroMeta("post_trig_frames", "Post trigger frame count", "c%d.lastfr", NDAttrInt32, 0x0, 0));
+  metaArray_.push_back(new PhantomMeta("exposure", "Camera exposure time", "c%d.exp", NDAttrInt32, 0x674, 4));
+  metaArray_.push_back(new PhantomMeta("rate", "Camera frame rate", "c%d.rate", NDAttrInt32, 0x354, 4));
+  metaArray_.push_back(new PhantomMeta("trigger_secs", "Trigger time (seconds since 1970)", "c%d.trigtime.secs", NDAttrInt32, 0x028, 4));
+  metaArray_.push_back(new PhantomMeta("trigger_usecs", "Trigger time fraction (micro seconds)", "c%d.trigtime.frac", NDAttrInt32, 0x024, 4));
+  metaArray_.push_back(new PhantomMeta("label", "Label of data capture", "c%d.meta.name", NDAttrString, 0x1B9C, 256));
+  metaArray_.push_back(new PhantomMeta("trigger_polarity", "1 = Rising Edge, 0 = Falling Edge", "c%d.cam.trigpol", NDAttrInt32, 0x1690, 4));
+  metaArray_.push_back(new PhantomMeta("trigger_filter", "Trigger filter time (us)", "c%d.cam.trigfilt", NDAttrInt32, 0x1694, 4));
+  metaArray_.push_back(new PhantomMeta("fsync", "Frame sync mode", "c%d.cam.syncimg", NDAttrInt32, 0x065, 1));
+  metaArray_.push_back(new PhantomMeta("roi_width", "Region of interest pixel width", "c%d.meta.vw", NDAttrInt32, 0x030, 4));
+  metaArray_.push_back(new PhantomMeta("roi_height", "Region of interest pixel height", "c%d.meta.vh", NDAttrInt32, 0x034, 4));
+  metaArray_.push_back(new PhantomMeta("aux1_mode", "Auxiliary mode 1", "c%d.cam.aux1mode", NDAttrInt32, 0x0, 0));
+  //metaArray_.push_back(new PhantomMeta("fan_quiet", "Fan quiet mode", "c%d.cam.quiet", NDAttrInt32, 0x0, 0));
+  metaArray_.push_back(new PhantomMeta("first_frame", "First frame number", "c%d.firstfr", NDAttrInt32, 0x010, 4));
+  metaArray_.push_back(new PhantomMeta("frame_count", "Total frame count", "c%d.frcount", NDAttrInt32, 0x014, 4));
+//  metaArray_.push_back(new PhantomMeta("post_trig_frames", "Post trigger frame count", "c%d.lastfr", NDAttrInt32, 0x0, 0));
 
   if (status == asynSuccess){
     debug(functionName, "Starting up polling task....");
     // Create the thread that runs the acquisition
-    status = (epicsThreadCreate("MiroCameraTask",
+    status = (epicsThreadCreate("PhantomCameraTask",
                                 epicsThreadPriorityMedium,
                                 epicsThreadGetStackSize(epicsThreadStackMedium),
-                                (EPICSTHREADFUNC)miroCameraTaskC,
+                                (EPICSTHREADFUNC)phantomCameraTaskC,
                                 this) == NULL);
     if (status){
       debug(functionName, "epicsTheadCreate failure for image task");
@@ -616,10 +616,10 @@ MiroCamera::MiroCamera(const char *portName, const char *ctrlPort, const char *d
   if (status == asynSuccess){
     debug(functionName, "Starting up preview task....");
     // Create the thread that runs the acquisition
-    status = (epicsThreadCreate("MiroPreviewTask",
+    status = (epicsThreadCreate("PhantomPreviewTask",
                                 epicsThreadPriorityMedium,
                                 epicsThreadGetStackSize(epicsThreadStackMedium),
-                                (EPICSTHREADFUNC)miroPreviewTaskC,
+                                (EPICSTHREADFUNC)phantomPreviewTaskC,
                                 this) == NULL);
     if (status){
       debug(functionName, "epicsTheadCreate failure for preview task");
@@ -629,10 +629,10 @@ MiroCamera::MiroCamera(const char *portName, const char *ctrlPort, const char *d
   if (status == asynSuccess){
     debug(functionName, "Starting up status task....");
     // Create the thread that runs the live preview
-    status = (epicsThreadCreate("MiroStatusTask",
+    status = (epicsThreadCreate("PhantomStatusTask",
                                 epicsThreadPriorityMedium,
                                 epicsThreadGetStackSize(epicsThreadStackMedium),
-                                (EPICSTHREADFUNC)miroStatusTaskC,
+                                (EPICSTHREADFUNC)phantomStatusTaskC,
                                 this) == NULL);
     if (status){
       debug(functionName, "epicsTheadCreate failure for status task");
@@ -642,10 +642,10 @@ MiroCamera::MiroCamera(const char *portName, const char *ctrlPort, const char *d
   if (status == asynSuccess){
     debug(functionName, "Starting up flash task....");
     // Create the thread that runs the flash format and delete
-    status = (epicsThreadCreate("MiroFlashTask",
+    status = (epicsThreadCreate("PhantomFlashTask",
                                 epicsThreadPriorityMedium,
                                 epicsThreadGetStackSize(epicsThreadStackMedium),
-                                (EPICSTHREADFUNC)miroFlashTaskC,
+                                (EPICSTHREADFUNC)phantomFlashTaskC,
                                 this) == NULL);
     if (status){
       debug(functionName, "epicsTheadCreate failure for flash task");
@@ -685,10 +685,10 @@ MiroCamera::MiroCamera(const char *portName, const char *ctrlPort, const char *d
 
 }
 
-asynStatus MiroCamera::makeConnection()
+asynStatus ADPhantom::makeConnection()
 {
   int status = asynSuccess;
-  static const char *functionName = "MiroCamera::makeConnection";
+  static const char *functionName = "ADPhantom::makeConnection";
   
   status = connect();
   std::cout << "makeConnection(). connection status = " << status << '\n';
@@ -708,23 +708,23 @@ asynStatus MiroCamera::makeConnection()
   return (asynStatus)status;
 }
 
-asynStatus MiroCamera::connect()
+asynStatus ADPhantom::connect()
 {
   asynStatus status = asynSuccess;
-  const char *functionName = "MiroCamera::connect";
+  const char *functionName = "ADPhantom::connect";
 
   // Connect our Asyn user to the low level port that is a parameter to this constructor
   status = asynPortConnect(ctrlPort_, 0, &portUser_, "\n", "\n");
   if (status != asynSuccess){
     debug(functionName, "Failed to connect to low level asynOctetSyncIO port", ctrlPort_);
     // Failure, set the connected status to 0
-    setIntegerParam(MIROConnected_,     0);
+    setIntegerParam(PHANTOMConnected_,     0);
     setIntegerParam(ADStatus, ADStatusError);
     callParamCallbacks();
   } else {
     // Success, set the connected status to 1
-    setIntegerParam(MIROConnected_,     1);
-    setStringParam(ADStatusMessage, "Connected to MIRO");
+    setIntegerParam(PHANTOMConnected_,     1);
+    setStringParam(ADStatusMessage, "Connected to PHANTOM");
     setIntegerParam(ADStatus, ADStatusIdle);
     callParamCallbacks();
   }
@@ -737,7 +737,7 @@ asynStatus MiroCamera::connect()
   if (status != asynSuccess){
     debug(functionName, "Failed to connect to low level asynOctetSyncIO port", dataPort_);
     // Failure, set the connected status to 0
-    setIntegerParam(MIROConnected_,     0);
+    setIntegerParam(PHANTOMConnected_,     0);
     setIntegerParam(ADStatus, ADStatusError);
     callParamCallbacks();
   } else {
@@ -748,13 +748,13 @@ asynStatus MiroCamera::connect()
   return status;
 }
 
-asynStatus MiroCamera::disconnect()
+asynStatus ADPhantom::disconnect()
 {
   asynStatus status = asynSuccess;
-  const char *functionName = "MiroCamera::disconnect";
+  const char *functionName = "ADPhantom::disconnect";
   int connected = 0;
 
-  getIntegerParam(MIROConnected_, &connected);
+  getIntegerParam(PHANTOMConnected_, &connected);
   // We can only force a disconnect if we are connected
   if (connected == 1){
     // disconnect from the ctrl port
@@ -771,9 +771,9 @@ asynStatus MiroCamera::disconnect()
  *  It is started in the class constructor and must not return until the IOC stops.
  *
 */ 
-void MiroCamera::miroCameraTask()
+void ADPhantom::phantomCameraTask()
 {
-  static const char *functionName = "MiroCamera::miroCameraTask";
+  static const char *functionName = "ADPhantom::phantomCameraTask";
   int status = asynSuccess;
   int acquire = 0;
   int imageMode = 0;
@@ -787,7 +787,7 @@ void MiroCamera::miroCameraTask()
   int cineState = 0;
   int autoSave = 0;
   int autoAcquire = 0;
-  char command[MIRO_MAX_STRING];
+  char command[PHANTOM_MAX_STRING];
   std::string response;
   std::string cineStr;
 
@@ -825,7 +825,7 @@ void MiroCamera::miroCameraTask()
       getIntegerParam(ADAcquire, &acquire);
 
       // Read in the selected cine
-      getIntegerParam(MIRO_SelectedCine_, &cine);
+      getIntegerParam(PHANTOM_SelectedCine_, &cine);
       // Acquisition has been requested, read in the cine
       // Issue the start recording for the cine
       sprintf(command, "rec %d", cine);
@@ -844,7 +844,7 @@ void MiroCamera::miroCameraTask()
     // Decode the status
     debug(functionName, paramMap_[cineStr + ".state"].getValue().c_str());
     cineStates(paramMap_[cineStr + ".state"].getValue(), cineState);
-    setIntegerParam(MIRO_AcquireState_, cineState);
+    setIntegerParam(PHANTOM_AcquireState_, cineState);
     if (checkState(paramMap_[cineStr + ".state"].getValue(), "WTR")){
       debug(functionName, "WTR state");
     }
@@ -873,14 +873,14 @@ void MiroCamera::miroCameraTask()
     getIntegerParam(ADImageMode, &imageMode);
     setIntegerParam(NDArrayCounter, imageCounter);
     setIntegerParam(ADNumImagesCounter, numImagesCounter);
-    setIntegerParam(MIRO_TotalFrameCount_, frameCount);
+    setIntegerParam(PHANTOM_TotalFrameCount_, frameCount);
 
-    getIntegerParam(MIRO_AutoSave_, &autoSave);
-    getIntegerParam(MIRO_AutoRestart_, &autoAcquire);
+    getIntegerParam(PHANTOM_AutoSave_, &autoSave);
+    getIntegerParam(PHANTOM_AutoRestart_, &autoAcquire);
 
     debug(functionName, "cineState", cineState);
-    debug(functionName, "cineState", (cineState & MIRO_CINE_STATE_STR));
-    if ((cineState & MIRO_CINE_STATE_STR) == MIRO_CINE_STATE_STR){
+    debug(functionName, "cineState", (cineState & PHANTOM_CINE_STATE_STR));
+    if ((cineState & PHANTOM_CINE_STATE_STR) == PHANTOM_CINE_STATE_STR){
       bool found = false;
       // Check if set to auto record cines
       if (autoSave == 1 && autoAcquire == 1){
@@ -901,12 +901,12 @@ void MiroCamera::miroCameraTask()
         updateCine(14);
         updateCine(15);
         updateCine(16);
-        for (int index = 1; index < MIRO_NUMBER_OF_CINES; index++){
-          getIntegerParam(MIRO_CnStatus_[index], &cineState);
-          if ((cineState & MIRO_CINE_STATE_ACT) == MIRO_CINE_STATE_ACT){
+        for (int index = 1; index < PHANTOM_NUMBER_OF_CINES; index++){
+          getIntegerParam(PHANTOM_CnStatus_[index], &cineState);
+          if ((cineState & PHANTOM_CINE_STATE_ACT) == PHANTOM_CINE_STATE_ACT){
             cine = index;
             // Write out the selected cine
-            setIntegerParam(MIRO_SelectedCine_, cine);
+            setIntegerParam(PHANTOM_SelectedCine_, cine);
             // Update the cine string
             sprintf(command, "c%d", cine);
             cineStr.assign(command);
@@ -941,12 +941,12 @@ void MiroCamera::miroCameraTask()
   }
 }
 
-void MiroCamera::miroStatusTask()
+void ADPhantom::phantomStatusTask()
 {
-  static const char *functionName = "MiroCamera::miroStatusTask";
+  static const char *functionName = "ADPhantom::phantomStatusTask";
   int status = asynSuccess;
   int cine = 0;
-  char command[MIRO_MAX_STRING];
+  char command[PHANTOM_MAX_STRING];
   std::string cineStr;
   int frameCount = 0;
   int acquire = 0;
@@ -964,7 +964,7 @@ void MiroCamera::miroStatusTask()
       std::string scines = paramMap_["cam.cines"].getValue();
       cleanString(scines, " ");
       status = stringToInteger(scines, cines);
-      setIntegerParam(MIRO_GetCineCount_, cines);
+      setIntegerParam(PHANTOM_GetCineCount_, cines);
     }
 
     updateInfoStatus();
@@ -995,7 +995,7 @@ void MiroCamera::miroStatusTask()
     // If we are not acquiring update the cine frame count
     if (!acquire){
       // Read in the selected cine
-      getIntegerParam(MIRO_SelectedCine_, &cine);
+      getIntegerParam(PHANTOM_SelectedCine_, &cine);
       // Create the cine string
       sprintf(command, "c%d", cine);
       cineStr.assign(command);
@@ -1003,7 +1003,7 @@ void MiroCamera::miroStatusTask()
       getCameraDataStruc(cineStr, paramMap_);
       status = stringToInteger(paramMap_[cineStr + ".frcount"].getValue(), frameCount);
       // Set a bit of areadetector image/frame statistics...
-      setIntegerParam(MIRO_TotalFrameCount_, frameCount);
+      setIntegerParam(PHANTOM_TotalFrameCount_, frameCount);
       callParamCallbacks();
     }
 
@@ -1011,16 +1011,16 @@ void MiroCamera::miroStatusTask()
   }
 }
 
-void MiroCamera::miroPreviewTask()
+void ADPhantom::phantomPreviewTask()
 {
-  static const char *functionName = "MiroCamera::miroPreviewTask";
+  static const char *functionName = "ADPhantom::phantomPreviewTask";
   int status = asynSuccess;
   int preview = 0;
   std::string response;
 
   this->lock();
   while (1){
-    getIntegerParam(MIRO_LivePreview_, &preview);
+    getIntegerParam(PHANTOM_LivePreview_, &preview);
     // If we are not acquiring or encountered a problem then wait for a semaphore that is given when acquisition is started
     if (!preview){
       // Release the lock while we wait for an event that says acquire has started, then lock again
@@ -1028,7 +1028,7 @@ void MiroCamera::miroPreviewTask()
       debug(functionName, "Waiting for preview to start");
       status = epicsEventWait(this->startPreviewEventId_);
       this->lock();
-      getIntegerParam(MIRO_LivePreview_, &preview);
+      getIntegerParam(PHANTOM_LivePreview_, &preview);
       status = updatePreviewCine();
       //status = attachToPort("dataPort");
 
@@ -1047,9 +1047,9 @@ void MiroCamera::miroPreviewTask()
   }
 }
 
-void MiroCamera::miroFlashTask()
+void ADPhantom::phantomFlashTask()
 {
-  static const char *functionName = "MiroCamera::miroFlashTask";
+  static const char *functionName = "ADPhantom::phantomFlashTask";
   int status = asynSuccess;
   int formatFlash = 0;
   int deleteFile = 0;
@@ -1061,19 +1061,19 @@ void MiroCamera::miroFlashTask()
     debug(functionName, "Waiting for flash event");
     status = epicsEventWait(this->flashEventId_);
     this->lock();
-    getIntegerParam(MIRO_CFFormat_, &formatFlash);
+    getIntegerParam(PHANTOM_CFFormat_, &formatFlash);
     if (formatFlash){
       this->unlock();
       this->formatFlash();
       this->lock();
-      setIntegerParam(MIRO_CFFormat_, 0);
+      setIntegerParam(PHANTOM_CFFormat_, 0);
     }
-    getIntegerParam(MIRO_CFSFileDelete_, &deleteFile);
+    getIntegerParam(PHANTOM_CFSFileDelete_, &deleteFile);
     if (deleteFile){
       this->unlock();
       this->deleteFlashFile();
       this->lock();
-      setIntegerParam(MIRO_CFSFileDelete_, 0);
+      setIntegerParam(PHANTOM_CFSFileDelete_, 0);
     }
     callParamCallbacks();
   }
@@ -1089,9 +1089,9 @@ void MiroCamera::miroFlashTask()
  * @param inputEos - String input EOS.
  * @param outputEos - String output EOS.
  */
-asynStatus MiroCamera::asynPortConnect(const char *port, int addr, asynUser **ppasynUser, const char *inputEos, const char *outputEos)
+asynStatus ADPhantom::asynPortConnect(const char *port, int addr, asynUser **ppasynUser, const char *inputEos, const char *outputEos)
 {
-  static const char *functionName = "MiroCamera::asynPortConnect";
+  static const char *functionName = "ADPhantom::asynPortConnect";
 
   asynStatus status = asynSuccess;
   std::map<std::string, std::string> data;
@@ -1108,12 +1108,12 @@ asynStatus MiroCamera::asynPortConnect(const char *port, int addr, asynUser **pp
   debug(functionName, "Connected to low level asynOctetSyncIO port", port);
 
   // Record that we are connected
-  setIntegerParam(MIROConnected_, 1);
+  setIntegerParam(PHANTOMConnected_, 1);
 
 /*  // Issue the connect command to complete connection
-  status = sendSimpleCommand(MIRO_CMD_CONNECT, &data);
+  status = sendSimpleCommand(PHANTOM_CMD_CONNECT, &data);
   if (status != asynSuccess){
-    debug(functionName, "Failed to send command", MIRO_CMD_CONNECT);
+    debug(functionName, "Failed to send command", PHANTOM_CMD_CONNECT);
   } else {
     debug(functionName, "Connect command return data", data);
   } */
@@ -1121,17 +1121,17 @@ asynStatus MiroCamera::asynPortConnect(const char *port, int addr, asynUser **pp
     // The connection was successful, record the server name and the protocol version
 /*    std::string server = data["ServerName"];
     cleanString(server, "\"");
-    setStringParam(MIROServerName_, server.c_str());
+    setStringParam(PHANTOMServerName_, server.c_str());
     std::string protocol = data["ProtocolVersion"];
     cleanString(protocol, "\"");
-    setStringParam(MIROProtocolVersion_, protocol.c_str()); */
+    setStringParam(PHANTOMProtocolVersion_, protocol.c_str()); */
   }
   return status;
 }
 
-asynStatus MiroCamera::asynPortDisconnect(asynUser *pasynUser)
+asynStatus ADPhantom::asynPortDisconnect(asynUser *pasynUser)
 {
-  static const char *functionName = "MiroCamera::asynPortDisconnect";
+  static const char *functionName = "ADPhantom::asynPortDisconnect";
 
   asynStatus status = asynSuccess;
   std::map<std::string, std::string> data;
@@ -1141,7 +1141,7 @@ asynStatus MiroCamera::asynPortDisconnect(asynUser *pasynUser)
     debug(functionName, "Unable to disconnect from asyn port");
   }
   // Record that we are not connected
-  setIntegerParam(MIROConnected_, 0);
+  setIntegerParam(PHANTOMConnected_, 0);
 
   return status;
 }
@@ -1150,9 +1150,9 @@ asynStatus MiroCamera::asynPortDisconnect(asynUser *pasynUser)
  * Method for sending a simple command (no parameters) that will check the
  * error status and do the right thing.
  */
-asynStatus MiroCamera::sendSimpleCommand(const std::string& command, std::string *response, double timeout)
+asynStatus ADPhantom::sendSimpleCommand(const std::string& command, std::string *response, double timeout)
 {
-  static const char *functionName = "MiroCamera::sendSimpleCommand";
+  static const char *functionName = "ADPhantom::sendSimpleCommand";
   asynStatus status = asynSuccess;
 
   debug(functionName, "Sending command", command);
@@ -1162,7 +1162,7 @@ asynStatus MiroCamera::sendSimpleCommand(const std::string& command, std::string
 // Check the command sent OK
   if (status == asynSuccess){
     // Check the response for any errors
-    std::string errstr(MIRO_ERROR_STRING);
+    std::string errstr(PHANTOM_ERROR_STRING);
     if (*response == errstr){
       debug(functionName, "Unable to successfully issue the command", command);
 //      debug(functionName, "Returned error", response);
@@ -1180,15 +1180,15 @@ asynStatus MiroCamera::sendSimpleCommand(const std::string& command, std::string
  * @param response - String response back (OK or ERROR)
  * @param data - Map of data items indexed by name
  */
-asynStatus MiroCamera::commandResponse(const std::string &command, std::string *response, double timeout)
+asynStatus ADPhantom::commandResponse(const std::string &command, std::string *response, double timeout)
 {
-  static const char *functionName = "MiroCamera::commandResponse";
+  static const char *functionName = "ADPhantom::commandResponse";
 
   asynStatus status = asynSuccess;
   std::string errorCode = "";
   std::string replyString = "";
   std::string nameValueString = "";
-  char replyArray[MIRO_MAX_STRING];
+  char replyArray[PHANTOM_MAX_STRING];
 
   debug(functionName, "Command to send", command);
   status = asynWriteRead(command.c_str(), replyArray, timeout);
@@ -1209,9 +1209,9 @@ asynStatus MiroCamera::commandResponse(const std::string &command, std::string *
  * @param command - String command to send.
  * @param response - String response back.
  */
-asynStatus MiroCamera::asynWriteRead(const char *command, char *response, double timeout)
+asynStatus ADPhantom::asynWriteRead(const char *command, char *response, double timeout)
 {
-  static const char *functionName = "MiroCamera::asynWriteRead";
+  static const char *functionName = "ADPhantom::asynWriteRead";
 
   asynStatus status = asynSuccess;
   int eomReason;
@@ -1232,19 +1232,19 @@ asynStatus MiroCamera::asynWriteRead(const char *command, char *response, double
   // If there is no asyn port user then something higher up has failed
   // Make sure to set connected to 0 and then bail out of this call with an error
   if (!portUser_) {
-    setIntegerParam(MIROConnected_, 0);
+    setIntegerParam(PHANTOMConnected_, 0);
     return asynError;
   }
 
   // Get the connected status
-  getIntegerParam(MIROConnected_, &connected);
+  getIntegerParam(PHANTOMConnected_, &connected);
 
   // Only proceed if we are connected
   if (connected == 1){
 	  inpPtr = response;
 	  status = pasynOctetSyncIO->writeRead(portUser_ ,
 	  																		 sendString, strlen(sendString),
-                                         inpPtr, MIRO_MAX_STRING,
+                                         inpPtr, PHANTOM_MAX_STRING,
                                          timeout,
                                          &nwrite, &nread, &eomReason );
 	  tot += nread;
@@ -1255,8 +1255,8 @@ asynStatus MiroCamera::asynWriteRead(const char *command, char *response, double
 	  	tot++;
 	  	status = pasynOctetSyncIO->read(portUser_ ,
 	  																	inpPtr,
-																			MIRO_MAX_STRING,
-																			MIRO_TIMEOUT,
+																			PHANTOM_MAX_STRING,
+																			PHANTOM_TIMEOUT,
 																			&nread,
 																			&eomReason);
 	  	tot += nread;
@@ -1267,7 +1267,7 @@ asynStatus MiroCamera::asynWriteRead(const char *command, char *response, double
   return (tot == 0 ? asynError : asynSuccess);
 }
 
-int MiroCamera::getLocalPortNum(const std::string& driverPort)
+int ADPhantom::getLocalPortNum(const std::string& driverPort)
 {
 // Get local TCP socket port number for asyn port
   FILE *fp;
@@ -1275,10 +1275,10 @@ int MiroCamera::getLocalPortNum(const std::string& driverPort)
   int status = 0;
   
   //tfname = tmpnam(NULL);
-  fp = fopen("/tmp/miro_port","w");
+  fp = fopen("/tmp/phantom_port","w");
   pasynManager->report(fp, 2, driverPort.c_str());  // Output asynManager Report (level 2) into temp file
   fclose(fp);
-  std::string stfname("/tmp/miro_port");
+  std::string stfname("/tmp/phantom_port");
   std::string asynRepString = fileToString(stfname);  // Read file into a string
   std::size_t fd_pos = asynRepString.find("fd:");  // Locate line starting "fd:"
   if (fd_pos!=std::string::npos)
@@ -1290,11 +1290,11 @@ int MiroCamera::getLocalPortNum(const std::string& driverPort)
 // Call getsockname() to get the local TCP socket number in the structure sa
     status = getsockname(atoi(sfd.c_str()), (struct sockaddr *)&sa, (socklen_t *)&sa_len);
   }
-  remove("/tmp/miro_port");
+  remove("/tmp/phantom_port");
   return (status == 0 ? (int)ntohs(sa.sin_port) : 0);
 }
 
-asynStatus MiroCamera::cleanString(std::string &str, const std::string &search, int where)
+asynStatus ADPhantom::cleanString(std::string &str, const std::string &search, int where)
 {
   if (str != ""){
     if (where == 0 || where == 1){
@@ -1322,15 +1322,15 @@ asynStatus MiroCamera::cleanString(std::string &str, const std::string &search, 
   * @param nElements - Size of value array
   * @param nIn - Number of elements actually returned 
 
-asynStatus MiroCamera::readEnum(asynUser *pasynUser, char *strings[], int values[], int severities[], size_t nElements, size_t *nIn)
+asynStatus ADPhantom::readEnum(asynUser *pasynUser, char *strings[], int values[], int severities[], size_t nElements, size_t *nIn)
 {
 
-  const char *functionName = "MiroCamera::readEnum";
+  const char *functionName = "ADPhantom::readEnum";
   asynStatus status = asynSuccess;
   int function = pasynUser->reason;
   size_t index;
 
-  if (function == MIROLensMode_){
+  if (function == PHANTOMLensMode_){
     for (index = 0; ((index < (size_t)lensModes_.size()) && (index < nElements)); index++){
       if (strings[index]){
         free(strings[index]);
@@ -1341,7 +1341,7 @@ asynStatus MiroCamera::readEnum(asynUser *pasynUser, char *strings[], int values
       severities[index] = 0;
     }
     *nIn = index;
-  } else if (function == MIROScanRange_){
+  } else if (function == PHANTOMScanRange_){
     for (index = 0; ((index < (size_t)scanRanges_.size()) && (index < nElements)); index++){
       if (strings[index]){
         free(strings[index]);
@@ -1352,7 +1352,7 @@ asynStatus MiroCamera::readEnum(asynUser *pasynUser, char *strings[], int values
       severities[index] = 0;
     }
     *nIn = index;
-  } else if (function == MIRORunMode_){
+  } else if (function == PHANTOMRunMode_){
     for (index = 0; ((index < (size_t)runModes_.size()) && (index < nElements)); index++){
       if (strings[index]){
         free(strings[index]);
@@ -1380,9 +1380,9 @@ asynStatus MiroCamera::readEnum(asynUser *pasynUser, char *strings[], int values
  * @param pasynUser - Pointer to the asyn user structure.
  * @param value - The new value to write
  */
-asynStatus MiroCamera::writeInt32(asynUser *pasynUser, epicsInt32 value)
+asynStatus ADPhantom::writeInt32(asynUser *pasynUser, epicsInt32 value)
 {
-  const char *functionName = "MiroCamera::writeInt32";
+  const char *functionName = "ADPhantom::writeInt32";
   int status = asynSuccess;
   int function = pasynUser->reason;
   int oldValue;
@@ -1402,13 +1402,13 @@ asynStatus MiroCamera::writeInt32(asynUser *pasynUser, epicsInt32 value)
       epicsEventSignal(this->startEventId_);
     }
     if (!value && (adstatus != ADStatusIdle)){
-      // Sent the message to the miro to stop
+      // Sent the message to the phantom to stop
       std::string response = "";
-      sendSimpleCommand(MIRO_CMD_ABORT, &response);
+      sendSimpleCommand(PHANTOM_CMD_ABORT, &response);
       // Stop acquiring ( abort any hardware processing )
       epicsEventSignal(this->stopEventId_);
     }
-  } else if (function == MIRO_LivePreview_){
+  } else if (function == PHANTOM_LivePreview_){
     if (value){
       // Send an event to wake up the live preview
       epicsEventSignal(this->startPreviewEventId_);
@@ -1417,9 +1417,9 @@ asynStatus MiroCamera::writeInt32(asynUser *pasynUser, epicsInt32 value)
       // Stop live preview
       epicsEventSignal(this->stopPreviewEventId_);
     }
-  } else if (function == MIRO_SoftwareTrigger_){
+  } else if (function == PHANTOM_SoftwareTrigger_){
     sendSoftwareTrigger();
-  } else if (function == MIRO_CineRecord_){
+  } else if (function == PHANTOM_CineRecord_){
     int preview = 0;
     bool rangeValid = false;
     int cine;
@@ -1427,12 +1427,12 @@ asynStatus MiroCamera::writeInt32(asynUser *pasynUser, epicsInt32 value)
     epicsInt32 record_end;
     epicsInt32 first_frame;
     epicsInt32 last_frame;
-    getIntegerParam(MIRO_SelectedCine_, &cine);
-    getIntegerParam(MIRO_LivePreview_, &preview);
-    getIntegerParam(MIRO_CineRecordStart_, &record_start);
-    getIntegerParam(MIRO_CineRecordEnd_, &record_end);
-    getIntegerParam(MIRO_CnFirstFrame_[cine], &first_frame);
-    getIntegerParam(MIRO_CnLastFrame_[cine], &last_frame);
+    getIntegerParam(PHANTOM_SelectedCine_, &cine);
+    getIntegerParam(PHANTOM_LivePreview_, &preview);
+    getIntegerParam(PHANTOM_CineRecordStart_, &record_start);
+    getIntegerParam(PHANTOM_CineRecordEnd_, &record_end);
+    getIntegerParam(PHANTOM_CnFirstFrame_[cine], &first_frame);
+    getIntegerParam(PHANTOM_CnLastFrame_[cine], &last_frame);
 
     if (record_start < first_frame || record_start > last_frame) {
       rangeValid=false;
@@ -1453,28 +1453,28 @@ asynStatus MiroCamera::writeInt32(asynUser *pasynUser, epicsInt32 value)
     } else if (rangeValid) {
       status |= downloadCineFile(value);
     }
-  } else if (function == MIRO_CineSaveCF_){
+  } else if (function == PHANTOM_CineSaveCF_){
     status |= saveCineToFlash(value);
-  } else if (function == MIRO_SettingsSave_){
+  } else if (function == PHANTOM_SettingsSave_){
     status |= saveSettings();
-  } else if (function == MIRO_SettingsLoad_){
+  } else if (function == PHANTOM_SettingsLoad_){
     status |= loadSettings();
-  } else if (function == MIRO_SelectedCine_){
+  } else if (function == PHANTOM_SelectedCine_){
     // Set up the selected cine
     status |= selectCine(value);
-  } else if (function == MIRO_SetPartition_){
+  } else if (function == PHANTOM_SetPartition_){
     // Set up the partition
     status |= setPartition(value);
-  } else if (function == MIRO_CFCurPage_){
+  } else if (function == PHANTOM_CFCurPage_){
     // Set the current page
     status |= updateFlashFileTable();
-  } else if (function == MIRO_CFSIndex_){
+  } else if (function == PHANTOM_CFSIndex_){
     // Select the flash file from the table by index
     status |= selectFlashByIndex(value);
-  } else if (function == MIRO_CFSRecord_){
+  } else if (function == PHANTOM_CFSRecord_){
     // Download the flash file
     int preview = 0;
-    getIntegerParam(MIRO_LivePreview_, &preview);
+    getIntegerParam(PHANTOM_LivePreview_, &preview);
     if (preview){
       setStringParam(ADStatusMessage, "Cannot download while live previewing");
       setIntegerParam(ADStatus, ADStatusError);
@@ -1482,76 +1482,76 @@ asynStatus MiroCamera::writeInt32(asynUser *pasynUser, epicsInt32 value)
     } else {
       status |= downloadFlashFile();
     }
-  } else if (function == MIRO_CFSFileDelete_){
+  } else if (function == PHANTOM_CFSFileDelete_){
     // Delete the flash file
     epicsEventSignal(this->flashEventId_);
-  } else if (function == MIRO_CFFormat_){
+  } else if (function == PHANTOM_CFFormat_){
     // Format the flash disk
     epicsEventSignal(this->flashEventId_);
-  } else if (function == MIRO_CamExtSync_){
+  } else if (function == PHANTOM_CamExtSync_){
     status |= setCameraParameter("cam.syncimg", value);
-  } else if (function == MIRO_CamFrameDelay_){
+  } else if (function == PHANTOM_CamFrameDelay_){
     status |= setCameraParameter("cam.frdelay", value);
-  } else if (function == MIRO_CamTriggerEdge_){
+  } else if (function == PHANTOM_CamTriggerEdge_){
     status |= setCameraParameter("cam.trigpol", value);
-  } else if (function == MIRO_CamTriggerFilter_){
+  } else if (function == PHANTOM_CamTriggerFilter_){
     status |= setCameraParameter("cam.trigfilt", value);
-  } else if (function == MIRO_CamReadySignal_){
+  } else if (function == PHANTOM_CamReadySignal_){
     status |= setCameraParameter("cam.longready", value);
-  } else if (function == MIRO_CamAuxPin_){
+  } else if (function == PHANTOM_CamAuxPin_){
     status |= setCameraParameter("cam.aux1mode", value);
-  } else if (function == MIRO_CamQuietFan_){
+  } else if (function == PHANTOM_CamQuietFan_){
     status |= setCameraParameter("cam.quiet", value);
   } else if (function == ADSizeX || function == ADSizeY){
     status |= setCameraResolution();
-  } else if (function == MIRO_PostTrigCount_){
+  } else if (function == PHANTOM_PostTrigCount_){
     int maxFrameCount = 1;
-    getIntegerParam(MIRO_MaxFrameCount_, &maxFrameCount);
+    getIntegerParam(PHANTOM_MaxFrameCount_, &maxFrameCount);
     if (value > maxFrameCount){
       value = maxFrameCount;
     }
     status |= setCameraParameter("defc.ptframes", value);
-  } else if (function == MIRO_PerformCSR_){
+  } else if (function == PHANTOM_PerformCSR_){
     status |= performCSR();
-  } else if (function == MIRO_AutoSave_){
+  } else if (function == PHANTOM_AutoSave_){
     status |= setCameraParameter("auto.filesave", value);
-  } else if (function == MIRO_AutoRestart_){
+  } else if (function == PHANTOM_AutoRestart_){
     status |= setCameraParameter("auto.acqrestart", value);
-  } else if (function == MIRO_EDR_){
+  } else if (function == PHANTOM_EDR_){
     status |= setCameraParameter("defc.edrexp", value);
-  } else if (function == MIRO_SyncClock){
-    char command[MIRO_MAX_STRING];
+  } else if (function == PHANTOM_SyncClock){
+    char command[PHANTOM_MAX_STRING];
     std::string response;
     sprintf(command, "setrtc %d", std::time(NULL));
     sendSimpleCommand(command, &response);
-  } else if (function == MIRO_AutoTriggerX_){
+  } else if (function == PHANTOM_AutoTriggerX_){
     status |= setCameraParameter("auto.trigger.x", value);
-  } else if (function == MIRO_AutoTriggerY_){
+  } else if (function == PHANTOM_AutoTriggerY_){
     status |= setCameraParameter("auto.trigger.y", value);
-  } else if (function == MIRO_AutoTriggerW_){
+  } else if (function == PHANTOM_AutoTriggerW_){
     status |= setCameraParameter("auto.trigger.w", value);
-  } else if (function == MIRO_AutoTriggerH_){
+  } else if (function == PHANTOM_AutoTriggerH_){
     status |= setCameraParameter("auto.trigger.h", value);
-  } else if (function == MIRO_AutoTriggerThreshold_){
+  } else if (function == PHANTOM_AutoTriggerThreshold_){
     status |= setCameraParameter("auto.trigger.threshold", value);
-  } else if (function == MIRO_AutoTriggerArea_){
+  } else if (function == PHANTOM_AutoTriggerArea_){
     status |= setCameraParameter("auto.trigger.area", value);
-  } else if (function == MIRO_AutoTriggerInterval_){
+  } else if (function == PHANTOM_AutoTriggerInterval_){
     status |= setCameraParameter("auto.trigger.speed", value);
-  } else if (function == MIRO_AutoTriggerMode_){
+  } else if (function == PHANTOM_AutoTriggerMode_){
     if(value !=0){
       //Disable auto black ref prior to enabling auto trigger
       status |= setCameraParameter("auto.bref", 0);
-      if(status == asynSuccess) setIntegerParam(MIRO_AutoCSR_, 0);
+      if(status == asynSuccess) setIntegerParam(PHANTOM_AutoCSR_, 0);
     }
     if(status == asynSuccess){
       status |= setCameraParameter("auto.trigger.mode", value);
     }
-  } else if (function == MIRO_AutoCSR_){
+  } else if (function == PHANTOM_AutoCSR_){
     if( value!=0){
       //Disable auto trigger prior to enabling auto black ref
       status |= setCameraParameter("auto.trigger.mode", 0);
-      if (status == asynSuccess) setIntegerParam(MIRO_AutoTriggerMode_, 0);
+      if (status == asynSuccess) setIntegerParam(PHANTOM_AutoTriggerMode_, 0);
     }
     if (status == asynSuccess){
       status |= setCameraParameter("auto.bref", value);
@@ -1586,13 +1586,13 @@ asynStatus MiroCamera::writeInt32(asynUser *pasynUser, epicsInt32 value)
  * @param pasynUser - Pointer to the asyn user structure.
  * @param value - The new value to write
 */
-asynStatus MiroCamera::writeFloat64(asynUser *pasynUser, epicsFloat64 value)
+asynStatus ADPhantom::writeFloat64(asynUser *pasynUser, epicsFloat64 value)
 {
-  const char *functionName = "MiroCamera::writeFloat64";
+  const char *functionName = "ADPhantom::writeFloat64";
   asynStatus status = asynSuccess;
   int function = pasynUser->reason;
   double oldValue;
-  char command[MIRO_MAX_STRING];
+  char command[PHANTOM_MAX_STRING];
   int exposure = 0;
   double fps = 0;
   std::string response;
@@ -1629,7 +1629,7 @@ asynStatus MiroCamera::writeFloat64(asynUser *pasynUser, epicsFloat64 value)
   /*
   // Check if the function is one of our stored parameter index values
   if (paramIndexes_.count(function) == 1){
-    // This means the parameter was read out from the MIRO hardware at startup
+    // This means the parameter was read out from the PHANTOM hardware at startup
     debug(functionName, "Update request of parameter", paramIndexes_[function]);
     debug(functionName, "New Value", value);
     status = setCameraParameter(paramMap_[paramIndexes_[function]], value);
@@ -1660,7 +1660,7 @@ asynStatus MiroCamera::writeFloat64(asynUser *pasynUser, epicsFloat64 value)
   return status;
 }
 
-asynStatus MiroCamera::writeOctet(asynUser *pasynUser, const char *value, size_t nChars, size_t *nActual)
+asynStatus ADPhantom::writeOctet(asynUser *pasynUser, const char *value, size_t nChars, size_t *nActual)
 {
   int addr=0;
   int function = pasynUser->reason;
@@ -1671,9 +1671,9 @@ asynStatus MiroCamera::writeOctet(asynUser *pasynUser, const char *value, size_t
   status = (asynStatus)setStringParam(addr, function, (char *)value);
   if (status != asynSuccess) return(status);
 
-  if (function == MIRO_CFFileName_){
+  if (function == PHANTOM_CFFileName_){
     status = this->downloadFlashHeader(value);
-  } else if (function == MIRO_CineName_){
+  } else if (function == PHANTOM_CineName_){
     status = this->setCameraParameter("meta.name", value);
   }
 
@@ -1697,10 +1697,10 @@ asynStatus MiroCamera::writeOctet(asynUser *pasynUser, const char *value, size_t
   return status;
 }
 
-asynStatus MiroCamera::setCameraResolution()
+asynStatus ADPhantom::setCameraResolution()
 {
-  const char * functionName = "MiroCamera::setCameraResolution";
-  char command[MIRO_MAX_STRING];
+  const char * functionName = "ADPhantom::setCameraResolution";
+  char command[PHANTOM_MAX_STRING];
   std::string response;
   int x = 0;
   int y = 0;
@@ -1710,7 +1710,7 @@ asynStatus MiroCamera::setCameraResolution()
   getIntegerParam(ADSizeX, &x);
   getIntegerParam(ADSizeY, &y);
 
-  sprintf(command, "%s defc.res %dx%d", MIRO_CMD_SET_VALUE, x, y);
+  sprintf(command, "%s defc.res %dx%d", PHANTOM_CMD_SET_VALUE, x, y);
 
   debug(functionName, "Sending command", command);
   status = sendSimpleCommand(command, &response);
@@ -1718,27 +1718,27 @@ asynStatus MiroCamera::setCameraResolution()
   return status;
 }
 
-asynStatus MiroCamera::performCSR()
+asynStatus ADPhantom::performCSR()
 {
-  const char * functionName = "MiroCamera::performCSR";
+  const char * functionName = "ADPhantom::performCSR";
   std::string response;
   asynStatus status = asynSuccess;
 
   //Disable auto trigger prior to CSR
   status = setCameraParameter("auto.trigger.mode", 0);
   if( status == asynSuccess){
-    setIntegerParam(MIRO_AutoTriggerMode_, 0);
-    debug(functionName, "Sending command", MIRO_CMD_BLACKREF);
-    status = sendSimpleCommand(MIRO_CMD_BLACKREF, &response);
+    setIntegerParam(PHANTOM_AutoTriggerMode_, 0);
+    debug(functionName, "Sending command", PHANTOM_CMD_BLACKREF);
+    status = sendSimpleCommand(PHANTOM_CMD_BLACKREF, &response);
   }
 
   return status;
 }
 
-asynStatus MiroCamera::attachToPort(const std::string& portName)
+asynStatus ADPhantom::attachToPort(const std::string& portName)
 {
-  const char * functionName = "MiroCamera::attachToPort";
-  char command[MIRO_MAX_STRING];
+  const char * functionName = "ADPhantom::attachToPort";
+  char command[PHANTOM_MAX_STRING];
   std::string response;
   asynStatus status = asynSuccess;
 
@@ -1752,9 +1752,9 @@ asynStatus MiroCamera::attachToPort(const std::string& portName)
   return status;
 }
 
-asynStatus MiroCamera::readoutPreviewData()
+asynStatus ADPhantom::readoutPreviewData()
 {
-  const char * functionName = "MiroCamera::readoutPreviewData";
+  const char * functionName = "ADPhantom::readoutPreviewData";
   int nBytes = 0;
   std::string response;
   NDArray *pImage;
@@ -1816,29 +1816,29 @@ asynStatus MiroCamera::readoutPreviewData()
   return status;
 }
 
-asynStatus MiroCamera::sendSoftwareTrigger()
+asynStatus ADPhantom::sendSoftwareTrigger()
 {
-  const char * functionName = "MiroCamera::readoutDataStream";
+  const char * functionName = "ADPhantom::readoutDataStream";
   std::string response;
   asynStatus status = asynSuccess;
 
-  status = sendSimpleCommand(MIRO_CMD_TRIG, &response);
+  status = sendSimpleCommand(PHANTOM_CMD_TRIG, &response);
   debug(functionName, "Response", response);
 
   return status;
 }
 
-asynStatus MiroCamera::downloadCineFile(int cine)
+asynStatus ADPhantom::downloadCineFile(int cine)
 {
-  const char * functionName = "MiroCamera::downloadCineFile";
+  const char * functionName = "ADPhantom::downloadCineFile";
   int start = 0;
   int end = 0;
   std::string response;
   asynStatus status = asynSuccess;
 
   // Read in the number of frames to download
-  getIntegerParam(MIRO_CineRecordStart_, &start);
-  getIntegerParam(MIRO_CineRecordEnd_, &end);
+  getIntegerParam(PHANTOM_CineRecordStart_, &start);
+  getIntegerParam(PHANTOM_CineRecordEnd_, &end);
 
   debug(functionName, "Download start", start);
   debug(functionName, "Download end", end);
@@ -1855,10 +1855,10 @@ asynStatus MiroCamera::downloadCineFile(int cine)
   return status;
 }
 
-asynStatus MiroCamera::saveCineToFlash(int cine)
+asynStatus ADPhantom::saveCineToFlash(int cine)
 {
-  const char * functionName = "MiroCamera::saveCineToFlash";
-  char command[MIRO_MAX_STRING];
+  const char * functionName = "ADPhantom::saveCineToFlash";
+  char command[PHANTOM_MAX_STRING];
   std::string response = "";
   asynStatus status = asynSuccess;
 
@@ -1870,64 +1870,64 @@ asynStatus MiroCamera::saveCineToFlash(int cine)
 
   if (status == asynSuccess){
     // Execute the save cine command
-    sprintf(command, "%s {cine: %d}", MIRO_CMD_CFSAVE, cine);
+    sprintf(command, "%s {cine: %d}", PHANTOM_CMD_CFSAVE, cine);
     status = sendSimpleCommand(command, &response);
   }
 
   return status;
 }
 
-asynStatus MiroCamera::saveSettings()
+asynStatus ADPhantom::saveSettings()
 {
-  const char * functionName = "MiroCamera::saveSettings";
-  char command[MIRO_MAX_STRING];
+  const char * functionName = "ADPhantom::saveSettings";
+  char command[PHANTOM_MAX_STRING];
   std::string response = "";
   int slot = 1;
   asynStatus status = asynSuccess;
 
-  getIntegerParam(MIRO_SettingsSlot_, &slot);
-  sprintf(command, "%s { slot: %d }", MIRO_CMD_USERSAVE, slot);
+  getIntegerParam(PHANTOM_SettingsSlot_, &slot);
+  sprintf(command, "%s { slot: %d }", PHANTOM_CMD_USERSAVE, slot);
   status = sendSimpleCommand(command, &response);
   debug(functionName, response.c_str());
   return status;
 }
 
-asynStatus MiroCamera::loadSettings()
+asynStatus ADPhantom::loadSettings()
 {
-  const char * functionName = "MiroCamera::loadSettings";
-  char command[MIRO_MAX_STRING];
+  const char * functionName = "ADPhantom::loadSettings";
+  char command[PHANTOM_MAX_STRING];
   std::string response = "";
   int slot = 1;
   asynStatus status = asynSuccess;
 
-  getIntegerParam(MIRO_SettingsSlot_, &slot);
-  sprintf(command, "%s { slot: %d }", MIRO_CMD_USERLOAD, slot);
+  getIntegerParam(PHANTOM_SettingsSlot_, &slot);
+  sprintf(command, "%s { slot: %d }", PHANTOM_CMD_USERLOAD, slot);
   status = sendSimpleCommand(command, &response);
   debug(functionName, response.c_str());
   return status;
 }
 
-asynStatus MiroCamera::formatFlash()
+asynStatus ADPhantom::formatFlash()
 {
-  const char * functionName = "MiroCamera::formatFlash";
+  const char * functionName = "ADPhantom::formatFlash";
   std::string response = "";
   asynStatus status = asynSuccess;
 
-  status = sendSimpleCommand(MIRO_CMD_CFFORMAT, &response, MIRO_EXTENDED_TIMEOUT);
+  status = sendSimpleCommand(PHANTOM_CMD_CFFORMAT, &response, PHANTOM_EXTENDED_TIMEOUT);
   debug(functionName, response.c_str());
   return status;
 }
 
-asynStatus MiroCamera::deleteFlashFile()
+asynStatus ADPhantom::deleteFlashFile()
 {
-  const char * functionName = "MiroCamera::deleteFlashFile";
-  char command[MIRO_MAX_STRING];
-  char filename[MIRO_MAX_STRING];
+  const char * functionName = "ADPhantom::deleteFlashFile";
+  char command[PHANTOM_MAX_STRING];
+  char filename[PHANTOM_MAX_STRING];
   std::string response = "";
   asynStatus status = asynSuccess;
 
   // Read in the selected file
-  getStringParam(MIRO_CFFileName_, MIRO_MAX_STRING, filename);
+  getStringParam(PHANTOM_CFFileName_, PHANTOM_MAX_STRING, filename);
 
   // Verify the cine file is valid
   if (strcmp(filename, "") == 0){
@@ -1937,17 +1937,17 @@ asynStatus MiroCamera::deleteFlashFile()
 
   if (status == asynSuccess){
     // Execute the save cine command
-    sprintf(command, "%s {filename: \"%s\"}", MIRO_CMD_CFRM, filename);
+    sprintf(command, "%s {filename: \"%s\"}", PHANTOM_CMD_CFRM, filename);
     status = sendSimpleCommand(command, &response);
   }
 
   return status;
 }
 
-asynStatus MiroCamera::selectFlashByIndex(int index)
+asynStatus ADPhantom::selectFlashByIndex(int index)
 {
-  const char * functionName = "MiroCamera::selectFlashByIndex";
-  char filename[MIRO_MAX_STRING];
+  const char * functionName = "ADPhantom::selectFlashByIndex";
+  char filename[PHANTOM_MAX_STRING];
   asynStatus status = asynSuccess;
 
   // Check the index is between 1 and 8
@@ -1956,32 +1956,32 @@ asynStatus MiroCamera::selectFlashByIndex(int index)
     status = asynError;
   }
   if (status == asynSuccess){
-    getStringParam(MIRO_CfFileName_[index-1], MIRO_MAX_STRING, filename);
+    getStringParam(PHANTOM_CfFileName_[index-1], PHANTOM_MAX_STRING, filename);
     if (strcmp(filename, "")){
-      setStringParam(MIRO_CFFileName_, filename);
+      setStringParam(PHANTOM_CFFileName_, filename);
       status = downloadFlashHeader(filename);
     }
   }
   return status;
 }
 
-asynStatus MiroCamera::downloadFlashFile()
+asynStatus ADPhantom::downloadFlashFile()
 {
-  const char * functionName = "MiroCamera::downloadFlashFile";
+  const char * functionName = "ADPhantom::downloadFlashFile";
   int start = 0;
   int end = 0;
-  char filename[MIRO_MAX_STRING];
+  char filename[PHANTOM_MAX_STRING];
   asynStatus status = asynSuccess;
 
   // Read in the number of frames to download
-  getIntegerParam(MIRO_CFSRecordStart_, &start);
-  getIntegerParam(MIRO_CFSRecordEnd_, &end);
+  getIntegerParam(PHANTOM_CFSRecordStart_, &start);
+  getIntegerParam(PHANTOM_CFSRecordEnd_, &end);
 
   // Attach to the correct port
   //status = attachToPort("dataPort");
 
   // Read in the selected file
-  getStringParam(MIRO_CFFileName_, MIRO_MAX_STRING, filename);
+  getStringParam(PHANTOM_CFFileName_, PHANTOM_MAX_STRING, filename);
 
   // Verify the file is valid
   if (strcmp(filename, "") == 0){
@@ -2025,10 +2025,10 @@ asynStatus MiroCamera::downloadFlashFile()
   return status;
 }
 
-asynStatus MiroCamera::downloadFlashHeader(const std::string& filename)
+asynStatus ADPhantom::downloadFlashHeader(const std::string& filename)
 {
-  const char * functionName = "MiroCamera::downloadFlashHeader";
-  char command[MIRO_MAX_STRING];
+  const char * functionName = "ADPhantom::downloadFlashHeader";
+  char command[PHANTOM_MAX_STRING];
   std::string response;
   short setupLength = 0;
   int noOfTimes = 0;
@@ -2073,12 +2073,12 @@ asynStatus MiroCamera::downloadFlashHeader(const std::string& filename)
   if (status == asynSuccess){
     status = this->readFrame(40);
     memcpy(&cineBitmapHeader_, data_, 40);
-    setIntegerParam(MIRO_CFSWidth_, cineBitmapHeader_.biWidth);
-    setIntegerParam(MIRO_CFSHeight_, cineBitmapHeader_.biHeight);
-    setIntegerParam(MIRO_CFSFrameCount_, cineHeader_.TotalImageCount);
-    setIntegerParam(MIRO_CFSFirstFrame_, cineHeader_.FirstImageNo);
+    setIntegerParam(PHANTOM_CFSWidth_, cineBitmapHeader_.biWidth);
+    setIntegerParam(PHANTOM_CFSHeight_, cineBitmapHeader_.biHeight);
+    setIntegerParam(PHANTOM_CFSFrameCount_, cineHeader_.TotalImageCount);
+    setIntegerParam(PHANTOM_CFSFirstFrame_, cineHeader_.FirstImageNo);
     std::cout<<"cineHeader_.FirstImageNo: "<<cineHeader_.FirstImageNo<<std::endl;
-    setIntegerParam(MIRO_CFSLastFrame_, cineHeader_.FirstImageNo + cineHeader_.ImageCount - 1);
+    setIntegerParam(PHANTOM_CFSLastFrame_, cineHeader_.FirstImageNo + cineHeader_.ImageCount - 1);
   }
 
   // Read in the default exposure time ns
@@ -2193,10 +2193,10 @@ asynStatus MiroCamera::downloadFlashHeader(const std::string& filename)
   return status;
 }
 
-asynStatus MiroCamera::downloadFlashImages(const std::string& filename, int start, int end)
+asynStatus ADPhantom::downloadFlashImages(const std::string& filename, int start, int end)
 {
-  const char * functionName = "MiroCamera::downloadFlashFile";
-  char command[MIRO_MAX_STRING];
+  const char * functionName = "ADPhantom::downloadFlashFile";
+  char command[PHANTOM_MAX_STRING];
   std::string response;
   NDArray *pImage;
   size_t dims[2];
@@ -2376,14 +2376,14 @@ asynStatus MiroCamera::downloadFlashImages(const std::string& filename, int star
       pImage->release();
     }
     recordCount++;
-    setIntegerParam(MIRO_CFSRecordCount_, recordCount);
+    setIntegerParam(PHANTOM_CFSRecordCount_, recordCount);
     callParamCallbacks();
   }
 
   return status;
 }
 
-asynStatus MiroCamera::convert10BitPacketTo12Bit(void *input, void *output)
+asynStatus ADPhantom::convert10BitPacketTo12Bit(void *input, void *output)
 {
   const char * functionName = "convert10BitPacketTo12Bit";
   asynStatus status = asynSuccess;
@@ -2393,25 +2393,25 @@ asynStatus MiroCamera::convert10BitPacketTo12Bit(void *input, void *output)
   unsigned char *inBytes = (unsigned char *)input;
   unsigned char *outBytes = (unsigned char *)output;
   int pIndex = 0;
-  int rawValue = MIRO_LinLUT[(inBytes[0]<<2) + ((inBytes[1]&0xC0)>>6)];
+  int rawValue = PHANTOM_LinLUT[(inBytes[0]<<2) + ((inBytes[1]&0xC0)>>6)];
   outBytes[pIndex] = (rawValue&0x00FF);
   pIndex++;
   outBytes[pIndex] = (rawValue&0xFF00)>>8;
   pIndex++;
 
-  rawValue = MIRO_LinLUT[((inBytes[1]&0x3F)<<4) + ((inBytes[2]&0xF0)>>4)];
+  rawValue = PHANTOM_LinLUT[((inBytes[1]&0x3F)<<4) + ((inBytes[2]&0xF0)>>4)];
   outBytes[pIndex] = (rawValue&0x00FF);
   pIndex++;
   outBytes[pIndex] = (rawValue&0xFF00)>>8;
   pIndex++;
 
-  rawValue = MIRO_LinLUT[((inBytes[2]&0x0F)<<6) + ((inBytes[3]&0xFC)>>2)];
+  rawValue = PHANTOM_LinLUT[((inBytes[2]&0x0F)<<6) + ((inBytes[3]&0xFC)>>2)];
   outBytes[pIndex] = (rawValue&0x00FF);
   pIndex++;
   outBytes[pIndex] = (rawValue&0xFF00)>>8;
   pIndex++;
 
-  rawValue = MIRO_LinLUT[((inBytes[3]&0x03)<<8) + inBytes[4]];
+  rawValue = PHANTOM_LinLUT[((inBytes[3]&0x03)<<8) + inBytes[4]];
   outBytes[pIndex] = (rawValue&0x00FF);
   pIndex++;
   outBytes[pIndex] = (rawValue&0xFF00)>>8;
@@ -2420,10 +2420,10 @@ asynStatus MiroCamera::convert10BitPacketTo12Bit(void *input, void *output)
   return status;
 }
 
-asynStatus MiroCamera::readoutTimestamps(int cine, int start, int end)
+asynStatus ADPhantom::readoutTimestamps(int cine, int start, int end)
 {
-  const char * functionName = "MiroCamera::readoutTimestamps";
-  char command[MIRO_MAX_STRING];
+  const char * functionName = "ADPhantom::readoutTimestamps";
+  char command[PHANTOM_MAX_STRING];
   int nBytes = 0;
   std::string response;
   int frames = end - start + 1;
@@ -2465,10 +2465,10 @@ asynStatus MiroCamera::readoutTimestamps(int cine, int start, int end)
   return status;
 }
 
-asynStatus MiroCamera::readoutDataStream(int cine, int start, int end)
+asynStatus ADPhantom::readoutDataStream(int cine, int start, int end)
 {
-  const char * functionName = "MiroCamera::readoutDataStream";
-  char command[MIRO_MAX_STRING];
+  const char * functionName = "ADPhantom::readoutDataStream";
+  char command[PHANTOM_MAX_STRING];
   int width = 0;
   int height = 0;
   int nBytes = 0;
@@ -2514,8 +2514,8 @@ asynStatus MiroCamera::readoutDataStream(int cine, int start, int end)
   }
 
   // Read the frame size for the selected cine
-  getIntegerParam(MIRO_CnWidth_[cine], &width);
-  getIntegerParam(MIRO_CnHeight_[cine], &height);
+  getIntegerParam(PHANTOM_CnWidth_[cine], &width);
+  getIntegerParam(PHANTOM_CnHeight_[cine], &height);
   // Calculate the number of bytes to read
   // In packet format there are 10 bits per pixel,
   // which equates to 1.25 bytes
@@ -2540,7 +2540,7 @@ asynStatus MiroCamera::readoutDataStream(int cine, int start, int end)
   while ((frame < frames) && (status == asynSuccess)){
     metaFrame = start+frame;
     frame++;
-    setIntegerParam(MIRO_CineRecordCount_, frame);
+    setIntegerParam(PHANTOM_CineRecordCount_, frame);
     callParamCallbacks();
     status = this->readFrame(nBytes);
 
@@ -2649,15 +2649,15 @@ asynStatus MiroCamera::readoutDataStream(int cine, int start, int end)
       pImage->release();
     }
   }
-  setIntegerParam(MIRO_CineRecordCount_, 0);
+  setIntegerParam(PHANTOM_CineRecordCount_, 0);
   callParamCallbacks();
 
   return status;
 }
 
-asynStatus MiroCamera::readFrame(int bytes)
+asynStatus ADPhantom::readFrame(int bytes)
 {
-  const char * functionName = "MiroCamera::readFrame";
+  const char * functionName = "ADPhantom::readFrame";
   size_t nread = 0;
   int eomReason = 0;
   std::string response;
@@ -2670,7 +2670,7 @@ asynStatus MiroCamera::readFrame(int bytes)
     status = pasynOctetSyncIO->read(dataChannel_,
                                     dataPtr,
                                     (bytes-totalRead),
-                                    MIRO_TIMEOUT,
+                                    PHANTOM_TIMEOUT,
                                     &nread,
                                     &eomReason);
 
@@ -2685,9 +2685,9 @@ asynStatus MiroCamera::readFrame(int bytes)
   return status;
 }
 
-asynStatus MiroCamera::updatePreviewCine()
+asynStatus ADPhantom::updatePreviewCine()
 {
-  const char * functionName = "MiroCamera::updatePreviewCine";
+  const char * functionName = "ADPhantom::updatePreviewCine";
   asynStatus status = asynSuccess;
   std::string param = "";
 
@@ -2716,9 +2716,9 @@ asynStatus MiroCamera::updatePreviewCine()
   return status;
 }
 
-asynStatus MiroCamera::updateCine(int cine)
+asynStatus ADPhantom::updateCine(int cine)
 {
-  const char * functionName = "MiroCamera::updateCine";
+  const char * functionName = "ADPhantom::updateCine";
   asynStatus status = asynSuccess;
   std::string param = "";
   char cmd[MAX_STRING_SIZE];
@@ -2733,7 +2733,7 @@ asynStatus MiroCamera::updateCine(int cine)
     sprintf(cmd, "c%d.meta.name", cine);
     std::string sname = paramMap_[cmd].getValue();
     cleanString(sname, " ");
-    setStringParam(MIRO_CnName_[cine], sname.c_str());
+    setStringParam(PHANTOM_CnName_[cine], sname.c_str());
   }
 
   if (status == asynSuccess){
@@ -2753,8 +2753,8 @@ asynStatus MiroCamera::updateCine(int cine)
       debug(functionName, "   Height", sh);
       status = stringToInteger(sw, width);
       status = stringToInteger(sh, height);
-      setIntegerParam(MIRO_CnWidth_[cine], width);
-      setIntegerParam(MIRO_CnHeight_[cine], height);
+      setIntegerParam(PHANTOM_CnWidth_[cine], width);
+      setIntegerParam(PHANTOM_CnHeight_[cine], height);
     }
   }
   if (status == asynSuccess){
@@ -2764,7 +2764,7 @@ asynStatus MiroCamera::updateCine(int cine)
     // Decode the status
     debug(functionName, paramMap_[cmd].getValue().c_str());
     cineStates(paramMap_[cmd].getValue(), cineState);
-    setIntegerParam(MIRO_CnStatus_[cine], cineState);
+    setIntegerParam(PHANTOM_CnStatus_[cine], cineState);
   }
 
   if (status == asynSuccess){
@@ -2774,7 +2774,7 @@ asynStatus MiroCamera::updateCine(int cine)
     std::string sfrCount = paramMap_[cmd].getValue();
     cleanString(sfrCount, " ");
     status = stringToInteger(sfrCount, frCount);
-    setIntegerParam(MIRO_CnFrameCount_[cine], frCount);
+    setIntegerParam(PHANTOM_CnFrameCount_[cine], frCount);
   }
 
   if (status == asynSuccess){
@@ -2784,7 +2784,7 @@ asynStatus MiroCamera::updateCine(int cine)
     std::string sfirstFr = paramMap_[cmd].getValue();
     cleanString(sfirstFr, " ");
     status = stringToInteger(sfirstFr, firstFr);
-    setIntegerParam(MIRO_CnFirstFrame_[cine], firstFr);
+    setIntegerParam(PHANTOM_CnFirstFrame_[cine], firstFr);
   }
 
   if (status == asynSuccess){
@@ -2794,7 +2794,7 @@ asynStatus MiroCamera::updateCine(int cine)
     std::string slastFr = paramMap_[cmd].getValue();
     cleanString(slastFr, " ");
     status = stringToInteger(slastFr, lastFr);
-    setIntegerParam(MIRO_CnLastFrame_[cine], lastFr);
+    setIntegerParam(PHANTOM_CnLastFrame_[cine], lastFr);
   }
 
   callParamCallbacks();
@@ -2802,16 +2802,16 @@ asynStatus MiroCamera::updateCine(int cine)
   return status;
 }
 
-asynStatus MiroCamera::selectCine(int cine)
+asynStatus ADPhantom::selectCine(int cine)
 {
-  const char * functionName = "MiroCamera::selectCine";
+  const char * functionName = "ADPhantom::selectCine";
   asynStatus status = asynSuccess;
   char command[256];
   std::string param = "";
   int maxCines = 1;
 
   // Get the number of cines available
-  getIntegerParam(MIRO_GetCineCount_, &maxCines);
+  getIntegerParam(PHANTOM_GetCineCount_, &maxCines);
   if (cine < 1){
     setStringParam(ADStatusMessage, "Cannot select cine 0");
     setIntegerParam(ADStatus, ADStatusError);
@@ -2843,9 +2843,9 @@ asynStatus MiroCamera::selectCine(int cine)
       debug(functionName, "Cine width", sw);
       debug(functionName, "Cine height", sh);
       status = stringToInteger(sw, width);
-      setIntegerParam(MIRO_CineWidth_, width);
+      setIntegerParam(PHANTOM_CineWidth_, width);
       status = stringToInteger(sh, height);
-      setIntegerParam(MIRO_CineHeight_, height);
+      setIntegerParam(PHANTOM_CineHeight_, height);
     }
 
     // Update the cine frame count
@@ -2854,7 +2854,7 @@ asynStatus MiroCamera::selectCine(int cine)
     int frCount = 0;
     cleanString(sfrCount, " ");
     status = stringToInteger(sfrCount, frCount);
-    setIntegerParam(MIRO_CineFrameCount_, frCount);
+    setIntegerParam(PHANTOM_CineFrameCount_, frCount);
 
     // Update the cine first frame
     sprintf(command, "c%d.firstfr", cine);
@@ -2863,8 +2863,8 @@ asynStatus MiroCamera::selectCine(int cine)
     int firstFr = 0;
     cleanString(sfirstFr, " ");
     status = stringToInteger(sfirstFr, firstFr);
-    //std::cout<<"Setting MIRO_CineFirstFrame_ to "<<firstFr<<std::endl;
-    setIntegerParam(MIRO_CineFirstFrame_, firstFr);
+    //std::cout<<"Setting PHANTOM_CineFirstFrame_ to "<<firstFr<<std::endl;
+    setIntegerParam(PHANTOM_CineFirstFrame_, firstFr);
 
     // Update the cine last frame
     sprintf(command, "c%d.lastfr", cine);
@@ -2872,25 +2872,25 @@ asynStatus MiroCamera::selectCine(int cine)
     int lastFr = 0;
     cleanString(slastFr, " ");
     status = stringToInteger(slastFr, lastFr);
-    setIntegerParam(MIRO_CineLastFrame_, lastFr);
+    setIntegerParam(PHANTOM_CineLastFrame_, lastFr);
   }
 
   return status;
 }
 
-asynStatus MiroCamera::setPartition(int count)
+asynStatus ADPhantom::setPartition(int count)
 {
-  const char * functionName = "MiroCamera::setPartition";
+  const char * functionName = "ADPhantom::setPartition";
   asynStatus status = asynSuccess;
   char command[256];
   std::string response = "";
   int cCine = 1;
 
   // Get the current partition size
-  getIntegerParam(MIRO_SelectedCine_, &cCine);
+  getIntegerParam(PHANTOM_SelectedCine_, &cCine);
 
   // Create the cine string
-  sprintf(command, "%s %d", MIRO_CMD_PARTITION, count);
+  sprintf(command, "%s %d", PHANTOM_CMD_PARTITION, count);
   // Read out the cine status
   status = sendSimpleCommand(command, &response);
   debug(functionName, "Response", response);
@@ -2900,19 +2900,19 @@ asynStatus MiroCamera::setPartition(int count)
     // set a new selected cine
     if (count < cCine){
       status = selectCine(count);
-      setIntegerParam(MIRO_SelectedCine_, count);
+      setIntegerParam(PHANTOM_SelectedCine_, count);
     }
   }
   return status;
 }
 
-asynStatus MiroCamera::updateFlash()
+asynStatus ADPhantom::updateFlash()
 {
-  const char * functionName = "MiroCamera::updateFlash";
+  const char * functionName = "ADPhantom::updateFlash";
   asynStatus status = asynSuccess;
   std::string data;
   std::vector<std::string> names;
-  std::vector<miroVal> values;
+  std::vector<phantomVal> values;
 
   debug(functionName, "Method called");
 
@@ -2925,7 +2925,7 @@ asynStatus MiroCamera::updateFlash()
     std::string sstate = paramMap_["cf.state"].getValue();
     cleanString(sstate, " ");
     status = stringToInteger(sstate, state);
-    setIntegerParam(MIRO_CFState_, state);
+    setIntegerParam(PHANTOM_CFState_, state);
   }
 
   if (status == asynSuccess){
@@ -2934,7 +2934,7 @@ asynStatus MiroCamera::updateFlash()
     std::string saction = paramMap_["cf.action"].getValue();
     cleanString(saction, " ");
     status = stringToInteger(saction, action);
-    setIntegerParam(MIRO_CFAction_, action);
+    setIntegerParam(PHANTOM_CFAction_, action);
   }
 
   if (status == asynSuccess){
@@ -2943,7 +2943,7 @@ asynStatus MiroCamera::updateFlash()
     std::string ssize = paramMap_["cf.size"].getValue();
     cleanString(ssize, " ");
     status = stringToInteger(ssize, size);
-    setIntegerParam(MIRO_CFSize_, size);
+    setIntegerParam(PHANTOM_CFSize_, size);
   }
 
   if (status == asynSuccess){
@@ -2952,7 +2952,7 @@ asynStatus MiroCamera::updateFlash()
     std::string sused = paramMap_["cf.used"].getValue();
     cleanString(sused, " ");
     status = stringToInteger(sused, used);
-    setIntegerParam(MIRO_CFUsed_, used);
+    setIntegerParam(PHANTOM_CFUsed_, used);
   }
 
   if (status == asynSuccess){
@@ -2961,7 +2961,7 @@ asynStatus MiroCamera::updateFlash()
     std::string sprog = paramMap_["cf.progress"].getValue();
     cleanString(sprog, " ");
     status = stringToInteger(sprog, prog);
-    setIntegerParam(MIRO_CFProgress_, prog);
+    setIntegerParam(PHANTOM_CFProgress_, prog);
   }
 
   if (status == asynSuccess){
@@ -2970,7 +2970,7 @@ asynStatus MiroCamera::updateFlash()
     std::string serr = paramMap_["cf.errcode"].getValue();
     cleanString(serr, " ");
     status = stringToInteger(serr, err);
-    setIntegerParam(MIRO_CFError_, err);
+    setIntegerParam(PHANTOM_CFError_, err);
   }
 
   // Require vector of file set information
@@ -2978,7 +2978,7 @@ asynStatus MiroCamera::updateFlash()
   std::vector<std::string> fileInfo;
   int item = 0;
   // Read out the file list
-  status = sendSimpleCommand(MIRO_CMD_CFLS, &data);
+  status = sendSimpleCommand(PHANTOM_CMD_CFLS, &data);
   // Strip out unwanted characters
   std::string iline = stripControl(data);
   iline = deleteParen(iline);
@@ -3006,47 +3006,47 @@ asynStatus MiroCamera::updateFlash()
   return status;
 }
 
-asynStatus MiroCamera::updateFlashFileTable()
+asynStatus ADPhantom::updateFlashFileTable()
 {
-  const char * functionName = "MiroCamera::updateFlashFileTable";
+  const char * functionName = "ADPhantom::updateFlashFileTable";
   asynStatus status = asynSuccess;
 
   debug(functionName, "Number of files", (int)fileInfoSet_.size());
-  setIntegerParam(MIRO_CFNumFiles_, fileInfoSet_.size());
+  setIntegerParam(PHANTOM_CFNumFiles_, fileInfoSet_.size());
   int max_pages = (fileInfoSet_.size() / 8) + (fileInfoSet_.size() % 8 == 0?0:1);
   if (max_pages == 0){
     max_pages = 1;
   }
-  setIntegerParam(MIRO_CFMaxPages_, max_pages);
+  setIntegerParam(PHANTOM_CFMaxPages_, max_pages);
   int current_page = 0;
   // Check the page number
-  getIntegerParam(MIRO_CFCurPage_, &current_page);
+  getIntegerParam(PHANTOM_CFCurPage_, &current_page);
   if (current_page > max_pages){
     current_page = max_pages;
   }
   if (current_page == 0){
     current_page = 1;
   }
-  setIntegerParam(MIRO_CFCurPage_, current_page);
+  setIntegerParam(PHANTOM_CFCurPage_, current_page);
 
   for (int index=0; index < 8; index++ ){
     int pindex = ((current_page - 1) * 8) + index;
     if (pindex < (int)fileInfoSet_.size()){
-      setStringParam(MIRO_CfFileName_[index], (fileInfoSet_[pindex][0]).c_str());
-      setStringParam(MIRO_CfFileSize_[index], (fileInfoSet_[pindex][1]).c_str());
-      setStringParam(MIRO_CfFileDate_[index], (fileInfoSet_[pindex][2]).c_str());
+      setStringParam(PHANTOM_CfFileName_[index], (fileInfoSet_[pindex][0]).c_str());
+      setStringParam(PHANTOM_CfFileSize_[index], (fileInfoSet_[pindex][1]).c_str());
+      setStringParam(PHANTOM_CfFileDate_[index], (fileInfoSet_[pindex][2]).c_str());
     } else {
-      setStringParam(MIRO_CfFileName_[index], "");
-      setStringParam(MIRO_CfFileSize_[index], "");
-      setStringParam(MIRO_CfFileDate_[index], "");
+      setStringParam(PHANTOM_CfFileName_[index], "");
+      setStringParam(PHANTOM_CfFileSize_[index], "");
+      setStringParam(PHANTOM_CfFileDate_[index], "");
     }
   }
   return status;
 }
 
-asynStatus MiroCamera::updateAutoStatus()
+asynStatus ADPhantom::updateAutoStatus()
 {
-  const char * functionName = "MiroCamera::updateAutotatus";
+  const char * functionName = "ADPhantom::updateAutotatus";
   asynStatus status = asynSuccess;
 
   debug(functionName, "Method called");
@@ -3056,51 +3056,51 @@ asynStatus MiroCamera::updateAutoStatus()
 
   if (status == asynSuccess){
     // Update the sensor temperature
-    status = this->updateIntegerParameter("auto.filesave", MIRO_AutoSave_);
+    status = this->updateIntegerParameter("auto.filesave", PHANTOM_AutoSave_);
   }
   if (status == asynSuccess){
     // Update the sensor temperature
-    status = this->updateIntegerParameter("auto.acqrestart", MIRO_AutoRestart_);
+    status = this->updateIntegerParameter("auto.acqrestart", PHANTOM_AutoRestart_);
   }
   if (status == asynSuccess){
     // Update the sensor temperature
-    status = this->updateIntegerParameter("auto.bref", MIRO_AutoCSR_);
+    status = this->updateIntegerParameter("auto.bref", PHANTOM_AutoCSR_);
   }
   if (status == asynSuccess){
     // Update the sensor temperature
-    status = this->updateIntegerParameter("auto.bref_progress", MIRO_CSRCount_);
+    status = this->updateIntegerParameter("auto.bref_progress", PHANTOM_CSRCount_);
   }
   if (status == asynSuccess){
   // Update the auto trigger ROI x coordinate
-    status = this->updateIntegerParameter("auto.trigger.x", MIRO_AutoTriggerX_);
+    status = this->updateIntegerParameter("auto.trigger.x", PHANTOM_AutoTriggerX_);
   }
   if (status == asynSuccess){
   // Update the auto trigger ROI y coordinate
-    status = this->updateIntegerParameter("auto.trigger.y", MIRO_AutoTriggerY_);
+    status = this->updateIntegerParameter("auto.trigger.y", PHANTOM_AutoTriggerY_);
   }
   if (status == asynSuccess){
   // Update the auto trigger ROI width
-    status = this->updateIntegerParameter("auto.trigger.w", MIRO_AutoTriggerW_);
+    status = this->updateIntegerParameter("auto.trigger.w", PHANTOM_AutoTriggerW_);
   }
   if (status == asynSuccess){
   // Update the auto trigger ROI height
-    status = this->updateIntegerParameter("auto.trigger.h", MIRO_AutoTriggerH_);
+    status = this->updateIntegerParameter("auto.trigger.h", PHANTOM_AutoTriggerH_);
   }
   if (status == asynSuccess){
   // Update the auto trigger threshold parameter
-    status = this->updateIntegerParameter("auto.trigger.threshold", MIRO_AutoTriggerThreshold_);
+    status = this->updateIntegerParameter("auto.trigger.threshold", PHANTOM_AutoTriggerThreshold_);
   }
   if (status == asynSuccess){
   // Update the auto trigger pixel fraction parameter
-    status = this->updateIntegerParameter("auto.trigger.area", MIRO_AutoTriggerArea_);
+    status = this->updateIntegerParameter("auto.trigger.area", PHANTOM_AutoTriggerArea_);
   }
   if (status == asynSuccess){
   // Update the auto trigger check interval
-    status = this->updateIntegerParameter("auto.trigger.speed", MIRO_AutoTriggerInterval_);
+    status = this->updateIntegerParameter("auto.trigger.speed", PHANTOM_AutoTriggerInterval_);
   }
   if (status == asynSuccess){
   // Update the auto trigger mode
-    status = this->updateIntegerParameter("auto.trigger.mode", MIRO_AutoTriggerMode_);
+    status = this->updateIntegerParameter("auto.trigger.mode", PHANTOM_AutoTriggerMode_);
   }
   if (status == asynSuccess){
   // Update the auto trigger coordinates corrected such that top left is the origin
@@ -3109,46 +3109,46 @@ asynStatus MiroCamera::updateAutoStatus()
   return status;
 }
 
-asynStatus MiroCamera::updateAutoTrigPos()
+asynStatus ADPhantom::updateAutoTrigPos()
 {
-  const char * functionName = "MiroCamera::updateAutoTrigPos";
+  const char * functionName = "ADPhantom::updateAutoTrigPos";
   debug(functionName, "Method called");
   asynStatus status = asynSuccess;
 
   int value = 0;
 
   std::string name = "auto.trigger.x";
-  int paramID = MIRO_AutoTriggerXZeroed_;
+  int paramID = PHANTOM_AutoTriggerXZeroed_;
   debug(functionName, "Name", name);
-  debug(functionName, "paramID", MIRO_AutoTriggerXZeroed_);
+  debug(functionName, "paramID", PHANTOM_AutoTriggerXZeroed_);
   std::string svalue = paramMap_[name].getValue();
   cleanString(svalue, " ");
   status = stringToInteger(svalue, value);
   int res = 0;
   getIntegerParam(ADSizeX, &res);
   value += res/2 ;
-  setIntegerParam(MIRO_AutoTriggerXZeroed_, value);
+  setIntegerParam(PHANTOM_AutoTriggerXZeroed_, value);
 
   if (status == asynSuccess){
     name = "auto.trigger.y";
-    paramID = MIRO_AutoTriggerYZeroed_;
+    paramID = PHANTOM_AutoTriggerYZeroed_;
     debug(functionName, "Name", name);
-    debug(functionName, "paramID", MIRO_AutoTriggerYZeroed_);
+    debug(functionName, "paramID", PHANTOM_AutoTriggerYZeroed_);
     svalue = paramMap_[name].getValue();
     cleanString(svalue, " ");
     status = stringToInteger(svalue, value);
     res = 0;
     getIntegerParam(ADSizeY, &res);
     value += res/2 ;
-    setIntegerParam(MIRO_AutoTriggerYZeroed_, value);
+    setIntegerParam(PHANTOM_AutoTriggerYZeroed_, value);
   }
 
   return status;
 }
 
-asynStatus MiroCamera::updateInfoStatus()
+asynStatus ADPhantom::updateInfoStatus()
 {
-  const char * functionName = "MiroCamera::updateInfoStatus";
+  const char * functionName = "ADPhantom::updateInfoStatus";
   asynStatus status = asynSuccess;
 
   debug(functionName, "Method called");
@@ -3158,27 +3158,27 @@ asynStatus MiroCamera::updateInfoStatus()
 
   if (status == asynSuccess){
     // Update the sensor temperature
-    status = this->updateIntegerParameter("info.snstemp", MIRO_InfoSensorTemp_);
+    status = this->updateIntegerParameter("info.snstemp", PHANTOM_InfoSensorTemp_);
   }
   if (status == asynSuccess){
     // Update the thermo power
-    status = this->updateIntegerParameter("info.tepower", MIRO_InfoThermoPower_);
+    status = this->updateIntegerParameter("info.tepower", PHANTOM_InfoThermoPower_);
   }
   if (status == asynSuccess){
     // Update the camera temperature
-    status = this->updateIntegerParameter("info.camtemp", MIRO_InfoCameraTemp_);
+    status = this->updateIntegerParameter("info.camtemp", PHANTOM_InfoCameraTemp_);
   }
   if (status == asynSuccess){
     // Update the fan power
-    status = this->updateIntegerParameter("info.fanpower", MIRO_InfoFanPower_);
+    status = this->updateIntegerParameter("info.fanpower", PHANTOM_InfoFanPower_);
   }
 
   return status;
 }
 
-asynStatus MiroCamera::updateCameraStatus()
+asynStatus ADPhantom::updateCameraStatus()
 {
-  const char * functionName = "MiroCamera::updateCameraStatus";
+  const char * functionName = "ADPhantom::updateCameraStatus";
   asynStatus status = asynSuccess;
 
   debug(functionName, "Method called");
@@ -3188,39 +3188,39 @@ asynStatus MiroCamera::updateCameraStatus()
 
   if (status == asynSuccess){
     // Update the sync image value
-    status = this->updateIntegerParameter("cam.syncimg", MIRO_CamExtSync_);
+    status = this->updateIntegerParameter("cam.syncimg", PHANTOM_CamExtSync_);
   }
   if (status == asynSuccess){
     // Update the frame delay
-    status = this->updateIntegerParameter("cam.frdelay", MIRO_CamFrameDelay_);
+    status = this->updateIntegerParameter("cam.frdelay", PHANTOM_CamFrameDelay_);
   }
   if (status == asynSuccess){
     // Update the trigger edge
-    status = this->updateIntegerParameter("cam.trigpol", MIRO_CamTriggerEdge_);
+    status = this->updateIntegerParameter("cam.trigpol", PHANTOM_CamTriggerEdge_);
   }
   if (status == asynSuccess){
     // Update the trigger filter
-    status = this->updateIntegerParameter("cam.trigfilt", MIRO_CamTriggerFilter_);
+    status = this->updateIntegerParameter("cam.trigfilt", PHANTOM_CamTriggerFilter_);
   }
   if (status == asynSuccess){
     // Update the ready signal
-    status = this->updateIntegerParameter("cam.longready", MIRO_CamReadySignal_);
+    status = this->updateIntegerParameter("cam.longready", PHANTOM_CamReadySignal_);
   }
   if (status == asynSuccess){
     // Update the aux pin
-    status = this->updateIntegerParameter("cam.aux1mode", MIRO_CamAuxPin_);
+    status = this->updateIntegerParameter("cam.aux1mode", PHANTOM_CamAuxPin_);
   }
   if (status == asynSuccess){
     // Update the quiet mode
-    status = this->updateIntegerParameter("cam.quiet", MIRO_CamQuietFan_);
+    status = this->updateIntegerParameter("cam.quiet", PHANTOM_CamQuietFan_);
   }
 
   return status;
 }
 
-asynStatus MiroCamera::updateDefcStatus()
+asynStatus ADPhantom::updateDefcStatus()
 {
-  const char * functionName = "MiroCamera::updateDefcStatus";
+  const char * functionName = "ADPhantom::updateDefcStatus";
   std::string param = "";
   asynStatus status = asynSuccess;
 
@@ -3229,17 +3229,17 @@ asynStatus MiroCamera::updateDefcStatus()
 
   if (status == asynSuccess){
     // Update the post trigger frame count
-    status = this->updateIntegerParameter("defc.ptframes", MIRO_PostTrigCount_);
+    status = this->updateIntegerParameter("defc.ptframes", PHANTOM_PostTrigCount_);
   }
 
   if (status == asynSuccess){
     // Update the post trigger frame count
-    status = this->updateIntegerParameter("defc.frcount", MIRO_MaxFrameCount_);
+    status = this->updateIntegerParameter("defc.frcount", PHANTOM_MaxFrameCount_);
   }
 
   if (status == asynSuccess){
     // Update the extended dynamic range
-    status = this->updateIntegerParameter("defc.edrexp", MIRO_EDR_);
+    status = this->updateIntegerParameter("defc.edrexp", PHANTOM_EDR_);
   }
 
   if (status == asynSuccess){
@@ -3283,9 +3283,9 @@ asynStatus MiroCamera::updateDefcStatus()
   return status;
 }
 
-asynStatus MiroCamera::updateMetaStatus()
+asynStatus ADPhantom::updateMetaStatus()
 {
-  const char * functionName = "MiroCamera::updateMetaStatus";
+  const char * functionName = "ADPhantom::updateMetaStatus";
   std::string param = "";
   asynStatus status = asynSuccess;
 
@@ -3296,15 +3296,15 @@ asynStatus MiroCamera::updateMetaStatus()
 
   if (status == asynSuccess){
     // Update the cine name prefix
-    status = this->updateStringParameter("meta.name", MIRO_CineName_);
+    status = this->updateStringParameter("meta.name", PHANTOM_CineName_);
   }
 
   return status;
 }
 
-asynStatus MiroCamera::updateIntegerParameter(const std::string& name, int paramID)
+asynStatus ADPhantom::updateIntegerParameter(const std::string& name, int paramID)
 {
-  const char * functionName = "MiroCamera::updateIntegerParameter";
+  const char * functionName = "ADPhantom::updateIntegerParameter";
   asynStatus status = asynSuccess;
   int value = 0;
 
@@ -3318,9 +3318,9 @@ asynStatus MiroCamera::updateIntegerParameter(const std::string& name, int param
   return status;
 }
 
-asynStatus MiroCamera::updateStringParameter(const std::string& name, int paramID)
+asynStatus ADPhantom::updateStringParameter(const std::string& name, int paramID)
 {
-  const char * functionName = "MiroCamera::updateStringParameter";
+  const char * functionName = "ADPhantom::updateStringParameter";
   asynStatus status = asynSuccess;
 
   debug(functionName, "Name", name);
@@ -3330,14 +3330,14 @@ asynStatus MiroCamera::updateStringParameter(const std::string& name, int paramI
   return status;
 }
 
-asynStatus MiroCamera::getCameraDataStruc(const std::string& strucName, std::map<std::string, miroVal>& params)
+asynStatus ADPhantom::getCameraDataStruc(const std::string& strucName, std::map<std::string, phantomVal>& params)
 {
-  const char * functionName = "MiroCamera::getCameraDataStruc";
+  const char * functionName = "ADPhantom::getCameraDataStruc";
   asynStatus status = asynSuccess;
   std::string data;
-  std::string cmd = MIRO_CMD_GET_VALUE;
+  std::string cmd = PHANTOM_CMD_GET_VALUE;
   std::vector<std::string> names;
-  std::vector<miroVal> values;
+  std::vector<phantomVal> values;
   unsigned int j;
   
   debug(functionName, "Method called");
@@ -3355,12 +3355,12 @@ asynStatus MiroCamera::getCameraDataStruc(const std::string& strucName, std::map
   return status;  
 }
 
-asynStatus MiroCamera::getCameraParameter(const std::string& name, int &value)
+asynStatus ADPhantom::getCameraParameter(const std::string& name, int &value)
 {
-  const char * functionName = "MiroCamera::getCameraParameter";
+  const char * functionName = "ADPhantom::getCameraParameter";
   asynStatus status = asynSuccess;
   std::string data;
-  std::string cmd = MIRO_CMD_GET_VALUE;
+  std::string cmd = PHANTOM_CMD_GET_VALUE;
   
   debug(functionName, "Parameter", name);
   status = sendSimpleCommand(cmd + " ParameterName:\"" + name + "\"", &data);
@@ -3376,12 +3376,12 @@ asynStatus MiroCamera::getCameraParameter(const std::string& name, int &value)
   return status;
 }
 
-asynStatus MiroCamera::getCameraParameter(const std::string& name, double &value)
+asynStatus ADPhantom::getCameraParameter(const std::string& name, double &value)
 {
-  const char * functionName = "MiroCamera::getCameraParameter";
+  const char * functionName = "ADPhantom::getCameraParameter";
   asynStatus status = asynSuccess;
   std::string data;
-  std::string cmd = MIRO_CMD_GET_VALUE;
+  std::string cmd = PHANTOM_CMD_GET_VALUE;
 
   debug(functionName, "Parameter", name);
   status = sendSimpleCommand(cmd + " ParameterName:\"" + name + "\"", &data);
@@ -3391,12 +3391,12 @@ asynStatus MiroCamera::getCameraParameter(const std::string& name, double &value
   return status;
 }
 
-asynStatus MiroCamera::getCameraParameter(const std::string& name, std::string &value)
+asynStatus ADPhantom::getCameraParameter(const std::string& name, std::string &value)
 {
-  const char * functionName = "MiroCamera::getCameraParameter";
+  const char * functionName = "ADPhantom::getCameraParameter";
   asynStatus status = asynSuccess;
   std::string data;
-  std::string cmd = MIRO_CMD_GET_VALUE;
+  std::string cmd = PHANTOM_CMD_GET_VALUE;
 
   debug(functionName, "Parameter", name);
   status = sendSimpleCommand(cmd + " ParameterName:\"" + name + "\"", &data);
@@ -3407,12 +3407,12 @@ asynStatus MiroCamera::getCameraParameter(const std::string& name, std::string &
   return status;
 }
 
-asynStatus MiroCamera::getCameraParameter(const std::string& name, bool &value)
+asynStatus ADPhantom::getCameraParameter(const std::string& name, bool &value)
 {
-  const char * functionName = "MiroCamera::getCameraParameter (bool)";
+  const char * functionName = "ADPhantom::getCameraParameter (bool)";
   asynStatus status = asynSuccess;
   std::string data;
-  std::string cmd = MIRO_CMD_GET_VALUE;
+  std::string cmd = PHANTOM_CMD_GET_VALUE;
 
   debug(functionName, "Parameter", name);
   status = sendSimpleCommand(cmd + " ParameterName:\"" + name + "\"", &data);
@@ -3429,12 +3429,12 @@ asynStatus MiroCamera::getCameraParameter(const std::string& name, bool &value)
   return status;
 }
 
-asynStatus MiroCamera::setCameraParameter(const std::string& name, int value)
+asynStatus ADPhantom::setCameraParameter(const std::string& name, int value)
 {
-  const char * functionName = "MiroCamera::setCameraParameter";
+  const char * functionName = "ADPhantom::setCameraParameter";
   asynStatus status = asynSuccess;
   std::string data;
-  std::string cmd = MIRO_CMD_SET_VALUE;
+  std::string cmd = PHANTOM_CMD_SET_VALUE;
   std::stringstream svalue;
   
   debug(functionName, "Parameter", name);
@@ -3444,12 +3444,12 @@ asynStatus MiroCamera::setCameraParameter(const std::string& name, int value)
   return status;
 }
 
-asynStatus MiroCamera::setCameraParameter(const std::string& name, double value)
+asynStatus ADPhantom::setCameraParameter(const std::string& name, double value)
 {
-  const char * functionName = "MiroCamera::setCameraParameter";
+  const char * functionName = "ADPhantom::setCameraParameter";
   asynStatus status = asynSuccess;
   std::string data;
-  std::string cmd = MIRO_CMD_SET_VALUE;
+  std::string cmd = PHANTOM_CMD_SET_VALUE;
   std::stringstream svalue;
   
   debug(functionName, "Parameter", name);
@@ -3459,12 +3459,12 @@ asynStatus MiroCamera::setCameraParameter(const std::string& name, double value)
   return status;
 }
 
-asynStatus MiroCamera::setCameraParameter(const std::string& name, std::string value)
+asynStatus ADPhantom::setCameraParameter(const std::string& name, std::string value)
 {
-  const char * functionName = "MiroCamera::setCameraParameter";
+  const char * functionName = "ADPhantom::setCameraParameter";
   asynStatus status = asynSuccess;
   std::string data;
-  std::string cmd = MIRO_CMD_SET_VALUE;
+  std::string cmd = PHANTOM_CMD_SET_VALUE;
   
   debug(functionName, "Parameter", name);
   debug(functionName, "Value", value);
@@ -3472,47 +3472,47 @@ asynStatus MiroCamera::setCameraParameter(const std::string& name, std::string v
   return status;
 }
 
-asynStatus MiroCamera::cineStates(const std::string& states, int &mask)
+asynStatus ADPhantom::cineStates(const std::string& states, int &mask)
 {
-  const char * functionName = "MiroCamera::cineStates";
+  const char * functionName = "ADPhantom::cineStates";
   asynStatus status = asynSuccess;
   mask = 0;
 
   if (checkState(states, "INV")){
-    mask += MIRO_CINE_STATE_INV;
+    mask += PHANTOM_CINE_STATE_INV;
   }
   if (checkState(states, "STR")){
-    mask += MIRO_CINE_STATE_STR;
+    mask += PHANTOM_CINE_STATE_STR;
   }
   if (checkState(states, "WTR")){
-    mask += MIRO_CINE_STATE_WTR;
+    mask += PHANTOM_CINE_STATE_WTR;
   }
   if (checkState(states, "TRG")){
-    mask += MIRO_CINE_STATE_TRG;
+    mask += PHANTOM_CINE_STATE_TRG;
   }
   if (checkState(states, "RDY")){
-    mask += MIRO_CINE_STATE_RDY;
+    mask += PHANTOM_CINE_STATE_RDY;
   }
   if (checkState(states, "DEF")){
-    mask += MIRO_CINE_STATE_DEF;
+    mask += PHANTOM_CINE_STATE_DEF;
   }
   if (checkState(states, "ABL")){
-    mask += MIRO_CINE_STATE_ABL;
+    mask += PHANTOM_CINE_STATE_ABL;
   }
   if (checkState(states, "PRE")){
-    mask += MIRO_CINE_STATE_PRE;
+    mask += PHANTOM_CINE_STATE_PRE;
   }
   if (checkState(states, "ACT")){
-    mask += MIRO_CINE_STATE_ACT;
+    mask += PHANTOM_CINE_STATE_ACT;
   }
   if (checkState(states, "REU")){
-    mask += MIRO_CINE_STATE_REU;
+    mask += PHANTOM_CINE_STATE_REU;
   }
   debug(functionName, "State value", mask);
   return status;
 }
 
-bool MiroCamera::checkState(const std::string &state, const std::string &item)
+bool ADPhantom::checkState(const std::string &state, const std::string &item)
 {
   bool found = false;
   // Clean up from the front of the string
@@ -3522,9 +3522,9 @@ bool MiroCamera::checkState(const std::string &state, const std::string &item)
   return found;
 }
 
-asynStatus MiroCamera::stringToInteger(const std::string& name, int &value)
+asynStatus ADPhantom::stringToInteger(const std::string& name, int &value)
 {
-  const char * functionName = "MiroCamera::stringToInteger";
+  const char * functionName = "ADPhantom::stringToInteger";
   asynStatus status = asynSuccess;
 
   std::stringstream integerValueStream(name);
@@ -3536,9 +3536,9 @@ asynStatus MiroCamera::stringToInteger(const std::string& name, int &value)
   return status;
 }
 
-asynStatus MiroCamera::stringToDouble(const std::string& name, double &value)
+asynStatus ADPhantom::stringToDouble(const std::string& name, double &value)
 {
-  const char * functionName = "MiroCamera::stringToDouble";
+  const char * functionName = "ADPhantom::stringToDouble";
   asynStatus status = asynSuccess;
 
   std::stringstream doubleValueStream(name);
@@ -3550,9 +3550,9 @@ asynStatus MiroCamera::stringToDouble(const std::string& name, double &value)
   return status;
 }
 
-asynStatus MiroCamera::readIntegerData(std::map<std::string, std::string> data, const std::string& name, int &value)
+asynStatus ADPhantom::readIntegerData(std::map<std::string, std::string> data, const std::string& name, int &value)
 {
-  const char * functionName = "MiroCamera::readIntegerData";
+  const char * functionName = "ADPhantom::readIntegerData";
   asynStatus status = asynSuccess;
 
   std::stringstream integerValueStream(data[name]);
@@ -3564,9 +3564,9 @@ asynStatus MiroCamera::readIntegerData(std::map<std::string, std::string> data, 
   return status;
 }
 
-asynStatus MiroCamera::readDoubleData(std::map<std::string, std::string> data, const std::string& name, double &value)
+asynStatus ADPhantom::readDoubleData(std::map<std::string, std::string> data, const std::string& name, double &value)
 {
-  const char * functionName = "MiroCamera::readDoubleData";
+  const char * functionName = "ADPhantom::readDoubleData";
   asynStatus status = asynSuccess;
 
   std::stringstream doubleValueStream(data[name]);
@@ -3579,52 +3579,52 @@ asynStatus MiroCamera::readDoubleData(std::map<std::string, std::string> data, c
 }
 
 
-asynStatus MiroCamera::initDebugger(int initDebug)
+asynStatus ADPhantom::initDebugger(int initDebug)
 {
   // Set all debugging levels to initialised value
   debugLevel("all", initDebug);
   return asynSuccess;
 }
 
-asynStatus MiroCamera::debugLevel(const std::string& method, int onOff)
+asynStatus ADPhantom::debugLevel(const std::string& method, int onOff)
 {
   if (method == "all"){
-    debugMap_["MiroCamera::MiroCamera"]               = onOff;
-    debugMap_["MiroCamera::miroCameraTask"]           = onOff;
-    debugMap_["MiroCamera::miroPreviewTask"]          = onOff;
-    debugMap_["MiroCamera::readoutPreviewData"]       = onOff;
-    debugMap_["MiroCamera::readFrame"]                = onOff;
-    debugMap_["MiroCamera::downloadFlashFile"]        = onOff;
-    debugMap_["MiroCamera::connect"]                  = onOff;    
-    debugMap_["MiroCamera::readEnum"]                 = onOff;
-    debugMap_["MiroCamera::writeInt32"]               = onOff;
-    debugMap_["MiroCamera::writeFloat64"]             = onOff;
-    debugMap_["MiroCamera::validateSpectrum"]         = onOff;
-    debugMap_["MiroCamera::defineSpectrumFAT"]        = onOff;
-    debugMap_["MiroCamera::defineSpectrumSFAT"]       = onOff;
-    debugMap_["MiroCamera::defineSpectrumFRR"]        = onOff;
-    debugMap_["MiroCamera::defineSpectrumFE"]         = onOff;
-    debugMap_["MiroCamera::readAcquisitionData"]      = onOff;
-    debugMap_["MiroCamera::sendSimpleCommand"]        = onOff;
-    debugMap_["MiroCamera::getCameraDataStruc"]       = onOff;
-    debugMap_["MiroCamera::setupEPICSParameters"]     = onOff;
-    debugMap_["MiroCamera::readoutDataStream"]        = onOff;
-    debugMap_["MiroCamera::getCameraParameterType"]   = onOff;
-    debugMap_["MiroCamera::getCameraParameter"]       = onOff;
-    debugMap_["MiroCamera::readIntegerData"]          = onOff;
-    debugMap_["MiroCamera::readDoubleData"]           = onOff;
-    debugMap_["MiroCamera::readRunModes"]             = onOff;
-    debugMap_["MiroCamera::asynPortConnect"]          = onOff;
-    debugMap_["MiroCamera::commandResponse"]          = onOff;
-    debugMap_["MiroCamera::asynWriteRead"]            = onOff;
-    debugMap_["MiroCamera::cineStates"]               = onOff;
+    debugMap_["ADPhantom::ADPhantom"]               = onOff;
+    debugMap_["ADPhantom::phantomCameraTask"]           = onOff;
+    debugMap_["ADPhantom::phantomPreviewTask"]          = onOff;
+    debugMap_["ADPhantom::readoutPreviewData"]       = onOff;
+    debugMap_["ADPhantom::readFrame"]                = onOff;
+    debugMap_["ADPhantom::downloadFlashFile"]        = onOff;
+    debugMap_["ADPhantom::connect"]                  = onOff;    
+    debugMap_["ADPhantom::readEnum"]                 = onOff;
+    debugMap_["ADPhantom::writeInt32"]               = onOff;
+    debugMap_["ADPhantom::writeFloat64"]             = onOff;
+    debugMap_["ADPhantom::validateSpectrum"]         = onOff;
+    debugMap_["ADPhantom::defineSpectrumFAT"]        = onOff;
+    debugMap_["ADPhantom::defineSpectrumSFAT"]       = onOff;
+    debugMap_["ADPhantom::defineSpectrumFRR"]        = onOff;
+    debugMap_["ADPhantom::defineSpectrumFE"]         = onOff;
+    debugMap_["ADPhantom::readAcquisitionData"]      = onOff;
+    debugMap_["ADPhantom::sendSimpleCommand"]        = onOff;
+    debugMap_["ADPhantom::getCameraDataStruc"]       = onOff;
+    debugMap_["ADPhantom::setupEPICSParameters"]     = onOff;
+    debugMap_["ADPhantom::readoutDataStream"]        = onOff;
+    debugMap_["ADPhantom::getCameraParameterType"]   = onOff;
+    debugMap_["ADPhantom::getCameraParameter"]       = onOff;
+    debugMap_["ADPhantom::readIntegerData"]          = onOff;
+    debugMap_["ADPhantom::readDoubleData"]           = onOff;
+    debugMap_["ADPhantom::readRunModes"]             = onOff;
+    debugMap_["ADPhantom::asynPortConnect"]          = onOff;
+    debugMap_["ADPhantom::commandResponse"]          = onOff;
+    debugMap_["ADPhantom::asynWriteRead"]            = onOff;
+    debugMap_["ADPhantom::cineStates"]               = onOff;
   } else {
     debugMap_[method] = onOff;
   }
   return asynSuccess;
 }
 
-asynStatus MiroCamera::debug(const std::string& method, const std::string& msg)
+asynStatus ADPhantom::debug(const std::string& method, const std::string& msg)
 {
   // First check for the debug entry in the debug map
   if (debugMap_.count(method) == 1){
@@ -3637,7 +3637,7 @@ asynStatus MiroCamera::debug(const std::string& method, const std::string& msg)
   return asynSuccess;
 }
 
-asynStatus MiroCamera::debug(const std::string& method, const std::string& msg, int value)
+asynStatus ADPhantom::debug(const std::string& method, const std::string& msg, int value)
 {
   // First check for the debug entry in the debug map
   if (debugMap_.count(method) == 1){
@@ -3650,7 +3650,7 @@ asynStatus MiroCamera::debug(const std::string& method, const std::string& msg, 
   return asynSuccess;
 }
 
-asynStatus MiroCamera::debug(const std::string& method, const std::string& msg, double value)
+asynStatus ADPhantom::debug(const std::string& method, const std::string& msg, double value)
 {
   // First check for the debug entry in the debug map
   if (debugMap_.count(method) == 1){
@@ -3663,7 +3663,7 @@ asynStatus MiroCamera::debug(const std::string& method, const std::string& msg, 
   return asynSuccess;
 }
 
-asynStatus MiroCamera::debug(const std::string& method, const std::string& msg, const std::string& value)
+asynStatus ADPhantom::debug(const std::string& method, const std::string& msg, const std::string& value)
 {
   // First check for the debug entry in the debug map
   if (debugMap_.count(method) == 1){
@@ -3680,7 +3680,7 @@ asynStatus MiroCamera::debug(const std::string& method, const std::string& msg, 
   return asynSuccess;
 }
 
-asynStatus MiroCamera::debug(const std::string& method, const std::string& msg, std::map<std::string, std::string> value)
+asynStatus ADPhantom::debug(const std::string& method, const std::string& msg, std::map<std::string, std::string> value)
 {
   std::map<std::string, std::string>::iterator iter;
 
@@ -3700,51 +3700,51 @@ asynStatus MiroCamera::debug(const std::string& method, const std::string& msg, 
   return asynSuccess;
 }
 
-// Code required for iocsh registration of the MIRO camera
-static const iocshArg miroCameraConfigArg0 = {"portName", iocshArgString};
-static const iocshArg miroCameraConfigArg1 = {"Control Port Name", iocshArgString};
-static const iocshArg miroCameraConfigArg2 = {"Data Port Name", iocshArgString};
-static const iocshArg miroCameraConfigArg3 = {"Max number of NDArray buffers", iocshArgInt};
-static const iocshArg miroCameraConfigArg4 = {"maxMemory", iocshArgInt};
-static const iocshArg miroCameraConfigArg5 = {"priority", iocshArgInt};
-static const iocshArg miroCameraConfigArg6 = {"stackSize", iocshArgInt};
+// Code required for iocsh registration of the PHANTOM camera
+static const iocshArg ADPhantomConfigArg0 = {"portName", iocshArgString};
+static const iocshArg ADPhantomConfigArg1 = {"Control Port Name", iocshArgString};
+static const iocshArg ADPhantomConfigArg2 = {"Data Port Name", iocshArgString};
+static const iocshArg ADPhantomConfigArg3 = {"Max number of NDArray buffers", iocshArgInt};
+static const iocshArg ADPhantomConfigArg4 = {"maxMemory", iocshArgInt};
+static const iocshArg ADPhantomConfigArg5 = {"priority", iocshArgInt};
+static const iocshArg ADPhantomConfigArg6 = {"stackSize", iocshArgInt};
 
-static const iocshArg * const miroCameraConfigArgs[] =  {&miroCameraConfigArg0,
-                                                            &miroCameraConfigArg1,
-                                                            &miroCameraConfigArg2,
-                                                            &miroCameraConfigArg3,
-                                                            &miroCameraConfigArg4,
-                                                            &miroCameraConfigArg5,
-                                                            &miroCameraConfigArg6};
+static const iocshArg * const ADPhantomConfigArgs[] =  {&ADPhantomConfigArg0,
+                                                            &ADPhantomConfigArg1,
+                                                            &ADPhantomConfigArg2,
+                                                            &ADPhantomConfigArg3,
+                                                            &ADPhantomConfigArg4,
+                                                            &ADPhantomConfigArg5,
+                                                            &ADPhantomConfigArg6};
 
-static const iocshFuncDef configMiroCamera = {"miroCameraConfig", 7, miroCameraConfigArgs};
+static const iocshFuncDef configADPhantom = {"ADPhantomConfig", 7, ADPhantomConfigArgs};
 
-static void configMiroCameraCallFunc(const iocshArgBuf *args)
+static void configADPhantomCallFunc(const iocshArgBuf *args)
 {
-    miroCameraConfig(args[0].sval, args[1].sval, args[2].sval, args[3].ival, args[4].ival, args[5].ival, args[6].ival);
+    ADPhantomConfig(args[0].sval, args[1].sval, args[2].sval, args[3].ival, args[4].ival, args[5].ival, args[6].ival);
 }
 
-// Code required for setting the debug level of the MIRO camera
-static const iocshArg miroCameraDebugArg0 = {"port name", iocshArgString};
-static const iocshArg miroCameraDebugArg1 = {"method name", iocshArgString};
-static const iocshArg miroCameraDebugArg2 = {"debug on or off", iocshArgInt};
+// Code required for setting the debug level of the PHANTOM camera
+static const iocshArg ADPhantomDebugArg0 = {"port name", iocshArgString};
+static const iocshArg ADPhantomDebugArg1 = {"method name", iocshArgString};
+static const iocshArg ADPhantomDebugArg2 = {"debug on or off", iocshArgInt};
 
-static const iocshArg * const miroCameraDebugArgs[] =  {&miroCameraDebugArg0,
-                                                           &miroCameraDebugArg1,
-                                                           &miroCameraDebugArg2};
+static const iocshArg * const ADPhantomDebugArgs[] =  {&ADPhantomDebugArg0,
+                                                           &ADPhantomDebugArg1,
+                                                           &ADPhantomDebugArg2};
 
-static const iocshFuncDef debugMiroCamera = {"miroCameraDebug", 3, miroCameraDebugArgs};
+static const iocshFuncDef debugADPhantom = {"ADPhantomDebug", 3, ADPhantomDebugArgs};
 
-static void debugMiroCameraCallFunc(const iocshArgBuf *args)
+static void debugADPhantomCallFunc(const iocshArgBuf *args)
 {
-    miroSetDebugLevel(args[0].sval, args[1].sval, args[2].ival);
+    phantomSetDebugLevel(args[0].sval, args[1].sval, args[2].ival);
 }
 
-static void miroCameraRegister(void)
+static void ADPhantomRegister(void)
 {
-    iocshRegister(&configMiroCamera, configMiroCameraCallFunc);
-    iocshRegister(&debugMiroCamera, debugMiroCameraCallFunc);
+    iocshRegister(&configADPhantom, configADPhantomCallFunc);
+    iocshRegister(&debugADPhantom, debugADPhantomCallFunc);
 }
 
-epicsExportRegistrar(miroCameraRegister);
+epicsExportRegistrar(ADPhantomRegister);
 

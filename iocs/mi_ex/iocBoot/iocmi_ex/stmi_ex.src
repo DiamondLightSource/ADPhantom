@@ -22,8 +22,8 @@ mi_ex_registerRecordDeviceDriver(pdbbase)
 drvAsynIPPortConfigure("ctrlPort", "172.23.240.96:7115", 0, 0, 0)
 drvAsynIPPortConfigure("dataPort", "172.23.240.96:7116", 0, 0, 0)
 
-# miroCameraConfig(portName, driverName, maxBuffers, maxMemory, priority, stackSize )
-miroCameraConfig("CAM.CAM", "ctrlPort", "dataPort", 0, 0, 0, 0)
+# ADPhantomConfig(portName, driverName, maxBuffers, maxMemory, priority, stackSize )
+ADPhantomConfig("CAM.CAM", "ctrlPort", "dataPort", 0, 0, 0, 0)
 
 # NDROIConfigure(portName, queueSize, blockingCallbacks, NDArrayPort, NDArrayAddr, maxBuffers, maxMemory)
 NDROIConfigure("CAM.roi", 16, 0, "CAM.CAM", 0, 0, 0)

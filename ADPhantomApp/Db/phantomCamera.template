@@ -6,7 +6,7 @@
 #% macro, TIMEOUT, TIMEOUT
 
 # This associates the template with an edm screen
-# % gui, $(PORT), edmtab, miroTop.edl, P=$(P),R=$(R)
+# % gui, $(PORT), edmtab, phantomTop.edl, P=$(P),R=$(R)
 
 include "ADBase.template"
 
@@ -27,14 +27,14 @@ record(longout, "$(P)$(R)PartitionCines")
 {
   field(DESC, "Partition the memory")
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_SET_PARTITION")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_SET_PARTITION")
 }
 
 record(longin, "$(P)$(R)CineCount_RBV")
 {
   field(DESC, "Number of available cines")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_GET_CINE_COUNT")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_GET_CINE_COUNT")
   field(SCAN, "I/O Intr")
 }
 
@@ -46,7 +46,7 @@ record(longin, "$(P)$(R)MaxFrameCount_RBV")
 {
   field(DESC, "Maximum number of frames per cine")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_MAX_FRAME_COUNT")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_MAX_FRAME_COUNT")
   field(SCAN, "I/O Intr")
 }
 
@@ -58,14 +58,14 @@ record(longout, "$(P)$(R)PostTrigFrames")
 {
   field(DESC, "Set the post trigger frame count")
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_POST_TRIG_COUNT")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_POST_TRIG_COUNT")
 }
 
 record(longin, "$(P)$(R)PostTrigFrames_RBV")
 {
   field(DESC, "Number of post trigger frames")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_POST_TRIG_COUNT")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_POST_TRIG_COUNT")
   field(SCAN, "I/O Intr")
 }
 
@@ -78,7 +78,7 @@ record(longin, "$(P)$(R)TotalFrameCount_RBV")
 {
   field(DESC, "Total number of frames recorded")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_TOTAL_FRAME_COUNT")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_TOTAL_FRAME_COUNT")
   field(SCAN, "I/O Intr")
 }
 
@@ -90,7 +90,7 @@ record(longin, "$(P)$(R)TotalFrameCount_RBV")
 record(bo, "$(P)$(R)AutoSave")
 {
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTO_SAVE")
+   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUTO_SAVE")
    field(ZNAM, "Off")
    field(ONAM, "On")
 }
@@ -98,7 +98,7 @@ record(bo, "$(P)$(R)AutoSave")
 record(bi, "$(P)$(R)AutoSave_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTO_SAVE")
+   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUTO_SAVE")
    field(ZNAM, "Off")
    field(ONAM, "On")
    field(SCAN, "I/O Intr")
@@ -107,7 +107,7 @@ record(bi, "$(P)$(R)AutoSave_RBV")
 record(bo, "$(P)$(R)AutoRestart")
 {
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTO_RESTART")
+   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUTO_RESTART")
    field(ZNAM, "Off")
    field(ONAM, "On")
 }
@@ -115,7 +115,7 @@ record(bo, "$(P)$(R)AutoRestart")
 record(bi, "$(P)$(R)AutoRestart_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTO_RESTART")
+   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUTO_RESTART")
    field(ZNAM, "Off")
    field(ONAM, "On")
    field(SCAN, "I/O Intr")
@@ -124,7 +124,7 @@ record(bi, "$(P)$(R)AutoRestart_RBV")
 record(bo, "$(P)$(R)AutoBref")
 {
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTO_CSR")
+   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUTO_CSR")
    field(ZNAM, "Off")
    field(ONAM, "On")
 }
@@ -132,7 +132,7 @@ record(bo, "$(P)$(R)AutoBref")
 record(bi, "$(P)$(R)AutoBref_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTO_CSR")
+   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUTO_CSR")
    field(ZNAM, "Off")
    field(ONAM, "On")
    field(SCAN, "I/O Intr")
@@ -148,7 +148,7 @@ record(waveform, "$(P)$(R)CineName")
 {
   field(DESC, "Set Cine name")
   field(DTYP, "asynOctetWrite")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CINE_NAME")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CINE_NAME")
   field(FTVL, "CHAR")
   field(NELM, "256")
 }
@@ -158,7 +158,7 @@ record(waveform, "$(P)$(R)CineName_RBV")
 {
   field(DESC, "Get Cine name prefix")
   field(DTYP, "asynOctetRead")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CINE_NAME")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CINE_NAME")
   field(FTVL, "CHAR")
   field(NELM, "256")
   field(SCAN, "I/O Intr")
@@ -171,7 +171,7 @@ record(mbbo, "$(P)$(R)SelectedCine")
 {
   field(DESC, "Select a Cine file")
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CINE_SELECTED")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CINE_SELECTED")
   field(ZRST, "1")
   field(ZRVL, "1")
   field(ONST, "2")
@@ -210,7 +210,7 @@ record(mbbi, "$(P)$(R)SelectedCine_RBV")
 {
   field(DESC, "Selected Cine file ID")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CINE_SELECTED")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CINE_SELECTED")
   field(ZRST, "1")
   field(ZRVL, "1")
   field(ONST, "2")
@@ -252,7 +252,7 @@ record(longin, "$(P)$(R)CineFrameCount_RBV")
 {
   field(DESC, "Selected Cine frame count")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CINE_FR_COUNT")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CINE_FR_COUNT")
   field(SCAN, "I/O Intr")
 }
 
@@ -262,7 +262,7 @@ record(longin, "$(P)$(R)CineFirstFrame_RBV")
 {
   field(DESC, "Selected Cine first frame")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CINE_FIRST_FR")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CINE_FIRST_FR")
   field(SCAN, "I/O Intr")
 }
 
@@ -272,7 +272,7 @@ record(longin, "$(P)$(R)CineLastFrame_RBV")
 {
   field(DESC, "Selected Cine last frame")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CINE_LAST_FR")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CINE_LAST_FR")
   field(SCAN, "I/O Intr")
 }
 
@@ -282,14 +282,14 @@ record(longout, "$(P)$(R)RecordStart")
 {
   field(DESC, "Record starting frame")
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CINE_REC_START")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CINE_REC_START")
 }
 
 record(longin, "$(P)$(R)RecordStart_RBV")
 {
   field(DESC, "Record starting frame")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CINE_REC_START")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CINE_REC_START")
   field(SCAN, "I/O Intr")
 }
 
@@ -299,14 +299,14 @@ record(longout, "$(P)$(R)RecordEnd")
 {
   field(DESC, "Record ending frame")
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CINE_REC_END")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CINE_REC_END")
 }
 
 record(longin, "$(P)$(R)RecordEnd_RBV")
 {
   field(DESC, "Record ending frame")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CINE_REC_END")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CINE_REC_END")
   field(SCAN, "I/O Intr")
 }
 
@@ -316,7 +316,7 @@ record(longout, "$(P)$(R)Record")
 {
   field(DESC, "Start the recording")
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CINE_RECORD")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CINE_RECORD")
 }
 
 ### Cine save to flash command
@@ -325,19 +325,19 @@ record(longout, "$(P)$(R)SaveToCF")
 {
   field(DESC, "Save selected cine to CF")
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CINE_SAVE_CF")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CINE_SAVE_CF")
 }
 
 record(longin, "$(P)$(R)RecordCount_RBV") {
   field(DTYP, "asynInt32")
   field(SCAN, "I/O Intr")
-  field(INP, "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CINE_REC_COUNT")
+  field(INP, "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CINE_REC_COUNT")
 }
 
 record(longin, "$(P)$(R)StateRaw") {
   field(DTYP, "asynInt32")
   field(SCAN, "I/O Intr")
-  field(INP, "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_ACQUIRE_STATE")
+  field(INP, "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_ACQUIRE_STATE")
   field(FLNK, "$(P)$(R)State_RBV")
 }
 
@@ -353,7 +353,7 @@ record(longout, "$(P)$(R)SendSoftwareTrigger")
 {
   field(DESC, "Send a software trigger")
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_SOFTWARE_TRIGGER")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_SOFTWARE_TRIGGER")
 }
 
 ################################################################
@@ -364,14 +364,14 @@ record(longout, "$(P)$(R)PerformCSR")
 {
   field(DESC, "Perform a CSR")
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_PERFORM_CSR")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_PERFORM_CSR")
 }
 
 record(longin, "$(P)$(R)CSRCount_RBV")
 {
   field(DESC, "Bref counter")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CSR_COUNT")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CSR_COUNT")
   field(SCAN, "I/O Intr")
 }
 
@@ -383,21 +383,21 @@ record(longout, "$(P)$(R)SettingsSave")
 {
   field(DESC, "Save User Settings")
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_SETTINGS_SAVE")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_SETTINGS_SAVE")
 }
 
 record(longout, "$(P)$(R)SettingsLoad")
 {
   field(DESC, "Load User Settings")
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_SETTINGS_LOAD")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_SETTINGS_LOAD")
 }
 
 record(mbbo, "$(P)$(R)SettingsSlot")
 {
   field(DESC, "Settings slot")
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_SETTINGS_SLOT")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_SETTINGS_SLOT")
   field(ZRST, "1")
   field(ZRVL, "1")
   field(ONST, "2")
@@ -414,7 +414,7 @@ record(mbbi, "$(P)$(R)SettingsSlot_RBV")
 {
   field(DESC, "Settings slot")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_SETTINGS_SLOT")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_SETTINGS_SLOT")
   field(ZRST, "1")
   field(ZRVL, "1")
   field(ONST, "2")
@@ -438,14 +438,14 @@ record(longout, "$(P)$(R)Preview")
 {
   field(DESC, "Run the live preview")
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_LIVE_PREVIEW")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_LIVE_PREVIEW")
 }
 
 record(longin, "$(P)$(R)Preview_RBV")
 {
   field(DESC, "Status of live preview")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_LIVE_PREVIEW")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_LIVE_PREVIEW")
   field(SCAN, "I/O Intr")
 }
 
@@ -459,7 +459,7 @@ record(longin, "$(P)$(R)SensorTemp_RBV")
 {
   field(DESC, "Sensor Temperature")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_SENSOR_TEMP")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_SENSOR_TEMP")
   field(SCAN, "I/O Intr")
 }
 
@@ -467,7 +467,7 @@ record(longin, "$(P)$(R)ThermoPower_RBV")
 {
   field(DESC, "Thermo power %")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_THERMO_POWER")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_THERMO_POWER")
   field(SCAN, "I/O Intr")
 }
 
@@ -475,7 +475,7 @@ record(longin, "$(P)$(R)CameraTemp_RBV")
 {
   field(DESC, "Camera Temperature")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CAMERA_TEMP")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CAMERA_TEMP")
   field(SCAN, "I/O Intr")
 }
 
@@ -483,14 +483,14 @@ record(longin, "$(P)$(R)FanPower_RBV")
 {
   field(DESC, "Fan Power %")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_FAN_POWER")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_FAN_POWER")
   field(SCAN, "I/O Intr")
 }
 
 record(mbbo, "$(P)$(R)ExtSyncType")
 {
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_EXT_SYNC")
+   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_EXT_SYNC")
    field(ZRST, "FREE-RUN")
    field(ZRVL, "0")
    field(ONST, "FSYNC")
@@ -504,7 +504,7 @@ record(mbbo, "$(P)$(R)ExtSyncType")
 record(mbbi, "$(P)$(R)ExtSyncType_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_EXT_SYNC")
+   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_EXT_SYNC")
    field(ZRST, "FREE-RUN")
    field(ZRVL, "0")
    field(ONST, "FSYNC")
@@ -520,14 +520,14 @@ record(longout, "$(P)$(R)EDR")
 {
   field(DESC, "Extended Dynamic Range in ns")
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_EDR")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_EDR")
 }
 
 record(longin, "$(P)$(R)EDR_RBV")
 {
   field(DESC, "Extended Dynamic Range in ns")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_EDR")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_EDR")
   field(SCAN, "I/O Intr")
 }
 
@@ -535,21 +535,21 @@ record(longout, "$(P)$(R)FrameDelay")
 {
   field(DESC, "Frame Delay in us")
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_FRAME_DELAY")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_FRAME_DELAY")
 }
 
 record(longin, "$(P)$(R)FrameDelay_RBV")
 {
   field(DESC, "Frame Delay in us")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_FRAME_DELAY")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_FRAME_DELAY")
   field(SCAN, "I/O Intr")
 }
 
 record(mbbo, "$(P)$(R)TriggerEdge")
 {
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_TRIGGER_EDGE")
+   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_TRIGGER_EDGE")
    field(ZRST, "FALLING")
    field(ZRVL, "0")
    field(ONST, "RISING")
@@ -559,7 +559,7 @@ record(mbbo, "$(P)$(R)TriggerEdge")
 record(mbbi, "$(P)$(R)TriggerEdge_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_TRIGGER_EDGE")
+   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_TRIGGER_EDGE")
    field(ZRST, "FALLING")
    field(ZRVL, "0")
    field(ONST, "RISING")
@@ -571,21 +571,21 @@ record(longout, "$(P)$(R)TriggerFilter")
 {
   field(DESC, "Trigger filter in us")
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_TRIGGER_FILTER")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_TRIGGER_FILTER")
 }
 
 record(longin, "$(P)$(R)TriggerFilter_RBV")
 {
   field(DESC, "Trigger filter in us")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_TRIGGER_FILTER")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_TRIGGER_FILTER")
   field(SCAN, "I/O Intr")
 }
 
 record(mbbo, "$(P)$(R)ReadySignal")
 {
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_READY_SIGNAL")
+   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_READY_SIGNAL")
    field(ZRST, "RECORDING")
    field(ZRVL, "0")
    field(ONST, "TRIGGER")
@@ -595,7 +595,7 @@ record(mbbo, "$(P)$(R)ReadySignal")
 record(mbbi, "$(P)$(R)ReadySignal_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_READY_SIGNAL")
+   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_READY_SIGNAL")
    field(ZRST, "RECORDING")
    field(ZRVL, "0")
    field(ONST, "TRIGGER")
@@ -606,7 +606,7 @@ record(mbbi, "$(P)$(R)ReadySignal_RBV")
 record(mbbo, "$(P)$(R)AuxPinMode")
 {
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUX_PIN")
+   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUX_PIN")
    field(ZRST, "STROBE")
    field(ZRVL, "0")
    field(ONST, "EVENT")
@@ -618,7 +618,7 @@ record(mbbo, "$(P)$(R)AuxPinMode")
 record(mbbi, "$(P)$(R)AuxPinMode_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUX_PIN")
+   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUX_PIN")
    field(ZRST, "STROBE")
    field(ZRVL, "0")
    field(ONST, "EVENT")
@@ -631,7 +631,7 @@ record(mbbi, "$(P)$(R)AuxPinMode_RBV")
 record(bo, "$(P)$(R)QuietFan")
 {
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_FAN_QUIET")
+   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_FAN_QUIET")
    field(ZNAM, "Fan On")
    field(ONAM, "Fan Quiet")
 }
@@ -639,7 +639,7 @@ record(bo, "$(P)$(R)QuietFan")
 record(bi, "$(P)$(R)QuietFan_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_FAN_QUIET")
+   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_FAN_QUIET")
    field(ZNAM, "Fan On")
    field(ONAM, "Fan Quiet")
    field(SCAN, "I/O Intr")
@@ -648,9 +648,9 @@ record(bi, "$(P)$(R)QuietFan_RBV")
 
 record(longout, "$(P)$(R)SyncClock")
 {
-  field(DESC,  "Sync Miro Clock with server")
+  field(DESC,  "Sync Phantom Clock with server")
   field(DTYP,  "asynInt32")
-  field(OUT,   "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_SYNC_CLOCK")
+  field(OUT,   "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_SYNC_CLOCK")
 }
 
 ################################################################
@@ -661,75 +661,75 @@ record(longout, "$(P)$(R)SyncClock")
 record(ao, "$(P)$(R)AutoTriggerX")
 {
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_X")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUTOTRIG_X")
 }
 
 record(ai, "$(P)$(R)AutoTriggerX_RBV")
 {
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_X")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUTOTRIG_X")
   field(SCAN, "I/O Intr")
 }
 
 record(ai, "$(P)$(R)AutoTriggerXZeroed_RBV")
 {
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIGZEROED_X")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUTOTRIGZEROED_X")
   field(SCAN, "I/O Intr")
 }
 
 record(ao, "$(P)$(R)AutoTriggerY")
 {
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_Y")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUTOTRIG_Y")
 }
 
 record(ai, "$(P)$(R)AutoTriggerY_RBV")
 {
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_Y")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUTOTRIG_Y")
   field(SCAN, "I/O Intr")
 }
 
 record(ai, "$(P)$(R)AutoTriggerYZeroed_RBV")
 {
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIGZEROED_Y")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUTOTRIGZEROED_Y")
   field(SCAN, "I/O Intr")
 }
 
 record(ao, "$(P)$(R)AutoTriggerW")
 {
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_W")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUTOTRIG_W")
   field(DRVL, 1)
 }
 
 record(ai, "$(P)$(R)AutoTriggerW_RBV")
 {
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_W")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUTOTRIG_W")
   field(SCAN, "I/O Intr")
 }
 
 record(ao, "$(P)$(R)AutoTriggerH")
 {
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_H")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUTOTRIG_H")
   field(DRVL, 1)
 }
 
 record(ai, "$(P)$(R)AutoTriggerH_RBV")
 {
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_H")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUTOTRIG_H")
   field(SCAN, "I/O Intr")
 }
 
 record(ao, "$(P)$(R)AutoTriggerThresh")
 {
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_THRESH")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUTOTRIG_THRESH")
   field(DRVH, 100)
   field(DRVL, 0)
 }
@@ -737,14 +737,14 @@ record(ao, "$(P)$(R)AutoTriggerThresh")
 record(ai, "$(P)$(R)AutoTriggerThresh_RBV")
 {
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_THRESH")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUTOTRIG_THRESH")
   field(SCAN, "I/O Intr")
 }
 
 record(ao, "$(P)$(R)AutoTriggerArea")
 {
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_AREA")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUTOTRIG_AREA")
   field(DRVH, 100)
   field(DRVL, 0)
 }
@@ -752,28 +752,28 @@ record(ao, "$(P)$(R)AutoTriggerArea")
 record(ai, "$(P)$(R)AutoTriggerArea_RBV")
 {
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_AREA")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUTOTRIG_AREA")
   field(SCAN, "I/O Intr")
 }
 
 record(ao, "$(P)$(R)AutoTriggerInterval")
 {
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_INTERVAL")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUTOTRIG_INTERVAL")
   field(DRVL, 1)
 }
 
 record(ai, "$(P)$(R)AutoTriggerInterval_RBV")
 {
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_INTERVAL")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUTOTRIG_INTERVAL")
   field(SCAN, "I/O Intr")
 }
 
 record(bo, "$(P)$(R)AutoTriggerMode")
 {
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_MODE")
+   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUTOTRIG_MODE")
    field(ZNAM, "Off")
    field(ONAM, "On")
 }
@@ -781,7 +781,7 @@ record(bo, "$(P)$(R)AutoTriggerMode")
 record(bi, "$(P)$(R)AutoTriggerMode_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_AUTOTRIG_MODE")
+   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUTOTRIG_MODE")
    field(ZNAM, "Off")
    field(ONAM, "On")
    field(SCAN, "I/O Intr")
@@ -886,12 +886,12 @@ record(bi, "$(P)$(R)CONNECTED_RBV")
 {
   field(DESC, "Current connected status")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))MIRO_CONNECTED")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CONNECTED")
   field(SCAN, "I/O Intr")
   field(ZNAM, "Not Connected")
   field(ONAM, "Connected")
 }
 
-include "miroFlash.template"
+include "phantomFlash.template"
 
 

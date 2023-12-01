@@ -11,9 +11,9 @@ include $(TOP)/configure/CONFIG
 # In a Diamond Support Module, install
 # templates like this
 #
-DB += miroCamera.template
-DB += miroCine.template
-DB += miroFlash.template
+DB += phantomCamera.template
+DB += phantomCine.template
+DB += phantomFlash.template
 
 #----------------------------------------------------
 # In a Diamond IOC Application, build db files from

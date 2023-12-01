@@ -69,7 +69,7 @@ bgColor index 3
 topShadowColor index 1
 botShadowColor index 11
 displaySource "file"
-file "miroBase"
+file "phantomBase"
 sizeOfs 5
 numDsps 1
 displayFileName {
@@ -472,7 +472,7 @@ buttonLabel "Details"
 numPvs 4
 numDsps 1
 displayFileName {
-  0 "miroDetails"
+  0 "phantomDetails"
 }
 endObjectProperties
 
@@ -495,7 +495,7 @@ buttonLabel "Flash"
 numPvs 4
 numDsps 1
 displayFileName {
-  0 "miroFlashDetails"
+  0 "phantomFlashDetails"
 }
 endObjectProperties
 

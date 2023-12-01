@@ -132,7 +132,7 @@ fgColor index 14
 bgColor index 3
 useDisplayBg
 value {
-  "Are you sure you want to format the flash drive on the MIRO camera?"
+  "Are you sure you want to format the flash drive on the PHANTOM camera?"
   "All data will be lost.  Formatting can take several minutes and the "
   "camera will not be responsive to commands during this time."
   "Select \"Format\" to confirm formatting or \"Cancel\" to abort."

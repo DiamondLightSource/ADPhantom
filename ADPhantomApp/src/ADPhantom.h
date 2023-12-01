@@ -35,181 +35,181 @@
 #include <ph16UnitStructure.h>
 
 // Protocol buffer size is 64K
-#define MIRO_MAX_STRING 8192
+#define PHANTOM_MAX_STRING 8192
 // Asyn timeout
-#define MIRO_TIMEOUT 1.000
-#define MIRO_EXTENDED_TIMEOUT 200.0 // Format time out
-// MIRO Update rate
-#define MIRO_UPDATE_RATE 0.1
-// MIRO Response OK/ERROR
-#define MIRO_OK_STRING    "Ok!"
-#define MIRO_ERROR_STRING "ERR:"
+#define PHANTOM_TIMEOUT 1.000
+#define PHANTOM_EXTENDED_TIMEOUT 200.0 // Format time out
+// PHANTOM Update rate
+#define PHANTOM_UPDATE_RATE 0.1
+// PHANTOM Response OK/ERROR
+#define PHANTOM_OK_STRING    "Ok!"
+#define PHANTOM_ERROR_STRING "ERR:"
 
-// MIRO Run Modes
-#define MIRO_RUN_FAT  0
-#define MIRO_RUN_SFAT 1
-#define MIRO_RUN_FRR  2
-#define MIRO_RUN_FE   3
+// PHANTOM Run Modes
+#define PHANTOM_RUN_FAT  0
+#define PHANTOM_RUN_SFAT 1
+#define PHANTOM_RUN_FRR  2
+#define PHANTOM_RUN_FE   3
 
-// MIRO Cine States
-#define MIRO_CINE_STATE_INV 1
-#define MIRO_CINE_STATE_STR 2
-#define MIRO_CINE_STATE_WTR 4
-#define MIRO_CINE_STATE_TRG 8
-#define MIRO_CINE_STATE_RDY 16
-#define MIRO_CINE_STATE_DEF 32
-#define MIRO_CINE_STATE_ABL 64
-#define MIRO_CINE_STATE_PRE 128
-#define MIRO_CINE_STATE_ACT 256
-#define MIRO_CINE_STATE_REU 512
+// PHANTOM Cine States
+#define PHANTOM_CINE_STATE_INV 1
+#define PHANTOM_CINE_STATE_STR 2
+#define PHANTOM_CINE_STATE_WTR 4
+#define PHANTOM_CINE_STATE_TRG 8
+#define PHANTOM_CINE_STATE_RDY 16
+#define PHANTOM_CINE_STATE_DEF 32
+#define PHANTOM_CINE_STATE_ABL 64
+#define PHANTOM_CINE_STATE_PRE 128
+#define PHANTOM_CINE_STATE_ACT 256
+#define PHANTOM_CINE_STATE_REU 512
 
-// MIRO Data Types
-#define MIRO_TYPE_FLOAT   "float"
-#define MIRO_TYPE_INTEGER "integer"
-#define MIRO_TYPE_STRING  "string"
-#define MIRO_TYPE_HEX     "hex"
-#define MIRO_TYPE_RES     "resolution"
-#define MIRO_TYPE_FLAGS   "flaglist"
+// PHANTOM Data Types
+#define PHANTOM_TYPE_FLOAT   "float"
+#define PHANTOM_TYPE_INTEGER "integer"
+#define PHANTOM_TYPE_STRING  "string"
+#define PHANTOM_TYPE_HEX     "hex"
+#define PHANTOM_TYPE_RES     "resolution"
+#define PHANTOM_TYPE_FLAGS   "flaglist"
 
 // Number of Cines
-#define MIRO_NUMBER_OF_CINES  17
+#define PHANTOM_NUMBER_OF_CINES  17
 
 // Number of flash files to display at one time
-#define MIRO_NUMBER_OF_FLASH_FILES 8
+#define PHANTOM_NUMBER_OF_FLASH_FILES 8
 
-// MIRO Command Strings
-#define MIRO_CMD_GET_VALUE    "get"
-#define MIRO_CMD_SET_VALUE    "set"
-#define MIRO_CMD_ABORT        "rec 0"
-#define MIRO_CMD_START_REC    "rec"
-#define MIRO_CMD_DELETE       "del"
-#define MIRO_CMD_RELEASE      "rel"
-#define MIRO_CMD_TRIG         "trig"
-#define MIRO_CMD_GET_CSTATES  "cstats"
-#define MIRO_CMD_START_DATA   "startdata"
-#define MIRO_CMD_ATTACH       "attach"
-#define MIRO_CMD_GET_IMG      "img"
-#define MIRO_CMD_GET_XIMG     "ximg"
-#define MIRO_CMD_GET_TSTAMP   "time"
-#define MIRO_CMD_PARTITION    "partition"
-#define MIRO_CMD_WHITEBAL     "wbal"
-#define MIRO_CMD_WUPDATE      "wupdate"
-#define MIRO_CMD_BLACKREF     "bref"
-#define MIRO_CMD_BUPDATE      "bupdate"
-#define MIRO_CMD_FERASE       "ferase"
-#define MIRO_CMD_FSAVE        "fsave"
-#define MIRO_CMD_CFSAVE       "cfsave"
-#define MIRO_CMD_GET_LOG      "tail"
-#define MIRO_CMD_VPLAY        "vplay"
-#define MIRO_CMD_CHECKCLEAN   "clean"
-#define MIRO_CMD_ENABNOTIFY   "notify"
-#define MIRO_CMD_USERSAVE     "usave"
-#define MIRO_CMD_USERLOAD     "uload"
-#define MIRO_CMD_USERERASE    "uerase"
-#define MIRO_CMD_USERLIST     "uls"
-#define MIRO_CMD_DEBUG        "console"
-#define MIRO_CMD_SET_FSTOP    "fstop"
-#define MIRO_CMD_FOCUS        "focus"
-#define MIRO_CMD_CALIB        "calib"
-#define MIRO_CMD_SYSMON       "sysmon"
-#define MIRO_CMD_TESTIMG      "testimg"
-#define MIRO_CMD_SETRTC       "setrtc"
-#define MIRO_CMD_CFLS         "cfls"
-#define MIRO_CMD_CFRM         "cfrm"
-#define MIRO_CMD_CFFORMAT     "cfformat"
-#define MIRO_CMD_CFREAD       "cfread"
-#define MIRO_CMD_PRESET       "preset"
-#define MIRO_CMD_MMSET        "mmset"
+// PHANTOM Command Strings
+#define PHANTOM_CMD_GET_VALUE    "get"
+#define PHANTOM_CMD_SET_VALUE    "set"
+#define PHANTOM_CMD_ABORT        "rec 0"
+#define PHANTOM_CMD_START_REC    "rec"
+#define PHANTOM_CMD_DELETE       "del"
+#define PHANTOM_CMD_RELEASE      "rel"
+#define PHANTOM_CMD_TRIG         "trig"
+#define PHANTOM_CMD_GET_CSTATES  "cstats"
+#define PHANTOM_CMD_START_DATA   "startdata"
+#define PHANTOM_CMD_ATTACH       "attach"
+#define PHANTOM_CMD_GET_IMG      "img"
+#define PHANTOM_CMD_GET_XIMG     "ximg"
+#define PHANTOM_CMD_GET_TSTAMP   "time"
+#define PHANTOM_CMD_PARTITION    "partition"
+#define PHANTOM_CMD_WHITEBAL     "wbal"
+#define PHANTOM_CMD_WUPDATE      "wupdate"
+#define PHANTOM_CMD_BLACKREF     "bref"
+#define PHANTOM_CMD_BUPDATE      "bupdate"
+#define PHANTOM_CMD_FERASE       "ferase"
+#define PHANTOM_CMD_FSAVE        "fsave"
+#define PHANTOM_CMD_CFSAVE       "cfsave"
+#define PHANTOM_CMD_GET_LOG      "tail"
+#define PHANTOM_CMD_VPLAY        "vplay"
+#define PHANTOM_CMD_CHECKCLEAN   "clean"
+#define PHANTOM_CMD_ENABNOTIFY   "notify"
+#define PHANTOM_CMD_USERSAVE     "usave"
+#define PHANTOM_CMD_USERLOAD     "uload"
+#define PHANTOM_CMD_USERERASE    "uerase"
+#define PHANTOM_CMD_USERLIST     "uls"
+#define PHANTOM_CMD_DEBUG        "console"
+#define PHANTOM_CMD_SET_FSTOP    "fstop"
+#define PHANTOM_CMD_FOCUS        "focus"
+#define PHANTOM_CMD_CALIB        "calib"
+#define PHANTOM_CMD_SYSMON       "sysmon"
+#define PHANTOM_CMD_TESTIMG      "testimg"
+#define PHANTOM_CMD_SETRTC       "setrtc"
+#define PHANTOM_CMD_CFLS         "cfls"
+#define PHANTOM_CMD_CFRM         "cfrm"
+#define PHANTOM_CMD_CFFORMAT     "cfformat"
+#define PHANTOM_CMD_CFREAD       "cfread"
+#define PHANTOM_CMD_PRESET       "preset"
+#define PHANTOM_CMD_MMSET        "mmset"
 
 // Pre-defined EPICS Parameter Names
-#define MIROConnectString                   "MIRO_CONNECT"
-#define MIROConnectedString                 "MIRO_CONNECTED"
+#define PHANTOMConnectString                   "PHANTOM_CONNECT"
+#define PHANTOMConnectedString                 "PHANTOM_CONNECTED"
 
-#define MIRO_AcquireStateString             "MIRO_ACQUIRE_STATE"
+#define PHANTOM_AcquireStateString             "PHANTOM_ACQUIRE_STATE"
 
-#define MIRO_SoftwareTriggerString          "MIRO_SOFTWARE_TRIGGER"
-#define MIRO_PerformCSRString               "MIRO_PERFORM_CSR"
-#define MIRO_CSRCountString                 "MIRO_CSR_COUNT"
+#define PHANTOM_SoftwareTriggerString          "PHANTOM_SOFTWARE_TRIGGER"
+#define PHANTOM_PerformCSRString               "PHANTOM_PERFORM_CSR"
+#define PHANTOM_CSRCountString                 "PHANTOM_CSR_COUNT"
 
-#define MIRO_SettingsSlotString             "MIRO_SETTINGS_SLOT"
-#define MIRO_SettingsSaveString             "MIRO_SETTINGS_SAVE"
-#define MIRO_SettingsLoadString             "MIRO_SETTINGS_LOAD"
+#define PHANTOM_SettingsSlotString             "PHANTOM_SETTINGS_SLOT"
+#define PHANTOM_SettingsSaveString             "PHANTOM_SETTINGS_SAVE"
+#define PHANTOM_SettingsLoadString             "PHANTOM_SETTINGS_LOAD"
 
-#define MIRO_AutoSaveString                 "MIRO_AUTO_SAVE"
-#define MIRO_AutoRestartString              "MIRO_AUTO_RESTART"
-#define MIRO_AutoCSRString                  "MIRO_AUTO_CSR"
+#define PHANTOM_AutoSaveString                 "PHANTOM_AUTO_SAVE"
+#define PHANTOM_AutoRestartString              "PHANTOM_AUTO_RESTART"
+#define PHANTOM_AutoCSRString                  "PHANTOM_AUTO_CSR"
 
-#define MIRO_PostTrigCountString            "MIRO_POST_TRIG_COUNT"
-#define MIRO_TotalFrameCountString          "MIRO_TOTAL_FRAME_COUNT"
-#define MIRO_MaxFrameCountString            "MIRO_MAX_FRAME_COUNT"
+#define PHANTOM_PostTrigCountString            "PHANTOM_POST_TRIG_COUNT"
+#define PHANTOM_TotalFrameCountString          "PHANTOM_TOTAL_FRAME_COUNT"
+#define PHANTOM_MaxFrameCountString            "PHANTOM_MAX_FRAME_COUNT"
 
-#define MIRO_CineNameString                 "MIRO_CINE_NAME"
-#define MIRO_SelectedCineString             "MIRO_CINE_SELECTED"
-#define MIRO_CineWidthString                "MIRO_CINE_WIDTH"
-#define MIRO_CineHeightString               "MIRO_CINE_HEIGHT"
-#define MIRO_CineFrameCountString           "MIRO_CINE_FR_COUNT"
-#define MIRO_CineFirstFrameString           "MIRO_CINE_FIRST_FR"
-#define MIRO_CineLastFrameString            "MIRO_CINE_LAST_FR"
-#define MIRO_CineRecordStartString          "MIRO_CINE_REC_START"
-#define MIRO_CineRecordEndString            "MIRO_CINE_REC_END"
-#define MIRO_CineRecordString               "MIRO_CINE_RECORD"
-#define MIRO_CineRecordCountString          "MIRO_CINE_REC_COUNT"
-#define MIRO_CineSaveCFString               "MIRO_CINE_SAVE_CF"       // Save selected cine to flash
+#define PHANTOM_CineNameString                 "PHANTOM_CINE_NAME"
+#define PHANTOM_SelectedCineString             "PHANTOM_CINE_SELECTED"
+#define PHANTOM_CineWidthString                "PHANTOM_CINE_WIDTH"
+#define PHANTOM_CineHeightString               "PHANTOM_CINE_HEIGHT"
+#define PHANTOM_CineFrameCountString           "PHANTOM_CINE_FR_COUNT"
+#define PHANTOM_CineFirstFrameString           "PHANTOM_CINE_FIRST_FR"
+#define PHANTOM_CineLastFrameString            "PHANTOM_CINE_LAST_FR"
+#define PHANTOM_CineRecordStartString          "PHANTOM_CINE_REC_START"
+#define PHANTOM_CineRecordEndString            "PHANTOM_CINE_REC_END"
+#define PHANTOM_CineRecordString               "PHANTOM_CINE_RECORD"
+#define PHANTOM_CineRecordCountString          "PHANTOM_CINE_REC_COUNT"
+#define PHANTOM_CineSaveCFString               "PHANTOM_CINE_SAVE_CF"       // Save selected cine to flash
 
-#define MIRO_SetPartitionString             "MIRO_SET_PARTITION"
-#define MIRO_GetCineCountString             "MIRO_GET_CINE_COUNT"
+#define PHANTOM_SetPartitionString             "PHANTOM_SET_PARTITION"
+#define PHANTOM_GetCineCountString             "PHANTOM_GET_CINE_COUNT"
 
-#define MIRO_CFStateString                  "MIRO_CF_STATE"
-#define MIRO_CFActionString                 "MIRO_CF_ACTION"
-#define MIRO_CFSizeString                   "MIRO_CF_SIZE"
-#define MIRO_CFUsedString                   "MIRO_CF_USED"
-#define MIRO_CFProgressString               "MIRO_CF_PROGRESS"
-#define MIRO_CFErrorString                  "MIRO_CF_ERROR"
-#define MIRO_CFNumFilesString               "MIRO_CF_NUM_FILES"
-#define MIRO_CFMaxPagesString               "MIRO_CF_MAX_PAGES"
-#define MIRO_CFCurPageString                "MIRO_CF_CUR_PAGE"
-#define MIRO_CFFormatString                 "MIRO_CF_FORMAT"
+#define PHANTOM_CFStateString                  "PHANTOM_CF_STATE"
+#define PHANTOM_CFActionString                 "PHANTOM_CF_ACTION"
+#define PHANTOM_CFSizeString                   "PHANTOM_CF_SIZE"
+#define PHANTOM_CFUsedString                   "PHANTOM_CF_USED"
+#define PHANTOM_CFProgressString               "PHANTOM_CF_PROGRESS"
+#define PHANTOM_CFErrorString                  "PHANTOM_CF_ERROR"
+#define PHANTOM_CFNumFilesString               "PHANTOM_CF_NUM_FILES"
+#define PHANTOM_CFMaxPagesString               "PHANTOM_CF_MAX_PAGES"
+#define PHANTOM_CFCurPageString                "PHANTOM_CF_CUR_PAGE"
+#define PHANTOM_CFFormatString                 "PHANTOM_CF_FORMAT"
 
-#define MIRO_CFFileNameString               "MIRO_CF_FILENAME"
-#define MIRO_CFSIndexString                 "MIRO_CFS_INDEX"
-#define MIRO_CFSWidthString                 "MIRO_CFS_WIDTH"
-#define MIRO_CFSHeightString                "MIRO_CFS_HEIGHT"
-#define MIRO_CFSFrameCountString            "MIRO_CFS_FR_COUNT"
-#define MIRO_CFSFirstFrameString            "MIRO_CFS_FIRST_FR"
-#define MIRO_CFSLastFrameString             "MIRO_CFS_LAST_FR"
-#define MIRO_CFSRecordStartString           "MIRO_CFS_REC_START"
-#define MIRO_CFSRecordEndString             "MIRO_CFS_REC_END"
-#define MIRO_CFSRecordString                "MIRO_CFS_RECORD"
-#define MIRO_CFSRecordCountString           "MIRO_CFS_REC_COUNT"
-#define MIRO_CFSFileDeleteString            "MIRO_CFS_DELETE"         // Delete the (C)ompact (F)lash (S)elected file
+#define PHANTOM_CFFileNameString               "PHANTOM_CF_FILENAME"
+#define PHANTOM_CFSIndexString                 "PHANTOM_CFS_INDEX"
+#define PHANTOM_CFSWidthString                 "PHANTOM_CFS_WIDTH"
+#define PHANTOM_CFSHeightString                "PHANTOM_CFS_HEIGHT"
+#define PHANTOM_CFSFrameCountString            "PHANTOM_CFS_FR_COUNT"
+#define PHANTOM_CFSFirstFrameString            "PHANTOM_CFS_FIRST_FR"
+#define PHANTOM_CFSLastFrameString             "PHANTOM_CFS_LAST_FR"
+#define PHANTOM_CFSRecordStartString           "PHANTOM_CFS_REC_START"
+#define PHANTOM_CFSRecordEndString             "PHANTOM_CFS_REC_END"
+#define PHANTOM_CFSRecordString                "PHANTOM_CFS_RECORD"
+#define PHANTOM_CFSRecordCountString           "PHANTOM_CFS_REC_COUNT"
+#define PHANTOM_CFSFileDeleteString            "PHANTOM_CFS_DELETE"         // Delete the (C)ompact (F)lash (S)elected file
 
-#define MIRO_InfoSensorTempString           "MIRO_SENSOR_TEMP"
-#define MIRO_InfoThermoPowerString          "MIRO_THERMO_POWER"
-#define MIRO_InfoCameraTempString           "MIRO_CAMERA_TEMP"
-#define MIRO_InfoFanPowerString             "MIRO_FAN_POWER"
-#define MIRO_EDRString                      "MIRO_EDR"
-#define MIRO_CamExtSyncString               "MIRO_EXT_SYNC"
-#define MIRO_CamFrameDelayString            "MIRO_FRAME_DELAY"
-#define MIRO_CamTriggerEdgeString           "MIRO_TRIGGER_EDGE"
-#define MIRO_CamTriggerFilterString         "MIRO_TRIGGER_FILTER"
-#define MIRO_CamReadySignalString           "MIRO_READY_SIGNAL"
-#define MIRO_CamAuxPinString                "MIRO_AUX_PIN"
+#define PHANTOM_InfoSensorTempString           "PHANTOM_SENSOR_TEMP"
+#define PHANTOM_InfoThermoPowerString          "PHANTOM_THERMO_POWER"
+#define PHANTOM_InfoCameraTempString           "PHANTOM_CAMERA_TEMP"
+#define PHANTOM_InfoFanPowerString             "PHANTOM_FAN_POWER"
+#define PHANTOM_EDRString                      "PHANTOM_EDR"
+#define PHANTOM_CamExtSyncString               "PHANTOM_EXT_SYNC"
+#define PHANTOM_CamFrameDelayString            "PHANTOM_FRAME_DELAY"
+#define PHANTOM_CamTriggerEdgeString           "PHANTOM_TRIGGER_EDGE"
+#define PHANTOM_CamTriggerFilterString         "PHANTOM_TRIGGER_FILTER"
+#define PHANTOM_CamReadySignalString           "PHANTOM_READY_SIGNAL"
+#define PHANTOM_CamAuxPinString                "PHANTOM_AUX_PIN"
 
-#define MIRO_LivePreviewString              "MIRO_LIVE_PREVIEW"
-#define MIRO_SyncClockString                "MIRO_SYNC_CLOCK"
+#define PHANTOM_LivePreviewString              "PHANTOM_LIVE_PREVIEW"
+#define PHANTOM_SyncClockString                "PHANTOM_SYNC_CLOCK"
 
-#define MIRO_CamQuietFanString              "MIRO_FAN_QUIET"
+#define PHANTOM_CamQuietFanString              "PHANTOM_FAN_QUIET"
 
-#define MIRO_AutoTriggerXString             "MIRO_AUTOTRIG_X"
-#define MIRO_AutoTriggerXZeroedString       "MIRO_AUTOTRIGZEROED_X"
-#define MIRO_AutoTriggerYString             "MIRO_AUTOTRIG_Y"
-#define MIRO_AutoTriggerYZeroedString       "MIRO_AUTOTRIGZEROED_Y"
-#define MIRO_AutoTriggerWString             "MIRO_AUTOTRIG_W"
-#define MIRO_AutoTriggerHString             "MIRO_AUTOTRIG_H"
-#define MIRO_AutoTriggerThresholdString     "MIRO_AUTOTRIG_THRESH"
-#define MIRO_AutoTriggerAreaString          "MIRO_AUTOTRIG_AREA"
-#define MIRO_AutoTriggerIntervalString      "MIRO_AUTOTRIG_INTERVAL"
-#define MIRO_AutoTriggerModeString          "MIRO_AUTOTRIG_MODE"
+#define PHANTOM_AutoTriggerXString             "PHANTOM_AUTOTRIG_X"
+#define PHANTOM_AutoTriggerXZeroedString       "PHANTOM_AUTOTRIGZEROED_X"
+#define PHANTOM_AutoTriggerYString             "PHANTOM_AUTOTRIG_Y"
+#define PHANTOM_AutoTriggerYZeroedString       "PHANTOM_AUTOTRIGZEROED_Y"
+#define PHANTOM_AutoTriggerWString             "PHANTOM_AUTOTRIG_W"
+#define PHANTOM_AutoTriggerHString             "PHANTOM_AUTOTRIG_H"
+#define PHANTOM_AutoTriggerThresholdString     "PHANTOM_AUTOTRIG_THRESH"
+#define PHANTOM_AutoTriggerAreaString          "PHANTOM_AUTOTRIG_AREA"
+#define PHANTOM_AutoTriggerIntervalString      "PHANTOM_AUTOTRIG_INTERVAL"
+#define PHANTOM_AutoTriggerModeString          "PHANTOM_AUTOTRIG_MODE"
 
 #define OLDMAXFILENAME 65 // maximum file path size for the continuous recording
 // to keep compatibility with old setup files
@@ -491,34 +491,34 @@
 
 typedef enum
 {
-  MIROTypeFloat,
-  MIROTypeInteger,
-  MIROTypeString,
-  MIROTypeHex,
-  MIROTypeRes,
-  MIROTypeFlags,
-  MIROTypeUnknown
-} MIROValueType_t;
+  PHANTOMTypeFloat,
+  PHANTOMTypeInteger,
+  PHANTOMTypeString,
+  PHANTOMTypeHex,
+  PHANTOMTypeRes,
+  PHANTOMTypeFlags,
+  PHANTOMTypeUnknown
+} PHANTOMValueType_t;
 
-class miroVal
+class phantomVal
 { // Define class which contains data item value and type
 private:
   std::string value;
-  MIROValueType_t type;
+  PHANTOMValueType_t type;
 public:
-  miroVal() : value(""),
-              type(MIROTypeFloat)
+  phantomVal() : value(""),
+              type(PHANTOMTypeFloat)
     {  }
-  friend bool  operator<(const miroVal&, const miroVal&);
-  friend bool operator==(const miroVal&, const miroVal&);
+  friend bool  operator<(const phantomVal&, const phantomVal&);
+  friend bool operator==(const phantomVal&, const phantomVal&);
 // accessor methods
   std::string getValue() {return this->value;}
-  MIROValueType_t getType() {return this->type;}
+  PHANTOMValueType_t getType() {return this->type;}
   void setValue(std::string& s) {this->value = s;}
-  void setType(MIROValueType_t t) {this->type = t;}
-}; // end Class miroVal
+  void setType(PHANTOMValueType_t t) {this->type = t;}
+}; // end Class phantomVal
 
-class MiroMeta
+class PhantomMeta
 {
 public:
   std::string name_;
@@ -533,7 +533,7 @@ public:
   double dval_;
   void *vPtr_;
 
-  MiroMeta(const std::string& name,
+  PhantomMeta(const std::string& name,
       const std::string& desc,
       const std::string& param,
       NDAttrDataType_t type,
@@ -571,15 +571,15 @@ public:
   }
 };
 
-class MiroCamera: public ADDriver
+class ADPhantom: public ADDriver
 {
   public:
-    MiroCamera(const char *portName, const char *ctrlPort, const char *dataPort, int maxBuffers, size_t maxMemory, int priority, int stackSize);
-    virtual ~MiroCamera();
-    void miroCameraTask();
-    void miroStatusTask();
-    void miroPreviewTask();
-    void miroFlashTask();
+    ADPhantom(const char *portName, const char *ctrlPort, const char *dataPort, int maxBuffers, size_t maxMemory, int priority, int stackSize);
+    virtual ~ADPhantom();
+    void phantomCameraTask();
+    void phantomStatusTask();
+    void phantomPreviewTask();
+    void phantomFlashTask();
     asynStatus makeConnection();
     asynStatus connect();
     asynStatus disconnect();
@@ -587,7 +587,7 @@ class MiroCamera: public ADDriver
     asynStatus writeInt32(asynUser *pasynUser, epicsInt32 value);
     asynStatus writeFloat64(asynUser *pasynUser, epicsFloat64 value);
     asynStatus writeOctet(asynUser *pasynUser, const char *value, size_t maxChars, size_t *nActual);
-    asynStatus sendSimpleCommand(const std::string& command, std::string *data = NULL, double timeout=MIRO_TIMEOUT);
+    asynStatus sendSimpleCommand(const std::string& command, std::string *data = NULL, double timeout=PHANTOM_TIMEOUT);
     asynStatus setCameraResolution();
     asynStatus performCSR();
     asynStatus attachToPort(const std::string& portName);
@@ -621,8 +621,8 @@ class MiroCamera: public ADDriver
     asynStatus updateMetaStatus();
     asynStatus updateIntegerParameter(const std::string& name, int paramID);
     asynStatus updateStringParameter(const std::string& name, int paramID);
-    asynStatus getCameraDataStruc(const std::string& strucName, std::map<std::string, miroVal>& params);
-    asynStatus getCameraParameterType(const std::string& name, MIROValueType_t &value);
+    asynStatus getCameraDataStruc(const std::string& strucName, std::map<std::string, phantomVal>& params);
+    asynStatus getCameraParameterType(const std::string& name, PHANTOMValueType_t &value);
     asynStatus getCameraParameter(const std::string& name, int &value);
     asynStatus getCameraParameter(const std::string& name, double &value);
     asynStatus getCameraParameter(const std::string& name, std::string &value);
@@ -640,8 +640,8 @@ class MiroCamera: public ADDriver
     int getLocalPortNum(const std::string& driverPort);
     asynStatus asynPortConnect(const char *port, int addr, asynUser **ppasynUser, const char *inputEos, const char *outputEos);
     asynStatus asynPortDisconnect(asynUser *pasynUser);
-    asynStatus commandResponse(const std::string &command, std::string *response, double timeout=MIRO_TIMEOUT);
-    asynStatus asynWriteRead(const char *command, char *response, double timeout=MIRO_TIMEOUT);
+    asynStatus commandResponse(const std::string &command, std::string *response, double timeout=PHANTOM_TIMEOUT);
+    asynStatus asynWriteRead(const char *command, char *response, double timeout=PHANTOM_TIMEOUT);
 
     // String cleanup routines
     asynStatus cleanString(std::string &str, const std::string &search = ": \n", int where = 0);
@@ -656,114 +656,114 @@ class MiroCamera: public ADDriver
     asynStatus debug(const std::string& method, const std::string& msg, std::map<std::string, std::string> value);
 
   protected:
-    int MIROConnect_;
-    #define FIRST_MIRO_PARAM MIROConnect_
-    int MIRO_AcquireState_;
-    int MIRO_SoftwareTrigger_;
-    int MIRO_PerformCSR_;
-    int MIRO_CSRCount_;
-    int MIRO_SettingsSlot_;
-    int MIRO_SettingsSave_;
-    int MIRO_SettingsLoad_;
-    int MIRO_AutoSave_;
-    int MIRO_AutoRestart_;
-    int MIRO_AutoCSR_;
-    int MIRO_PostTrigCount_;
-    int MIRO_TotalFrameCount_;
-    int MIRO_MaxFrameCount_;
-    int MIRO_SelectedCine_;
-    int MIRO_CineName_;
-		int MIRO_CineWidth_;
-		int MIRO_CineHeight_;
-    int MIRO_CineFrameCount_;
-    int MIRO_CineFirstFrame_;
-    int MIRO_CineLastFrame_;
-    int MIRO_LivePreview_;
-    int MIRO_CineRecordStart_;
-    int MIRO_CineRecordEnd_;
-    int MIRO_CineRecord_;
-    int MIRO_CineRecordCount_;
-    int MIRO_CineSaveCF_;
-    int MIRO_SetPartition_;
-    int MIRO_GetCineCount_;
-    int MIRO_CFState_;
-    int MIRO_CFAction_;
-    int MIRO_CFSize_;
-    int MIRO_CFUsed_;
-    int MIRO_CFProgress_;
-    int MIRO_CFError_;
-    int MIRO_CFNumFiles_;
-    int MIRO_CFMaxPages_;
-    int MIRO_CFCurPage_;
-    int MIRO_CFFormat_;
-    int MIRO_CFFileName_;
-    int MIRO_CFSIndex_;
-    int MIRO_CFSWidth_;
-    int MIRO_CFSHeight_;
-    int MIRO_CFSFrameCount_;
-    int MIRO_CFSFirstFrame_;
-    int MIRO_CFSLastFrame_;
-    int MIRO_CFSRecordStart_;
-    int MIRO_CFSRecordEnd_;
-    int MIRO_CFSRecord_;
-    int MIRO_CFSRecordCount_;
-    int MIRO_CFSFileDelete_;
-    int MIRO_InfoSensorTemp_;
-    int MIRO_InfoThermoPower_;
-    int MIRO_InfoCameraTemp_;
-    int MIRO_InfoFanPower_;
-    int MIRO_EDR_;
-    int MIRO_CamExtSync_;
-    int MIRO_CamFrameDelay_;
-    int MIRO_CamTriggerEdge_;
-    int MIRO_CamTriggerFilter_;
-    int MIRO_CamReadySignal_;
-    int MIRO_CamQuietFan_;
-    int MIRO_CamAuxPin_;
-    int MIRO_AutoTriggerX_;
-    int MIRO_AutoTriggerXZeroed_;
-    int MIRO_AutoTriggerY_;
-    int MIRO_AutoTriggerYZeroed_;
-    int MIRO_AutoTriggerW_;
-    int MIRO_AutoTriggerH_;
-    int MIRO_AutoTriggerThreshold_;
-    int MIRO_AutoTriggerArea_;
-    int MIRO_AutoTriggerInterval_;
-    int MIRO_AutoTriggerMode_;
-    int MIRO_CnName_[MIRO_NUMBER_OF_CINES];
-    int MIRO_CnWidth_[MIRO_NUMBER_OF_CINES];
-    int MIRO_CnHeight_[MIRO_NUMBER_OF_CINES];
-    int MIRO_CnStatus_[MIRO_NUMBER_OF_CINES];
-    int MIRO_CnFrameCount_[MIRO_NUMBER_OF_CINES];
-    int MIRO_CnFirstFrame_[MIRO_NUMBER_OF_CINES];
-    int MIRO_CnLastFrame_[MIRO_NUMBER_OF_CINES];
-    int MIRO_CnRecordStart_[MIRO_NUMBER_OF_CINES];
-    int MIRO_CnRecordEnd_[MIRO_NUMBER_OF_CINES];
-    int MIRO_CnRecord_[MIRO_NUMBER_OF_CINES];
-    int MIRO_CnRecordCount_[MIRO_NUMBER_OF_CINES];
-    int MIRO_CfFileName_[MIRO_NUMBER_OF_FLASH_FILES];
-    int MIRO_CfFileSize_[MIRO_NUMBER_OF_FLASH_FILES];
-    int MIRO_CfFileDate_[MIRO_NUMBER_OF_FLASH_FILES];
-    int MIROConnected_;
-    int MIRO_SyncClock;
-    #define LAST_MIRO_PARAM MIROConnected_
+    int PHANTOMConnect_;
+    #define FIRST_PHANTOM_PARAM PHANTOMConnect_
+    int PHANTOM_AcquireState_;
+    int PHANTOM_SoftwareTrigger_;
+    int PHANTOM_PerformCSR_;
+    int PHANTOM_CSRCount_;
+    int PHANTOM_SettingsSlot_;
+    int PHANTOM_SettingsSave_;
+    int PHANTOM_SettingsLoad_;
+    int PHANTOM_AutoSave_;
+    int PHANTOM_AutoRestart_;
+    int PHANTOM_AutoCSR_;
+    int PHANTOM_PostTrigCount_;
+    int PHANTOM_TotalFrameCount_;
+    int PHANTOM_MaxFrameCount_;
+    int PHANTOM_SelectedCine_;
+    int PHANTOM_CineName_;
+		int PHANTOM_CineWidth_;
+		int PHANTOM_CineHeight_;
+    int PHANTOM_CineFrameCount_;
+    int PHANTOM_CineFirstFrame_;
+    int PHANTOM_CineLastFrame_;
+    int PHANTOM_LivePreview_;
+    int PHANTOM_CineRecordStart_;
+    int PHANTOM_CineRecordEnd_;
+    int PHANTOM_CineRecord_;
+    int PHANTOM_CineRecordCount_;
+    int PHANTOM_CineSaveCF_;
+    int PHANTOM_SetPartition_;
+    int PHANTOM_GetCineCount_;
+    int PHANTOM_CFState_;
+    int PHANTOM_CFAction_;
+    int PHANTOM_CFSize_;
+    int PHANTOM_CFUsed_;
+    int PHANTOM_CFProgress_;
+    int PHANTOM_CFError_;
+    int PHANTOM_CFNumFiles_;
+    int PHANTOM_CFMaxPages_;
+    int PHANTOM_CFCurPage_;
+    int PHANTOM_CFFormat_;
+    int PHANTOM_CFFileName_;
+    int PHANTOM_CFSIndex_;
+    int PHANTOM_CFSWidth_;
+    int PHANTOM_CFSHeight_;
+    int PHANTOM_CFSFrameCount_;
+    int PHANTOM_CFSFirstFrame_;
+    int PHANTOM_CFSLastFrame_;
+    int PHANTOM_CFSRecordStart_;
+    int PHANTOM_CFSRecordEnd_;
+    int PHANTOM_CFSRecord_;
+    int PHANTOM_CFSRecordCount_;
+    int PHANTOM_CFSFileDelete_;
+    int PHANTOM_InfoSensorTemp_;
+    int PHANTOM_InfoThermoPower_;
+    int PHANTOM_InfoCameraTemp_;
+    int PHANTOM_InfoFanPower_;
+    int PHANTOM_EDR_;
+    int PHANTOM_CamExtSync_;
+    int PHANTOM_CamFrameDelay_;
+    int PHANTOM_CamTriggerEdge_;
+    int PHANTOM_CamTriggerFilter_;
+    int PHANTOM_CamReadySignal_;
+    int PHANTOM_CamQuietFan_;
+    int PHANTOM_CamAuxPin_;
+    int PHANTOM_AutoTriggerX_;
+    int PHANTOM_AutoTriggerXZeroed_;
+    int PHANTOM_AutoTriggerY_;
+    int PHANTOM_AutoTriggerYZeroed_;
+    int PHANTOM_AutoTriggerW_;
+    int PHANTOM_AutoTriggerH_;
+    int PHANTOM_AutoTriggerThreshold_;
+    int PHANTOM_AutoTriggerArea_;
+    int PHANTOM_AutoTriggerInterval_;
+    int PHANTOM_AutoTriggerMode_;
+    int PHANTOM_CnName_[PHANTOM_NUMBER_OF_CINES];
+    int PHANTOM_CnWidth_[PHANTOM_NUMBER_OF_CINES];
+    int PHANTOM_CnHeight_[PHANTOM_NUMBER_OF_CINES];
+    int PHANTOM_CnStatus_[PHANTOM_NUMBER_OF_CINES];
+    int PHANTOM_CnFrameCount_[PHANTOM_NUMBER_OF_CINES];
+    int PHANTOM_CnFirstFrame_[PHANTOM_NUMBER_OF_CINES];
+    int PHANTOM_CnLastFrame_[PHANTOM_NUMBER_OF_CINES];
+    int PHANTOM_CnRecordStart_[PHANTOM_NUMBER_OF_CINES];
+    int PHANTOM_CnRecordEnd_[PHANTOM_NUMBER_OF_CINES];
+    int PHANTOM_CnRecord_[PHANTOM_NUMBER_OF_CINES];
+    int PHANTOM_CnRecordCount_[PHANTOM_NUMBER_OF_CINES];
+    int PHANTOM_CfFileName_[PHANTOM_NUMBER_OF_FLASH_FILES];
+    int PHANTOM_CfFileSize_[PHANTOM_NUMBER_OF_FLASH_FILES];
+    int PHANTOM_CfFileDate_[PHANTOM_NUMBER_OF_FLASH_FILES];
+    int PHANTOMConnected_;
+    int PHANTOM_SyncClock;
+    #define LAST_PHANTOM_PARAM PHANTOMConnected_
 
   private:
-    static const int MIRO_LinLUT[1024];
-    static const char *MIRO_CnNameString[];
-    static const char *MIRO_CnWidthString[];
-    static const char *MIRO_CnHeightString[];
-    static const char *MIRO_CnStatusString[];
-    static const char *MIRO_CnFrameCountString[];
-    static const char *MIRO_CnFirstFrameString[];
-    static const char *MIRO_CnLastFrameString[];
-    static const char *MIRO_CnRecordStartString[];
-    static const char *MIRO_CnRecordEndString[];
-    static const char *MIRO_CnRecordString[];
-    static const char *MIRO_CnRecordCountString[];
-    static const char *MIRO_CfFileNameString[];
-    static const char *MIRO_CfFileSizeString[];
-    static const char *MIRO_CfFileDateString[];
+    static const int PHANTOM_LinLUT[1024];
+    static const char *PHANTOM_CnNameString[];
+    static const char *PHANTOM_CnWidthString[];
+    static const char *PHANTOM_CnHeightString[];
+    static const char *PHANTOM_CnStatusString[];
+    static const char *PHANTOM_CnFrameCountString[];
+    static const char *PHANTOM_CnFirstFrameString[];
+    static const char *PHANTOM_CnLastFrameString[];
+    static const char *PHANTOM_CnRecordStartString[];
+    static const char *PHANTOM_CnRecordEndString[];
+    static const char *PHANTOM_CnRecordString[];
+    static const char *PHANTOM_CnRecordCountString[];
+    static const char *PHANTOM_CfFileNameString[];
+    static const char *PHANTOM_CfFileSizeString[];
+    static const char *PHANTOM_CfFileDateString[];
 
     asynUser                           *portUser_;
     asynUser                           *dataChannel_;
@@ -787,11 +787,11 @@ class MiroCamera: public ADDriver
     epicsEventId                       startPreviewEventId_;
     epicsEventId                       stopPreviewEventId_;
     epicsEventId                       flashEventId_;
-    std::vector<MiroMeta *>            metaArray_;
+    std::vector<PhantomMeta *>            metaArray_;
     std::vector<std::string>           lensModes_;
     std::vector<std::string>           scanRanges_;
     std::vector<std::string>           runModes_;
-    std::map<std::string, miroVal> paramMap_;
+    std::map<std::string, phantomVal> paramMap_;
     std::map<int, std::string>         paramIndexes_;
     std::vector<std::vector<std::string> > fileInfoSet_;
     bool                               firstConnect_;
@@ -803,9 +803,9 @@ class MiroCamera: public ADDriver
 
 // Number of asyn parameters (asyn commands) this driver supports
 // Currently hardcoding 100 additional device specific parameters
-#define NUM_MIRO_PARAMS ((int)(&LAST_MIRO_PARAM - &FIRST_MIRO_PARAM + 100))
+#define NUM_PHANTOM_PARAMS ((int)(&LAST_PHANTOM_PARAM - &FIRST_PHANTOM_PARAM + 100))
 
 std::string fileToString(const std::string fname);
 std::string stripControl(std::string& , const char* ws = "\\\t\n\r\f\v" );
 std::string deleteParen(std::string& str);
-void parseDataStruc(const std::string&, std::vector<std::string>& strucName, std::vector<miroVal>& value);
+void parseDataStruc(const std::string&, std::vector<std::string>& strucName, std::vector<phantomVal>& value);

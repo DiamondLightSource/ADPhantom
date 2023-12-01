@@ -10,7 +10,7 @@
 #  PORT     Asyn Port name
 #  TIMEOUT  Timeout
 #  ADDR     Asyn Port address
-file $(MIROCAMERA)/db/miroCamera.template
+file $(ADPHANTOM)/db/ADPhantom.template
 {
 pattern { P, R, PORT, TIMEOUT, ADDR }
     { "test:ioc", ":CAM:", "CAM.CAM", "1", "0" }

@@ -3,12 +3,12 @@ import sys
 if __name__ == "__main__":
 
     log_file_loc = "../documentation/logs/"
-    out_file_loc = "../miroCameraApp/src/"
+    out_file_loc = "../ADPhantomApp/src/"
     filenames = ["c1Struc.log","defcStruc.log","hwStruc.log","autoStruc.log", "cfStruc.log","camStruc.log","infoStruc.log"]
 
-    of1 = open(out_file_loc + "miroParamCreateCalls.h", 'w')
-    of2 = open(out_file_loc + "miroParamDefines.h", 'w')
-    of3 = open(out_file_loc + "miroParamVarDecl.h", 'w')
+    of1 = open(out_file_loc + "phantomParamCreateCalls.h", 'w')
+    of2 = open(out_file_loc + "phantomParamDefines.h", 'w')
+    of3 = open(out_file_loc + "phantomParamVarDecl.h", 'w')
     for filename in filenames:
         filename = log_file_loc + filename
         f = open(filename, 'r+')
@@ -22,8 +22,8 @@ if __name__ == "__main__":
                   names = names[:-1]
               else:
                   items = line.split(':')
-                  paramName = "MIRO" + "".join(names) + items[0].replace("\t", "").replace("\\", "").strip().capitalize()
-                  define = "MIRO_"
+                  paramName = "PHANTOM" + "".join(names) + items[0].replace("\t", "").replace("\\", "").strip().capitalize()
+                  define = "PHANTOM_"
                   for name in names:
                     define = define + name.upper() + "_"
                   define = define + items[0].replace("\t", "").replace("\\", "").strip().upper()

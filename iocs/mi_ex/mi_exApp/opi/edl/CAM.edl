@@ -221,7 +221,7 @@ filePv "LOC\\$(!W)tab"
 sizeOfs 5
 numDsps 10
 displayFileName {
-  0 "miro.edl"
+  0 "phantom.edl"
   1 "NDROI.edl"
   2 "NDStats.edl"
   3 "NDStdArrays.edl"
