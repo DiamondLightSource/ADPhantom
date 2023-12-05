@@ -72,7 +72,7 @@
 #define PHANTOM_TYPE_FLAGS   "flaglist"
 
 // Number of Cines
-#define PHANTOM_NUMBER_OF_CINES  17
+#define PHANTOM_NUMBER_OF_CINES  64
 
 // Number of flash files to display at one time
 #define PHANTOM_NUMBER_OF_FLASH_FILES 8

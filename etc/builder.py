@@ -54,7 +54,7 @@ class ADPhantom(AsynPort):
         # Make an instance of our template
         makeTemplateInstance(phantomCameraTemplate, locals(), args)
         # makeDb = phantomCameraTemplate(P=P, R=R, PORT=PORT, ADDR=ADDR, TIMEOUT=TIMEOUT)
-        for i in range(1,17):
+        for i in range(1,64):
             makeDb = phantomCineTemplate(P=P, R=R, PORT=PORT, ADDR=ADDR, TIMEOUT=TIMEOUT, CINE=i)
 
 
