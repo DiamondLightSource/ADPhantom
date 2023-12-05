@@ -1112,7 +1112,8 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   metaArray_.push_back(new PhantomMeta("roi_width", "Region of interest pixel width", "c%d.meta.vw", NDAttrInt32, 0x030, 4));
   metaArray_.push_back(new PhantomMeta("roi_height", "Region of interest pixel height", "c%d.meta.vh", NDAttrInt32, 0x034, 4));
   metaArray_.push_back(new PhantomMeta("aux1_mode", "Auxiliary mode 1", "c%d.cam.aux1mode", NDAttrInt32, 0x0, 0));
-  //metaArray_.push_back(new PhantomMeta("fan_quiet", "Fan quiet mode", "c%d.cam.quiet", NDAttrInt32, 0x0, 0));
+  metaArray_.push_back(new PhantomMeta("aux2_mode", "Auxiliary mode 2", "c%d.cam.aux2mode", NDAttrInt32, 0x0, 0));
+  metaArray_.push_back(new PhantomMeta("aux4_mode", "Auxiliary mode 4", "c%d.cam.aux4mode", NDAttrInt32, 0x0, 0));
   metaArray_.push_back(new PhantomMeta("first_frame", "First frame number", "c%d.firstfr", NDAttrInt32, 0x010, 4));
   metaArray_.push_back(new PhantomMeta("frame_count", "Total frame count", "c%d.frcount", NDAttrInt32, 0x014, 4));
 //  metaArray_.push_back(new PhantomMeta("post_trig_frames", "Post trigger frame count", "c%d.lastfr", NDAttrInt32, 0x0, 0));
