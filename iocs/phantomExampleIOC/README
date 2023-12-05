@@ -1,0 +1,1 @@
+This IOC is configured to demonstrate the commands required to start up an IOC to communicate with a Phantom camera using the ADPhantom driver. It also sets up the areaDetectors plugins NDFileHDF5 and NDStdArrays.
