@@ -1060,9 +1060,7 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   createParam(PHANTOM_CamQuietFanString,              asynParamInt32,         &PHANTOM_CamQuietFan_);
   createParam(PHANTOM_SyncClockString,                asynParamInt32,         &PHANTOM_SyncClock);
   createParam(PHANTOM_AutoTriggerXString,             asynParamInt32,         &PHANTOM_AutoTriggerX_);
-  createParam(PHANTOM_AutoTriggerXZeroedString,       asynParamInt32,         &PHANTOM_AutoTriggerXZeroed_);
   createParam(PHANTOM_AutoTriggerYString,             asynParamInt32,         &PHANTOM_AutoTriggerY_);
-  createParam(PHANTOM_AutoTriggerYZeroedString,       asynParamInt32,         &PHANTOM_AutoTriggerYZeroed_);
   createParam(PHANTOM_AutoTriggerWString,             asynParamInt32,         &PHANTOM_AutoTriggerW_);
   createParam(PHANTOM_AutoTriggerHString,             asynParamInt32,         &PHANTOM_AutoTriggerH_);
   createParam(PHANTOM_AutoTriggerThresholdString,     asynParamInt32,         &PHANTOM_AutoTriggerThreshold_);
@@ -2016,8 +2014,16 @@ asynStatus ADPhantom::writeInt32(asynUser *pasynUser, epicsInt32 value)
     sprintf(command, "setrtc %d", std::time(NULL));
     sendSimpleCommand(command, &response);
   } else if (function == PHANTOM_AutoTriggerX_){
+    //Apply corrections such that PV has coord origin in top left corner
+    int res = 0;
+    getIntegerParam(ADSizeX, &res);
+    value -= res/2 ;
     status |= setCameraParameter("auto.trigger.x", value);
   } else if (function == PHANTOM_AutoTriggerY_){
+    //Apply corrections such that PV has coord origin in top left corner
+    int res = 0;
+    getIntegerParam(ADSizeY, &res);
+    value -= res/2 ;
     status |= setCameraParameter("auto.trigger.y", value);
   } else if (function == PHANTOM_AutoTriggerW_){
     status |= setCameraParameter("auto.trigger.w", value);
@@ -3562,14 +3568,6 @@ asynStatus ADPhantom::updateAutoStatus()
     status = this->updateIntegerParameter("auto.bref_progress", PHANTOM_CSRCount_);
   }
   if (status == asynSuccess){
-  // Update the auto trigger ROI x coordinate
-    status = this->updateIntegerParameter("auto.trigger.x", PHANTOM_AutoTriggerX_);
-  }
-  if (status == asynSuccess){
-  // Update the auto trigger ROI y coordinate
-    status = this->updateIntegerParameter("auto.trigger.y", PHANTOM_AutoTriggerY_);
-  }
-  if (status == asynSuccess){
   // Update the auto trigger ROI width
     status = this->updateIntegerParameter("auto.trigger.w", PHANTOM_AutoTriggerW_);
   }
@@ -3609,29 +3607,29 @@ asynStatus ADPhantom::updateAutoTrigPos()
   int value = 0;
 
   std::string name = "auto.trigger.x";
-  int paramID = PHANTOM_AutoTriggerXZeroed_;
+  int paramID = PHANTOM_AutoTriggerX_;
   debug(functionName, "Name", name);
-  debug(functionName, "paramID", PHANTOM_AutoTriggerXZeroed_);
+  debug(functionName, "paramID", paramID);
   std::string svalue = paramMap_[name].getValue();
   cleanString(svalue, " ");
   status = stringToInteger(svalue, value);
   int res = 0;
   getIntegerParam(ADSizeX, &res);
   value += res/2 ;
-  setIntegerParam(PHANTOM_AutoTriggerXZeroed_, value);
+  setIntegerParam(PHANTOM_AutoTriggerX_, value);
 
   if (status == asynSuccess){
     name = "auto.trigger.y";
-    paramID = PHANTOM_AutoTriggerYZeroed_;
+    paramID = PHANTOM_AutoTriggerY_;
     debug(functionName, "Name", name);
-    debug(functionName, "paramID", PHANTOM_AutoTriggerYZeroed_);
+    debug(functionName, "paramID", paramID);
     svalue = paramMap_[name].getValue();
     cleanString(svalue, " ");
     status = stringToInteger(svalue, value);
     res = 0;
     getIntegerParam(ADSizeY, &res);
     value += res/2 ;
-    setIntegerParam(PHANTOM_AutoTriggerYZeroed_, value);
+    setIntegerParam(PHANTOM_AutoTriggerY_, value);
   }
 
   return status;

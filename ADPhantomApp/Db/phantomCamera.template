@@ -609,13 +609,6 @@ record(ai, "$(P)$(R)AutoTriggerX_RBV")
   field(SCAN, "I/O Intr")
 }
 
-record(ai, "$(P)$(R)AutoTriggerXZeroed_RBV")
-{
-  field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUTOTRIGZEROED_X")
-  field(SCAN, "I/O Intr")
-}
-
 record(ao, "$(P)$(R)AutoTriggerY")
 {
   field(DTYP, "asynInt32")
@@ -626,13 +619,6 @@ record(ai, "$(P)$(R)AutoTriggerY_RBV")
 {
   field(DTYP, "asynInt32")
   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUTOTRIG_Y")
-  field(SCAN, "I/O Intr")
-}
-
-record(ai, "$(P)$(R)AutoTriggerYZeroed_RBV")
-{
-  field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUTOTRIGZEROED_Y")
   field(SCAN, "I/O Intr")
 }
 

@@ -1,4 +1,0 @@
-file phantomCamera.template {
-pattern{ P, R , PORT, ADDR, TIMEOUT}
-{ "test:", "ioc:" , "PHANTOM", 0, 1}
-}
