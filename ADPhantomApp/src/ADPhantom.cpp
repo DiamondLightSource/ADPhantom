@@ -951,9 +951,6 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
 
   // Initialise the debugger
   initDebugger(0);
-  debugLevel("ADPhantom::downloadCineFile", 1);
-  debugLevel("ADPhantom::readoutTimestamps",1);
-  debugLevel("ADPhantom::readoutDataStream",1);
 
   //Initialize non static data members
   portUser_  = NULL;
@@ -2346,9 +2343,12 @@ asynStatus ADPhantom::downloadCineFile()
   debug(functionName, "Download start frame", start_frame);
   debug(functionName, "Download end frame", end_frame);
 
-  if (start_cine > end_cine){
+  if (start_cine < 1 || start_cine >= PHANTOM_NUMBER_OF_CINES){
     rangeValid=false;
-    setStringParam(ADStatusMessage, "end_cine can't be less than start_cine");
+    setStringParam(ADStatusMessage, "start_cine value invalid");
+  }  else if (end_cine < 1 || end_cine >= PHANTOM_NUMBER_OF_CINES){
+    rangeValid=false;
+    setStringParam(ADStatusMessage, "end_cine value invalid");
   } else if(uni_frame_lim){ //Start frame and end frame are applied to every cine
     int first_frame = 0;
     int last_frame = 0;
@@ -2994,11 +2994,16 @@ asynStatus ADPhantom::readoutTimestamps(int start_cine, int end_cine, int start_
   // Clear any old timestamp data out
   timestampData_.clear();
 
-  for( int cine{start_cine}; cine <= end_cine; cine++){
+  int cine{start_cine};
+  do{ //do/while loop ending when cine == end_cine
 
     //Previous cine timestaps have failed to load
     if(status != asynSuccess){
       return status;
+    }
+    //Allows range to loop back around
+    if(cine == PHANTOM_NUMBER_OF_CINES){ 
+      cine = 1;
     }
 
     //Determine first and last frame to read
@@ -3045,7 +3050,7 @@ asynStatus ADPhantom::readoutTimestamps(int start_cine, int end_cine, int start_
       dPtr+=12;
       timestampData_.push_back(ts);
     }
-  }
+  }  while (cine++ != end_cine);
   return status;
 }
 
@@ -3081,10 +3086,15 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
   status = getCameraDataStruc("irig", paramMap_);
   status = stringToInteger(paramMap_["irig.yearbegin"].getValue(), irigYear);
 
-  for( int cine{start_cine}; cine <= end_cine; cine++){
+  int cine{start_cine};
+  do{ //do/while loop ending when cine == end_cine
 
     if(status != asynSuccess){
       break;
+    }
+    //Allows range to loop back around
+    if(cine == PHANTOM_NUMBER_OF_CINES){ 
+      cine = 1;
     }
     frame = 0;
 
@@ -3263,7 +3273,8 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
         pImage->release();
       }
     }
-  }
+  } while (cine++ != end_cine);
+
   setIntegerParam(PHANTOM_DownloadCount_, 0);
   callParamCallbacks();
 
