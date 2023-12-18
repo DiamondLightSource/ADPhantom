@@ -3,10 +3,10 @@ beginScreenProperties
 major 4
 minor 0
 release 1
-x 775
-y 91
-w 390
-h 820
+x 1509
+y 437
+w 400
+h 830
 font "arial-bold-r-12.0"
 ctlFont "arial-bold-r-12.0"
 btnFont "arial-bold-r-12.0"
@@ -86,7 +86,7 @@ minor 1
 release 1
 x 5
 y 475
-w 86
+w 2
 h 13
 font "arial-medium-r-12.0"
 fgColor index 14
@@ -121,7 +121,7 @@ minor 1
 release 1
 x 185
 y 475
-w 79
+w 2
 h 13
 font "arial-medium-r-12.0"
 fgColor index 14
@@ -285,7 +285,7 @@ minor 1
 release 1
 x 5
 y 575
-w 64
+w 2
 h 13
 font "arial-medium-r-12.0"
 fgColor index 14
@@ -305,7 +305,7 @@ minor 1
 release 1
 x 20
 y 620
-w 101
+w 103
 h 13
 font "arial-bold-r-12.0"
 fgColor index 14
@@ -344,7 +344,7 @@ minor 1
 release 1
 x 20
 y 665
-w 120
+w 118
 h 13
 font "arial-bold-r-12.0"
 fgColor index 14
@@ -383,7 +383,7 @@ minor 1
 release 1
 x 20
 y 690
-w 141
+w 139
 h 13
 font "arial-bold-r-12.0"
 fgColor index 14
@@ -441,7 +441,7 @@ minor 1
 release 1
 x 185
 y 525
-w 109
+w 2
 h 13
 font "arial-medium-r-12.0"
 fgColor index 14
@@ -491,11 +491,11 @@ bgColor index 3
 topShadowColor index 1
 botShadowColor index 11
 font "arial-bold-r-12.0"
-buttonLabel "Flash"
+buttonLabel "Cines"
 numPvs 4
 numDsps 1
 displayFileName {
-  0 "phantomFlashDetails"
+  0 "phantomCine"
 }
 endObjectProperties
 
@@ -562,26 +562,6 @@ font "arial-bold-r-12.0"
 fontAlign "center"
 endObjectProperties
 
-# (Menu Button)
-object activeMenuButtonClass
-beginObjectProperties
-major 4
-minor 0
-release 0
-x 180
-y 590
-w 85
-h 20
-fgColor index 25
-bgColor index 3
-inconsistentColor index 0
-topShadowColor index 1
-botShadowColor index 11
-controlPv "$(P)$(R)SelectedCine"
-indicatorPv "$(P)$(R)SelectedCine_RBV"
-font "arial-bold-r-12.0"
-endObjectProperties
-
 # (Textupdate)
 object TextupdateClass
 beginObjectProperties
@@ -609,7 +589,7 @@ minor 1
 release 1
 x 20
 y 595
-w 142
+w 144
 h 13
 font "arial-bold-r-12.0"
 fgColor index 14
@@ -644,7 +624,7 @@ minor 1
 release 1
 x 5
 y 525
-w 157
+w 2
 h 13
 font "arial-medium-r-12.0"
 fgColor index 14
@@ -726,7 +706,7 @@ minor 1
 release 1
 x 20
 y 715
-w 121
+w 120
 h 13
 font "arial-bold-r-12.0"
 fgColor index 14
@@ -785,7 +765,7 @@ minor 1
 release 1
 x 20
 y 740
-w 143
+w 139
 h 13
 font "arial-bold-r-12.0"
 fgColor index 14
@@ -846,7 +826,7 @@ minor 1
 release 1
 x 20
 y 640
-w 149
+w 151
 h 13
 font "arial-bold-r-12.0"
 fgColor index 14
@@ -905,7 +885,7 @@ minor 1
 release 1
 x 20
 y 765
-w 120
+w 122
 h 13
 font "arial-bold-r-12.0"
 fgColor index 14
@@ -934,5 +914,23 @@ bgColor index 10
 fill
 font "arial-bold-r-12.0"
 fontAlign "center"
+endObjectProperties
+
+# (Textentry)
+object TextentryClass
+beginObjectProperties
+major 10
+minor 0
+release 0
+x 180
+y 590
+w 75
+h 20
+controlPv "$(P)$(R)SelectedCine"
+fgColor index 25
+fgAlarm
+bgColor index 3
+fill
+font "arial-bold-r-12.0"
 endObjectProperties
 
