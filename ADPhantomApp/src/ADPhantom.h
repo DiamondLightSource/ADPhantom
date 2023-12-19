@@ -655,6 +655,9 @@ class ADPhantom: public ADDriver
     asynStatus debug(const std::string& method, const std::string& msg, const std::string& value);
     asynStatus debug(const std::string& method, const std::string& msg, std::map<std::string, std::string> value);
 
+    //Temp
+    struct timespec start_;
+
   protected:
     int PHANTOMConnect_;
     #define FIRST_PHANTOM_PARAM PHANTOMConnect_
