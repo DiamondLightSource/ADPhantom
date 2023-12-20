@@ -321,6 +321,15 @@ record(longout, "$(P)$(R)Download")
   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_DOWNLOAD")
 }
 
+### Cine abort download command
+
+record(longout, "$(P)$(R)AbortDownload")
+{
+  field(DESC, "Abort the download")
+  field(DTYP, "asynInt32")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_DOWNLOAD_ABORT")
+}
+
 ### Cine save to flash command
 
 record(longout, "$(P)$(R)SaveToCF")

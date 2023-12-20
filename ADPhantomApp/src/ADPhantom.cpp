@@ -1021,6 +1021,7 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   createParam(PHANTOM_DownloadStartCineString,        asynParamInt32,         &PHANTOM_DownloadStartCine_);
   createParam(PHANTOM_DownloadEndCineString,          asynParamInt32,         &PHANTOM_DownloadEndCine_);
   createParam(PHANTOM_DownloadString,                 asynParamInt32,         &PHANTOM_Download_);
+  createParam(PHANTOM_DownloadAbortString,            asynParamInt32,         &PHANTOM_DownloadAbort_);
   createParam(PHANTOM_DownloadCountString,            asynParamInt32,         &PHANTOM_DownloadCount_);
   createParam(PHANTOM_DownloadFrameModeString,        asynParamInt32,         &PHANTOM_DownloadFrameMode_);
   createParam(PHANTOM_CineSaveCFString,               asynParamInt32,         &PHANTOM_CineSaveCF_);
@@ -1915,6 +1916,7 @@ asynStatus ADPhantom::writeInt32(asynUser *pasynUser, epicsInt32 value)
   } else if (function == PHANTOM_SoftwareTrigger_){
     sendSoftwareTrigger();
   } else if (function == PHANTOM_Download_){
+    setIntegerParam(PHANTOM_DownloadAbort_, 0); 
     int preview = 0;
     getIntegerParam(PHANTOM_LivePreview_, &preview);
     if (preview){
@@ -3079,6 +3081,7 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
   int irigYear = 0;
   int trigSecs = 0;
   int trigUSecs = 0;
+  int abort = 0;
   unsigned int first_tv_sec = 0;
   unsigned int first_tv_usec = 0;
   asynStatus status = asynSuccess;
@@ -3161,6 +3164,11 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
     }
     //for (int frame = 0; frame < frames; frame++){
     while ((frame < frames) && (status == asynSuccess)){
+      getIntegerParam(PHANTOM_DownloadAbort_, &abort);
+      if(abort){ //Message to make it clear that abort will occur
+        setStringParam(ADStatusMessage, "Download aborting at cine end");
+      }
+
       metaFrame = start_frame+frame;
       frame++;
       total_frame++;
@@ -3273,7 +3281,7 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
         pImage->release();
       }
     }
-  } while (cine++ != end_cine);
+  } while (cine++ != end_cine && !abort);
 
   setIntegerParam(PHANTOM_DownloadCount_, 0);
   callParamCallbacks();
