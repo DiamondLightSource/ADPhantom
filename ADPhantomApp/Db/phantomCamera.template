@@ -84,6 +84,30 @@ record(longin, "$(P)$(R)TotalFrameCount_RBV")
 
 ################################################################
 ###
+### Automatically move to next available cine after capturing
+###
+
+record(bo, "$(P)$(R)AutoAdvance")
+{
+   field(DTYP, "asynInt32")
+   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUTO_ADVANCE")
+   field(ZNAM, "Off")
+   field(ONAM, "On")
+   field(VAL, "1")
+   field(PINI, "YES")
+}
+
+record(bi, "$(P)$(R)AutoAdvance_RBV")
+{
+   field(DTYP, "asynInt32")
+   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_AUTO_ADVANCE")
+   field(ZNAM, "Off")
+   field(ONAM, "On")
+   field(SCAN, "I/O Intr")
+}
+
+################################################################
+###
 ### Auto Saving cine
 ###
 
