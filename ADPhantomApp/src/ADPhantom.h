@@ -584,6 +584,7 @@ class ADPhantom: public ADDriver
     void phantomStatusTask();
     void phantomPreviewTask();
     void phantomFlashTask();
+    void phantomDownloadTask();
     asynStatus makeConnection();
     asynStatus connect();
     asynStatus disconnect();
@@ -792,6 +793,7 @@ class ADPhantom: public ADDriver
     std::map<std::string, int>         debugMap_;
     epicsEventId                       startEventId_;
     epicsEventId                       stopEventId_;
+    epicsEventId                       startDownloadEventId_;
     epicsEventId                       startPreviewEventId_;
     epicsEventId                       stopPreviewEventId_;
     epicsEventId                       flashEventId_;

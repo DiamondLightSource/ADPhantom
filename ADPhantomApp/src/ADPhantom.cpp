@@ -899,6 +899,15 @@ static void phantomFlashTaskC(void *drvPvt)
 }
 
 /**
+ * Function to run the download task within a separate thread in C++
+ */
+static void phantomDownloadTaskC(void *drvPvt)
+{
+  ADPhantom *pPvt = (ADPhantom *)drvPvt;
+  pPvt->phantomDownloadTask();
+}
+
+/**
  * ADPhantom destructor
  */
 ADPhantom::~ADPhantom()
@@ -951,6 +960,10 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
 
   // Initialise the debugger
   initDebugger(0);
+  debugLevel("ADPhantom::phantomDownloadTask", 1);
+  debugLevel("ADPhantom::readoutDataStream", 1);
+  debugLevel("ADPhantom::phantomStatusTask", 1);
+
 
   //Initialize non static data members
   portUser_  = NULL;
@@ -990,6 +1003,13 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   this->flashEventId_ = epicsEventCreate(epicsEventEmpty);
   if (!this->flashEventId_){
     debug(functionName, "epicsEventCreate failure to create flash event");
+    status = asynError;
+  }
+
+  // Create the epicsEvents for signalling to the PHANTOM task when download starts
+  this->startDownloadEventId_ = epicsEventCreate(epicsEventEmpty);
+  if (!this->startDownloadEventId_){
+    debug(functionName, "epicsEventCreate failure for start download event");
     status = asynError;
   }
 
@@ -1131,7 +1151,7 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
                                 (EPICSTHREADFUNC)phantomCameraTaskC,
                                 this) == NULL);
     if (status){
-      debug(functionName, "epicsTheadCreate failure for image task");
+      debug(functionName, "epicsThreadCreate failure for image task");
     }
   }
 
@@ -1144,7 +1164,7 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
                                 (EPICSTHREADFUNC)phantomPreviewTaskC,
                                 this) == NULL);
     if (status){
-      debug(functionName, "epicsTheadCreate failure for preview task");
+      debug(functionName, "epicsThreadCreate failure for preview task");
     }
   }
 
@@ -1157,7 +1177,7 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
                                 (EPICSTHREADFUNC)phantomStatusTaskC,
                                 this) == NULL);
     if (status){
-      debug(functionName, "epicsTheadCreate failure for status task");
+      debug(functionName, "epicsThreadCreate failure for status task");
     }
   }
 
@@ -1170,7 +1190,20 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
                                 (EPICSTHREADFUNC)phantomFlashTaskC,
                                 this) == NULL);
     if (status){
-      debug(functionName, "epicsTheadCreate failure for flash task");
+      debug(functionName, "epicsThreadCreate failure for flash task");
+    }
+  }
+
+  if (status == asynSuccess){
+    debug(functionName, "Starting up download task....");
+    // Create the thread that runs downloads
+    status = (epicsThreadCreate("PhantomDownloadTask",
+                                epicsThreadPriorityMedium,
+                                epicsThreadGetStackSize(epicsThreadStackMedium),
+                                (EPICSTHREADFUNC)phantomDownloadTaskC,
+                                this) == NULL);
+    if (status){
+      debug(functionName, "epicsThreadCreate failure for download task");
     }
   }
 
@@ -1314,16 +1347,7 @@ void ADPhantom::phantomCameraTask()
   std::string cineStr;
 
   this->lock();
-  // The following is needed for this kind of acquisition
 
-  // Read in the cine number that we should be recording to
-  // ? Read in the number of frames and partition ?
-  // Start the cine recording by issuing a rec <cine_number>
-  // Monitor the cine structure and check how many frames have been recorded
-  // c#.state = State (recording, completed etc)
-  // c#.frcount = Number of frames recorded
-  // Increment the counters from the cine structure and decide when we have finished
-  // right now start by monitoring cine 1 state and report the two items
   while (1){
     getIntegerParam(ADAcquire, &acquire);
     // If we are not acquiring or encountered a problem then wait for a semaphore that is given when acquisition is started
@@ -1449,6 +1473,122 @@ void ADPhantom::phantomCameraTask()
     }
   }
 }
+
+/** 
+ *  This function runs the download thread.
+ *  It is started in the class constructor and must not return until the IOC stops.
+ *
+*/ 
+void ADPhantom::phantomDownloadTask()
+{
+  static const char *functionName = "ADPhantom::phantomDownloadTask";
+  int status = asynSuccess;
+  int preview = 0;
+  this->lock();
+  
+
+  while (1){
+    
+    debug(functionName, "Waiting for the download command");
+    this->unlock();
+    status = epicsEventWait(this->startDownloadEventId_);
+    debug(functionName, "Download command recieved");
+    this->lock();
+    getIntegerParam(PHANTOM_LivePreview_, &preview);
+    if (preview){
+      setStringParam(ADStatusMessage, "Cannot download while live previewing");
+      setIntegerParam(ADStatus, ADStatusError);
+    }
+    else{
+      int start_frame = 0;
+      int end_frame = 0;
+      int start_cine = 0;
+      int end_cine =0;
+      int uni_frame_lim = false; //Whether frame limits are applied to all cines
+      bool rangeValid = true;
+      std::string response;
+      asynStatus status = asynSuccess;
+
+      setStringParam(ADStatusMessage, "Downloading");
+
+
+      // Read in the number of frames to download
+      getIntegerParam(PHANTOM_DownloadStartFrame_, &start_frame);
+      getIntegerParam(PHANTOM_DownloadEndFrame_, &end_frame);
+      getIntegerParam(PHANTOM_DownloadStartCine_, &start_cine);
+      getIntegerParam(PHANTOM_DownloadEndCine_, &end_cine);
+      getIntegerParam(PHANTOM_DownloadFrameMode_, &uni_frame_lim);
+
+      debug(functionName, "Download start cine", start_cine);
+      debug(functionName, "Download end cine", end_cine);
+      debug(functionName, "Download start frame", start_frame);
+      debug(functionName, "Download end frame", end_frame);
+
+      if (start_cine < 1 || start_cine >= PHANTOM_NUMBER_OF_CINES){
+        rangeValid=false;
+        setStringParam(ADStatusMessage, "start_cine value invalid");
+      }  else if (end_cine < 1 || end_cine >= PHANTOM_NUMBER_OF_CINES){
+        rangeValid=false;
+        setStringParam(ADStatusMessage, "end_cine value invalid");
+      } else if(uni_frame_lim){ //Start frame and end frame are applied to every cine
+        int first_frame = 0;
+        int last_frame = 0;
+        for(int cine{start_cine}; cine <= end_cine; cine++){
+          debug(functionName, "Starting sanity checks on cine ", cine);
+          getIntegerParam(PHANTOM_CnFirstFrame_[cine], &first_frame);
+          getIntegerParam(PHANTOM_CnLastFrame_[cine], &last_frame);
+          if(start_frame < first_frame || start_frame > last_frame){
+            rangeValid=false;
+            setStringParam(ADStatusMessage, "start_frame value invalid");
+            break;
+          } else if(end_frame < first_frame || end_frame > last_frame ){
+            rangeValid=false;
+            setStringParam(ADStatusMessage, "end_frame value invalid");
+            break;
+          } else if(end_frame < start_frame){
+            rangeValid=false;
+            setStringParam(ADStatusMessage, "start_frame cannot be after end_frame");
+            break;
+          }
+        }
+      } else{ //Start frame refers to start cine and end frame refers to end cine
+        int start_cine_first_frame = 0;
+        int start_cine_last_frame = 0;
+        int end_cine_first_frame = 0;
+        int end_cine_last_frame = 0;
+        getIntegerParam(PHANTOM_CnFirstFrame_[start_cine], &start_cine_first_frame);
+        getIntegerParam(PHANTOM_CnLastFrame_[start_cine], &start_cine_last_frame);
+        getIntegerParam(PHANTOM_CnFirstFrame_[end_cine], &end_cine_first_frame);
+        getIntegerParam(PHANTOM_CnLastFrame_[end_cine], &end_cine_last_frame);
+
+        if (start_frame < start_cine_first_frame || start_frame > start_cine_last_frame) {
+          rangeValid=false;
+          setStringParam(ADStatusMessage, "start_frame value invalid");
+        } else if(end_frame < end_cine_first_frame || end_frame > end_cine_last_frame) {
+          rangeValid=false;
+          setStringParam(ADStatusMessage, "end_frame value invalid");
+        } else if (start_cine == end_cine && end_frame < start_frame) {
+          rangeValid=false;
+          setStringParam(ADStatusMessage, "end_frame cannot be less than start_frame within a cine");
+        }
+      }
+
+      if(rangeValid){
+        // Attach to the correct port
+        //status = attachToPort("dataPort");
+
+        // Download the timestamp information
+        status = readoutTimestamps(start_cine, end_cine, start_frame, end_frame, uni_frame_lim);
+
+        // Download the data and process arrays
+        status = readoutDataStream(start_cine, end_cine, start_frame, end_frame, uni_frame_lim);
+
+        setStringParam(ADStatusMessage, "Ready");
+      }
+   }  
+  }
+}
+
 
 void ADPhantom::phantomStatusTask()
 {
@@ -1907,7 +2047,15 @@ asynStatus ADPhantom::writeInt32(asynUser *pasynUser, epicsInt32 value)
   } else if (function == PHANTOM_LivePreview_){
     if (value){
       // Send an event to wake up the live preview
-      epicsEventSignal(this->startPreviewEventId_);
+      int downloadCount = 0;
+      getIntegerParam(PHANTOM_DownloadCount_, &downloadCount);
+      if(downloadCount){
+      setStringParam(ADStatusMessage, "Cannot live preview while downloading");  
+      setIntegerParam(ADStatus, ADStatusError);
+      status |= asynError;
+      } else{
+        epicsEventSignal(this->startPreviewEventId_);
+      }
     }
     if (!value){
       // Stop live preview
@@ -1929,7 +2077,8 @@ asynStatus ADPhantom::writeInt32(asynUser *pasynUser, epicsInt32 value)
         setIntegerParam(PHANTOM_DownloadStartCine_, value);
         setIntegerParam(PHANTOM_DownloadEndCine_, value);
       }
-      status |= downloadCineFile();
+      //Send an event to start the download
+      epicsEventSignal(this->startDownloadEventId_);
     }
   } else if (function == PHANTOM_CineSaveCF_){
     status |= saveCineToFlash(value);
@@ -2314,101 +2463,6 @@ asynStatus ADPhantom::sendSoftwareTrigger()
 
   status = sendSimpleCommand(PHANTOM_CMD_TRIG, &response);
   debug(functionName, "Response", response);
-
-  return status;
-}
-
-asynStatus ADPhantom::downloadCineFile()
-{
-  const char * functionName = "ADPhantom::downloadCineFile";
-  int start_frame = 0;
-  int end_frame = 0;
-  int start_cine = 0;
-  int end_cine =0;
-  int uni_frame_lim = false; //Whether frame limits are applied to all cines
-  bool rangeValid = true;
-  std::string response;
-  asynStatus status = asynSuccess;
-
-  setStringParam(ADStatusMessage, "Downloading");
-
-
-  // Read in the number of frames to download
-  getIntegerParam(PHANTOM_DownloadStartFrame_, &start_frame);
-  getIntegerParam(PHANTOM_DownloadEndFrame_, &end_frame);
-  getIntegerParam(PHANTOM_DownloadStartCine_, &start_cine);
-  getIntegerParam(PHANTOM_DownloadEndCine_, &end_cine);
-  getIntegerParam(PHANTOM_DownloadFrameMode_, &uni_frame_lim);
-
-  debug(functionName, "Download start cine", start_cine);
-  debug(functionName, "Download end cine", end_cine);
-  debug(functionName, "Download start frame", start_frame);
-  debug(functionName, "Download end frame", end_frame);
-
-  if (start_cine < 1 || start_cine >= PHANTOM_NUMBER_OF_CINES){
-    rangeValid=false;
-    setStringParam(ADStatusMessage, "start_cine value invalid");
-  }  else if (end_cine < 1 || end_cine >= PHANTOM_NUMBER_OF_CINES){
-    rangeValid=false;
-    setStringParam(ADStatusMessage, "end_cine value invalid");
-  } else if(uni_frame_lim){ //Start frame and end frame are applied to every cine
-    int first_frame = 0;
-    int last_frame = 0;
-    for(int cine{start_cine}; cine <= end_cine; cine++){
-      debug(functionName, "Starting sanity checks on cine ", cine);
-      getIntegerParam(PHANTOM_CnFirstFrame_[cine], &first_frame);
-      getIntegerParam(PHANTOM_CnLastFrame_[cine], &last_frame);
-      if(start_frame < first_frame || start_frame > last_frame){
-        rangeValid=false;
-        setStringParam(ADStatusMessage, "start_frame value invalid");
-        break;
-      } else if(end_frame < first_frame || end_frame > last_frame ){
-        rangeValid=false;
-        setStringParam(ADStatusMessage, "end_frame value invalid");
-        break;
-      } else if(end_frame < start_frame){
-        rangeValid=false;
-        setStringParam(ADStatusMessage, "start_frame cannot be after end_frame");
-        break;
-      }
-    }
-  } else{ //Start frame refers to start cine and end frame refers to end cine
-    int start_cine_first_frame = 0;
-    int start_cine_last_frame = 0;
-    int end_cine_first_frame = 0;
-    int end_cine_last_frame = 0;
-    getIntegerParam(PHANTOM_CnFirstFrame_[start_cine], &start_cine_first_frame);
-    getIntegerParam(PHANTOM_CnLastFrame_[start_cine], &start_cine_last_frame);
-    getIntegerParam(PHANTOM_CnFirstFrame_[end_cine], &end_cine_first_frame);
-    getIntegerParam(PHANTOM_CnLastFrame_[end_cine], &end_cine_last_frame);
-
-    if (start_frame < start_cine_first_frame || start_frame > start_cine_last_frame) {
-      rangeValid=false;
-      setStringParam(ADStatusMessage, "start_frame value invalid");
-    } else if(end_frame < end_cine_first_frame || end_frame > end_cine_last_frame) {
-      rangeValid=false;
-      setStringParam(ADStatusMessage, "end_frame value invalid");
-    } else if (start_cine == end_cine && end_frame < start_frame) {
-      rangeValid=false;
-      setStringParam(ADStatusMessage, "end_frame cannot be less than start_frame within a cine");
-    }
-  }
-
-  if(rangeValid){
-    // Attach to the correct port
-    //status = attachToPort("dataPort");
-
-    // Download the timestamp information
-    status = readoutTimestamps(start_cine, end_cine, start_frame, end_frame, uni_frame_lim);
-
-    // Download the data and process arrays
-    status = readoutDataStream(start_cine, end_cine, start_frame, end_frame, uni_frame_lim);
-
-    setStringParam(ADStatusMessage, "Ready");
-  }
-  else{ //Invalid range
-    status = asynError;
-  }
 
   return status;
 }
@@ -3188,6 +3242,7 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
         dims[1] = height;
         setIntegerParam(NDArraySizeX, width);
         setIntegerParam(NDArraySizeY, height);
+        this->unlock();
         nbytes = (dims[0] * dims[1]) * sizeof(int16_t);
         dataType= NDUInt16;
         pImage = this->pNDArrayPool->alloc(2, dims, dataType, nbytes, NULL);
@@ -3267,6 +3322,7 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
         first_tv_sec = tv_sec;
         first_tv_usec = tv_usec;
 
+        this->lock();
         getIntegerParam(NDArrayCallbacks, &arrayCallbacks);
         if (arrayCallbacks){
           // Must release the lock here, or we can get into a deadlock, because we can
@@ -4225,6 +4281,7 @@ asynStatus ADPhantom::debugLevel(const std::string& method, int onOff)
   if (method == "all"){
     debugMap_["ADPhantom::ADPhantom"]               = onOff;
     debugMap_["ADPhantom::phantomCameraTask"]           = onOff;
+    debugMap_["ADPhantom::phantomDownloadTask"]           = onOff;
     debugMap_["ADPhantom::phantomPreviewTask"]          = onOff;
     debugMap_["ADPhantom::readoutPreviewData"]       = onOff;
     debugMap_["ADPhantom::readFrame"]                = onOff;
