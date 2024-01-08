@@ -962,7 +962,8 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   initDebugger(0);
   debugLevel("ADPhantom::phantomDownloadTask", 1);
   debugLevel("ADPhantom::readoutDataStream", 1);
-  debugLevel("ADPhantom::phantomStatusTask", 1);
+  debugLevel("ADPhantom::asynPortDisconnect", 1);
+  debugLevel("ADPhantom::attachToPort", 1);
 
 
   //Initialize non static data members
@@ -3219,8 +3220,30 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
     //for (int frame = 0; frame < frames; frame++){
     while ((frame < frames) && (status == asynSuccess)){
       getIntegerParam(PHANTOM_DownloadAbort_, &abort);
-      if(abort){ //Message to make it clear that abort will occur
-        setStringParam(ADStatusMessage, "Download aborting at cine end");
+      if(abort){
+        setStringParam(ADStatusMessage, "Download aborting");
+        //To abort cleanly we disconnect from the port to restart the datastream
+        debug(functionName, "Running common connect");
+        status = pasynCommonSyncIO->connect(dataPort_, 0, &commonDataport_, NULL);
+        if (status){
+          debug(functionName, "Common connect failed");
+        }
+        debug(functionName, "Running pasynCommonSyncIO->disconnectDevice");
+        status = pasynCommonSyncIO->disconnectDevice(commonDataport_);
+        if (status) {
+          debug(functionName, "Disconnect device failed");
+        }
+        debug(functionName, "Running pasynCommonSyncIO->connectDevice");
+        status = pasynCommonSyncIO->connectDevice(commonDataport_);
+        if (status) {
+          debug(functionName, "Connect device failed");
+        }
+        debug(functionName, "Running attachToPort");
+        status = attachToPort("dataPort");
+        if(status){
+          debug(functionName, "Failed to attach ");
+        }
+        break;
       }
 
       metaFrame = start_frame+frame;

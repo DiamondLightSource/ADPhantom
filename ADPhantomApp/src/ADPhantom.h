@@ -30,6 +30,7 @@
 
 // Asyn driver includes
 #include "asynOctetSyncIO.h"
+#include "asynCommonSyncIO.h"
 
 // Phantom camera PH16 protocol data definitions
 #include <ph16UnitStructure.h>
@@ -776,6 +777,7 @@ class ADPhantom: public ADDriver
 
     asynUser                           *portUser_;
     asynUser                           *dataChannel_;
+    asynUser                           *commonDataport_;
     char                               ctrlPort_[128];
     char                               dataPort_[128];
     char                               data_[2048000];
