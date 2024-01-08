@@ -3,8 +3,8 @@ beginScreenProperties
 major 4
 minor 0
 release 1
-x 1509
-y 437
+x 1132
+y 373
 w 400
 h 830
 font "arial-bold-r-12.0"
@@ -777,47 +777,6 @@ value {
 autoSize
 endObjectProperties
 
-# (Group)
-object activeGroupClass
-beginObjectProperties
-major 4
-minor 0
-release 0
-x 175
-y 790
-w 195
-h 25
-
-beginGroup
-
-# (Static Text)
-object activeXTextClass
-beginObjectProperties
-major 4
-minor 1
-release 1
-x 175
-y 790
-w 195
-h 25
-font "arial-bold-r-12.0"
-fontAlign "center"
-fgColor index 20
-bgColor index 3
-value {
-  "Cine save to flash in progress."
-}
-border
-endObjectProperties
-
-endGroup
-
-visPv "$(P)$(R)CFProgress_RBV"
-visInvert
-visMin "0"
-visMax "1"
-endObjectProperties
-
 # (Static Text)
 object activeXTextClass
 beginObjectProperties
@@ -932,5 +891,28 @@ fgAlarm
 bgColor index 3
 fill
 font "arial-bold-r-12.0"
+endObjectProperties
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 4
+release 0
+x 300
+y 790
+w 85
+h 25
+fgColor index 14
+bgColor index 3
+topShadowColor index 1
+botShadowColor index 11
+font "arial-bold-r-12.0"
+buttonLabel "Download"
+numPvs 4
+numDsps 1
+displayFileName {
+  0 "phantomDownload"
+}
 endObjectProperties
 

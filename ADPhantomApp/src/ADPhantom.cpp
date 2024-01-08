@@ -1016,10 +1016,13 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   createParam(PHANTOM_CineFrameCountString,           asynParamInt32,         &PHANTOM_CineFrameCount_);
   createParam(PHANTOM_CineFirstFrameString,           asynParamInt32,         &PHANTOM_CineFirstFrame_);
   createParam(PHANTOM_CineLastFrameString,            asynParamInt32,         &PHANTOM_CineLastFrame_);
-  createParam(PHANTOM_CineRecordStartString,          asynParamInt32,         &PHANTOM_CineRecordStart_);
-  createParam(PHANTOM_CineRecordEndString,            asynParamInt32,         &PHANTOM_CineRecordEnd_);
-  createParam(PHANTOM_CineRecordString,               asynParamInt32,         &PHANTOM_CineRecord_);
-  createParam(PHANTOM_CineRecordCountString,          asynParamInt32,         &PHANTOM_CineRecordCount_);
+  createParam(PHANTOM_DownloadStartFrameString,       asynParamInt32,         &PHANTOM_DownloadStartFrame_);
+  createParam(PHANTOM_DownloadEndFrameString,         asynParamInt32,         &PHANTOM_DownloadEndFrame_);
+  createParam(PHANTOM_DownloadStartCineString,        asynParamInt32,         &PHANTOM_DownloadStartCine_);
+  createParam(PHANTOM_DownloadEndCineString,          asynParamInt32,         &PHANTOM_DownloadEndCine_);
+  createParam(PHANTOM_DownloadString,                 asynParamInt32,         &PHANTOM_Download_);
+  createParam(PHANTOM_DownloadCountString,            asynParamInt32,         &PHANTOM_DownloadCount_);
+  createParam(PHANTOM_DownloadFrameModeString,        asynParamInt32,         &PHANTOM_DownloadFrameMode_);
   createParam(PHANTOM_CineSaveCFString,               asynParamInt32,         &PHANTOM_CineSaveCF_);
   createParam(PHANTOM_LivePreviewString,              asynParamInt32,         &PHANTOM_LivePreview_);
   createParam(PHANTOM_SetPartitionString,             asynParamInt32,         &PHANTOM_SetPartition_);
@@ -1911,39 +1914,20 @@ asynStatus ADPhantom::writeInt32(asynUser *pasynUser, epicsInt32 value)
     }
   } else if (function == PHANTOM_SoftwareTrigger_){
     sendSoftwareTrigger();
-  } else if (function == PHANTOM_CineRecord_){
+  } else if (function == PHANTOM_Download_){
     int preview = 0;
-    bool rangeValid = false;
-    int cine;
-    epicsInt32 record_start;
-    epicsInt32 record_end;
-    epicsInt32 first_frame;
-    epicsInt32 last_frame;
-    getIntegerParam(PHANTOM_SelectedCine_, &cine);
     getIntegerParam(PHANTOM_LivePreview_, &preview);
-    getIntegerParam(PHANTOM_CineRecordStart_, &record_start);
-    getIntegerParam(PHANTOM_CineRecordEnd_, &record_end);
-    getIntegerParam(PHANTOM_CnFirstFrame_[cine], &first_frame);
-    getIntegerParam(PHANTOM_CnLastFrame_[cine], &last_frame);
-
-    if (record_start < first_frame || record_start > last_frame) {
-      rangeValid=false;
-      setStringParam(ADStatusMessage, "record_start value invalid");
-    } else if(record_end < first_frame || record_end > last_frame) {
-      rangeValid=false;
-      setStringParam(ADStatusMessage, "record_end value invalid");
-    } else if (record_end < record_start) {
-      rangeValid=false;
-      setStringParam(ADStatusMessage, "record_end can't be less than record_start");
-    } else
-      rangeValid=true;
-
     if (preview){
       setStringParam(ADStatusMessage, "Cannot download while live previewing");
       setIntegerParam(ADStatus, ADStatusError);
       status |= asynError;
-    } else if (rangeValid) {
-      status |= downloadCineFile(value);
+    } else{
+      if(value > 0 && value < PHANTOM_NUMBER_OF_CINES){ 
+        //Allows the easy download of single cine
+        setIntegerParam(PHANTOM_DownloadStartCine_, value);
+        setIntegerParam(PHANTOM_DownloadEndCine_, value);
+      }
+      status |= downloadCineFile();
     }
   } else if (function == PHANTOM_CineSaveCF_){
     status |= saveCineToFlash(value);
@@ -2322,7 +2306,7 @@ asynStatus ADPhantom::readoutPreviewData()
 
 asynStatus ADPhantom::sendSoftwareTrigger()
 {
-  const char * functionName = "ADPhantom::readoutDataStream";
+  const char * functionName = "ADPhantom::sendSoftwareTrigger";
   std::string response;
   asynStatus status = asynSuccess;
 
@@ -2332,29 +2316,101 @@ asynStatus ADPhantom::sendSoftwareTrigger()
   return status;
 }
 
-asynStatus ADPhantom::downloadCineFile(int cine)
+asynStatus ADPhantom::downloadCineFile()
 {
   const char * functionName = "ADPhantom::downloadCineFile";
-  int start = 0;
-  int end = 0;
+  int start_frame = 0;
+  int end_frame = 0;
+  int start_cine = 0;
+  int end_cine =0;
+  int uni_frame_lim = false; //Whether frame limits are applied to all cines
+  bool rangeValid = true;
   std::string response;
   asynStatus status = asynSuccess;
 
+  setStringParam(ADStatusMessage, "Downloading");
+
+
   // Read in the number of frames to download
-  getIntegerParam(PHANTOM_CineRecordStart_, &start);
-  getIntegerParam(PHANTOM_CineRecordEnd_, &end);
+  getIntegerParam(PHANTOM_DownloadStartFrame_, &start_frame);
+  getIntegerParam(PHANTOM_DownloadEndFrame_, &end_frame);
+  getIntegerParam(PHANTOM_DownloadStartCine_, &start_cine);
+  getIntegerParam(PHANTOM_DownloadEndCine_, &end_cine);
+  getIntegerParam(PHANTOM_DownloadFrameMode_, &uni_frame_lim);
 
-  debug(functionName, "Download start", start);
-  debug(functionName, "Download end", end);
+  debug(functionName, "Download start cine", start_cine);
+  debug(functionName, "Download end cine", end_cine);
+  debug(functionName, "Download start frame", start_frame);
+  debug(functionName, "Download end frame", end_frame);
 
-  // Attach to the correct port
-  //status = attachToPort("dataPort");
+  if (start_cine < 1 || start_cine >= PHANTOM_NUMBER_OF_CINES){
+    rangeValid=false;
+    setStringParam(ADStatusMessage, "start_cine value invalid");
+  }  else if (end_cine < 1 || end_cine >= PHANTOM_NUMBER_OF_CINES){
+    rangeValid=false;
+    setStringParam(ADStatusMessage, "end_cine value invalid");
+  } else if(uni_frame_lim){ //Start frame and end frame are applied to every cine
+    int first_frame = 0;
+    int last_frame = 0;
+    for(int cine{start_cine}; cine <= end_cine; cine++){
+      debug(functionName, "Starting sanity checks on cine ", cine);
+      getIntegerParam(PHANTOM_CnFirstFrame_[cine], &first_frame);
+      getIntegerParam(PHANTOM_CnLastFrame_[cine], &last_frame);
+      if(start_frame < first_frame || start_frame > last_frame){
+        rangeValid=false;
+        char message[256];
+        sprintf(message, "start_frame value invalid in cine %d", cine);
+        setStringParam(ADStatusMessage, message);
+        break;
+      } else if(end_frame < first_frame || end_frame > last_frame ){
+        rangeValid=false;
+        char message[256];
+        sprintf(message, "end_frame value invalid in cine %d", cine);
+        setStringParam(ADStatusMessage, message);
+        break;
+      } else if(end_frame < start_frame){
+        rangeValid=false;
+        setStringParam(ADStatusMessage, "start_frame cannot be after end_frame");
+        break;
+      }
+    }
+  } else{ //Start frame refers to start cine and end frame refers to end cine
+    int start_cine_first_frame = 0;
+    int start_cine_last_frame = 0;
+    int end_cine_first_frame = 0;
+    int end_cine_last_frame = 0;
+    getIntegerParam(PHANTOM_CnFirstFrame_[start_cine], &start_cine_first_frame);
+    getIntegerParam(PHANTOM_CnLastFrame_[start_cine], &start_cine_last_frame);
+    getIntegerParam(PHANTOM_CnFirstFrame_[end_cine], &end_cine_first_frame);
+    getIntegerParam(PHANTOM_CnLastFrame_[end_cine], &end_cine_last_frame);
 
-  // Download the timestamp information
-  status = readoutTimestamps(cine, start, end);
+    if (start_frame < start_cine_first_frame || start_frame > start_cine_last_frame) {
+      rangeValid=false;
+      setStringParam(ADStatusMessage, "start_frame value invalid");
+    } else if(end_frame < end_cine_first_frame || end_frame > end_cine_last_frame) {
+      rangeValid=false;
+      setStringParam(ADStatusMessage, "end_frame value invalid");
+    } else if (start_cine == end_cine && end_frame < start_frame) {
+      rangeValid=false;
+      setStringParam(ADStatusMessage, "end_frame cannot be less than start_frame within a cine");
+    }
+  }
 
-  // Download the data and process arrays
-  status = readoutDataStream(cine, start, end);
+  if(rangeValid){
+    // Attach to the correct port
+    //status = attachToPort("dataPort");
+
+    // Download the timestamp information
+    status = readoutTimestamps(start_cine, end_cine, start_frame, end_frame, uni_frame_lim);
+
+    // Download the data and process arrays
+    status = readoutDataStream(start_cine, end_cine, start_frame, end_frame, uni_frame_lim);
+
+    setStringParam(ADStatusMessage, "Ready");
+  }
+  else{ //Invalid range
+    status = asynError;
+  }
 
   return status;
 }
@@ -2924,13 +2980,15 @@ asynStatus ADPhantom::convert10BitPacketTo12Bit(void *input, void *output)
   return status;
 }
 
-asynStatus ADPhantom::readoutTimestamps(int cine, int start, int end)
+asynStatus ADPhantom::readoutTimestamps(int start_cine, int end_cine, int start_frame, int end_frame, bool uni_frame_lim)
 {
   const char * functionName = "ADPhantom::readoutTimestamps";
   char command[PHANTOM_MAX_STRING];
   int nBytes = 0;
   std::string response;
-  int frames = end - start + 1;
+  int first_frame = 0;
+  int last_frame = 0;
+  int frames = 0;
   short_time_stamp32 ts;
   asynStatus status = asynSuccess;
 
@@ -2940,53 +2998,87 @@ asynStatus ADPhantom::readoutTimestamps(int cine, int start, int end)
   // Clear any old timestamp data out
   timestampData_.clear();
 
-  sprintf(command, "time {cine:%d, start:%d, cnt:%d}", cine, start, frames);
-  status = sendSimpleCommand(command, &response);
-  debug(functionName, "Response", response);
+  int cine{start_cine};
+  do{ //do/while loop ending when cine == end_cine
 
-  // Read back all of the timestamps in one go
-  nBytes = frames * 12;
-  status = this->readFrame(nBytes);
-  char *dPtr = data_;
-  for (int frame = 0; frame < frames; frame++){
-    memcpy(&ts, dPtr, 12);
-    // time from beginning of the year in 1/100 sec units
-    //printf("Time sec 1/100: %u\n", ntohl(ts.csecs));
-    // exposure time in us
-    //printf("Exp time us: %d\n", ts.exptime);
-    // bits[15..2]: fractions (us to 10000); b[1]:event; b[0]:lock
-    //printf("Fractions us to 10000: %u\n", ntohs(ts.frac)>>2);
-    // exposure extension up to 32 bits
-    //printf("Exposure extension: %d\n", ts.exptime32);
-    //uint32_t ns_exp = (ntohs(ts.exptime)*1000) + (int)(floor((double)ntohs(ts.exptime32)/65535.0*1000.0 + 0.5));
-    //printf("Total Exposure ns: %d\n", ns_exp);
-    // fractions extension up to 32 bits
-    //printf("Fractions extension: %d\n", ts.frac32);
-    dPtr+=12;
-    timestampData_.push_back(ts);
-  }
+    //Previous cine timestaps have failed to load
+    if(status != asynSuccess){
+      return status;
+    }
+    //Allows range to loop back around
+    if(cine == PHANTOM_NUMBER_OF_CINES){ 
+      cine = 1;
+    }
 
+    //Determine first and last frame to read
+    if(uni_frame_lim){ //All cines have same frame limits
+      first_frame = start_frame;
+      last_frame = end_frame;
+    } else { //Frame limits only applied to first and last cine
+      if (cine == start_cine){
+        first_frame = start_frame;
+      } else{
+        getIntegerParam(PHANTOM_CnFirstFrame_[cine], &first_frame);
+      } 
+      if(cine == end_cine){
+        last_frame = end_frame;
+      } else{
+        getIntegerParam(PHANTOM_CnLastFrame_[cine], &last_frame);
+      }
+    }
+    frames = last_frame - first_frame + 1;
+
+    sprintf(command, "time {cine:%d, start:%d, cnt:%d}", cine, first_frame, frames);
+    status = sendSimpleCommand(command, &response);
+    debug(functionName, "Command", command);
+    debug(functionName, "Response", response);
+
+    // Read back all of the timestamps in one go
+    nBytes = frames * 12;
+    status = this->readFrame(nBytes);
+    char *dPtr = data_;
+    for (int frame = 0; frame < frames; frame++){
+      memcpy(&ts, dPtr, 12);
+      // time from beginning of the year in 1/100 sec units
+      //printf("Time sec 1/100: %u\n", ntohl(ts.csecs));
+      // exposure time in us
+      //printf("Exp time us: %d\n", ts.exptime);
+      // bits[15..2]: fractions (us to 10000); b[1]:event; b[0]:lock
+      //printf("Fractions us to 10000: %u\n", ntohs(ts.frac)>>2);
+      // exposure extension up to 32 bits
+      //printf("Exposure extension: %d\n", ts.exptime32);
+      //uint32_t ns_exp = (ntohs(ts.exptime)*1000) + (int)(floor((double)ntohs(ts.exptime32)/65535.0*1000.0 + 0.5));
+      //printf("Total Exposure ns: %d\n", ns_exp);
+      // fractions extension up to 32 bits
+      //printf("Fractions extension: %d\n", ts.frac32);
+      dPtr+=12;
+      timestampData_.push_back(ts);
+    }
+  }  while (cine++ != end_cine);
   return status;
 }
 
-asynStatus ADPhantom::readoutDataStream(int cine, int start, int end)
+asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_frame, int end_frame, bool uni_frame_lim)
 {
   const char * functionName = "ADPhantom::readoutDataStream";
   char command[PHANTOM_MAX_STRING];
   int width = 0;
   int height = 0;
   int nBytes = 0;
-  int frame = 0;
+  int frame = 0; //Frame within cine
+  int total_frame = 0; //Frame within all cines being downloaded
   std::string response;
   NDArray *pImage;
   size_t dims[2];
   NDDataType_t dataType;
   int nbytes;
   int arrayCallbacks   = 0;
-  int frames = end - start + 1;
+  int first_frame = 0;
+  int last_frame = 0;
+  int frames = 0;
   int metaExposure = 0;
   int metaRate = 0;
-  int metaFrame = 0;
+  int metaFrame = 0; //Frame as specified in cine
   int lastfr = 0;
   int irigYear = 0;
   int trigSecs = 0;
@@ -2995,165 +3087,199 @@ asynStatus ADPhantom::readoutDataStream(int cine, int start, int end)
   unsigned int first_tv_usec = 0;
   asynStatus status = asynSuccess;
 
-  // Read the meta data
-  sprintf(command, "c%d.rate", cine);
-  status = stringToInteger(paramMap_[command].getValue(), metaRate);
-  sprintf(command, "c%d.exp", cine);
-  status = stringToInteger(paramMap_[command].getValue(), metaExposure);
-  sprintf(command, "c%d.lastfr", cine);
-  status = stringToInteger(paramMap_[command].getValue(), lastfr);
-  lastfr++;
-
   status = getCameraDataStruc("irig", paramMap_);
   status = stringToInteger(paramMap_["irig.yearbegin"].getValue(), irigYear);
-  sprintf(command, "c%d.trigtime.secs", cine);
-  status = stringToInteger(paramMap_[command].getValue(), trigSecs);
-  sprintf(command, "c%d.trigtime.frac", cine);
-  status = stringToInteger(paramMap_[command].getValue(), trigUSecs);
 
-  // Loop over meta array to read values
-  for (int mc = 0; mc < (int)metaArray_.size(); mc++){
-    sprintf(command, metaArray_[mc]->param_.c_str(), cine);
-    metaArray_[mc]->setStringVal(paramMap_[command].getValue());
-  }
+  int cine{start_cine};
+  do{ //do/while loop ending when cine == end_cine
 
-  // Read the frame size for the selected cine
-  getIntegerParam(PHANTOM_CnWidth_[cine], &width);
-  getIntegerParam(PHANTOM_CnHeight_[cine], &height);
-  // Calculate the number of bytes to read
-  // In packet format there are 10 bits per pixel,
-  // which equates to 1.25 bytes
-  nBytes = (int)((double)width * (double)height * 1.25);
-  debug(functionName, "Width", width);
-  debug(functionName, "Height", height);
-  debug(functionName, "nBytes", nBytes);
+    if(status != asynSuccess){
+      break;
+    }
+    //Allows range to loop back around
+    if(cine == PHANTOM_NUMBER_OF_CINES){ 
+      cine = 1;
+    }
+    frame = 0;
 
-  // Flush the data connection
-  pasynOctetSyncIO->flush(dataChannel_);
+    // Read the cine meta data
+    sprintf(command, "c%d.rate", cine);
+    status = stringToInteger(paramMap_[command].getValue(), metaRate);
+    sprintf(command, "c%d.exp", cine);
+    status = stringToInteger(paramMap_[command].getValue(), metaExposure);
+    sprintf(command, "c%d.lastfr", cine);
+    status = stringToInteger(paramMap_[command].getValue(), lastfr);
+    lastfr++;
+    sprintf(command, "c%d.trigtime.secs", cine);
+    status = stringToInteger(paramMap_[command].getValue(), trigSecs);
+    sprintf(command, "c%d.trigtime.frac", cine);
+    status = stringToInteger(paramMap_[command].getValue(), trigUSecs);
 
-  sprintf(command, "img {cine:%d, start:%d, cnt:%d, fmt:P10}", cine, start, frames);
-  status = sendSimpleCommand(command, &response);
-  debug(functionName, "Response", response);
-
-  if (frame == 0){
-    short_time_stamp32 tss = timestampData_[0];
-    first_tv_sec = (ntohl(tss.csecs) / 100) + irigYear;
-    first_tv_usec = ((ntohl(tss.csecs) % 100) * 10000) + (ntohs(tss.frac) >> 2);
-  }
-  //for (int frame = 0; frame < frames; frame++){
-  while ((frame < frames) && (status == asynSuccess)){
-    metaFrame = start+frame;
-    frame++;
-    setIntegerParam(PHANTOM_CineRecordCount_, frame);
-    callParamCallbacks();
-    status = this->readFrame(nBytes);
-
-    unsigned char *input = (unsigned char *)data_;
-    unsigned char *output = (unsigned char *)flashData_;
-    for (int bIndex = 0; bIndex < nBytes/5; bIndex++){
-      this->convert10BitPacketTo12Bit(input+(bIndex*5), output+(bIndex*8));
+    // Loop over meta array to read values
+    for (int mc = 0; mc < (int)metaArray_.size(); mc++){
+      sprintf(command, metaArray_[mc]->param_.c_str(), cine);
+      metaArray_[mc]->setStringVal(paramMap_[command].getValue());
     }
 
-    if (status == asynSuccess){
-      // Allocate NDArray memory
-      dims[0] = width;
-      dims[1] = height;
-      setIntegerParam(NDArraySizeX, width);
-      setIntegerParam(NDArraySizeY, height);
-      nbytes = (dims[0] * dims[1]) * sizeof(int16_t);
-      dataType= NDUInt16;
-      pImage = this->pNDArrayPool->alloc(2, dims, dataType, nbytes, NULL);
+    //Determine first and last frame to read
+    if(uni_frame_lim){
+      first_frame = start_frame;
+      last_frame = end_frame;
+    } else {
+      if (cine == start_cine){
+        first_frame = start_frame;
+      } else{
+        getIntegerParam(PHANTOM_CnFirstFrame_[cine], &first_frame);
+      } 
+      if(cine == end_cine){
+        last_frame = end_frame;
+      } else{
+        getIntegerParam(PHANTOM_CnLastFrame_[cine], &last_frame);
+      }
+    }
+    frames = last_frame - first_frame + 1;
 
-      memcpy(pImage->pData, flashData_, nbytes);
-      pImage->dims[0].size = dims[0];
-      pImage->dims[1].size = dims[1];
-      // Add the frame number attribute
-      pImage->pAttributeList->add("number", "Frame number", NDAttrInt32, (void *)(&metaFrame));
-      // Add the download start frame
-      pImage->pAttributeList->add("rec_first_frame", "First frame of recording", NDAttrInt32, (void *)(&start));
-      // Add the download frame count
-      pImage->pAttributeList->add("rec_frame_count", "Frame count of recording", NDAttrInt32, (void *)(&frames));
-      // Add the partition number
-      pImage->pAttributeList->add("partition", "Partition number", NDAttrInt32, (void *)(&cine));
-      // Add the post trigger frame count
-      pImage->pAttributeList->add("post_trig_frames", "Post trigger frame count", NDAttrInt32, (void *)(&lastfr));
-      // Add the image UniqueID
-      pImage->pAttributeList->add("NDArrayUniqueId", "uniqueId", NDAttrInt32, (void *)(&frame));      // Loop over meta array to create attributes
-      pImage->uniqueId = frame;
-      for (int mc = 0; mc < (int)metaArray_.size(); mc++){
-        if (metaArray_[mc]->type_ == NDAttrInt8){
-          pImage->pAttributeList->add(metaArray_[mc]->name_.c_str(),
-              metaArray_[mc]->desc_.c_str(),
-              NDAttrInt8,
-              (void *)(&metaArray_[mc]->cval_));
-        } else if (metaArray_[mc]->type_ == NDAttrInt32){
-          pImage->pAttributeList->add(metaArray_[mc]->name_.c_str(),
-              metaArray_[mc]->desc_.c_str(),
-              NDAttrInt32,
-              (void *)(&metaArray_[mc]->ival_));
-        } else if (metaArray_[mc]->type_ == NDAttrFloat64){
-          pImage->pAttributeList->add(metaArray_[mc]->name_.c_str(),
-              metaArray_[mc]->desc_.c_str(),
-              NDAttrFloat64,
-              (void *)(&metaArray_[mc]->dval_));
-        } else if (metaArray_[mc]->type_ == NDAttrString){
-          char sval[256];
-          strncpy(sval, metaArray_[mc]->sval_.c_str(), 256);
-          pImage->pAttributeList->add(metaArray_[mc]->name_.c_str(),
-              metaArray_[mc]->desc_.c_str(),
-              NDAttrString,
-              (void *)(sval));
+    // Read the frame size for the selected cine
+    getIntegerParam(PHANTOM_CnWidth_[cine], &width);
+    getIntegerParam(PHANTOM_CnHeight_[cine], &height);
+    // Calculate the number of bytes to read
+    // In packet format there are 10 bits per pixel,
+    // which equates to 1.25 bytes
+    nBytes = (int)((double)width * (double)height * 1.25);
+    debug(functionName, "Width", width);
+    debug(functionName, "Height", height);
+    debug(functionName, "nBytes", nBytes);
+
+    // Flush the data connection
+    pasynOctetSyncIO->flush(dataChannel_);
+
+    sprintf(command, "img {cine:%d, start:%d, cnt:%d, fmt:P10}", cine, first_frame, frames);
+    status = sendSimpleCommand(command, &response);
+    debug(functionName, "Command", command);
+    debug(functionName, "Response", response);
+
+    if (frame == 0){
+      short_time_stamp32 tss = timestampData_[total_frame];
+      first_tv_sec = (ntohl(tss.csecs) / 100) + irigYear;
+      first_tv_usec = ((ntohl(tss.csecs) % 100) * 10000) + (ntohs(tss.frac) >> 2);
+    }
+    //for (int frame = 0; frame < frames; frame++){
+    while ((frame < frames) && (status == asynSuccess)){
+      metaFrame = start_frame+frame;
+      frame++;
+      total_frame++;
+      setIntegerParam(PHANTOM_DownloadCount_, total_frame);
+      callParamCallbacks();
+      status = this->readFrame(nBytes);
+
+      unsigned char *input = (unsigned char *)data_;
+      unsigned char *output = (unsigned char *)flashData_;
+      for (int bIndex = 0; bIndex < nBytes/5; bIndex++){
+        this->convert10BitPacketTo12Bit(input+(bIndex*5), output+(bIndex*8));
+      }
+
+      if (status == asynSuccess){
+        // Allocate NDArray memory
+        dims[0] = width;
+        dims[1] = height;
+        setIntegerParam(NDArraySizeX, width);
+        setIntegerParam(NDArraySizeY, height);
+        nbytes = (dims[0] * dims[1]) * sizeof(int16_t);
+        dataType= NDUInt16;
+        pImage = this->pNDArrayPool->alloc(2, dims, dataType, nbytes, NULL);
+
+        memcpy(pImage->pData, flashData_, nbytes);
+        pImage->dims[0].size = dims[0];
+        pImage->dims[1].size = dims[1];
+        // Add the frame number attribute
+        pImage->pAttributeList->add("number", "Frame number", NDAttrInt32, (void *)(&metaFrame));
+        // Add the download start frame
+        pImage->pAttributeList->add("rec_first_frame", "First frame of recording", NDAttrInt32, (void *)(&start_frame));
+        // Add the download frame count
+        pImage->pAttributeList->add("rec_frame_count", "Frame count of recording", NDAttrInt32, (void *)(&frames));
+        // Add the partition number
+        pImage->pAttributeList->add("partition", "Partition number", NDAttrInt32, (void *)(&cine));
+        // Add the post trigger frame count
+        pImage->pAttributeList->add("post_trig_frames", "Post trigger frame count", NDAttrInt32, (void *)(&lastfr));
+        // Add the image UniqueID
+        pImage->pAttributeList->add("NDArrayUniqueId", "uniqueId", NDAttrInt32, (void *)(&total_frame));      // Loop over meta array to create attributes
+        pImage->uniqueId = total_frame;
+        for (int mc = 0; mc < (int)metaArray_.size(); mc++){
+          if (metaArray_[mc]->type_ == NDAttrInt8){
+            pImage->pAttributeList->add(metaArray_[mc]->name_.c_str(),
+                metaArray_[mc]->desc_.c_str(),
+                NDAttrInt8,
+                (void *)(&metaArray_[mc]->cval_));
+          } else if (metaArray_[mc]->type_ == NDAttrInt32){
+            pImage->pAttributeList->add(metaArray_[mc]->name_.c_str(),
+                metaArray_[mc]->desc_.c_str(),
+                NDAttrInt32,
+                (void *)(&metaArray_[mc]->ival_));
+          } else if (metaArray_[mc]->type_ == NDAttrFloat64){
+            pImage->pAttributeList->add(metaArray_[mc]->name_.c_str(),
+                metaArray_[mc]->desc_.c_str(),
+                NDAttrFloat64,
+                (void *)(&metaArray_[mc]->dval_));
+          } else if (metaArray_[mc]->type_ == NDAttrString){
+            char sval[256];
+            strncpy(sval, metaArray_[mc]->sval_.c_str(), 256);
+            pImage->pAttributeList->add(metaArray_[mc]->name_.c_str(),
+                metaArray_[mc]->desc_.c_str(),
+                NDAttrString,
+                (void *)(sval));
+          }
         }
-      }
 
-      // Add the timing attributes
-      short_time_stamp32 ts = timestampData_[frame-1];
-      unsigned int tv_sec = (ntohl(ts.csecs) / 100) + irigYear;
-      pImage->pAttributeList->add("ts_sec", "Timestamp of frames (seconds since 1970)", NDAttrUInt32, (void *)(&tv_sec));
-      unsigned int tv_usec = ((ntohl(ts.csecs) % 100) * 10000) + (ntohs(ts.frac) >> 2);
-      pImage->pAttributeList->add("ts_usec", "Timestamp of frames (microseconds)", NDAttrUInt32, (void *)(&tv_usec));
-      char locked = ntohs(ts.frac) & 0x01;
-      pImage->pAttributeList->add("irig_sync", "IRIG synchronized", NDAttrInt8, (void *)(&locked));
-      char event_active = (ntohs(ts.frac) & 0x02) >> 1;
-      pImage->pAttributeList->add("event_input", "Event Input (1 = open)", NDAttrInt8, (void *)(&event_active));
-      //unsigned int exp_time = ntohs(ts.exptime);
-      unsigned int exp_time = (ntohs(ts.exptime)*1000) + (int)(floor((double)ntohs(ts.exptime32)/65535.0*1000.0 + 0.5));
-      pImage->pAttributeList->add("exp_time", "Exposure time (nanoseconds)", NDAttrUInt32, (void *)(&exp_time));
-      int tfts = tv_sec - trigSecs;
-      int tftus = tv_usec - trigUSecs;
-      if (tftus < 0){
-        tfts--;
-        tftus += 1000000;
-      }
-      int tft = (tfts * 1000000) + tftus;
-      pImage->pAttributeList->add("tft", "Time from trigger (microseconds)", NDAttrInt32, (void *)(&tft));
+        // Add the timing attributes
+        short_time_stamp32 ts = timestampData_[total_frame-1];
+        unsigned int tv_sec = (ntohl(ts.csecs) / 100) + irigYear;
+        pImage->pAttributeList->add("ts_sec", "Timestamp of frames (seconds since 1970)", NDAttrUInt32, (void *)(&tv_sec));
+        unsigned int tv_usec = ((ntohl(ts.csecs) % 100) * 10000) + (ntohs(ts.frac) >> 2);
+        pImage->pAttributeList->add("ts_usec", "Timestamp of frames (microseconds)", NDAttrUInt32, (void *)(&tv_usec));
+        char locked = ntohs(ts.frac) & 0x01;
+        pImage->pAttributeList->add("irig_sync", "IRIG synchronized", NDAttrInt8, (void *)(&locked));
+        char event_active = (ntohs(ts.frac) & 0x02) >> 1;
+        pImage->pAttributeList->add("event_input", "Event Input (1 = open)", NDAttrInt8, (void *)(&event_active));
+        //unsigned int exp_time = ntohs(ts.exptime);
+        unsigned int exp_time = (ntohs(ts.exptime)*1000) + (int)(floor((double)ntohs(ts.exptime32)/65535.0*1000.0 + 0.5));
+        pImage->pAttributeList->add("exp_time", "Exposure time (nanoseconds)", NDAttrUInt32, (void *)(&exp_time));
+        int tfts = tv_sec - trigSecs;
+        int tftus = tv_usec - trigUSecs;
+        if (tftus < 0){
+          tfts--;
+          tftus += 1000000;
+        }
+        int tft = (tfts * 1000000) + tftus;
+        pImage->pAttributeList->add("tft", "Time from trigger (microseconds)", NDAttrInt32, (void *)(&tft));
 
-      int ifts = tv_sec - first_tv_sec;
-      int iftus = tv_usec - first_tv_usec;
-      if (iftus < 0){
-        ifts--;
-        iftus += 1000000;
-      }
-      int ift = (ifts * 1000000) + iftus;
-      pImage->pAttributeList->add("ift", "Inter frame time (microseconds)", NDAttrInt32, (void *)(&ift));
-      first_tv_sec = tv_sec;
-      first_tv_usec = tv_usec;
+        int ifts = tv_sec - first_tv_sec;
+        int iftus = tv_usec - first_tv_usec;
+        if (iftus < 0){
+          ifts--;
+          iftus += 1000000;
+        }
+        int ift = (ifts * 1000000) + iftus;
+        pImage->pAttributeList->add("ift", "Inter frame time (microseconds)", NDAttrInt32, (void *)(&ift));
+        first_tv_sec = tv_sec;
+        first_tv_usec = tv_usec;
 
-      getIntegerParam(NDArrayCallbacks, &arrayCallbacks);
-      if (arrayCallbacks){
-        // Must release the lock here, or we can get into a deadlock, because we can
-        // block on the plugin lock, and the plugin can be calling us
-        this->unlock();
-        debug(functionName, "Calling NDArray callback");
-        doCallbacksGenericPointer(pImage, NDArrayData, 0);
-        this->lock();
-      }
+        getIntegerParam(NDArrayCallbacks, &arrayCallbacks);
+        if (arrayCallbacks){
+          // Must release the lock here, or we can get into a deadlock, because we can
+          // block on the plugin lock, and the plugin can be calling us
+          this->unlock();
+          debug(functionName, "Calling NDArray callback");
+          doCallbacksGenericPointer(pImage, NDArrayData, 0);
+          this->lock();
+        }
 
-      // Free the image buffer
-      pImage->release();
+        // Free the image buffer
+        pImage->release();
+      }
     }
-  }
-  setIntegerParam(PHANTOM_CineRecordCount_, 0);
+  } while (cine++ != end_cine);
+
+  setIntegerParam(PHANTOM_DownloadCount_, 0);
   callParamCallbacks();
 
   return status;
