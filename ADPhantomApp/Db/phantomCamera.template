@@ -238,47 +238,111 @@ record(longin, "$(P)$(R)CineLastFrame_RBV")
   field(SCAN, "I/O Intr")
 }
 
-### Cine start record 
+### Download start frame
 
-record(longout, "$(P)$(R)RecordStart")
+record(longout, "$(P)$(R)DownloadStartFrame")
 {
-  field(DESC, "Record starting frame")
+  field(DESC, "Download starting frame")
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CINE_REC_START")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_DOWNLOAD_START_FRAME")
 }
 
-record(longin, "$(P)$(R)RecordStart_RBV")
+record(longin, "$(P)$(R)DownloadStartFrame_RBV")
 {
-  field(DESC, "Record starting frame")
+  field(DESC, "Download starting frame")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CINE_REC_START")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_DOWNLOAD_START_FRAME")
   field(SCAN, "I/O Intr")
 }
 
-### Cine end record 
+### Download end frame
 
-record(longout, "$(P)$(R)RecordEnd")
+record(longout, "$(P)$(R)DownloadEndFrame")
 {
-  field(DESC, "Record ending frame")
+  field(DESC, "Download ending frame")
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CINE_REC_END")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_DOWNLOAD_END_FRAME")
 }
 
-record(longin, "$(P)$(R)RecordEnd_RBV")
+record(longin, "$(P)$(R)DownloadEndFrame_RBV")
 {
-  field(DESC, "Record ending frame")
+  field(DESC, "Download ending frame")
   field(DTYP, "asynInt32")
-  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CINE_REC_END")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_DOWNLOAD_END_FRAME")
   field(SCAN, "I/O Intr")
 }
 
-### Cine record command
+### Download start cine
 
-record(longout, "$(P)$(R)Record")
+record(longout, "$(P)$(R)DownloadStartCine")
 {
-  field(DESC, "Start the recording")
+  field(DESC, "Download starting cine")
   field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CINE_RECORD")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_DOWNLOAD_START_CINE")
+  field(VAL, "1")
+  field(PINI, "YES")
+  field(DRVL, "1")
+  field(DRVH, "63")
+}
+
+record(longin, "$(P)$(R)DownloadStartCine_RBV")
+{
+  field(DESC, "Download starting cine")
+  field(DTYP, "asynInt32")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_DOWNLOAD_START_CINE")
+  field(SCAN, "I/O Intr")
+}
+
+### Download end cine
+
+record(longout, "$(P)$(R)DownloadEndCine")
+{
+  field(DESC, "Download ending cine")
+  field(DTYP, "asynInt32")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_DOWNLOAD_END_CINE")
+  field(VAL, "1")
+  field(PINI, "YES")
+  field(DRVL, "1")
+  field(DRVH, "63")
+}
+
+record(longin, "$(P)$(R)DownloadEndCine_RBV")
+{
+  field(DESC, "Download ending cine")
+  field(DTYP, "asynInt32")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_DOWNLOAD_END_CINE")
+  field(SCAN, "I/O Intr")
+}
+
+### Download frame mode 
+# Determines whether start and end frames apply to all cines downloaded or only the first and last
+
+record(bo, "$(P)$(R)DownloadFrameMode")
+{
+  field(DTYP, "asynInt32")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_DOWNLOAD_FRAME_MODE")
+  field(ZNAM, "First and Last")
+  field(ONAM, "Universal")
+  field(VAL, "1")
+  field(PINI, "YES")
+}
+
+record(bi, "$(P)$(R)DownloadFrameMode_RBV")
+{
+  field(DTYP, "asynInt32")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_DOWNLOAD_FRAME_MODE")
+  field(ZNAM, "First and Last")
+  field(ONAM, "Universal")
+  field(SCAN, "I/O Intr")
+}
+
+### Cine download command
+
+record(longout, "$(P)$(R)Download")
+{
+  field(DESC, "Start the download")
+  field(DTYP, "asynInt32")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_DOWNLOAD")
 }
 
 ### Cine save to flash command
@@ -290,10 +354,10 @@ record(longout, "$(P)$(R)SaveToCF")
   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CINE_SAVE_CF")
 }
 
-record(longin, "$(P)$(R)RecordCount_RBV") {
+record(longin, "$(P)$(R)DownloadCount_RBV") {
   field(DTYP, "asynInt32")
   field(SCAN, "I/O Intr")
-  field(INP, "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CINE_REC_COUNT")
+  field(INP, "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_DOWNLOAD_COUNT")
 }
 
 record(longin, "$(P)$(R)StateRaw") {

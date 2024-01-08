@@ -152,10 +152,13 @@
 #define PHANTOM_CineFrameCountString           "PHANTOM_CINE_FR_COUNT"
 #define PHANTOM_CineFirstFrameString           "PHANTOM_CINE_FIRST_FR"
 #define PHANTOM_CineLastFrameString            "PHANTOM_CINE_LAST_FR"
-#define PHANTOM_CineRecordStartString          "PHANTOM_CINE_REC_START"
-#define PHANTOM_CineRecordEndString            "PHANTOM_CINE_REC_END"
-#define PHANTOM_CineRecordString               "PHANTOM_CINE_RECORD"
-#define PHANTOM_CineRecordCountString          "PHANTOM_CINE_REC_COUNT"
+#define PHANTOM_DownloadStartFrameString       "PHANTOM_DOWNLOAD_START_FRAME"
+#define PHANTOM_DownloadEndFrameString         "PHANTOM_DOWNLOAD_END_FRAME"
+#define PHANTOM_DownloadStartCineString        "PHANTOM_DOWNLOAD_START_CINE"
+#define PHANTOM_DownloadEndCineString          "PHANTOM_DOWNLOAD_END_CINE"
+#define PHANTOM_DownloadString                 "PHANTOM_DOWNLOAD"
+#define PHANTOM_DownloadCountString            "PHANTOM_DOWNLOAD_COUNT"
+#define PHANTOM_DownloadFrameModeString        "PHANTOM_DOWNLOAD_FRAME_MODE"
 #define PHANTOM_CineSaveCFString               "PHANTOM_CINE_SAVE_CF"       // Save selected cine to flash
 
 #define PHANTOM_SetPartitionString             "PHANTOM_SET_PARTITION"
@@ -595,7 +598,7 @@ class ADPhantom: public ADDriver
     asynStatus attachToPort(const std::string& portName);
     asynStatus readoutPreviewData();
     asynStatus sendSoftwareTrigger();
-    asynStatus downloadCineFile(int cine);
+    asynStatus downloadCineFile();
     asynStatus saveCineToFlash(int cine);
     asynStatus saveSettings();
     asynStatus loadSettings();
@@ -606,8 +609,8 @@ class ADPhantom: public ADDriver
     asynStatus downloadFlashHeader(const std::string& filename);
     asynStatus downloadFlashImages(const std::string& filename, int start, int end);
     asynStatus convert10BitPacketTo12Bit(void *input, void *output);
-    asynStatus readoutTimestamps(int cine, int start, int end);
-    asynStatus readoutDataStream(int cine, int start, int end);
+    asynStatus readoutTimestamps(int start_cine, int end_cine, int start_frame, int end_frame, bool uni_frame_lim);
+    asynStatus readoutDataStream(int start_cine, int end_cine, int start_frame, int end_frame, bool uni_frame_lim);
     asynStatus readFrame(int bytes);
     asynStatus updatePreviewCine();
     asynStatus updateCine(int cine);
@@ -682,10 +685,13 @@ class ADPhantom: public ADDriver
     int PHANTOM_CineFirstFrame_;
     int PHANTOM_CineLastFrame_;
     int PHANTOM_LivePreview_;
-    int PHANTOM_CineRecordStart_;
-    int PHANTOM_CineRecordEnd_;
-    int PHANTOM_CineRecord_;
-    int PHANTOM_CineRecordCount_;
+    int PHANTOM_DownloadStartFrame_;
+    int PHANTOM_DownloadEndFrame_;
+    int PHANTOM_DownloadStartCine_;
+    int PHANTOM_DownloadEndCine_;
+    int PHANTOM_Download_;
+    int PHANTOM_DownloadCount_;
+    int PHANTOM_DownloadFrameMode_;
     int PHANTOM_CineSaveCF_;
     int PHANTOM_SetPartition_;
     int PHANTOM_GetCineCount_;
