@@ -159,6 +159,8 @@
 #define PHANTOM_SetPartitionString             "PHANTOM_SET_PARTITION"
 #define PHANTOM_GetCineCountString             "PHANTOM_GET_CINE_COUNT"
 
+#define PHANTOM_DataFormatString               "PHANTOM_DATA_FORMAT"   // Integer corresponding to format token (8,8R,P16,P16R,P10,P12L)
+
 #define PHANTOM_CFStateString                  "PHANTOM_CF_STATE"
 #define PHANTOM_CFActionString                 "PHANTOM_CF_ACTION"
 #define PHANTOM_CFSizeString                   "PHANTOM_CF_SIZE"
@@ -747,9 +749,10 @@ class ADPhantom: public ADDriver
     int PHANTOM_CfFileName_[PHANTOM_NUMBER_OF_FLASH_FILES];
     int PHANTOM_CfFileSize_[PHANTOM_NUMBER_OF_FLASH_FILES];
     int PHANTOM_CfFileDate_[PHANTOM_NUMBER_OF_FLASH_FILES];
+    int PHANTOM_DataFormat_;
     int PHANTOMConnected_;
-    int PHANTOM_SyncClock;
-    #define LAST_PHANTOM_PARAM PHANTOMConnected_
+    int PHANTOM_SyncClock_;
+    #define LAST_PHANTOM_PARAM PHANTOM_SyncClock_
 
   private:
     static const int PHANTOM_LinLUT[1024];
@@ -784,6 +787,8 @@ class ADPhantom: public ADDriver
     int                                flashTrigUsecs_;
     int                                previewWidth_;
     int                                previewHeight_;
+    int                                bitDepth_;
+    std::string                        phantomToken_;
     std::map<std::string, int>         debugMap_;
     epicsEventId                       startEventId_;
     epicsEventId                       stopEventId_;
