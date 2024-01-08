@@ -2358,11 +2358,15 @@ asynStatus ADPhantom::downloadCineFile()
       getIntegerParam(PHANTOM_CnLastFrame_[cine], &last_frame);
       if(start_frame < first_frame || start_frame > last_frame){
         rangeValid=false;
-        setStringParam(ADStatusMessage, "start_frame value invalid");
+        char message[256];
+        sprintf(message, "start_frame value invalid in cine %d", cine);
+        setStringParam(ADStatusMessage, message);
         break;
       } else if(end_frame < first_frame || end_frame > last_frame ){
         rangeValid=false;
-        setStringParam(ADStatusMessage, "end_frame value invalid");
+        char message[256];
+        sprintf(message, "end_frame value invalid in cine %d", cine);
+        setStringParam(ADStatusMessage, message);
         break;
       } else if(end_frame < start_frame){
         rangeValid=false;
