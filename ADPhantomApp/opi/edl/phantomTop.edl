@@ -3,8 +3,8 @@ beginScreenProperties
 major 4
 minor 0
 release 1
-x 1132
-y 373
+x 1005
+y 179
 w 400
 h 830
 font "arial-bold-r-12.0"
@@ -674,8 +674,8 @@ bgColor index 3
 inconsistentColor index 0
 topShadowColor index 1
 botShadowColor index 11
-controlPv "$(P)$(R)AutoSave"
-indicatorPv "$(P)$(R)AutoSave_RBV"
+controlPv "$(P)$(R)AutoAdvance"
+indicatorPv "$(P)$(R)AutoAdvance_RBV"
 font "arial-bold-r-12.0"
 endObjectProperties
 
@@ -689,7 +689,7 @@ x 265
 y 710
 w 85
 h 20
-controlPv "$(P)$(R)AutoSave_RBV"
+controlPv "$(P)$(R)AutoAdvance_RBV"
 fgColor index 16
 fgAlarm
 bgColor index 10
@@ -706,73 +706,14 @@ minor 1
 release 1
 x 20
 y 715
-w 120
+w 110
 h 13
 font "arial-bold-r-12.0"
 fgColor index 14
 bgColor index 3
 useDisplayBg
 value {
-  "Auto-save Cine Files"
-}
-autoSize
-endObjectProperties
-
-# (Menu Button)
-object activeMenuButtonClass
-beginObjectProperties
-major 4
-minor 0
-release 0
-x 175
-y 735
-w 75
-h 20
-fgColor index 25
-bgColor index 3
-inconsistentColor index 0
-topShadowColor index 1
-botShadowColor index 11
-controlPv "$(P)$(R)AutoRestart"
-indicatorPv "$(P)$(R)AutoRestart_RBV"
-font "arial-bold-r-12.0"
-endObjectProperties
-
-# (Textupdate)
-object TextupdateClass
-beginObjectProperties
-major 10
-minor 0
-release 0
-x 265
-y 735
-w 85
-h 20
-controlPv "$(P)$(R)AutoRestart_RBV"
-fgColor index 16
-fgAlarm
-bgColor index 10
-fill
-font "arial-bold-r-12.0"
-fontAlign "center"
-endObjectProperties
-
-# (Static Text)
-object activeXTextClass
-beginObjectProperties
-major 4
-minor 1
-release 1
-x 20
-y 740
-w 139
-h 13
-font "arial-bold-r-12.0"
-fgColor index 14
-bgColor index 3
-useDisplayBg
-value {
-  "Auto-restart Acquisition"
+  "Auto-advance Cine"
 }
 autoSize
 endObjectProperties
@@ -804,7 +745,7 @@ major 4
 minor 0
 release 0
 x 175
-y 760
+y 735
 w 75
 h 20
 fgColor index 25
@@ -824,7 +765,7 @@ major 10
 minor 0
 release 0
 x 265
-y 760
+y 735
 w 85
 h 20
 controlPv "$(P)$(R)AutoBref_RBV"
@@ -843,7 +784,7 @@ major 4
 minor 1
 release 1
 x 20
-y 765
+y 740
 w 122
 h 13
 font "arial-bold-r-12.0"
