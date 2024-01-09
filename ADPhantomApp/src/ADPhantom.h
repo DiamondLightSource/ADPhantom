@@ -136,6 +136,8 @@
 #define PHANTOM_SettingsSaveString             "PHANTOM_SETTINGS_SAVE"
 #define PHANTOM_SettingsLoadString             "PHANTOM_SETTINGS_LOAD"
 
+#define PHANTOM_AutoAdvanceString             "PHANTOM_AUTO_ADVANCE"
+
 #define PHANTOM_AutoSaveString                 "PHANTOM_AUTO_SAVE"
 #define PHANTOM_AutoRestartString              "PHANTOM_AUTO_RESTART"
 #define PHANTOM_AutoCSRString                  "PHANTOM_AUTO_CSR"
@@ -671,6 +673,7 @@ class ADPhantom: public ADDriver
     int PHANTOM_SettingsSlot_;
     int PHANTOM_SettingsSave_;
     int PHANTOM_SettingsLoad_;
+    int PHANTOM_AutoAdvance_;
     int PHANTOM_AutoSave_;
     int PHANTOM_AutoRestart_;
     int PHANTOM_AutoCSR_;

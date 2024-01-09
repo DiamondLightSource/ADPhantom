@@ -1024,6 +1024,7 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   createParam(PHANTOM_SettingsSlotString,             asynParamInt32,         &PHANTOM_SettingsSlot_);
   createParam(PHANTOM_SettingsSaveString,             asynParamInt32,         &PHANTOM_SettingsSave_);
   createParam(PHANTOM_SettingsLoadString,             asynParamInt32,         &PHANTOM_SettingsLoad_);
+  createParam(PHANTOM_AutoAdvanceString,              asynParamInt32,         &PHANTOM_AutoAdvance_);
   createParam(PHANTOM_AutoSaveString,                 asynParamInt32,         &PHANTOM_AutoSave_);
   createParam(PHANTOM_AutoRestartString,              asynParamInt32,         &PHANTOM_AutoRestart_);
   createParam(PHANTOM_AutoCSRString,                  asynParamInt32,         &PHANTOM_AutoCSR_);
@@ -1341,8 +1342,7 @@ void ADPhantom::phantomCameraTask()
   int lastFrame = 0;
   int frameCount = 0;
   int cineState = 0;
-  int autoSave = 0;
-  int autoAcquire = 0;
+  int autoAdvance = 0;
   char command[PHANTOM_MAX_STRING];
   std::string response;
   std::string cineStr;
@@ -1422,20 +1422,17 @@ void ADPhantom::phantomCameraTask()
     setIntegerParam(ADNumImagesCounter, numImagesCounter);
     setIntegerParam(PHANTOM_TotalFrameCount_, frameCount);
 
-    getIntegerParam(PHANTOM_AutoSave_, &autoSave);
-    getIntegerParam(PHANTOM_AutoRestart_, &autoAcquire);
+    getIntegerParam(PHANTOM_AutoAdvance_, &autoAdvance);
 
     debug(functionName, "cineState", cineState);
     debug(functionName, "cineState", (cineState & PHANTOM_CINE_STATE_STR));
     if ((cineState & PHANTOM_CINE_STATE_STR) == PHANTOM_CINE_STATE_STR){
       bool found = false;
-      // Check if set to auto record cines
-      if (autoSave == 1 && autoAcquire == 1){
+      // Check if set to auto advance to next available cine
+      if (autoAdvance){
         // Find the next active cine
-        for( int index{1}; index < PHANTOM_NUMBER_OF_CINES; index++){
-          updateCine(index);
-        }
         for (int index = 1; index < PHANTOM_NUMBER_OF_CINES; index++){
+          updateCine(index);
           getIntegerParam(PHANTOM_CnStatus_[index], &cineState);
           if ((cineState & PHANTOM_CINE_STATE_ACT) == PHANTOM_CINE_STATE_ACT){
             cine = index;
@@ -1445,8 +1442,13 @@ void ADPhantom::phantomCameraTask()
             sprintf(command, "c%d", cine);
             cineStr.assign(command);
             found = true;
+            break;
           }
         }
+      }
+      else{ //Auto advance not set so stop acquisition
+        std::string response = "";
+        sendSimpleCommand(PHANTOM_CMD_ABORT, &response);
       }
       if (!found){
         acquire = 0;
@@ -1540,11 +1542,15 @@ void ADPhantom::phantomDownloadTask()
           getIntegerParam(PHANTOM_CnLastFrame_[cine], &last_frame);
           if(start_frame < first_frame || start_frame > last_frame){
             rangeValid=false;
-            setStringParam(ADStatusMessage, "start_frame value invalid");
+            char message[256];
+            sprintf(message, "start_frame value invalid in cine %d", cine);
+            setStringParam(ADStatusMessage, message);
             break;
           } else if(end_frame < first_frame || end_frame > last_frame ){
             rangeValid=false;
-            setStringParam(ADStatusMessage, "end_frame value invalid");
+            char message[256];
+            sprintf(message, "end_frame value invalid in cine %d", cine);
+            setStringParam(ADStatusMessage, message);
             break;
           } else if(end_frame < start_frame){
             rangeValid=false;
