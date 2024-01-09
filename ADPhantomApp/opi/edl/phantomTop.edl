@@ -3,8 +3,8 @@ beginScreenProperties
 major 4
 minor 0
 release 1
-x 1509
-y 437
+x 1251
+y 177
 w 400
 h 830
 font "arial-bold-r-12.0"
@@ -46,9 +46,9 @@ major 4
 minor 0
 release 0
 x 5
-y 485
+y 475
 w 175
-h 35
+h 45
 lineColor index 14
 fill
 fillColor index 3
@@ -105,9 +105,9 @@ major 4
 minor 0
 release 0
 x 185
-y 485
+y 475
 w 200
-h 35
+h 45
 lineColor index 14
 fill
 fillColor index 3
@@ -932,5 +932,25 @@ fgAlarm
 bgColor index 3
 fill
 font "arial-bold-r-12.0"
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 10
+y 480
+w 126
+h 13
+font "arial-bold-r-12.0"
+fgColor index 14
+bgColor index 3
+useDisplayBg
+value {
+  "Toggle Preview Mode"
+}
+autoSize
 endObjectProperties
 
