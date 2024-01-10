@@ -1487,11 +1487,18 @@ void ADPhantom::phantomDownloadTask()
   static const char *functionName = "ADPhantom::phantomDownloadTask";
   int status = asynSuccess;
   int preview = 0;
+  int start_frame = 0;
+  int end_frame = 0;
+  int start_cine = 0;
+  int end_cine = 0;
+  int num_cines = 0;
+  int uni_frame_lim = false; //Whether frame limits are applied to all cines
+  bool rangeValid = true;
+  std::string response;
   this->lock();
   
 
   while (1){
-    
     debug(functionName, "Waiting for the download command");
     this->unlock();
     status = epicsEventWait(this->startDownloadEventId_);
@@ -1503,17 +1510,12 @@ void ADPhantom::phantomDownloadTask()
       setIntegerParam(ADStatus, ADStatusError);
     }
     else{
-      int start_frame = 0;
-      int end_frame = 0;
-      int start_cine = 0;
-      int end_cine =0;
-      int uni_frame_lim = false; //Whether frame limits are applied to all cines
-      bool rangeValid = true;
-      std::string response;
-      asynStatus status = asynSuccess;
 
       setStringParam(ADStatusMessage, "Downloading");
+      rangeValid = true;
 
+      //Read in total number of cines available
+      getIntegerParam(PHANTOM_GetCineCount_, &num_cines);
 
       // Read in the number of frames to download
       getIntegerParam(PHANTOM_DownloadStartFrame_, &start_frame);
@@ -1527,10 +1529,10 @@ void ADPhantom::phantomDownloadTask()
       debug(functionName, "Download start frame", start_frame);
       debug(functionName, "Download end frame", end_frame);
 
-      if (start_cine < 1 || start_cine >= PHANTOM_NUMBER_OF_CINES){
+      if (start_cine < 1 || start_cine > num_cines){
         rangeValid=false;
         setStringParam(ADStatusMessage, "start_cine value invalid");
-      }  else if (end_cine < 1 || end_cine >= PHANTOM_NUMBER_OF_CINES){
+      }  else if (end_cine < 1 || end_cine > num_cines){
         rangeValid=false;
         setStringParam(ADStatusMessage, "end_cine value invalid");
       } else if(uni_frame_lim){ //Start frame and end frame are applied to every cine
@@ -3103,9 +3105,11 @@ asynStatus ADPhantom::readoutTimestamps(int start_cine, int end_cine, int start_
   int first_frame = 0;
   int last_frame = 0;
   int frames = 0;
+  int num_cines = 0;
   short_time_stamp32 ts;
   asynStatus status = asynSuccess;
 
+  getIntegerParam(PHANTOM_GetCineCount_, &num_cines);
 
   // Flush the data connection
   pasynOctetSyncIO->flush(dataChannel_);
@@ -3120,7 +3124,7 @@ asynStatus ADPhantom::readoutTimestamps(int start_cine, int end_cine, int start_
       return status;
     }
     //Allows range to loop back around
-    if(cine == PHANTOM_NUMBER_OF_CINES){ 
+    if(cine > num_cines){ 
       cine = 1;
     }
 
@@ -3190,6 +3194,7 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
   int first_frame = 0;
   int last_frame = 0;
   int frames = 0;
+  int num_cines = 0;
   int metaExposure = 0;
   int metaRate = 0;
   int metaFrame = 0; //Frame as specified in cine
@@ -3206,6 +3211,9 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
   status = getCameraDataStruc("irig", paramMap_);
   status = stringToInteger(paramMap_["irig.yearbegin"].getValue(), irigYear);
 
+  //Read total number of cines
+  getIntegerParam(PHANTOM_GetCineCount_, &num_cines);
+
   int cine{start_cine};
   do{ //do/while loop ending when cine == end_cine
 
@@ -3213,7 +3221,7 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
       break;
     }
     //Allows range to loop back around
-    if(cine == PHANTOM_NUMBER_OF_CINES){ 
+    if(cine > num_cines){ 
       cine = 1;
     }
     frame = 0;
