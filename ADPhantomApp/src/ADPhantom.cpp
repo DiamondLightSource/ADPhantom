@@ -2123,7 +2123,15 @@ asynStatus ADPhantom::writeInt32(asynUser *pasynUser, epicsInt32 value)
       setIntegerParam(ADStatus, ADStatusError);
       status |= asynError;
     } else {
-      status |= downloadFlashFile();
+      int downloadCount = 0;
+      getIntegerParam(PHANTOM_DownloadCount_, &downloadCount);
+      if(downloadCount){
+        setStringParam(ADStatusMessage, "Cannot download to flash while downloading to file");  
+        setIntegerParam(ADStatus, ADStatusError);
+        status |= asynError;
+      } else{
+        status |= downloadFlashFile();
+      }
     }
   } else if (function == PHANTOM_CFSFileDelete_){
     // Delete the flash file
