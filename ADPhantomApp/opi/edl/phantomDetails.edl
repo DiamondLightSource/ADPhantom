@@ -3,8 +3,8 @@ beginScreenProperties
 major 4
 minor 0
 release 1
-x 1461
-y 331
+x 300
+y 111
 w 1060
 h 314
 font "arial-bold-r-12.0"
@@ -1576,14 +1576,14 @@ minor 1
 release 1
 x 380
 y 210
-w 97
+w 69
 h 13
 font "arial-bold-r-12.0"
 fgColor index 14
 bgColor index 3
 useDisplayBg
 value {
-  "Auto-restart acq."
+  "Auto-restart"
 }
 autoSize
 endObjectProperties

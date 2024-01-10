@@ -960,10 +960,6 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
 
   // Initialise the debugger
   initDebugger(0);
-  debugLevel("ADPhantom::phantomDownloadTask", 1);
-  debugLevel("ADPhantom::readoutDataStream", 1);
-  debugLevel("ADPhantom::asynPortDisconnect", 1);
-  debugLevel("ADPhantom::attachToPort", 1);
 
 
   //Initialize non static data members
@@ -1046,7 +1042,11 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   createParam(PHANTOM_DownloadAbortString,            asynParamInt32,         &PHANTOM_DownloadAbort_);
   createParam(PHANTOM_DownloadCountString,            asynParamInt32,         &PHANTOM_DownloadCount_);
   createParam(PHANTOM_DownloadFrameModeString,        asynParamInt32,         &PHANTOM_DownloadFrameMode_);
+  createParam(PHANTOM_MarkCineSavedString,            asynParamInt32,         &PHANTOM_MarkCineSaved_);
   createParam(PHANTOM_CineSaveCFString,               asynParamInt32,         &PHANTOM_CineSaveCF_);
+  createParam(PHANTOM_DeleteString,                   asynParamInt32,         &PHANTOM_Delete_);
+  createParam(PHANTOM_DeleteStartCineString,          asynParamInt32,         &PHANTOM_DeleteStartCine_);
+  createParam(PHANTOM_DeleteEndCineString,            asynParamInt32,         &PHANTOM_DeleteEndCine_);
   createParam(PHANTOM_LivePreviewString,              asynParamInt32,         &PHANTOM_LivePreview_);
   createParam(PHANTOM_SetPartitionString,             asynParamInt32,         &PHANTOM_SetPartition_);
   createParam(PHANTOM_GetCineCountString,             asynParamInt32,         &PHANTOM_GetCineCount_);
@@ -2087,6 +2087,13 @@ asynStatus ADPhantom::writeInt32(asynUser *pasynUser, epicsInt32 value)
       //Send an event to start the download
       epicsEventSignal(this->startDownloadEventId_);
     }
+  } else if(function == PHANTOM_Delete_){
+    if(value > 0 && value < PHANTOM_NUMBER_OF_CINES){ 
+        //Allows the easy deletion of single cine
+        setIntegerParam(PHANTOM_DeleteStartCine_, value);
+        setIntegerParam(PHANTOM_DeleteEndCine_, value);
+    }
+    status = deleteCineFiles();
   } else if (function == PHANTOM_CineSaveCF_){
     status |= saveCineToFlash(value);
   } else if (function == PHANTOM_SettingsSave_){
@@ -2470,6 +2477,54 @@ asynStatus ADPhantom::sendSoftwareTrigger()
 
   status = sendSimpleCommand(PHANTOM_CMD_TRIG, &response);
   debug(functionName, "Response", response);
+
+  return status;
+}
+
+asynStatus ADPhantom::deleteCineFiles()
+{
+  const char * functionName = "ADPhantom::deleteCineFiles";
+
+  int start_cine = 0;
+  int end_cine = 0;
+  int num_cines = 0;
+  char command[PHANTOM_MAX_STRING];
+  asynStatus status = asynSuccess;
+  std::string response;
+
+  // Read in the number of frames to download
+  getIntegerParam(PHANTOM_DeleteStartCine_, &start_cine);
+  getIntegerParam(PHANTOM_DeleteEndCine_, &end_cine);
+  getIntegerParam(PHANTOM_GetCineCount_, &num_cines);
+
+  debug(functionName, "Delete start cine", start_cine);
+  debug(functionName, "Delete end cine", end_cine);
+
+  if(start_cine > num_cines){
+    setStringParam(ADStatusMessage, "Delete start cine greater than number of cines");  
+    setIntegerParam(ADStatus, ADStatusError);
+    return asynError;
+  }
+  else if(end_cine > num_cines){
+    setStringParam(ADStatusMessage, "Delete end cine greater than number of cines");  
+    setIntegerParam(ADStatus, ADStatusError);
+    return asynError;
+  }
+  
+  int cine{start_cine};
+  do {
+    if(status != asynSuccess){
+       break;
+    }
+    //Allows range to loop around
+    if(cine > num_cines){
+      cine = 1;
+    }
+    sprintf(command, "del %d", cine);
+    status = sendSimpleCommand(command, &response);
+    debug(functionName, "Command", command);
+    debug(functionName, "Response", response);
+  } while(cine ++ != end_cine);
 
   return status;
 }
@@ -3143,6 +3198,7 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
   int trigSecs = 0;
   int trigUSecs = 0;
   int abort = 0;
+  int markSaved = 0;
   unsigned int first_tv_sec = 0;
   unsigned int first_tv_usec = 0;
   asynStatus status = asynSuccess;
@@ -3366,6 +3422,17 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
         pImage->release();
       }
     }
+    //mark cine as saved/reusable after download
+    if(!abort){
+      getIntegerParam(PHANTOM_MarkCineSaved_, &markSaved);
+      if(markSaved){
+        sprintf(command, "rel %d", cine);
+        status = sendSimpleCommand(command, &response);
+        debug(functionName, "Command", command);
+        debug(functionName, "Response", response);
+      }
+    }
+
   } while (cine++ != end_cine && !abort);
 
   setIntegerParam(PHANTOM_DownloadCount_, 0);
@@ -4308,11 +4375,12 @@ asynStatus ADPhantom::initDebugger(int initDebug)
 asynStatus ADPhantom::debugLevel(const std::string& method, int onOff)
 {
   if (method == "all"){
-    debugMap_["ADPhantom::ADPhantom"]               = onOff;
-    debugMap_["ADPhantom::phantomCameraTask"]           = onOff;
-    debugMap_["ADPhantom::phantomDownloadTask"]           = onOff;
-    debugMap_["ADPhantom::phantomPreviewTask"]          = onOff;
+    debugMap_["ADPhantom::ADPhantom"]                = onOff;
+    debugMap_["ADPhantom::phantomCameraTask"]        = onOff;
+    debugMap_["ADPhantom::phantomDownloadTask"]      = onOff;
+    debugMap_["ADPhantom::phantomPreviewTask"]       = onOff;
     debugMap_["ADPhantom::readoutPreviewData"]       = onOff;
+    debugMap_["ADPhantom::deleteCineFiles"]          = onOff;
     debugMap_["ADPhantom::readFrame"]                = onOff;
     debugMap_["ADPhantom::downloadFlashFile"]        = onOff;
     debugMap_["ADPhantom::connect"]                  = onOff;    

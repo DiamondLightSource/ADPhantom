@@ -3,8 +3,8 @@ beginScreenProperties
 major 4
 minor 0
 release 1
-x 1005
-y 179
+x 1597
+y 134
 w 400
 h 830
 font "arial-bold-r-12.0"
@@ -745,7 +745,7 @@ major 4
 minor 0
 release 0
 x 175
-y 735
+y 760
 w 75
 h 20
 fgColor index 25
@@ -765,7 +765,7 @@ major 10
 minor 0
 release 0
 x 265
-y 735
+y 760
 w 85
 h 20
 controlPv "$(P)$(R)AutoBref_RBV"
@@ -784,7 +784,7 @@ major 4
 minor 1
 release 1
 x 20
-y 740
+y 765
 w 122
 h 13
 font "arial-bold-r-12.0"
@@ -855,5 +855,64 @@ numDsps 1
 displayFileName {
   0 "phantomDownload"
 }
+endObjectProperties
+
+# (Menu Button)
+object activeMenuButtonClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 175
+y 735
+w 75
+h 20
+fgColor index 25
+bgColor index 3
+inconsistentColor index 0
+topShadowColor index 1
+botShadowColor index 11
+controlPv "$(P)$(R)AutoRestart"
+indicatorPv "$(P)$(R)AutoRestart_RBV"
+font "arial-bold-r-12.0"
+endObjectProperties
+
+# (Textupdate)
+object TextupdateClass
+beginObjectProperties
+major 10
+minor 0
+release 0
+x 265
+y 735
+w 85
+h 20
+controlPv "$(P)$(R)AutoRestart_RBV"
+fgColor index 16
+fgAlarm
+bgColor index 10
+fill
+font "arial-bold-r-12.0"
+fontAlign "center"
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 20
+y 740
+w 69
+h 13
+font "arial-bold-r-12.0"
+fgColor index 14
+bgColor index 3
+useDisplayBg
+value {
+  "Auto-restart"
+}
+autoSize
 endObjectProperties
 

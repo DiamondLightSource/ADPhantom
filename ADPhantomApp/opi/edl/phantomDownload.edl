@@ -3,8 +3,8 @@ beginScreenProperties
 major 4
 minor 0
 release 1
-x 794
-y 447
+x 217
+y 443
 w 401
 h 250
 font "arial-bold-r-12.0"
@@ -176,7 +176,7 @@ major 10
 minor 0
 release 0
 x 145
-y 180
+y 200
 w 85
 h 20
 controlPv "$(P)$(R)DownloadCount_RBV"
@@ -195,7 +195,7 @@ major 4
 minor 1
 release 1
 x 20
-y 185
+y 205
 w 112
 h 13
 font "arial-bold-r-12.0"
@@ -548,5 +548,45 @@ visPv "$(P)$(R)DownloadCount_RBV"
 visInvert
 visMin "0"
 visMax "1"
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 20
+y 170
+w 106
+h 13
+font "arial-bold-r-12.0"
+fgColor index 14
+bgColor index 3
+useDisplayBg
+value {
+  "Mark cines saved:"
+}
+autoSize
+endObjectProperties
+
+# (Menu Button)
+object activeMenuButtonClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 145
+y 165
+w 110
+h 25
+fgColor index 14
+bgColor index 3
+inconsistentColor index 3
+topShadowColor index 1
+botShadowColor index 11
+controlPv "$(P)$(R)MarkCineSaved"
+indicatorPv "$(P)$(R)MarkCineSaved_RBV"
+font "arial-bold-r-12.0"
 endObjectProperties
 
