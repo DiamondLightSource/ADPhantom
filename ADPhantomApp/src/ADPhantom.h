@@ -159,7 +159,7 @@
 #define PHANTOM_SetPartitionString             "PHANTOM_SET_PARTITION"
 #define PHANTOM_GetCineCountString             "PHANTOM_GET_CINE_COUNT"
 
-#define PHANTOM_DataFormatString               "PHANTOM_DATA_FORMAT"   // Integer corresponding to format token (8,8R,P16,P16R,P10,P12L)
+#define PHANTOM_DataFormatString               "PHANTOM_DataFormat"   // Integer corresponding to format token (8,8R,P16,P16R,P10,P12L)
 
 #define PHANTOM_CFStateString                  "PHANTOM_CF_STATE"
 #define PHANTOM_CFActionString                 "PHANTOM_CF_ACTION"
@@ -605,7 +605,9 @@ class ADPhantom: public ADDriver
     asynStatus downloadFlashFile();
     asynStatus downloadFlashHeader(const std::string& filename);
     asynStatus downloadFlashImages(const std::string& filename, int start, int end);
-    asynStatus convert10BitPacketTo12Bit(void *input, void *output);
+    asynStatus convert12BitPacketTo16Bit(void *input, void *output);
+    asynStatus convert10BitPacketTo16Bit(void *input, void *output);
+    asynStatus convert8BitPacketTo16Bit(void *input, void *output, int nBytes);
     asynStatus readoutTimestamps(int cine, int start, int end);
     asynStatus readoutDataStream(int cine, int start, int end);
     asynStatus readFrame(int bytes);
