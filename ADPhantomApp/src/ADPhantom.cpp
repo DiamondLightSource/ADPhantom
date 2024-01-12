@@ -961,7 +961,6 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   // Initialise the debugger
   initDebugger(0);
 
-
   //Initialize non static data members
   portUser_  = NULL;
   dataChannel_ = NULL;
@@ -1532,9 +1531,11 @@ void ADPhantom::phantomDownloadTask()
       if (start_cine < 1 || start_cine > num_cines){
         rangeValid=false;
         setStringParam(ADStatusMessage, "start_cine value invalid");
+        debug(functionName, "start_cine value invalid");
       }  else if (end_cine < 1 || end_cine > num_cines){
         rangeValid=false;
         setStringParam(ADStatusMessage, "end_cine value invalid");
+        debug(functionName, "end_cine value invalid");
       } else if(uni_frame_lim){ //Start frame and end frame are applied to every cine
         int first_frame = 0;
         int last_frame = 0;
@@ -1547,16 +1548,19 @@ void ADPhantom::phantomDownloadTask()
             char message[256];
             sprintf(message, "start_frame value invalid in cine %d", cine);
             setStringParam(ADStatusMessage, message);
+            debug(functionName, message);
             break;
           } else if(end_frame < first_frame || end_frame > last_frame ){
             rangeValid=false;
             char message[256];
             sprintf(message, "end_frame value invalid in cine %d", cine);
             setStringParam(ADStatusMessage, message);
+            debug(functionName, message);
             break;
           } else if(end_frame < start_frame){
             rangeValid=false;
             setStringParam(ADStatusMessage, "start_frame cannot be after end_frame");
+            debug(functionName, "start_frame cannot be after end_frame");
             break;
           }
         }
@@ -1593,6 +1597,9 @@ void ADPhantom::phantomDownloadTask()
         status = readoutDataStream(start_cine, end_cine, start_frame, end_frame, uni_frame_lim);
 
         setStringParam(ADStatusMessage, "Ready");
+      }
+      else{
+        setStringParam(ADStatus, ADStatusError);
       }
    }  
   }
