@@ -3,8 +3,8 @@ beginScreenProperties
 major 4
 minor 0
 release 1
-x 971
-y 571
+x 1595
+y 274
 w 401
 h 321
 font "arial-bold-r-12.0"
@@ -1036,6 +1036,50 @@ endObjectProperties
 endGroup
 
 visPv "$(P)$(R)DownloadCount_RBV"
+visMin "0"
+visMax "1"
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 180
+y 280
+w 85
+h 30
+
+beginGroup
+
+# (Message Button)
+object activeMessageButtonClass
+beginObjectProperties
+major 4
+minor 1
+release 0
+x 180
+y 280
+w 85
+h 30
+fgColor index 20
+onColor index 3
+offColor index 3
+topShadowColor index 1
+botShadowColor index 11
+controlPv "$(P)$(R)AbortDownload"
+pressValue "1"
+onLabel "Abort"
+offLabel "Abort"
+3d
+font "arial-bold-r-12.0"
+endObjectProperties
+
+endGroup
+
+visPv "$(P)$(R)DownloadCount_RBV"
+visInvert
 visMin "0"
 visMax "1"
 endObjectProperties

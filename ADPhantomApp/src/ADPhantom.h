@@ -30,6 +30,7 @@
 
 // Asyn driver includes
 #include "asynOctetSyncIO.h"
+#include "asynCommonSyncIO.h"
 
 // Phantom camera PH16 protocol data definitions
 #include <ph16UnitStructure.h>
@@ -157,9 +158,15 @@
 #define PHANTOM_DownloadStartCineString        "PHANTOM_DOWNLOAD_START_CINE"
 #define PHANTOM_DownloadEndCineString          "PHANTOM_DOWNLOAD_END_CINE"
 #define PHANTOM_DownloadString                 "PHANTOM_DOWNLOAD"
+#define PHANTOM_DownloadAbortString            "PHANTOM_DOWNLOAD_ABORT"
 #define PHANTOM_DownloadCountString            "PHANTOM_DOWNLOAD_COUNT"
 #define PHANTOM_DownloadFrameModeString        "PHANTOM_DOWNLOAD_FRAME_MODE"
+#define PHANTOM_MarkCineSavedString            "PHANTOM_MARK_CINE_SAVED"
 #define PHANTOM_CineSaveCFString               "PHANTOM_CINE_SAVE_CF"       // Save selected cine to flash
+
+#define PHANTOM_DeleteString                   "PHANTOM_DELETE"
+#define PHANTOM_DeleteStartCineString          "PHANTOM_DELETE_START_CINE"
+#define PHANTOM_DeleteEndCineString            "PHANTOM_DELETE_END_CINE"
 
 #define PHANTOM_SetPartitionString             "PHANTOM_SET_PARTITION"
 #define PHANTOM_GetCineCountString             "PHANTOM_GET_CINE_COUNT"
@@ -585,6 +592,7 @@ class ADPhantom: public ADDriver
     void phantomStatusTask();
     void phantomPreviewTask();
     void phantomFlashTask();
+    void phantomDownloadTask();
     asynStatus makeConnection();
     asynStatus connect();
     asynStatus disconnect();
@@ -598,7 +606,7 @@ class ADPhantom: public ADDriver
     asynStatus attachToPort(const std::string& portName);
     asynStatus readoutPreviewData();
     asynStatus sendSoftwareTrigger();
-    asynStatus downloadCineFile();
+    asynStatus deleteCineFiles();
     asynStatus saveCineToFlash(int cine);
     asynStatus saveSettings();
     asynStatus loadSettings();
@@ -690,9 +698,14 @@ class ADPhantom: public ADDriver
     int PHANTOM_DownloadStartCine_;
     int PHANTOM_DownloadEndCine_;
     int PHANTOM_Download_;
+    int PHANTOM_DownloadAbort_;
     int PHANTOM_DownloadCount_;
     int PHANTOM_DownloadFrameMode_;
+    int PHANTOM_MarkCineSaved_;
     int PHANTOM_CineSaveCF_;
+    int PHANTOM_Delete_;
+    int PHANTOM_DeleteStartCine_;
+    int PHANTOM_DeleteEndCine_;
     int PHANTOM_SetPartition_;
     int PHANTOM_GetCineCount_;
     int PHANTOM_CFState_;
@@ -776,6 +789,7 @@ class ADPhantom: public ADDriver
 
     asynUser                           *portUser_;
     asynUser                           *dataChannel_;
+    asynUser                           *commonDataport_;
     char                               ctrlPort_[128];
     char                               dataPort_[128];
     char                               data_[2048000];
@@ -793,6 +807,7 @@ class ADPhantom: public ADDriver
     std::map<std::string, int>         debugMap_;
     epicsEventId                       startEventId_;
     epicsEventId                       stopEventId_;
+    epicsEventId                       startDownloadEventId_;
     epicsEventId                       startPreviewEventId_;
     epicsEventId                       stopPreviewEventId_;
     epicsEventId                       flashEventId_;
