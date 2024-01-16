@@ -1,5 +1,6 @@
 #include "ADPhantom.h"
 
+//lookup table required to convert non-linear pixel data to linear pixel data
 const int ADPhantom::PHANTOM_LinLUT[1024] = {
   2, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 17, 18,
   19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 33,
@@ -954,6 +955,10 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   static const char *functionName = "ADPhantom::ADPhantom";
   int status = asynSuccess;
   int index = 0;
+  
+  //temp time profiling 
+  clock_gettime(CLOCK_MONOTONIC_RAW, &start_);
+  //
 
   // Setup flag to state this is our first connection
   firstConnect_ = true;
@@ -1085,7 +1090,7 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   createParam(PHANTOM_CamAux2PinString,               asynParamInt32,         &PHANTOM_CamAux2Pin_);
   createParam(PHANTOM_CamAux4PinString,               asynParamInt32,         &PHANTOM_CamAux4Pin_);
   createParam(PHANTOM_CamQuietFanString,              asynParamInt32,         &PHANTOM_CamQuietFan_);
-  createParam(PHANTOM_SyncClockString,                asynParamInt32,         &PHANTOM_SyncClock);
+  createParam(PHANTOM_SyncClockString,                asynParamInt32,         &PHANTOM_SyncClock_);
   createParam(PHANTOM_AutoTriggerXString,             asynParamInt32,         &PHANTOM_AutoTriggerX_);
   createParam(PHANTOM_AutoTriggerYString,             asynParamInt32,         &PHANTOM_AutoTriggerY_);
   createParam(PHANTOM_AutoTriggerWString,             asynParamInt32,         &PHANTOM_AutoTriggerW_);
@@ -1094,6 +1099,7 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   createParam(PHANTOM_AutoTriggerAreaString,          asynParamInt32,         &PHANTOM_AutoTriggerArea_);
   createParam(PHANTOM_AutoTriggerIntervalString,      asynParamInt32,         &PHANTOM_AutoTriggerInterval_);
   createParam(PHANTOM_AutoTriggerModeString,          asynParamInt32,         &PHANTOM_AutoTriggerMode_);
+  createParam(PHANTOM_DataFormatString,               asynParamInt32,         &PHANTOM_DataFormat_);
   for (index = 0; index < PHANTOM_NUMBER_OF_CINES; index++){
     createParam(PHANTOM_CnNameString[index],            asynParamOctet,         &PHANTOM_CnName_[index]);
     createParam(PHANTOM_CnWidthString[index],           asynParamInt32,         &PHANTOM_CnWidth_[index]);
@@ -1117,6 +1123,7 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   setIntegerParam(PHANTOMConnected_, 0);
   setIntegerParam(PHANTOM_TotalFrameCount_, 0);
   setIntegerParam(PHANTOM_AcquireState_, 0);
+  setStringParam(NDDataType, "UInt16");
   setIntegerParam(ADSizeX, 1280);
   setIntegerParam(ADSizeY, 800);
   setIntegerParam(PHANTOM_LivePreview_, 0);
@@ -1124,6 +1131,9 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   setStringParam(ADManufacturer,  "Vision Research");
   setStringParam(PHANTOM_CFFileName_,  "");
   setIntegerParam(PHANTOM_SettingsSlot_,  1);
+  setIntegerParam(PHANTOM_DataFormat_,  4); //P10 by default
+  bitDepth_=10;
+  phantomToken_ = "P10";
 
   // Initialise meta data to save
   metaArray_.push_back(new PhantomMeta("exposure", "Camera exposure time", "c%d.exp", NDAttrInt32, 0x674, 4));
@@ -2181,7 +2191,7 @@ asynStatus ADPhantom::writeInt32(asynUser *pasynUser, epicsInt32 value)
     status |= setCameraParameter("auto.acqrestart", value);
   } else if (function == PHANTOM_EDR_){
     status |= setCameraParameter("defc.edrexp", value);
-  } else if (function == PHANTOM_SyncClock){
+  } else if (function == PHANTOM_SyncClock_){
     char command[PHANTOM_MAX_STRING];
     std::string response;
     sprintf(command, "setrtc %d", std::time(NULL));
@@ -2226,6 +2236,37 @@ asynStatus ADPhantom::writeInt32(asynUser *pasynUser, epicsInt32 value)
     if (status == asynSuccess){
       status |= setCameraParameter("auto.bref", value);
     } 
+  }
+  else if (function == PHANTOM_DataFormat_){
+    //Update the selected token and associated bit depth
+      if (value==0){
+        bitDepth_ = 8;
+        phantomToken_ = "8";
+      }
+      else if (value==1){
+        bitDepth_ = 8;
+        phantomToken_ = "8R";
+      }
+      else if (value==2){
+        bitDepth_ = 16;
+        phantomToken_ = "P16";
+      }
+      else if (value==3){
+        bitDepth_ = 16;
+        phantomToken_ = "P16R";
+      }
+      else if (value==4){
+        bitDepth_ = 10;
+        phantomToken_ = "P10";
+      }
+      else if (value==5){
+        bitDepth_ = 12;
+        phantomToken_ = "P12L";
+        printf("P12L selected!");
+      }
+      else{
+        printf("Invalid Data Format selected!\n");
+      }
   }
 
   // If the status is bad reset the original value
@@ -2425,6 +2466,7 @@ asynStatus ADPhantom::attachToPort(const std::string& portName)
 asynStatus ADPhantom::readoutPreviewData()
 {
   const char * functionName = "ADPhantom::readoutPreviewData";
+  char command[PHANTOM_MAX_STRING];
   int nBytes = 0;
   std::string response;
   NDArray *pImage;
@@ -2436,7 +2478,7 @@ asynStatus ADPhantom::readoutPreviewData()
   asynStatus status = asynSuccess;
 
   // Calculate the number of bytes to read
-  nBytes = (int)((double)previewWidth_ * (double)previewHeight_ * 1.25);
+  nBytes = (int)((double)previewWidth_ * (double)previewHeight_ * ((float)bitDepth_/8));
   debug(functionName, "nBytes", nBytes);
 
   // Flush the data connection
@@ -2445,18 +2487,35 @@ asynStatus ADPhantom::readoutPreviewData()
   // Read in the acquire state and selected cine
   getIntegerParam(ADAcquire, &acquire);
   if (acquire){
-    status = sendSimpleCommand("img {cine:-1, start:0, cnt:1, fmt:P10}", &response);
+    sprintf(command, "img {cine:-1, start:0, cnt:1, fmt:%s}", phantomToken_.c_str());
+    status = sendSimpleCommand(command, &response);
   } else {
-    status = sendSimpleCommand("img {cine:0, start:0, cnt:1, fmt:P10}", &response);
+    sprintf(command, "img {cine:0, start:0, cnt:1, fmt:%s}", phantomToken_.c_str());
+    status = sendSimpleCommand(command, &response);
+    debug(functionName, command);
   }
   debug(functionName, "Response", response);
 
   this->readFrame(nBytes);
 
-  unsigned char *input = (unsigned char *)data_;
-  unsigned char *output = (unsigned char *)flashData_;
-  for (int bIndex = 0; bIndex < nBytes/5; bIndex++){
-    this->convert10BitPacketTo12Bit(input+(bIndex*5), output+(bIndex*8));
+  if (bitDepth_==8){
+    unsigned char *input = (unsigned char *)data_;
+    unsigned char *output = (unsigned char *)flashData_;
+    this->convert8BitPacketTo16Bit(input, output, nBytes);
+  }
+  else if (bitDepth_==10){
+    unsigned char *input = (unsigned char *)data_;
+    unsigned char *output = (unsigned char *)flashData_;
+    for (int bIndex = 0; bIndex < nBytes/5; bIndex++){
+      this->convert10BitPacketTo16Bit(input+(bIndex*5), output+(bIndex*8));
+    }
+  }
+  else if (bitDepth_==12){
+    unsigned char *input = (unsigned char *)data_;
+    unsigned char *output = (unsigned char *)flashData_;
+    for (int bIndex = 0; bIndex < nBytes/3; bIndex++){
+      this->convert12BitPacketTo16Bit(input+(bIndex*3), output+(bIndex*4));
+    }
   }
 
   // Allocate NDArray memory
@@ -2466,7 +2525,14 @@ asynStatus ADPhantom::readoutPreviewData()
   dataType= NDUInt16;
   pImage = this->pNDArrayPool->alloc(2, dims, dataType, nbytes, NULL);
 
-  memcpy(pImage->pData, flashData_, nbytes);
+  if (bitDepth_!=16){
+    //must use converted data
+    memcpy(pImage->pData, flashData_, nbytes);
+  }
+  else if (bitDepth_==16){
+    //raw data can be used
+    memcpy(pImage->pData, data_, nbytes);
+  }
   pImage->dims[0].size = dims[0];
   pImage->dims[1].size = dims[1];
 
@@ -2928,9 +2994,7 @@ asynStatus ADPhantom::downloadFlashImages(const std::string& filename, int start
   width = cineBitmapHeader_.biWidth;
   height = cineBitmapHeader_.biHeight;
   // Calculate the number of bytes to read
-  // In packet format there are 10 bits per pixel,
-  // which equates to 1.25 bytes
-  nBytes = (int)((double)width * (double)height * 1.25);
+  nBytes = (int)((double)width * (double)height * ((float)bitDepth_/8));
   debug(functionName, "Width", width);
   debug(functionName, "Height", height);
   debug(functionName, "nBytes", nBytes);
@@ -2966,11 +3030,25 @@ asynStatus ADPhantom::downloadFlashImages(const std::string& filename, int start
     debug(functionName, "Response", response);
     status = this->readFrame(nBytes);
 
+  if (bitDepth_==8){
+    unsigned char *input = (unsigned char *)data_;
+    unsigned char *output = (unsigned char *)flashData_;
+    this->convert8BitPacketTo16Bit(input, output, nBytes);
+  }
+  else if (bitDepth_==10){
     unsigned char *input = (unsigned char *)data_;
     unsigned char *output = (unsigned char *)flashData_;
     for (int bIndex = 0; bIndex < nBytes/5; bIndex++){
-      this->convert10BitPacketTo12Bit(input+(bIndex*5), output+(bIndex*8));
+      this->convert10BitPacketTo16Bit(input+(bIndex*5), output+(bIndex*8));
     }
+  }
+  else if (bitDepth_==12){
+    unsigned char *input = (unsigned char *)data_;
+    unsigned char *output = (unsigned char *)flashData_;
+    for (int bIndex = 0; bIndex < nBytes/3; bIndex++){
+      this->convert12BitPacketTo16Bit(input+(bIndex*3), output+(bIndex*4));
+    }
+  }
 
     if (status == asynSuccess){
       // Allocate NDArray memory
@@ -3006,7 +3084,8 @@ asynStatus ADPhantom::downloadFlashImages(const std::string& filename, int start
       pImage->pAttributeList->add("exp_time", "Exposure time (nanoseconds)", NDAttrUInt32, (void *)(&(flashExpData_[count])));
       pImage->pAttributeList->add("irig_sync", "IRIG synchronized", NDAttrInt8, (void *)(&(flashIrigData_[count])));
       pImage->pAttributeList->add("event_input", "Event Input (1 = open)", NDAttrInt8, (void *)(&(flashEventData_[count])));
-
+      //pixel token
+      pImage->pAttributeList->add("pixel_token", "Phantom pixel type token", NDAttrString, (void *)(phantomToken_.c_str()));
       // Loop over meta array to create attributes
       for (int mc = 0; mc < (int)metaArray_.size(); mc++){
         if (metaArray_[mc]->type_ == NDAttrInt8){
@@ -3074,9 +3153,34 @@ asynStatus ADPhantom::downloadFlashImages(const std::string& filename, int start
   return status;
 }
 
-asynStatus ADPhantom::convert10BitPacketTo12Bit(void *input, void *output)
+asynStatus ADPhantom::convert12BitPacketTo16Bit(void *input, void *output)
 {
-  const char * functionName = "convert10BitPacketTo12Bit";
+  const char * functionName = "convert12BitPacketTo16Bit";
+  asynStatus status = asynSuccess;
+
+  debug(functionName, "Method called");
+
+  unsigned char *inBytes = (unsigned char *)input;
+  unsigned char *outBytes = (unsigned char *)output;
+  int pIndex = 0;
+  int rawValue = (inBytes[0]<<4) + ((inBytes[1]&0xF0)>>4);
+  outBytes[pIndex] = (rawValue&0x00FF);
+  pIndex++;
+  outBytes[pIndex] = (rawValue&0xFF00)>>8;
+  pIndex++;
+
+  rawValue = ((inBytes[1]&0x0F)<<8) + ((inBytes[2]&0xFF));
+  outBytes[pIndex] = (rawValue&0x00FF);
+  pIndex++;
+  outBytes[pIndex] = (rawValue&0xFF00)>>8;
+  pIndex++;
+
+  return status;
+}
+
+asynStatus ADPhantom::convert10BitPacketTo16Bit(void *input, void *output)
+{
+  const char * functionName = "convert10BitPacketTo16Bit";
   asynStatus status = asynSuccess;
 
   debug(functionName, "Method called");
@@ -3108,6 +3212,28 @@ asynStatus ADPhantom::convert10BitPacketTo12Bit(void *input, void *output)
   outBytes[pIndex] = (rawValue&0xFF00)>>8;
   pIndex++;
 
+  return status;
+}
+
+
+asynStatus ADPhantom::convert8BitPacketTo16Bit(void *input, void *output, int nBytes)
+{
+  const char * functionName = "convert8BitPacketTo16Bit";
+  asynStatus status = asynSuccess;
+
+  debug(functionName, "Method called");
+
+  unsigned char *inBytes = (unsigned char *)input;
+  unsigned char *outBytes = (unsigned char *)output;
+  
+  for (int i=0;i<nBytes;i++)
+  {
+    outBytes[(i*2)+1]=inBytes[i];
+    outBytes[(i*2)]=0;
+  }
+  uint8_t byte1 = inBytes[0];
+  uint16_t byte2 = (outBytes[0] << 8) + outBytes[1];
+  //printf("8bit val = %d  16bit val= %d\n",byte1,byte2);
   return status;
 }
 
@@ -3194,6 +3320,14 @@ asynStatus ADPhantom::readoutTimestamps(int start_cine, int end_cine, int start_
 asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_frame, int end_frame, bool uni_frame_lim)
 {
   const char * functionName = "ADPhantom::readoutDataStream";
+  // Time profiling
+  struct timespec end_time;
+  clock_gettime(CLOCK_MONOTONIC_RAW, &end_time);
+  uint64_t delta_ms = (end_time.tv_sec - start_.tv_sec) * 1000 + (end_time.tv_nsec - start_.tv_nsec) / 1000000; 
+  debug(functionName, "msec since last download/init", (int)delta_ms);
+  clock_gettime(CLOCK_MONOTONIC_RAW, &start_);
+  //
+
   char command[PHANTOM_MAX_STRING];
   int width = 0;
   int height = 0;
@@ -3282,18 +3416,16 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
     getIntegerParam(PHANTOM_CnWidth_[cine], &width);
     getIntegerParam(PHANTOM_CnHeight_[cine], &height);
     // Calculate the number of bytes to read
-    // In packet format there are 10 bits per pixel,
-    // which equates to 1.25 bytes
-    nBytes = (int)((double)width * (double)height * 1.25);
+    // Depends on the chosen bit depth
+    nBytes = (int)((double)width * (double)height * ((float)bitDepth_/8));
     debug(functionName, "Width", width);
     debug(functionName, "Height", height);
     debug(functionName, "nBytes", nBytes);
 
+
     // Flush the data connection
     pasynOctetSyncIO->flush(dataChannel_);
-
-    sprintf(command, "img {cine:%d, start:%d, cnt:%d, fmt:P10}", cine, first_frame, frames);
-    status = sendSimpleCommand(command, &response);
+    sprintf(command, "img {cine:%d, start:%d, cnt:%d, fmt:%s}", cine, start, frames, phantomToken_.c_str());  status = sendSimpleCommand(command, &response);
     debug(functionName, "Command", command);
     debug(functionName, "Response", response);
 
@@ -3302,7 +3434,6 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
       first_tv_sec = (ntohl(tss.csecs) / 100) + irigYear;
       first_tv_usec = ((ntohl(tss.csecs) % 100) * 10000) + (ntohs(tss.frac) >> 2);
     }
-    //for (int frame = 0; frame < frames; frame++){
     while ((frame < frames) && (status == asynSuccess)){
       getIntegerParam(PHANTOM_DownloadAbort_, &abort);
       if(abort){
@@ -3336,12 +3467,33 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
       total_frame++;
       setIntegerParam(PHANTOM_DownloadCount_, total_frame);
       callParamCallbacks();
-      status = this->readFrame(nBytes);
+          
+      //Time profiling
+      struct timespec end;
+      clock_gettime(CLOCK_MONOTONIC_RAW, &end);
+      uint64_t delta_ms = (end.tv_sec - start_.tv_sec) * 1000 + (end.tv_nsec - start_.tv_nsec) / 1000000; 
+      debug(functionName, "msec to ready for next read, since last frame", (int)delta_ms);
+      //
 
-      unsigned char *input = (unsigned char *)data_;
-      unsigned char *output = (unsigned char *)flashData_;
-      for (int bIndex = 0; bIndex < nBytes/5; bIndex++){
-        this->convert10BitPacketTo12Bit(input+(bIndex*5), output+(bIndex*8));
+      status = this->readFrame(nBytes);
+      if (bitDepth_==8){
+        unsigned char *input = (unsigned char *)data_;
+        unsigned char *output = (unsigned char *)flashData_;
+        this->convert8BitPacketTo16Bit(input, output, nBytes);
+      }
+      else if (bitDepth_==10){
+        unsigned char *input = (unsigned char *)data_;
+        unsigned char *output = (unsigned char *)flashData_;
+        for (int bIndex = 0; bIndex < nBytes/5; bIndex++){
+          this->convert10BitPacketTo16Bit(input+(bIndex*5), output+(bIndex*8));
+        }
+      }
+      else if (bitDepth_==12){
+        unsigned char *input = (unsigned char *)data_;
+        unsigned char *output = (unsigned char *)flashData_;
+        for (int bIndex = 0; bIndex < nBytes/3; bIndex++){
+          this->convert12BitPacketTo16Bit(input+(bIndex*3), output+(bIndex*4));
+        }
       }
 
       if (status == asynSuccess){
@@ -3355,7 +3507,13 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
         dataType= NDUInt16;
         pImage = this->pNDArrayPool->alloc(2, dims, dataType, nbytes, NULL);
 
-        memcpy(pImage->pData, flashData_, nbytes);
+        if (bitDepth_==10 || bitDepth_==8 || bitDepth_==12){
+          //Use converted data array
+          memcpy(pImage->pData, flashData_, nbytes);
+        }
+        else {
+          memcpy(pImage->pData, data_, nbytes);
+        }
         pImage->dims[0].size = dims[0];
         pImage->dims[1].size = dims[1];
         // Add the frame number attribute
@@ -3370,6 +3528,8 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
         pImage->pAttributeList->add("post_trig_frames", "Post trigger frame count", NDAttrInt32, (void *)(&lastfr));
         // Add the image UniqueID
         pImage->pAttributeList->add("NDArrayUniqueId", "uniqueId", NDAttrInt32, (void *)(&total_frame));      // Loop over meta array to create attributes
+        // Add the pixel token
+        pImage->pAttributeList->add("pixel_token", "Phantom pixel type token", NDAttrString, (void *)(phantomToken_.c_str()));
         pImage->uniqueId = total_frame;
         for (int mc = 0; mc < (int)metaArray_.size(); mc++){
           if (metaArray_[mc]->type_ == NDAttrInt8){
@@ -3474,7 +3634,6 @@ asynStatus ADPhantom::readFrame(int bytes)
 
   char *dataPtr = data_;
   int totalRead = 0;
-  //printf("Bytes to read: %d\n", (int)bytes);
   while (status == asynSuccess && totalRead < bytes){
     status = pasynOctetSyncIO->read(dataChannel_,
                                     dataPtr,
@@ -3483,13 +3642,20 @@ asynStatus ADPhantom::readFrame(int bytes)
                                     &nread,
                                     &eomReason);
 
-    //printf("Read status %d\n", (int)status);
     debug(functionName, "Read status", (int)status);
     debug(functionName, "nread", (int)nread);
     debug(functionName, "eomReason", (int)eomReason);
     totalRead += nread;
     debug(functionName, "total read bytes", (int)totalRead);
     dataPtr += nread;
+
+    //Time Profiling
+    struct timespec end;
+    clock_gettime(CLOCK_MONOTONIC_RAW, &end);
+    uint64_t delta_ms = (end.tv_sec - start_.tv_sec) * 1000 + (end.tv_nsec - start_.tv_nsec) / 1000000; 
+    debug(functionName, "msec since last data read", (int)delta_ms);
+    clock_gettime(CLOCK_MONOTONIC_RAW, &start_);
+    //
   }
   return status;
 }
