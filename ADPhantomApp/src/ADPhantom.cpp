@@ -1609,7 +1609,7 @@ void ADPhantom::phantomDownloadTask()
         setStringParam(ADStatusMessage, "Ready");
       }
       else{
-        setStringParam(ADStatus, ADStatusError);
+        setIntegerParam(ADStatus, ADStatusError);
       }
    }  
   }
@@ -3425,7 +3425,8 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
 
     // Flush the data connection
     pasynOctetSyncIO->flush(dataChannel_);
-    sprintf(command, "img {cine:%d, start:%d, cnt:%d, fmt:%s}", cine, start, frames, phantomToken_.c_str());  status = sendSimpleCommand(command, &response);
+    sprintf(command, "img {cine:%d, start:%d, cnt:%d, fmt:%s}", cine, first_frame, frames, phantomToken_.c_str());  
+    status = sendSimpleCommand(command, &response);
     debug(functionName, "Command", command);
     debug(functionName, "Response", response);
 
