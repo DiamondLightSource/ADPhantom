@@ -3,10 +3,10 @@ beginScreenProperties
 major 4
 minor 0
 release 1
-x 217
-y 443
+x 681
+y 125
 w 401
-h 250
+h 280
 font "arial-bold-r-12.0"
 fontAlign "center"
 ctlFont "arial-bold-r-12.0"
@@ -21,7 +21,6 @@ ctlBgColor2 index 3
 topShadowColor index 1
 botShadowColor index 11
 showGrid
-snapToGrid
 gridSize 5
 endScreenProperties
 
@@ -31,10 +30,10 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 0
+x -2
 y 0
 w 400
-h 250
+h 320
 lineColor index 5
 fill
 fillColor index 5
@@ -47,9 +46,9 @@ major 4
 minor 0
 release 0
 x 5
-y 15
+y 9
 w 390
-h 230
+h 255
 lineColor index 14
 fill
 fillColor index 3
@@ -175,8 +174,8 @@ beginObjectProperties
 major 10
 minor 0
 release 0
-x 145
-y 200
+x 142
+y 228
 w 85
 h 20
 controlPv "$(P)$(R)DownloadCount_RBV"
@@ -194,8 +193,8 @@ beginObjectProperties
 major 4
 minor 1
 release 1
-x 20
-y 205
+x 17
+y 233
 w 112
 h 13
 font "arial-bold-r-12.0"
@@ -472,8 +471,8 @@ beginObjectProperties
 major 4
 minor 1
 release 1
-x 20
-y 140
+x 17
+y 168
 w 108
 h 13
 font "arial-bold-r-12.0"
@@ -492,8 +491,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 145
-y 135
+x 142
+y 163
 w 110
 h 25
 fgColor index 14
@@ -556,8 +555,8 @@ beginObjectProperties
 major 4
 minor 1
 release 1
-x 20
-y 170
+x 17
+y 198
 w 106
 h 13
 font "arial-bold-r-12.0"
@@ -576,8 +575,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 145
-y 165
+x 142
+y 193
 w 110
 h 25
 fgColor index 14
@@ -588,5 +587,43 @@ botShadowColor index 11
 controlPv "$(P)$(R)MarkCineSaved"
 indicatorPv "$(P)$(R)MarkCineSaved_RBV"
 font "arial-bold-r-12.0"
+endObjectProperties
+
+# (Menu Button)
+object activeMenuButtonClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 142
+y 133
+w 110
+h 25
+fgColor index 14
+bgColor index 3
+inconsistentColor index 3
+topShadowColor index 1
+botShadowColor index 11
+controlPv "$(P)$(R)SelectPixelDataFormat"
+font "arial-bold-r-12.0"
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 18
+y 136
+w 92
+h 20
+font "arial-bold-r-12.0"
+fgColor index 14
+bgColor index 3
+useDisplayBg
+value {
+  "Pixel Token:"
+}
 endObjectProperties
 

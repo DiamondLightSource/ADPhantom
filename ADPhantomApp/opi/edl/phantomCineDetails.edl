@@ -3,10 +3,10 @@ beginScreenProperties
 major 4
 minor 0
 release 1
-x 1595
-y 274
+x 1039
+y 470
 w 401
-h 321
+h 510
 font "arial-bold-r-12.0"
 fontAlign "center"
 ctlFont "arial-bold-r-12.0"
@@ -34,7 +34,7 @@ release 0
 x 0
 y 0
 w 400
-h 320
+h 350
 lineColor index 5
 fill
 fillColor index 5
@@ -49,7 +49,7 @@ release 0
 x 5
 y 15
 w 390
-h 300
+h 330
 lineColor index 14
 fill
 fillColor index 3
@@ -962,7 +962,7 @@ major 4
 minor 0
 release 0
 x 275
-y 280
+y 310
 w 85
 h 30
 
@@ -975,7 +975,7 @@ major 4
 minor 1
 release 1
 x 275
-y 280
+y 310
 w 85
 h 30
 font "arial-bold-r-12.0"
@@ -1004,7 +1004,7 @@ major 4
 minor 0
 release 0
 x 275
-y 280
+y 310
 w 85
 h 30
 
@@ -1017,7 +1017,7 @@ major 4
 minor 1
 release 0
 x 275
-y 280
+y 310
 w 85
 h 30
 fgColor index 20
@@ -1047,7 +1047,7 @@ major 4
 minor 0
 release 0
 x 180
-y 280
+y 310
 w 85
 h 30
 
@@ -1060,7 +1060,7 @@ major 4
 minor 1
 release 0
 x 180
-y 280
+y 310
 w 85
 h 30
 fgColor index 20
@@ -1082,5 +1082,43 @@ visPv "$(P)$(R)DownloadCount_RBV"
 visInvert
 visMin "0"
 visMax "1"
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 20
+y 280
+w 92
+h 20
+font "arial-bold-r-12.0"
+fgColor index 14
+bgColor index 3
+useDisplayBg
+value {
+  "Pixel Token:"
+}
+endObjectProperties
+
+# (Menu Button)
+object activeMenuButtonClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 135
+y 280
+w 74
+h 20
+fgColor index 14
+bgColor index 3
+inconsistentColor index 3
+topShadowColor index 1
+botShadowColor index 11
+controlPv "$(P)$(R)SelectPixelDataFormat"
+font "arial-bold-r-12.0"
 endObjectProperties
 
