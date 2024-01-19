@@ -3,8 +3,8 @@ beginScreenProperties
 major 4
 minor 0
 release 1
-x 179
-y 470
+x 429
+y 343
 w 390
 h 470
 font "arial-bold-r-12.0"
@@ -40,25 +40,6 @@ useDisplayBg
 value {
   "Pixel Data Type"
 }
-endObjectProperties
-
-# (Menu Button)
-object activeMenuButtonClass
-beginObjectProperties
-major 4
-minor 0
-release 0
-x 306
-y 205
-w 74
-h 20
-fgColor index 14
-bgColor index 3
-inconsistentColor index 3
-topShadowColor index 1
-botShadowColor index 11
-controlPv "$(P)$(R)SelectPixelDataFormat"
-font "arial-bold-r-12.0"
 endObjectProperties
 
 # (Rectangle)
