@@ -30,6 +30,7 @@
 
 // Asyn driver includes
 #include "asynOctetSyncIO.h"
+#include "asynCommonSyncIO.h"
 
 // Phantom camera PH16 protocol data definitions
 #include <ph16UnitStructure.h>
@@ -135,6 +136,8 @@
 #define PHANTOM_SettingsSaveString             "PHANTOM_SETTINGS_SAVE"
 #define PHANTOM_SettingsLoadString             "PHANTOM_SETTINGS_LOAD"
 
+#define PHANTOM_AutoAdvanceString             "PHANTOM_AUTO_ADVANCE"
+
 #define PHANTOM_AutoSaveString                 "PHANTOM_AUTO_SAVE"
 #define PHANTOM_AutoRestartString              "PHANTOM_AUTO_RESTART"
 #define PHANTOM_AutoCSRString                  "PHANTOM_AUTO_CSR"
@@ -150,16 +153,23 @@
 #define PHANTOM_CineFrameCountString           "PHANTOM_CINE_FR_COUNT"
 #define PHANTOM_CineFirstFrameString           "PHANTOM_CINE_FIRST_FR"
 #define PHANTOM_CineLastFrameString            "PHANTOM_CINE_LAST_FR"
-#define PHANTOM_CineRecordStartString          "PHANTOM_CINE_REC_START"
-#define PHANTOM_CineRecordEndString            "PHANTOM_CINE_REC_END"
-#define PHANTOM_CineRecordString               "PHANTOM_CINE_RECORD"
-#define PHANTOM_CineRecordCountString          "PHANTOM_CINE_REC_COUNT"
+#define PHANTOM_DownloadStartFrameString       "PHANTOM_DOWNLOAD_START_FRAME"
+#define PHANTOM_DownloadEndFrameString         "PHANTOM_DOWNLOAD_END_FRAME"
+#define PHANTOM_DownloadStartCineString        "PHANTOM_DOWNLOAD_START_CINE"
+#define PHANTOM_DownloadEndCineString          "PHANTOM_DOWNLOAD_END_CINE"
+#define PHANTOM_DownloadString                 "PHANTOM_DOWNLOAD"
+#define PHANTOM_DownloadAbortString            "PHANTOM_DOWNLOAD_ABORT"
+#define PHANTOM_DownloadCountString            "PHANTOM_DOWNLOAD_COUNT"
+#define PHANTOM_DownloadFrameModeString        "PHANTOM_DOWNLOAD_FRAME_MODE"
+#define PHANTOM_MarkCineSavedString            "PHANTOM_MARK_CINE_SAVED"
 #define PHANTOM_CineSaveCFString               "PHANTOM_CINE_SAVE_CF"       // Save selected cine to flash
+
+#define PHANTOM_DeleteString                   "PHANTOM_DELETE"
+#define PHANTOM_DeleteStartCineString          "PHANTOM_DELETE_START_CINE"
+#define PHANTOM_DeleteEndCineString            "PHANTOM_DELETE_END_CINE"
 
 #define PHANTOM_SetPartitionString             "PHANTOM_SET_PARTITION"
 #define PHANTOM_GetCineCountString             "PHANTOM_GET_CINE_COUNT"
-
-#define PHANTOM_DataFormatString               "PHANTOM_DataFormat"   // Integer corresponding to format token (8,8R,P16,P16R,P10,P12L)
 
 #define PHANTOM_CFStateString                  "PHANTOM_CF_STATE"
 #define PHANTOM_CFActionString                 "PHANTOM_CF_ACTION"
@@ -582,6 +592,7 @@ class ADPhantom: public ADDriver
     void phantomStatusTask();
     void phantomPreviewTask();
     void phantomFlashTask();
+    void phantomDownloadTask();
     asynStatus makeConnection();
     asynStatus connect();
     asynStatus disconnect();
@@ -595,7 +606,7 @@ class ADPhantom: public ADDriver
     asynStatus attachToPort(const std::string& portName);
     asynStatus readoutPreviewData();
     asynStatus sendSoftwareTrigger();
-    asynStatus downloadCineFile(int cine);
+    asynStatus deleteCineFiles();
     asynStatus saveCineToFlash(int cine);
     asynStatus saveSettings();
     asynStatus loadSettings();
@@ -605,11 +616,9 @@ class ADPhantom: public ADDriver
     asynStatus downloadFlashFile();
     asynStatus downloadFlashHeader(const std::string& filename);
     asynStatus downloadFlashImages(const std::string& filename, int start, int end);
-    asynStatus convert12BitPacketTo16Bit(void *input, void *output);
-    asynStatus convert10BitPacketTo16Bit(void *input, void *output);
-    asynStatus convert8BitPacketTo16Bit(void *input, void *output, int nBytes);
-    asynStatus readoutTimestamps(int cine, int start, int end);
-    asynStatus readoutDataStream(int cine, int start, int end);
+    asynStatus convert10BitPacketTo12Bit(void *input, void *output);
+    asynStatus readoutTimestamps(int start_cine, int end_cine, int start_frame, int end_frame, bool uni_frame_lim);
+    asynStatus readoutDataStream(int start_cine, int end_cine, int start_frame, int end_frame, bool uni_frame_lim);
     asynStatus readFrame(int bytes);
     asynStatus updatePreviewCine();
     asynStatus updateCine(int cine);
@@ -659,9 +668,6 @@ class ADPhantom: public ADDriver
     asynStatus debug(const std::string& method, const std::string& msg, const std::string& value);
     asynStatus debug(const std::string& method, const std::string& msg, std::map<std::string, std::string> value);
 
-    //Temp
-    struct timespec start_;
-
   protected:
     int PHANTOMConnect_;
     #define FIRST_PHANTOM_PARAM PHANTOMConnect_
@@ -672,6 +678,7 @@ class ADPhantom: public ADDriver
     int PHANTOM_SettingsSlot_;
     int PHANTOM_SettingsSave_;
     int PHANTOM_SettingsLoad_;
+    int PHANTOM_AutoAdvance_;
     int PHANTOM_AutoSave_;
     int PHANTOM_AutoRestart_;
     int PHANTOM_AutoCSR_;
@@ -686,11 +693,19 @@ class ADPhantom: public ADDriver
     int PHANTOM_CineFirstFrame_;
     int PHANTOM_CineLastFrame_;
     int PHANTOM_LivePreview_;
-    int PHANTOM_CineRecordStart_;
-    int PHANTOM_CineRecordEnd_;
-    int PHANTOM_CineRecord_;
-    int PHANTOM_CineRecordCount_;
+    int PHANTOM_DownloadStartFrame_;
+    int PHANTOM_DownloadEndFrame_;
+    int PHANTOM_DownloadStartCine_;
+    int PHANTOM_DownloadEndCine_;
+    int PHANTOM_Download_;
+    int PHANTOM_DownloadAbort_;
+    int PHANTOM_DownloadCount_;
+    int PHANTOM_DownloadFrameMode_;
+    int PHANTOM_MarkCineSaved_;
     int PHANTOM_CineSaveCF_;
+    int PHANTOM_Delete_;
+    int PHANTOM_DeleteStartCine_;
+    int PHANTOM_DeleteEndCine_;
     int PHANTOM_SetPartition_;
     int PHANTOM_GetCineCount_;
     int PHANTOM_CFState_;
@@ -751,10 +766,9 @@ class ADPhantom: public ADDriver
     int PHANTOM_CfFileName_[PHANTOM_NUMBER_OF_FLASH_FILES];
     int PHANTOM_CfFileSize_[PHANTOM_NUMBER_OF_FLASH_FILES];
     int PHANTOM_CfFileDate_[PHANTOM_NUMBER_OF_FLASH_FILES];
-    int PHANTOM_DataFormat_;
     int PHANTOMConnected_;
-    int PHANTOM_SyncClock_;
-    #define LAST_PHANTOM_PARAM PHANTOM_SyncClock_
+    int PHANTOM_SyncClock;
+    #define LAST_PHANTOM_PARAM PHANTOMConnected_
 
   private:
     static const int PHANTOM_LinLUT[1024];
@@ -775,6 +789,7 @@ class ADPhantom: public ADDriver
 
     asynUser                           *portUser_;
     asynUser                           *dataChannel_;
+    asynUser                           *commonDataport_;
     char                               ctrlPort_[128];
     char                               dataPort_[128];
     char                               data_[2048000];
@@ -789,11 +804,10 @@ class ADPhantom: public ADDriver
     int                                flashTrigUsecs_;
     int                                previewWidth_;
     int                                previewHeight_;
-    int                                bitDepth_;
-    std::string                        phantomToken_;
     std::map<std::string, int>         debugMap_;
     epicsEventId                       startEventId_;
     epicsEventId                       stopEventId_;
+    epicsEventId                       startDownloadEventId_;
     epicsEventId                       startPreviewEventId_;
     epicsEventId                       stopPreviewEventId_;
     epicsEventId                       flashEventId_;
