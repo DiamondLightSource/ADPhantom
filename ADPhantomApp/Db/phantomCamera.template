@@ -1168,6 +1168,27 @@ record(bi, "$(P)$(R)CONNECTED_RBV")
   field(ONAM, "Connected")
 }
 
+# Choose the format of camera pixel data
+record(mbbo, "$(P)$(R)SelectPixelDataFormat")
+{
+  field(DESC, "Phantom pixel data format token")
+  field(DTYP, "asynInt32")
+  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_DataFormat")
+  field(ZRST, "8")
+  field(ZRVL, "0")
+  field(ONST, "8R")
+  field(ONVL, "1")
+  field(TWST, "P16")
+  field(TWVL, "2")
+  field(THST, "P16R")
+  field(THVL, "3")
+  field(FRST, "P10")
+  field(FRVL, "4")
+  field(FVST, "P12L")
+  field(FVVL, "5")
+}
+
+
 include "phantomFlash.template"
 
 

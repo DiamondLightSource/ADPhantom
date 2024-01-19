@@ -3,8 +3,8 @@ beginScreenProperties
 major 4
 minor 0
 release 1
-x 1597
-y 134
+x 1100
+y 223
 w 400
 h 830
 font "arial-bold-r-12.0"
@@ -20,7 +20,6 @@ ctlBgColor2 index 3
 topShadowColor index 1
 botShadowColor index 11
 showGrid
-snapToGrid
 gridSize 5
 endScreenProperties
 
@@ -46,9 +45,9 @@ major 4
 minor 0
 release 0
 x 5
-y 485
+y 475
 w 175
-h 35
+h 45
 lineColor index 14
 fill
 fillColor index 3
@@ -105,9 +104,9 @@ major 4
 minor 0
 release 0
 x 185
-y 485
+y 475
 w 200
-h 35
+h 45
 lineColor index 14
 fill
 fillColor index 3
@@ -902,8 +901,28 @@ beginObjectProperties
 major 4
 minor 1
 release 1
+x 10
+y 480
+w 126
+h 13
+font "arial-bold-r-12.0"
+fgColor index 14
+bgColor index 3
+useDisplayBg
+value {
+  "Toggle Preview Mode"
+}
+autoSize
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
 x 20
-y 740
+y 739
 w 69
 h 13
 font "arial-bold-r-12.0"
@@ -915,4 +934,3 @@ value {
 }
 autoSize
 endObjectProperties
-

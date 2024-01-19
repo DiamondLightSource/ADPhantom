@@ -31,3 +31,14 @@ CROSS_COMPILER_TARGET_ARCHS =
 # You must rebuild in the iocBoot directory for this to
 #   take effect.
 #IOCS_APPL_TOP = </IOC/path/to/application/top>
+
+#Switch these on for debugging
+#HOST_OPT=NO
+#CROSS_OPT=NO
+#USR_CXXFLAGS=-g
+#USR_LDFLAGS=-g
+#USR_CPPFLAGS_Linux += -g
+#USR_CFLAGS_Linux += -g
+#USR_LDFLAGS_Linux += -g
+#STATIC_BUILD=YES
+

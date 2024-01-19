@@ -3,8 +3,8 @@ beginScreenProperties
 major 4
 minor 0
 release 1
-x 286
-y 233
+x 429
+y 343
 w 390
 h 470
 font "arial-bold-r-12.0"
@@ -20,9 +20,27 @@ ctlBgColor2 index 3
 topShadowColor index 1
 botShadowColor index 11
 showGrid
-snapToGrid
 gridSize 5
 endScreenProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 205
+y 205
+w 92
+h 20
+font "arial-bold-r-12.0"
+fgColor index 14
+bgColor index 3
+useDisplayBg
+value {
+  "Pixel Data Type"
+}
+endObjectProperties
 
 # (Rectangle)
 object activeRectangleClass
@@ -32,7 +50,7 @@ minor 0
 release 0
 x 0
 y 0
-w 390
+w 393
 h 470
 lineColor index 5
 fill
@@ -132,46 +150,6 @@ minor 1
 release 1
 x 90
 y 120
-w 95
-h 20
-font "arial-bold-r-10.0"
-fontAlign "center"
-fgColor index 5
-bgColor index 3
-useDisplayBg
-value {
-  "N/A"
-}
-endObjectProperties
-
-# (Static Text)
-object activeXTextClass
-beginObjectProperties
-major 4
-minor 1
-release 1
-x 285
-y 205
-w 95
-h 20
-font "arial-bold-r-10.0"
-fontAlign "center"
-fgColor index 5
-bgColor index 3
-useDisplayBg
-value {
-  "N/A"
-}
-endObjectProperties
-
-# (Static Text)
-object activeXTextClass
-beginObjectProperties
-major 4
-minor 1
-release 1
-x 285
-y 230
 w 95
 h 20
 font "arial-bold-r-10.0"
@@ -527,7 +505,7 @@ minor 1
 release 1
 x 5
 y 5
-w 32
+w 2
 h 13
 font "arial-medium-r-12.0"
 fgColor index 14
@@ -642,7 +620,7 @@ minor 1
 release 1
 x 5
 y 105
-w 49
+w 2
 h 13
 font "arial-medium-r-12.0"
 fgColor index 14
@@ -952,7 +930,7 @@ minor 1
 release 1
 x 200
 y 105
-w 74
+w 2
 h 13
 font "arial-medium-r-12.0"
 fgColor index 14
@@ -1029,7 +1007,7 @@ minor 1
 release 1
 x 200
 y 320
-w 48
+w 2
 h 13
 font "arial-medium-r-12.0"
 fgColor index 14
