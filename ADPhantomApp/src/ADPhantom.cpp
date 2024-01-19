@@ -2262,10 +2262,10 @@ asynStatus ADPhantom::writeInt32(asynUser *pasynUser, epicsInt32 value)
       else if (value==5){
         bitDepth_ = 12;
         phantomToken_ = "P12L";
-        printf("P12L selected!");
       }
       else{
         printf("Invalid Data Format selected!\n");
+        status = asynError;
       }
   }
 

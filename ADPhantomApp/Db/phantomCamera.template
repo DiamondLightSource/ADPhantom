@@ -1184,8 +1184,8 @@ record(mbbo, "$(P)$(R)SelectPixelDataFormat")
   field(THVL, "3")
   field(FRST, "P10")
   field(FRVL, "4")
-  field(SXST, "P12L")
-  field(SXVL, "5")
+  field(FVST, "P12L")
+  field(FVVL, "5")
 }
 
 
