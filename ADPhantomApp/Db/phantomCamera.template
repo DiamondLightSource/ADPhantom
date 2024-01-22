@@ -1188,6 +1188,16 @@ record(mbbo, "$(P)$(R)SelectPixelDataFormat")
   field(FVVL, "5")
 }
 
+###
+### Driver frame read speed
+###
+record(longin, "$(P)$(R)FrameReadSpeed_RBV")
+{
+  field(DESC, "Frames processed by driver per second")
+  field(DTYP, "asynInt32")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_FRAMES_PER_SECOND")
+  field(SCAN, "I/O Intr")
+}
 
 include "phantomFlash.template"
 

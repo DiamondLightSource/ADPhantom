@@ -956,9 +956,9 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   int status = asynSuccess;
   int index = 0;
   
-  //temp time profiling 
-  clock_gettime(CLOCK_MONOTONIC_RAW, &start_);
-  //
+  //Time profiling 
+  clock_gettime(CLOCK_MONOTONIC_RAW, &frameStart_);
+  clock_gettime(CLOCK_MONOTONIC_RAW, &readStart_);
 
   // Setup flag to state this is our first connection
   firstConnect_ = true;
@@ -1100,6 +1100,7 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   createParam(PHANTOM_AutoTriggerIntervalString,      asynParamInt32,         &PHANTOM_AutoTriggerInterval_);
   createParam(PHANTOM_AutoTriggerModeString,          asynParamInt32,         &PHANTOM_AutoTriggerMode_);
   createParam(PHANTOM_DataFormatString,               asynParamInt32,         &PHANTOM_DataFormat_);
+  createParam(PHANTOM_FramesPerSecondString,          asynParamInt32,         &PHANTOM_FramesPerSecond_);
   for (index = 0; index < PHANTOM_NUMBER_OF_CINES; index++){
     createParam(PHANTOM_CnNameString[index],            asynParamOctet,         &PHANTOM_CnName_[index]);
     createParam(PHANTOM_CnWidthString[index],           asynParamInt32,         &PHANTOM_CnWidth_[index]);
@@ -1122,6 +1123,7 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   // Initialise PHANTOM parameters
   setIntegerParam(PHANTOMConnected_, 0);
   setIntegerParam(PHANTOM_TotalFrameCount_, 0);
+  setIntegerParam(PHANTOM_FramesPerSecond_, 0);
   setIntegerParam(PHANTOM_AcquireState_, 0);
   setStringParam(NDDataType, "UInt16");
   setIntegerParam(ADSizeX, 1280);
@@ -2496,6 +2498,11 @@ asynStatus ADPhantom::readoutPreviewData()
   }
   debug(functionName, "Response", response);
 
+  struct timespec endTime;
+  clock_gettime(CLOCK_MONOTONIC_RAW, &endTime);
+  uint64_t delta_ms = (endTime.tv_sec - frameStart_.tv_sec) * 1000 + (endTime.tv_nsec - frameStart_.tv_nsec) / 1000000; 
+  clock_gettime(CLOCK_MONOTONIC_RAW, &readStart_);
+
   this->readFrame(nBytes);
 
   if (bitDepth_==8){
@@ -3321,11 +3328,10 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
 {
   const char * functionName = "ADPhantom::readoutDataStream";
   // Time profiling
-  struct timespec end_time;
-  clock_gettime(CLOCK_MONOTONIC_RAW, &end_time);
-  uint64_t delta_ms = (end_time.tv_sec - start_.tv_sec) * 1000 + (end_time.tv_nsec - start_.tv_nsec) / 1000000; 
-  debug(functionName, "msec since last download/init", (int)delta_ms);
-  clock_gettime(CLOCK_MONOTONIC_RAW, &start_);
+  struct timespec endTime;
+  clock_gettime(CLOCK_MONOTONIC_RAW, &endTime);
+  uint64_t delta_ms = (endTime.tv_sec - frameStart_.tv_sec) * 1000 + (endTime.tv_nsec - frameStart_.tv_nsec) / 1000000; 
+  debug(functionName, "Time since last download/init (msec)", (int)delta_ms);
   //
 
   char command[PHANTOM_MAX_STRING];
@@ -3470,10 +3476,12 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
       callParamCallbacks();
           
       //Time profiling
-      struct timespec end;
-      clock_gettime(CLOCK_MONOTONIC_RAW, &end);
-      uint64_t delta_ms = (end.tv_sec - start_.tv_sec) * 1000 + (end.tv_nsec - start_.tv_nsec) / 1000000; 
-      debug(functionName, "msec to ready for next read, since last frame", (int)delta_ms);
+      struct timespec endTime;
+      clock_gettime(CLOCK_MONOTONIC_RAW, &endTime);
+      uint64_t delta_ms = (endTime.tv_sec - frameStart_.tv_sec) * 1000 + (endTime.tv_nsec - frameStart_.tv_nsec) / 1000000; 
+      clock_gettime(CLOCK_MONOTONIC_RAW, &readStart_);
+      debug(functionName, "Time taken for driver to process new data", (int)delta_ms);
+      printf("Time taken for driver to process new data %d\n", (int)delta_ms);
       //
 
       status = this->readFrame(nBytes);
@@ -3503,7 +3511,7 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
         dims[1] = height;
         setIntegerParam(NDArraySizeX, width);
         setIntegerParam(NDArraySizeY, height);
-        this->unlock();
+        //this->unlock();
         nbytes = (dims[0] * dims[1]) * sizeof(int16_t);
         dataType= NDUInt16;
         pImage = this->pNDArrayPool->alloc(2, dims, dataType, nbytes, NULL);
@@ -3591,15 +3599,15 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
         first_tv_sec = tv_sec;
         first_tv_usec = tv_usec;
 
-        this->lock();
+        //this->lock();
         getIntegerParam(NDArrayCallbacks, &arrayCallbacks);
         if (arrayCallbacks){
           // Must release the lock here, or we can get into a deadlock, because we can
           // block on the plugin lock, and the plugin can be calling us
-          this->unlock();
+          //this->unlock();
           debug(functionName, "Calling NDArray callback");
           doCallbacksGenericPointer(pImage, NDArrayData, 0);
-          this->lock();
+          //this->lock();
         }
 
         // Free the image buffer
@@ -3651,11 +3659,20 @@ asynStatus ADPhantom::readFrame(int bytes)
     dataPtr += nread;
 
     //Time Profiling
-    struct timespec end;
-    clock_gettime(CLOCK_MONOTONIC_RAW, &end);
-    uint64_t delta_ms = (end.tv_sec - start_.tv_sec) * 1000 + (end.tv_nsec - start_.tv_nsec) / 1000000; 
-    debug(functionName, "msec since last data read", (int)delta_ms);
-    clock_gettime(CLOCK_MONOTONIC_RAW, &start_);
+    struct timespec endTime;
+    clock_gettime(CLOCK_MONOTONIC_RAW, &endTime);
+
+    uint64_t delta_ms = (endTime.tv_sec - readStart_.tv_sec) * 1000 + (endTime.tv_nsec - readStart_.tv_nsec) / 1000000; 
+    debug(functionName, "Time taken to get frame from network interface (msec)", (int)delta_ms);
+    printf("Time taken to get frame from network interface (msec) %d\n", (int)delta_ms);
+
+    delta_ms = (endTime.tv_sec - frameStart_.tv_sec) * 1000 + (endTime.tv_nsec - frameStart_.tv_nsec) / 1000000; 
+    debug(functionName, "Total time taken to read 1 frame (msec)", (int)delta_ms);
+    printf("Total time taken to read 1 frame (msec) %d\n", (int)delta_ms);
+
+    setIntegerParam(PHANTOM_FramesPerSecond_, 1000/((int)delta_ms));
+    callParamCallbacks();
+    clock_gettime(CLOCK_MONOTONIC_RAW, &frameStart_);
     //
   }
   return status;
