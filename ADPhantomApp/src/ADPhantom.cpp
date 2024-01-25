@@ -1125,7 +1125,7 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   setIntegerParam(PHANTOM_TotalFrameCount_, 0);
   setIntegerParam(PHANTOM_FramesPerSecond_, 0);
   setIntegerParam(PHANTOM_AcquireState_, 0);
-  setStringParam(NDDataType, "UInt16");
+  setIntegerParam(NDDataType, (NDDataType_t) 3); // 3 is equal to NDUInt16 (see NDAttribute.h)
   setIntegerParam(ADSizeX, 1280);
   setIntegerParam(ADSizeY, 800);
   setIntegerParam(PHANTOM_LivePreview_, 0);
@@ -1630,7 +1630,7 @@ void ADPhantom::phantomStatusTask()
 
   debug(functionName, "Starting thread...");
   while (1){
-    epicsThreadSleep(0.25);
+    epicsThreadSleep(1);
     this->lock();
 
     // Read out the preview cine status
@@ -2547,10 +2547,10 @@ asynStatus ADPhantom::readoutPreviewData()
   if (arrayCallbacks){
     // Must release the lock here, or we can get into a deadlock, because we can
     // block on the plugin lock, and the plugin can be calling us
-    this->unlock();
+    //this->unlock();
     debug(functionName, "Calling NDArray callback");
     doCallbacksGenericPointer(pImage, NDArrayData, 0);
-    this->lock();
+    //this->lock();
   }
 
   // Free the image buffer
@@ -3435,12 +3435,12 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
     status = sendSimpleCommand(command, &response);
     debug(functionName, "Command", command);
     debug(functionName, "Response", response);
-
     if (frame == 0){
       short_time_stamp32 tss = timestampData_[total_frame];
       first_tv_sec = (ntohl(tss.csecs) / 100) + irigYear;
       first_tv_usec = ((ntohl(tss.csecs) % 100) * 10000) + (ntohs(tss.frac) >> 2);
     }
+    //epicsThreadSleep(5);
     while ((frame < frames) && (status == asynSuccess)){
       getIntegerParam(PHANTOM_DownloadAbort_, &abort);
       if(abort){
@@ -3476,10 +3476,10 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
       callParamCallbacks();
           
       //Time profiling
+      //epicsThreadSleep(0.05);
       struct timespec endTime;
       clock_gettime(CLOCK_MONOTONIC_RAW, &endTime);
       uint64_t delta_ms = (endTime.tv_sec - frameStart_.tv_sec) * 1000 + (endTime.tv_nsec - frameStart_.tv_nsec) / 1000000; 
-      clock_gettime(CLOCK_MONOTONIC_RAW, &readStart_);
       debug(functionName, "Time taken for driver to process new data", (int)delta_ms);
       printf("Time taken for driver to process new data %d\n", (int)delta_ms);
       //
@@ -3643,6 +3643,7 @@ asynStatus ADPhantom::readFrame(int bytes)
 
   char *dataPtr = data_;
   int totalRead = 0;
+  clock_gettime(CLOCK_MONOTONIC_RAW, &readStart_);
   while (status == asynSuccess && totalRead < bytes){
     status = pasynOctetSyncIO->read(dataChannel_,
                                     dataPtr,
@@ -3669,8 +3670,10 @@ asynStatus ADPhantom::readFrame(int bytes)
     delta_ms = (endTime.tv_sec - frameStart_.tv_sec) * 1000 + (endTime.tv_nsec - frameStart_.tv_nsec) / 1000000; 
     debug(functionName, "Total time taken to read 1 frame (msec)", (int)delta_ms);
     printf("Total time taken to read 1 frame (msec) %d\n", (int)delta_ms);
-
-    setIntegerParam(PHANTOM_FramesPerSecond_, 1000/((int)delta_ms));
+    printf("======================================\n");
+    if (delta_ms>0){
+      setIntegerParam(PHANTOM_FramesPerSecond_, (int)(1000/delta_ms));
+    }
     callParamCallbacks();
     clock_gettime(CLOCK_MONOTONIC_RAW, &frameStart_);
     //
