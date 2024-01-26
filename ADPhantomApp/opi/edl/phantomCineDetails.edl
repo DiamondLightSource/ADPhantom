@@ -3,10 +3,10 @@ beginScreenProperties
 major 4
 minor 0
 release 1
-x 1039
-y 470
-w 401
-h 510
+x 437
+y 292
+w 390
+h 350
 font "arial-bold-r-12.0"
 fontAlign "center"
 ctlFont "arial-bold-r-12.0"
