@@ -1630,7 +1630,7 @@ void ADPhantom::phantomStatusTask()
 
   debug(functionName, "Starting thread...");
   while (1){
-    epicsThreadSleep(1);
+    epicsThreadSleep(0.25);
     this->lock();
 
     // Read out the preview cine status
@@ -2547,10 +2547,10 @@ asynStatus ADPhantom::readoutPreviewData()
   if (arrayCallbacks){
     // Must release the lock here, or we can get into a deadlock, because we can
     // block on the plugin lock, and the plugin can be calling us
-    //this->unlock();
+    this->unlock();
     debug(functionName, "Calling NDArray callback");
     doCallbacksGenericPointer(pImage, NDArrayData, 0);
-    //this->lock();
+    this->lock();
   }
 
   // Free the image buffer
@@ -3440,7 +3440,6 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
       first_tv_sec = (ntohl(tss.csecs) / 100) + irigYear;
       first_tv_usec = ((ntohl(tss.csecs) % 100) * 10000) + (ntohs(tss.frac) >> 2);
     }
-    //epicsThreadSleep(5);
     while ((frame < frames) && (status == asynSuccess)){
       getIntegerParam(PHANTOM_DownloadAbort_, &abort);
       if(abort){
@@ -3476,12 +3475,11 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
       callParamCallbacks();
           
       //Time profiling
-      //epicsThreadSleep(0.05);
       struct timespec endTime;
       clock_gettime(CLOCK_MONOTONIC_RAW, &endTime);
       uint64_t delta_ms = (endTime.tv_sec - frameStart_.tv_sec) * 1000 + (endTime.tv_nsec - frameStart_.tv_nsec) / 1000000; 
       debug(functionName, "Time taken for driver to process new data", (int)delta_ms);
-      printf("Time taken for driver to process new data %d\n", (int)delta_ms);
+      //printf("Time taken for driver to process new data %d\n", (int)delta_ms);
       //
 
       status = this->readFrame(nBytes);
@@ -3511,7 +3509,7 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
         dims[1] = height;
         setIntegerParam(NDArraySizeX, width);
         setIntegerParam(NDArraySizeY, height);
-        //this->unlock();
+        this->unlock();
         nbytes = (dims[0] * dims[1]) * sizeof(int16_t);
         dataType= NDUInt16;
         pImage = this->pNDArrayPool->alloc(2, dims, dataType, nbytes, NULL);
@@ -3599,15 +3597,15 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
         first_tv_sec = tv_sec;
         first_tv_usec = tv_usec;
 
-        //this->lock();
+        this->lock();
         getIntegerParam(NDArrayCallbacks, &arrayCallbacks);
         if (arrayCallbacks){
           // Must release the lock here, or we can get into a deadlock, because we can
           // block on the plugin lock, and the plugin can be calling us
-          //this->unlock();
+          this->unlock();
           debug(functionName, "Calling NDArray callback");
           doCallbacksGenericPointer(pImage, NDArrayData, 0);
-          //this->lock();
+          this->lock();
         }
 
         // Free the image buffer
@@ -3665,12 +3663,12 @@ asynStatus ADPhantom::readFrame(int bytes)
 
     uint64_t delta_ms = (endTime.tv_sec - readStart_.tv_sec) * 1000 + (endTime.tv_nsec - readStart_.tv_nsec) / 1000000; 
     debug(functionName, "Time taken to get frame from network interface (msec)", (int)delta_ms);
-    printf("Time taken to get frame from network interface (msec) %d\n", (int)delta_ms);
+    //printf("Time taken to get frame from network interface (msec) %d\n", (int)delta_ms);
 
     delta_ms = (endTime.tv_sec - frameStart_.tv_sec) * 1000 + (endTime.tv_nsec - frameStart_.tv_nsec) / 1000000; 
     debug(functionName, "Total time taken to read 1 frame (msec)", (int)delta_ms);
-    printf("Total time taken to read 1 frame (msec) %d\n", (int)delta_ms);
-    printf("======================================\n");
+    //printf("Total time taken to read 1 frame (msec) %d\n", (int)delta_ms);
+    //printf("======================================\n");
     if (delta_ms>0){
       setIntegerParam(PHANTOM_FramesPerSecond_, (int)(1000/delta_ms));
     }
