@@ -145,6 +145,7 @@
 #define PHANTOM_PostTrigCountString            "PHANTOM_POST_TRIG_COUNT"
 #define PHANTOM_TotalFrameCountString          "PHANTOM_TOTAL_FRAME_COUNT"
 #define PHANTOM_MaxFrameCountString            "PHANTOM_MAX_FRAME_COUNT"
+#define PHANTOM_FramesPerSecondString          "PHANTOM_FRAMES_PER_SECOND"
 
 #define PHANTOM_CineNameString                 "PHANTOM_CINE_NAME"
 #define PHANTOM_SelectedCineString             "PHANTOM_CINE_SELECTED"
@@ -672,8 +673,8 @@ class ADPhantom: public ADDriver
     asynStatus debug(const std::string& method, const std::string& msg, const std::string& value);
     asynStatus debug(const std::string& method, const std::string& msg, std::map<std::string, std::string> value);
 
-    //Temp
-    struct timespec start_;
+    struct timespec frameStart_;
+    struct timespec readStart_;
 
   protected:
     int PHANTOMConnect_;
@@ -775,6 +776,7 @@ class ADPhantom: public ADDriver
     int PHANTOM_CfFileDate_[PHANTOM_NUMBER_OF_FLASH_FILES];
     int PHANTOM_DataFormat_;
     int PHANTOMConnected_;
+    int PHANTOM_FramesPerSecond_;
     int PHANTOM_SyncClock_;
     #define LAST_PHANTOM_PARAM PHANTOM_SyncClock_
 

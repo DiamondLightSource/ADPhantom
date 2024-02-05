@@ -3,8 +3,8 @@ beginScreenProperties
 major 4
 minor 0
 release 1
-x 429
-y 343
+x 847
+y 268
 w 390
 h 470
 font "arial-bold-r-12.0"
@@ -2287,5 +2287,64 @@ useDisplayBg
 value {
   "Acquisition Active"
 }
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 205
+y 206
+w 122
+h 20
+font "arial-bold-r-12.0"
+fgColor index 14
+bgColor index 3
+useDisplayBg
+value {
+  "Frames Per Second"
+}
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 332
+y 207
+w 47
+h 20
+
+beginGroup
+
+# (Textupdate)
+object TextupdateClass
+beginObjectProperties
+major 10
+minor 0
+release 0
+x 332
+y 207
+w 47
+h 20
+controlPv "$(P)$(R)FrameReadSpeed_RBV"
+displayMode "decimal"
+fgColor index 16
+fgAlarm
+bgColor index 10
+fill
+font "arial-bold-r-12.0"
+fontAlign "center"
+endObjectProperties
+
+endGroup
+
+visPv "$(P)$(R)FrameReadSpeed_RBV.DISA"
+visMin "0"
+visMax "1"
 endObjectProperties
 
