@@ -16,6 +16,7 @@
 #include <map>
 #include <algorithm>
 #include <ctime>
+#include <pthread.h>
 
 // EPICS includes
 #include <epicsThread.h>
@@ -621,6 +622,8 @@ class ADPhantom: public ADDriver
     asynStatus downloadFlashImages(const std::string& filename, int start, int end);
     asynStatus readoutTimestamps(int start_cine, int end_cine, int start_frame, int end_frame, bool uni_frame_lim);
     asynStatus readoutDataStream(int start_cine, int end_cine, int start_frame, int end_frame, bool uni_frame_lim);
+    asynStatus convertPixelData(int nBytes);
+    asynStatus conversionMiddle();
     asynStatus convert12BitPacketTo16Bit(void *input, void *output);
     asynStatus convert10BitPacketTo16Bit(void *input, void *output);
     asynStatus convert8BitPacketTo16Bit(void *input, void *output, int nBytes);
@@ -805,6 +808,7 @@ class ADPhantom: public ADDriver
     char                               data_[2048000];
     char                               imgData_[2048000];
     char                               flashData_[2048000];
+    char                               downloadData_[102400000]; // 50, 2MB images
     std::vector<short_time_stamp32>    timestampData_;
     std::vector<tagTIME64>             flashTsData_;
     std::vector<uint32_t>              flashExpData_;
@@ -834,6 +838,7 @@ class ADPhantom: public ADDriver
     CINEFILEHEADER                     cineHeader_;
     BITMAPINFOHEADER                   cineBitmapHeader_;
     SETUP                              cineSetupHeader_;
+    epicsEventId                       conversionEvt_[10];
 
 };
 

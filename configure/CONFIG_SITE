@@ -32,15 +32,17 @@ CROSS_COMPILER_TARGET_ARCHS =
 #   take effect.
 #IOCS_APPL_TOP = </IOC/path/to/application/top>
 
+USR_CPPFLAGS_Linux += -std=c++11
+
 #Switch these on for debugging
-#HOST_OPT=NO
-#CROSS_OPT=NO
-#USR_CXXFLAGS=-g
-#USR_LDFLAGS=-g
-#USR_CPPFLAGS_Linux += -g
-#USR_CFLAGS_Linux += -g
-#USR_LDFLAGS_Linux += -g
-#STATIC_BUILD=YES
+HOST_OPT=NO
+CROSS_OPT=NO
+USR_CXXFLAGS=-g
+USR_LDFLAGS=-g
+USR_CPPFLAGS_Linux += -g
+USR_CFLAGS_Linux += -g
+USR_LDFLAGS_Linux += -g
+STATIC_BUILD=YES
 
 #Switch these on for gprof profiling
 USR_CXXFLAGS=-pg

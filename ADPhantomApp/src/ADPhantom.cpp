@@ -864,6 +864,16 @@ extern "C"
 }
 
 /**
+ * Function to convert pixel data in parallel
+ */
+static int phantomPixelConversionTaskC(void *drvPvt)
+{
+  ADPhantom *pPvt = (ADPhantom *)drvPvt;
+  pPvt->conversionMiddle();
+  return asynSuccess;
+}
+
+/**
  * Function to run the camera task within a separate thread in C++
  */
 static void phantomCameraTaskC(void *drvPvt)
@@ -2510,16 +2520,22 @@ asynStatus ADPhantom::readoutPreviewData()
     unsigned char *output = (unsigned char *)flashData_;
     this->convert8BitPacketTo16Bit(input, output, nBytes);
   }
+  // else if (bitDepth_==10){
+  //   unsigned char *input = (unsigned char *)data_;
+  //   unsigned char *output = (unsigned char *)flashData_;
+  //   for (int bIndex = 0; bIndex < nBytes/5; bIndex++){
+  //     this->convert10BitPacketTo16Bit(input+(bIndex*5), output+(bIndex*8));
+  //   }
+  // }
+
   else if (bitDepth_==10){
-    unsigned char *input = (unsigned char *)data_;
-    unsigned char *output = (unsigned char *)flashData_;
-    for (int bIndex = 0; bIndex < nBytes/5; bIndex++){
-      this->convert10BitPacketTo16Bit(input+(bIndex*5), output+(bIndex*8));
-    }
+    convertPixelData(nBytes);
   }
+
   else if (bitDepth_==12){
     unsigned char *input = (unsigned char *)data_;
     unsigned char *output = (unsigned char *)flashData_;
+    //create 10 threads and give each a chunk of data to convert
     for (int bIndex = 0; bIndex < nBytes/3; bIndex++){
       this->convert12BitPacketTo16Bit(input+(bIndex*3), output+(bIndex*4));
     }
@@ -3160,6 +3176,42 @@ asynStatus ADPhantom::downloadFlashImages(const std::string& filename, int start
   return status;
 }
 
+asynStatus ADPhantom::convertPixelData(int nBytes)
+{
+  int status = asynSuccess;
+  int threads = 10;
+  epicsThreadId conversionThreadIDs[threads];
+  //unsigned int ncpus = epicsThreadGetCPUs();
+  //printf("Number of cpus available: %d\n", ncpus);
+
+  for (int i =0; i<threads; i++){
+    //All threads share the same input and output data pointers
+    conversionEvt_[i] = epicsEventCreate(epicsEventEmpty);
+    char threadName[30];
+    sprintf(threadName, "conversionThread%d", i); 
+    conversionThreadIDs[i] = epicsThreadCreate(threadName, 
+                      epicsThreadPriorityMedium, 
+                      epicsThreadGetStackSize(epicsThreadStackMedium), 
+                      (EPICSTHREADFUNC)phantomPixelConversionTaskC, 
+                      this);
+  }
+  int count = 0;
+  while (true)
+  {
+    for (int i =0; i<=threads; i++){
+      //All threads must rejoin
+      if (conversionEvt_[i] != NULL){
+        epicsEventWait(conversionEvt_[i]);
+        count++;
+        //printf("Thread %d finished\n",conversionThreadIDs[i]);
+      }
+    }
+    if (count==threads){
+      break;
+    }
+  }
+}
+
 asynStatus ADPhantom::convert12BitPacketTo16Bit(void *input, void *output)
 {
   const char * functionName = "convert12BitPacketTo16Bit";
@@ -3185,13 +3237,31 @@ asynStatus ADPhantom::convert12BitPacketTo16Bit(void *input, void *output)
   return status;
 }
 
+asynStatus ADPhantom::conversionMiddle()
+{
+  unsigned char *input = (unsigned char *)data_;
+  unsigned char *output = (unsigned char *)flashData_;
+  std::string threadName = epicsThreadGetNameSelf();
+  std::string newString = threadName.substr(threadName.find("conversionThread") + 16);
+  int i = std::stoi(newString);
+  epicsThreadId id = epicsThreadGetIdSelf();
+  int nBytes = 1280000;
+  int myBytes=nBytes/10;
+  int startByte = i*myBytes;
+  //printf("My i is:%d My ID is:%d My startBytes is:%d My endByte is %d\n", i, id, startByte, (startByte+myBytes)/5);
+  for (int bIndex = startByte/5; bIndex < (startByte+myBytes)/5; bIndex++){
+    this->convert10BitPacketTo16Bit(input+(bIndex*5), output+(bIndex*8));
+  }
+  epicsEventSignal(conversionEvt_[i]);
+  return asynSuccess;
+}
+
 asynStatus ADPhantom::convert10BitPacketTo16Bit(void *input, void *output)
 {
   const char * functionName = "convert10BitPacketTo16Bit";
   asynStatus status = asynSuccess;
 
   debug(functionName, "Method called");
-
   unsigned char *inBytes = (unsigned char *)input;
   unsigned char *outBytes = (unsigned char *)output;
   int pIndex = 0;
@@ -3218,7 +3288,6 @@ asynStatus ADPhantom::convert10BitPacketTo16Bit(void *input, void *output)
   pIndex++;
   outBytes[pIndex] = (rawValue&0xFF00)>>8;
   pIndex++;
-
   return status;
 }
 
