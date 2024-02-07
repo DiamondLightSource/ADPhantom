@@ -866,11 +866,10 @@ extern "C"
 /**
  * Function to convert pixel data in parallel
  */
-static int phantomPixelConversionTaskC(void *drvPvt)
+static void phantomPixelConversionTaskC(void *drvPvt)
 {
   ADPhantom *pPvt = (ADPhantom *)drvPvt;
-  pPvt->conversionMiddle();
-  return asynSuccess;
+  pPvt->phantomConversionTask();
 }
 
 /**
@@ -1145,6 +1144,8 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   setIntegerParam(PHANTOM_SettingsSlot_,  1);
   setIntegerParam(PHANTOM_DataFormat_,  4); //P10 by default
   bitDepth_=10;
+  conversionBitDepth_=10; // These are only updated prior to conversion start to ensure no race condition if bitDepth_ is changed before all conversion threads start
+  conversionBytes_=1280*800*1.25;
   phantomToken_ = "P10";
 
   // Initialise meta data to save
@@ -1227,6 +1228,22 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
                                 this) == NULL);
     if (status){
       debug(functionName, "epicsThreadCreate failure for download task");
+    }
+  }
+
+  if (status == asynSuccess){
+    debug(functionName, "Starting up conversion task....");
+    for (int i =0; i<PHANTOM_CONV_THREADS; i++){
+      //All threads share the same input and output data pointers
+      convStartEvt_[i] = epicsEventCreate(epicsEventEmpty);
+      convFinishEvt_[i] = epicsEventCreate(epicsEventEmpty);
+      char threadName[30];
+      sprintf(threadName, "conversionThread%d", i); 
+      status = (epicsThreadCreate(threadName, 
+                        epicsThreadPriorityMedium, 
+                        epicsThreadGetStackSize(epicsThreadStackMedium), 
+                        (EPICSTHREADFUNC)phantomPixelConversionTaskC, 
+                        this)==NULL);
     }
   }
 
@@ -1715,7 +1732,7 @@ void ADPhantom::phantomPreviewTask()
 
     if (preview){
       this->unlock();
-      status = epicsEventWaitWithTimeout(this->stopPreviewEventId_, 0.1);
+      status = epicsEventWaitWithTimeout(this->stopPreviewEventId_, 0.5);
       this->lock();
     }
   }
@@ -1750,6 +1767,38 @@ void ADPhantom::phantomFlashTask()
       setIntegerParam(PHANTOM_CFSFileDelete_, 0);
     }
     callParamCallbacks();
+  }
+}
+
+void ADPhantom::phantomConversionTask()
+{
+  // This task is run by 10 threads in parallel to convert data faster for P10 and P12L types
+  static const char *functionName = "ADPhantom::phantomConversionTask";
+  unsigned char *input = (unsigned char *)data_;
+  unsigned char *output = (unsigned char *)flashData_;
+  std::string threadName = epicsThreadGetNameSelf();
+  std::string newString = threadName.substr(threadName.find("conversionThread") + 16);
+  int i = std::stoi(newString);
+  while (1){
+    epicsEventWait(this->convStartEvt_[i]);
+    //epicsThreadId id = epicsThreadGetIdSelf();
+    //printf("My i is:%d My ID is:%d My startBytes is:%d My endByte is %d\n", i, id, startByte, (startByte+myBytes)/5);
+    int myBytes=conversionBytes_/PHANTOM_CONV_THREADS;
+    int startByte = i*myBytes;
+    if (bitDepth_==8){
+      this->convert8BitPacketTo16Bit(input+startByte, output+startByte*2, myBytes);
+    }
+    else if (conversionBitDepth_ == 10){
+      for (int bIndex = startByte/5; bIndex < (startByte+myBytes)/5; bIndex++){
+        this->convert10BitPacketTo16Bit(input+(bIndex*5), output+(bIndex*8));
+      }
+    }
+    else if (conversionBitDepth_ == 12){
+      for (int bIndex = startByte/3; bIndex < (startByte+myBytes)/3; bIndex++){
+        this->convert12BitPacketTo16Bit(input+(bIndex*3), output+(bIndex*4));
+      }
+    }
+    epicsEventSignal(convFinishEvt_[i]);
   }
 }
 
@@ -2485,9 +2534,8 @@ asynStatus ADPhantom::readoutPreviewData()
   size_t dims[2];
   NDDataType_t dataType;
   int acquire;
-  int nbytes;
   int arrayCallbacks   = 0;
-  asynStatus status = asynSuccess;
+  int status = asynSuccess;
 
   // Calculate the number of bytes to read
   nBytes = (int)((double)previewWidth_ * (double)previewHeight_ * ((float)bitDepth_/8));
@@ -2515,46 +2563,38 @@ asynStatus ADPhantom::readoutPreviewData()
 
   this->readFrame(nBytes);
 
-  if (bitDepth_==8){
-    unsigned char *input = (unsigned char *)data_;
-    unsigned char *output = (unsigned char *)flashData_;
-    this->convert8BitPacketTo16Bit(input, output, nBytes);
+  // Lock the number of bytes to prevent race condition
+  // Send event to conversion threads to start converting their slice of the new data
+  // Wait for all conv threads to send the finished event
+  // Unlock
+  conversionBitDepth_ = bitDepth_;
+  conversionBytes_ = nBytes;
+  for (int i =0; i<PHANTOM_CONV_THREADS; i++){
+    epicsEventSignal(convStartEvt_[i]);
   }
-  // else if (bitDepth_==10){
-  //   unsigned char *input = (unsigned char *)data_;
-  //   unsigned char *output = (unsigned char *)flashData_;
-  //   for (int bIndex = 0; bIndex < nBytes/5; bIndex++){
-  //     this->convert10BitPacketTo16Bit(input+(bIndex*5), output+(bIndex*8));
-  //   }
-  // }
-
-  else if (bitDepth_==10){
-    convertPixelData(nBytes);
-  }
-
-  else if (bitDepth_==12){
-    unsigned char *input = (unsigned char *)data_;
-    unsigned char *output = (unsigned char *)flashData_;
-    //create 10 threads and give each a chunk of data to convert
-    for (int bIndex = 0; bIndex < nBytes/3; bIndex++){
-      this->convert12BitPacketTo16Bit(input+(bIndex*3), output+(bIndex*4));
+  this->unlock();
+  for (int i =0; i<PHANTOM_CONV_THREADS; i++){
+    status = epicsEventWaitWithTimeout(convFinishEvt_[i], 0.1);
+    if (status == epicsEventWaitTimeout){
+      printf("Asyn timeout on conversion! This shouldnt happen\n");
     }
   }
+  this->lock();
 
   // Allocate NDArray memory
   dims[0] = previewWidth_;
   dims[1] = previewHeight_;
-  nbytes = (dims[0] * dims[1]) * sizeof(int16_t);
+  nBytes = (dims[0] * dims[1]) * sizeof(int16_t);
   dataType= NDUInt16;
-  pImage = this->pNDArrayPool->alloc(2, dims, dataType, nbytes, NULL);
+  pImage = this->pNDArrayPool->alloc(2, dims, dataType, nBytes, NULL);
 
   if (bitDepth_!=16){
     //must use converted data
-    memcpy(pImage->pData, flashData_, nbytes);
+    memcpy(pImage->pData, flashData_, nBytes);
   }
   else if (bitDepth_==16){
     //raw data can be used
-    memcpy(pImage->pData, data_, nbytes);
+    memcpy(pImage->pData, data_, nBytes);
   }
   pImage->dims[0].size = dims[0];
   pImage->dims[1].size = dims[1];
@@ -2572,7 +2612,7 @@ asynStatus ADPhantom::readoutPreviewData()
   // Free the image buffer
   pImage->release();
 
-  return status;
+  return (asynStatus) status;
 }
 
 asynStatus ADPhantom::sendSoftwareTrigger()
@@ -2993,7 +3033,7 @@ asynStatus ADPhantom::downloadFlashImages(const std::string& filename, int start
   int postTrig = 0;
   int first_tv_sec = 0;
   int first_tv_usec = 0;
-  asynStatus status = asynSuccess;
+  int status = asynSuccess;
 
   // Attach to the correct port
   //status = attachToPort("dataPort");
@@ -3053,25 +3093,23 @@ asynStatus ADPhantom::downloadFlashImages(const std::string& filename, int start
     debug(functionName, "Response", response);
     status = this->readFrame(nBytes);
 
-  if (bitDepth_==8){
-    unsigned char *input = (unsigned char *)data_;
-    unsigned char *output = (unsigned char *)flashData_;
-    this->convert8BitPacketTo16Bit(input, output, nBytes);
-  }
-  else if (bitDepth_==10){
-    unsigned char *input = (unsigned char *)data_;
-    unsigned char *output = (unsigned char *)flashData_;
-    for (int bIndex = 0; bIndex < nBytes/5; bIndex++){
-      this->convert10BitPacketTo16Bit(input+(bIndex*5), output+(bIndex*8));
+    // Lock the number of bytes to prevent race condition
+    // Send event to conversion threads to start converting their slice of the new data
+    // Wait for all conv threads to send the finished event
+    // Unlock
+    conversionBitDepth_ = bitDepth_;
+    conversionBytes_ = nBytes;
+    for (int i =0; i<PHANTOM_CONV_THREADS; i++){
+      epicsEventSignal(convStartEvt_[i]);
     }
-  }
-  else if (bitDepth_==12){
-    unsigned char *input = (unsigned char *)data_;
-    unsigned char *output = (unsigned char *)flashData_;
-    for (int bIndex = 0; bIndex < nBytes/3; bIndex++){
-      this->convert12BitPacketTo16Bit(input+(bIndex*3), output+(bIndex*4));
+    this->unlock();
+    for (int i =0; i<PHANTOM_CONV_THREADS; i++){
+      status = epicsEventWaitWithTimeout(convFinishEvt_[i], 0.1);
+      if (status == epicsEventWaitTimeout){
+        printf("Asyn timeout on conversion! This shouldnt happen\n");
+      }
     }
-  }
+    this->lock();
 
     if (status == asynSuccess){
       // Allocate NDArray memory
@@ -3173,43 +3211,7 @@ asynStatus ADPhantom::downloadFlashImages(const std::string& filename, int start
     callParamCallbacks();
   }
 
-  return status;
-}
-
-asynStatus ADPhantom::convertPixelData(int nBytes)
-{
-  int status = asynSuccess;
-  int threads = 10;
-  epicsThreadId conversionThreadIDs[threads];
-  //unsigned int ncpus = epicsThreadGetCPUs();
-  //printf("Number of cpus available: %d\n", ncpus);
-
-  for (int i =0; i<threads; i++){
-    //All threads share the same input and output data pointers
-    conversionEvt_[i] = epicsEventCreate(epicsEventEmpty);
-    char threadName[30];
-    sprintf(threadName, "conversionThread%d", i); 
-    conversionThreadIDs[i] = epicsThreadCreate(threadName, 
-                      epicsThreadPriorityMedium, 
-                      epicsThreadGetStackSize(epicsThreadStackMedium), 
-                      (EPICSTHREADFUNC)phantomPixelConversionTaskC, 
-                      this);
-  }
-  int count = 0;
-  while (true)
-  {
-    for (int i =0; i<=threads; i++){
-      //All threads must rejoin
-      if (conversionEvt_[i] != NULL){
-        epicsEventWait(conversionEvt_[i]);
-        count++;
-        //printf("Thread %d finished\n",conversionThreadIDs[i]);
-      }
-    }
-    if (count==threads){
-      break;
-    }
-  }
+  return (asynStatus) status;
 }
 
 asynStatus ADPhantom::convert12BitPacketTo16Bit(void *input, void *output)
@@ -3235,25 +3237,6 @@ asynStatus ADPhantom::convert12BitPacketTo16Bit(void *input, void *output)
   pIndex++;
 
   return status;
-}
-
-asynStatus ADPhantom::conversionMiddle()
-{
-  unsigned char *input = (unsigned char *)data_;
-  unsigned char *output = (unsigned char *)flashData_;
-  std::string threadName = epicsThreadGetNameSelf();
-  std::string newString = threadName.substr(threadName.find("conversionThread") + 16);
-  int i = std::stoi(newString);
-  epicsThreadId id = epicsThreadGetIdSelf();
-  int nBytes = 1280000;
-  int myBytes=nBytes/10;
-  int startByte = i*myBytes;
-  //printf("My i is:%d My ID is:%d My startBytes is:%d My endByte is %d\n", i, id, startByte, (startByte+myBytes)/5);
-  for (int bIndex = startByte/5; bIndex < (startByte+myBytes)/5; bIndex++){
-    this->convert10BitPacketTo16Bit(input+(bIndex*5), output+(bIndex*8));
-  }
-  epicsEventSignal(conversionEvt_[i]);
-  return asynSuccess;
 }
 
 asynStatus ADPhantom::convert10BitPacketTo16Bit(void *input, void *output)
@@ -3307,8 +3290,8 @@ asynStatus ADPhantom::convert8BitPacketTo16Bit(void *input, void *output, int nB
     outBytes[(i*2)+1]=inBytes[i];
     outBytes[(i*2)]=0;
   }
-  uint8_t byte1 = inBytes[0];
-  uint16_t byte2 = (outBytes[0] << 8) + outBytes[1];
+  //uint8_t byte1 = inBytes[0];
+  //uint16_t byte2 = (outBytes[0] << 8) + outBytes[1];
   //printf("8bit val = %d  16bit val= %d\n",byte1,byte2);
   return status;
 }
@@ -3430,7 +3413,7 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
   int markSaved = 0;
   unsigned int first_tv_sec = 0;
   unsigned int first_tv_usec = 0;
-  asynStatus status = asynSuccess;
+  int status = asynSuccess;
 
   status = getCameraDataStruc("irig", paramMap_);
   status = stringToInteger(paramMap_["irig.yearbegin"].getValue(), irigYear);
@@ -3552,25 +3535,24 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
       //
 
       status = this->readFrame(nBytes);
-      if (bitDepth_==8){
-        unsigned char *input = (unsigned char *)data_;
-        unsigned char *output = (unsigned char *)flashData_;
-        this->convert8BitPacketTo16Bit(input, output, nBytes);
+
+      // Lock the number of bytes to prevent race condition
+      // Send event to conversion threads to start converting their slice of the new data
+      // Wait for all conv threads to send the finished event
+      // Unlock
+      conversionBitDepth_ = bitDepth_;
+      conversionBytes_ = nBytes;
+      for (int i =0; i<PHANTOM_CONV_THREADS; i++){
+        epicsEventSignal(convStartEvt_[i]);
       }
-      else if (bitDepth_==10){
-        unsigned char *input = (unsigned char *)data_;
-        unsigned char *output = (unsigned char *)flashData_;
-        for (int bIndex = 0; bIndex < nBytes/5; bIndex++){
-          this->convert10BitPacketTo16Bit(input+(bIndex*5), output+(bIndex*8));
+      this->unlock();
+      for (int i =0; i<PHANTOM_CONV_THREADS; i++){
+        status = epicsEventWaitWithTimeout(convFinishEvt_[i], 0.1);
+        if (status == epicsEventWaitTimeout){
+          printf("Asyn timeout on conversion! This shouldnt happen\n");
         }
       }
-      else if (bitDepth_==12){
-        unsigned char *input = (unsigned char *)data_;
-        unsigned char *output = (unsigned char *)flashData_;
-        for (int bIndex = 0; bIndex < nBytes/3; bIndex++){
-          this->convert12BitPacketTo16Bit(input+(bIndex*3), output+(bIndex*4));
-        }
-      }
+      this->lock();
 
       if (status == asynSuccess){
         // Allocate NDArray memory
@@ -3697,7 +3679,7 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
   setIntegerParam(PHANTOM_DownloadCount_, 0);
   callParamCallbacks();
 
-  return status;
+  return (asynStatus) status;
 }
 
 asynStatus ADPhantom::readFrame(int bytes)

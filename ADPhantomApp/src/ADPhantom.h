@@ -47,6 +47,9 @@
 #define PHANTOM_OK_STRING    "Ok!"
 #define PHANTOM_ERROR_STRING "ERR:"
 
+// Number of Conversion Threads
+#define PHANTOM_CONV_THREADS 10
+
 // PHANTOM Run Modes
 #define PHANTOM_RUN_FAT  0
 #define PHANTOM_RUN_SFAT 1
@@ -597,6 +600,7 @@ class ADPhantom: public ADDriver
     void phantomPreviewTask();
     void phantomFlashTask();
     void phantomDownloadTask();
+    void phantomConversionTask();
     asynStatus makeConnection();
     asynStatus connect();
     asynStatus disconnect();
@@ -623,7 +627,6 @@ class ADPhantom: public ADDriver
     asynStatus readoutTimestamps(int start_cine, int end_cine, int start_frame, int end_frame, bool uni_frame_lim);
     asynStatus readoutDataStream(int start_cine, int end_cine, int start_frame, int end_frame, bool uni_frame_lim);
     asynStatus convertPixelData(int nBytes);
-    asynStatus conversionMiddle();
     asynStatus convert12BitPacketTo16Bit(void *input, void *output);
     asynStatus convert10BitPacketTo16Bit(void *input, void *output);
     asynStatus convert8BitPacketTo16Bit(void *input, void *output, int nBytes);
@@ -819,6 +822,8 @@ class ADPhantom: public ADDriver
     int                                previewWidth_;
     int                                previewHeight_;
     int                                bitDepth_;
+    int                                conversionBitDepth_;
+    int                                conversionBytes_;
     std::string                        phantomToken_;
     std::map<std::string, int>         debugMap_;
     epicsEventId                       startEventId_;
@@ -827,18 +832,19 @@ class ADPhantom: public ADDriver
     epicsEventId                       startPreviewEventId_;
     epicsEventId                       stopPreviewEventId_;
     epicsEventId                       flashEventId_;
-    std::vector<PhantomMeta *>            metaArray_;
+    epicsEventId                       convStartEvt_[PHANTOM_CONV_THREADS];
+    epicsEventId                       convFinishEvt_[PHANTOM_CONV_THREADS];
+    std::vector<PhantomMeta *>         metaArray_;
     std::vector<std::string>           lensModes_;
     std::vector<std::string>           scanRanges_;
     std::vector<std::string>           runModes_;
-    std::map<std::string, phantomVal> paramMap_;
+    std::map<std::string, phantomVal>  paramMap_;
     std::map<int, std::string>         paramIndexes_;
     std::vector<std::vector<std::string> > fileInfoSet_;
     bool                               firstConnect_;
     CINEFILEHEADER                     cineHeader_;
     BITMAPINFOHEADER                   cineBitmapHeader_;
     SETUP                              cineSetupHeader_;
-    epicsEventId                       conversionEvt_[10];
 
 };
 
