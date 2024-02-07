@@ -824,6 +824,7 @@ class ADPhantom: public ADDriver
     int                                bitDepth_;
     int                                conversionBitDepth_;
     int                                conversionBytes_;
+    int                                downloadingFlag_;
     std::string                        phantomToken_;
     std::map<std::string, int>         debugMap_;
     epicsEventId                       startEventId_;

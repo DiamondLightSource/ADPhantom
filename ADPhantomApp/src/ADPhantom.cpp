@@ -1147,6 +1147,7 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   conversionBitDepth_=10; // These are only updated prior to conversion start to ensure no race condition if bitDepth_ is changed before all conversion threads start
   conversionBytes_=1280*800*1.25;
   phantomToken_ = "P10";
+  downloadingFlag_=0;
 
   // Initialise meta data to save
   metaArray_.push_back(new PhantomMeta("exposure", "Camera exposure time", "c%d.exp", NDAttrInt32, 0x674, 4));
@@ -1623,6 +1624,7 @@ void ADPhantom::phantomDownloadTask()
           rangeValid=false;
           setStringParam(ADStatusMessage, "end_frame cannot be less than start_frame within a cine");
         }
+        downloadingFlag_ = 0;
       }
 
       if(rangeValid){
@@ -1641,6 +1643,7 @@ void ADPhantom::phantomDownloadTask()
         setIntegerParam(ADStatus, ADStatusError);
       }
    }  
+   setIntegerParam(PHANTOM_Download_, 1);
   }
 }
 
@@ -1654,51 +1657,55 @@ void ADPhantom::phantomStatusTask()
   std::string cineStr;
   int frameCount = 0;
   int acquire = 0;
+  int download = 0;
 
   debug(functionName, "Starting thread...");
   while (1){
     epicsThreadSleep(0.25);
-    this->lock();
+    if (!downloadingFlag_){
+      // This thread has a large effect on performance so pause while downloading
+      this->lock();
 
-    // Read out the preview cine status
-    status = getCameraDataStruc("cam", paramMap_);
+      // Read out the preview cine status
+      status = getCameraDataStruc("cam", paramMap_);
 
-    if (status == asynSuccess){
-      int cines = 0;
-      std::string scines = paramMap_["cam.cines"].getValue();
-      cleanString(scines, " ");
-      status = stringToInteger(scines, cines);
-      setIntegerParam(PHANTOM_GetCineCount_, cines);
-    }
+      if (status == asynSuccess){
+        int cines = 0;
+        std::string scines = paramMap_["cam.cines"].getValue();
+        cleanString(scines, " ");
+        status = stringToInteger(scines, cines);
+        setIntegerParam(PHANTOM_GetCineCount_, cines);
+      }
 
-    updateInfoStatus();
-    updateCameraStatus();
-    updateDefcStatus();
-    updateMetaStatus();
-    updateFlash();
-    updateAutoStatus();
+      updateInfoStatus();
+      updateCameraStatus();
+      updateDefcStatus();
+      updateMetaStatus();
+      updateFlash();
+      updateAutoStatus();
 
-    for( int index{1}; index < PHANTOM_NUMBER_OF_CINES; index++){
-      updateCine(index);
-    }
+      for( int index{1}; index < PHANTOM_NUMBER_OF_CINES; index++){
+        updateCine(index);
+      }
 
-    getIntegerParam(ADAcquire, &acquire);
-    // If we are not acquiring update the cine frame count
-    if (!acquire){
-      // Read in the selected cine
-      getIntegerParam(PHANTOM_SelectedCine_, &cine);
-      // Create the cine string
-      sprintf(command, "c%d", cine);
-      cineStr.assign(command);
-      // Read out the cine status and counter
-      getCameraDataStruc(cineStr, paramMap_);
-      status = stringToInteger(paramMap_[cineStr + ".frcount"].getValue(), frameCount);
-      // Set a bit of areadetector image/frame statistics...
-      setIntegerParam(PHANTOM_TotalFrameCount_, frameCount);
-      callParamCallbacks();
-    }
+      getIntegerParam(ADAcquire, &acquire);
+      // If we are not acquiring update the cine frame count
+      if (!acquire){
+        // Read in the selected cine
+        getIntegerParam(PHANTOM_SelectedCine_, &cine);
+        // Create the cine string
+        sprintf(command, "c%d", cine);
+        cineStr.assign(command);
+        // Read out the cine status and counter
+        getCameraDataStruc(cineStr, paramMap_);
+        status = stringToInteger(paramMap_[cineStr + ".frcount"].getValue(), frameCount);
+        // Set a bit of areadetector image/frame statistics...
+        setIntegerParam(PHANTOM_TotalFrameCount_, frameCount);
+        callParamCallbacks();
+      }
 
-    this->unlock();
+      this->unlock();
+  }
   }
 }
 
@@ -2166,6 +2173,7 @@ asynStatus ADPhantom::writeInt32(asynUser *pasynUser, epicsInt32 value)
       }
       //Send an event to start the download
       epicsEventSignal(this->startDownloadEventId_);
+      downloadingFlag_ = 1;
     }
   } else if(function == PHANTOM_Delete_){
     if(value > 0 && value < PHANTOM_NUMBER_OF_CINES){ 
