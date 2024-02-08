@@ -1642,7 +1642,7 @@ void ADPhantom::phantomDownloadTask()
         }
       }
       else {
-        setStringParam(ADStatusMessage, "Error in preview task");
+        setStringParam(ADStatusMessage, "Error in download task");
         setIntegerParam(ADStatus, status);
       }
     }  
@@ -1664,50 +1664,51 @@ void ADPhantom::phantomStatusTask()
   debug(functionName, "Starting thread...");
   while (1){
     epicsThreadSleep(0.25);
-    if (!downloadingFlag_){
-      // This thread has a large effect on performance so pause while downloading
-      this->lock();
+    if (downloadingFlag_){
+      // This thread has a large effect on performance so reduce update rate while downloading
+      epicsThreadSleep(5);
+    }
+    this->lock();
 
-      // Read out the preview cine status
-      status = getCameraDataStruc("cam", paramMap_);
+    // Read out the preview cine status
+    status = getCameraDataStruc("cam", paramMap_);
 
-      if (status == asynSuccess){
-        int cines = 0;
-        std::string scines = paramMap_["cam.cines"].getValue();
-        cleanString(scines, " ");
-        status = stringToInteger(scines, cines);
-        setIntegerParam(PHANTOM_GetCineCount_, cines);
-      }
+    if (status == asynSuccess){
+      int cines = 0;
+      std::string scines = paramMap_["cam.cines"].getValue();
+      cleanString(scines, " ");
+      status = stringToInteger(scines, cines);
+      setIntegerParam(PHANTOM_GetCineCount_, cines);
+    }
 
-      updateInfoStatus();
-      updateCameraStatus();
-      updateDefcStatus();
-      updateMetaStatus();
-      updateFlash();
-      updateAutoStatus();
+    updateInfoStatus();
+    updateCameraStatus();
+    updateDefcStatus();
+    updateMetaStatus();
+    updateFlash();
+    updateAutoStatus();
 
-      for( int index{1}; index < PHANTOM_NUMBER_OF_CINES; index++){
-        updateCine(index);
-      }
+    for( int index{1}; index < PHANTOM_NUMBER_OF_CINES; index++){
+      updateCine(index);
+    }
 
-      getIntegerParam(ADAcquire, &acquire);
-      // If we are not acquiring update the cine frame count
-      if (!acquire){
-        // Read in the selected cine
-        getIntegerParam(PHANTOM_SelectedCine_, &cine);
-        // Create the cine string
-        sprintf(command, "c%d", cine);
-        cineStr.assign(command);
-        // Read out the cine status and counter
-        getCameraDataStruc(cineStr, paramMap_);
-        status = stringToInteger(paramMap_[cineStr + ".frcount"].getValue(), frameCount);
-        // Set a bit of areadetector image/frame statistics...
-        setIntegerParam(PHANTOM_TotalFrameCount_, frameCount);
-        callParamCallbacks();
-      }
+    getIntegerParam(ADAcquire, &acquire);
+    // If we are not acquiring update the cine frame count
+    if (!acquire){
+      // Read in the selected cine
+      getIntegerParam(PHANTOM_SelectedCine_, &cine);
+      // Create the cine string
+      sprintf(command, "c%d", cine);
+      cineStr.assign(command);
+      // Read out the cine status and counter
+      getCameraDataStruc(cineStr, paramMap_);
+      status = stringToInteger(paramMap_[cineStr + ".frcount"].getValue(), frameCount);
+      // Set a bit of areadetector image/frame statistics...
+      setIntegerParam(PHANTOM_TotalFrameCount_, frameCount);
+      callParamCallbacks();
+    }
 
-      this->unlock();
-  }
+    this->unlock();
   }
 }
 
