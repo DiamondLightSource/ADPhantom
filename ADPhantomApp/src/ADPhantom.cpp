@@ -1623,7 +1623,6 @@ void ADPhantom::phantomDownloadTask()
             rangeValid=false;
             setStringParam(ADStatusMessage, "end_frame cannot be less than start_frame within a cine");
           }
-          downloadingFlag_ = 0;
         }
 
         if(rangeValid){
@@ -1647,7 +1646,7 @@ void ADPhantom::phantomDownloadTask()
         setIntegerParam(ADStatus, status);
       }
     }  
-   setIntegerParam(PHANTOM_Download_, 1);
+   downloadingFlag_ = 0;
   }
 }
 
