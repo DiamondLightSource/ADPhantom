@@ -627,9 +627,9 @@ class ADPhantom: public ADDriver
     asynStatus readoutTimestamps(int start_cine, int end_cine, int start_frame, int end_frame, bool uni_frame_lim);
     asynStatus readoutDataStream(int start_cine, int end_cine, int start_frame, int end_frame, bool uni_frame_lim);
     asynStatus convertPixelData(int nBytes);
-    asynStatus convert12BitPacketTo16Bit(void *input, void *output);
-    asynStatus convert10BitPacketTo16Bit(void *input, void *output);
-    asynStatus convert8BitPacketTo16Bit(void *input, void *output, int nBytes);
+    asynStatus convert12BitPacketTo16Bit(unsigned char *input, unsigned char *output);
+    asynStatus convert10BitPacketTo16Bit(unsigned char *input, unsigned char *output);
+    asynStatus convert8BitPacketTo16Bit(unsigned char *input, unsigned char *output, int nBytes);
     asynStatus readFrame(int bytes);
     asynStatus updatePreviewCine();
     asynStatus updateCine(int cine);

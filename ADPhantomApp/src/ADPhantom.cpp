@@ -1786,26 +1786,49 @@ void ADPhantom::phantomConversionTask()
   std::string threadName = epicsThreadGetNameSelf();
   std::string newString = threadName.substr(threadName.find("conversionThread") + 16);
   int i = std::stoi(newString);
+
+  // Time profiling
+  struct timespec endTime;
+  struct timespec startTime;
+  //
+
   while (1){
     epicsEventWait(this->convStartEvt_[i]);
     //epicsThreadId id = epicsThreadGetIdSelf();
     //printf("My i is:%d My ID is:%d My startBytes is:%d My endByte is %d\n", i, id, startByte, (startByte+myBytes)/5);
+
+    //time profile
+    // clock_gettime(CLOCK_MONOTONIC_RAW, &endTime);
+    // uint64_t delta_ms = ((endTime.tv_sec - startTime.tv_sec) + (endTime.tv_nsec - startTime.tv_nsec) / 1000)/1000; 
+    // printf("Time waiting for event on 1 thread (msec) = %d\n", (int)delta_ms);
+    // clock_gettime(CLOCK_MONOTONIC_RAW, &startTime);
+    //
+
     int myBytes=conversionBytes_/PHANTOM_CONV_THREADS;
     int startByte = i*myBytes;
     if (bitDepth_==8){
+      debug(functionName, "Starting 8 bit conversion");
       this->convert8BitPacketTo16Bit(input+startByte, output+startByte*2, myBytes);
     }
     else if (conversionBitDepth_ == 10){
+      debug(functionName, "Starting 10 bit conversion");
       for (int bIndex = startByte/5; bIndex < (startByte+myBytes)/5; bIndex++){
         this->convert10BitPacketTo16Bit(input+(bIndex*5), output+(bIndex*8));
       }
     }
     else if (conversionBitDepth_ == 12){
+      debug(functionName, "Starting 12 bit conversion");
       for (int bIndex = startByte/3; bIndex < (startByte+myBytes)/3; bIndex++){
         this->convert12BitPacketTo16Bit(input+(bIndex*3), output+(bIndex*4));
       }
     }
     epicsEventSignal(convFinishEvt_[i]);
+    //time profile
+    // clock_gettime(CLOCK_MONOTONIC_RAW, &endTime);
+    // delta_ms = ((endTime.tv_sec - startTime.tv_sec) + (endTime.tv_nsec - startTime.tv_nsec) / 1000)/1000; 
+    // printf("Time to process data on 1 thread (msec) = %d\n", (int)delta_ms);
+    // clock_gettime(CLOCK_MONOTONIC_RAW, &startTime);
+    //
   }
 }
 
@@ -2308,6 +2331,14 @@ asynStatus ADPhantom::writeInt32(asynUser *pasynUser, epicsInt32 value)
   }
   else if (function == PHANTOM_DataFormat_){
     //Update the selected token and associated bit depth
+    int downloadCount = 0;
+    getIntegerParam(PHANTOM_DownloadCount_, &downloadCount);
+    if(downloadCount){
+      setStringParam(ADStatusMessage, "Cannot change pixel type while downloading!");  
+      setIntegerParam(ADStatus, ADStatusError);
+      status |= asynError;
+    }
+    else{
       if (value==0){
         bitDepth_ = 8;
         phantomToken_ = "8";
@@ -2336,6 +2367,7 @@ asynStatus ADPhantom::writeInt32(asynUser *pasynUser, epicsInt32 value)
         printf("Invalid Data Format selected!\n");
         status = asynError;
       }
+    }
   }
 
   // If the status is bad reset the original value
@@ -3222,15 +3254,10 @@ asynStatus ADPhantom::downloadFlashImages(const std::string& filename, int start
   return (asynStatus) status;
 }
 
-asynStatus ADPhantom::convert12BitPacketTo16Bit(void *input, void *output)
+asynStatus ADPhantom::convert12BitPacketTo16Bit(unsigned char *inBytes, unsigned char *outBytes)
 {
-  const char * functionName = "convert12BitPacketTo16Bit";
   asynStatus status = asynSuccess;
 
-  debug(functionName, "Method called");
-
-  unsigned char *inBytes = (unsigned char *)input;
-  unsigned char *outBytes = (unsigned char *)output;
   int pIndex = 0;
   int rawValue = (inBytes[0]<<4) + ((inBytes[1]&0xF0)>>4);
   outBytes[pIndex] = (rawValue&0x00FF);
@@ -3247,14 +3274,10 @@ asynStatus ADPhantom::convert12BitPacketTo16Bit(void *input, void *output)
   return status;
 }
 
-asynStatus ADPhantom::convert10BitPacketTo16Bit(void *input, void *output)
+asynStatus ADPhantom::convert10BitPacketTo16Bit(unsigned char *inBytes, unsigned char *outBytes)
 {
-  const char * functionName = "convert10BitPacketTo16Bit";
   asynStatus status = asynSuccess;
 
-  debug(functionName, "Method called");
-  unsigned char *inBytes = (unsigned char *)input;
-  unsigned char *outBytes = (unsigned char *)output;
   int pIndex = 0;
   int rawValue = PHANTOM_LinLUT[(inBytes[0]<<2) + ((inBytes[1]&0xC0)>>6)];
   outBytes[pIndex] = (rawValue&0x00FF);
@@ -3283,15 +3306,9 @@ asynStatus ADPhantom::convert10BitPacketTo16Bit(void *input, void *output)
 }
 
 
-asynStatus ADPhantom::convert8BitPacketTo16Bit(void *input, void *output, int nBytes)
+asynStatus ADPhantom::convert8BitPacketTo16Bit(unsigned char *inBytes, unsigned char *outBytes, int nBytes)
 {
-  const char * functionName = "convert8BitPacketTo16Bit";
   asynStatus status = asynSuccess;
-
-  debug(functionName, "Method called");
-
-  unsigned char *inBytes = (unsigned char *)input;
-  unsigned char *outBytes = (unsigned char *)output;
   
   for (int i=0;i<nBytes;i++)
   {
@@ -4643,6 +4660,7 @@ asynStatus ADPhantom::debugLevel(const std::string& method, int onOff)
 {
   if (method == "all"){
     debugMap_["ADPhantom::ADPhantom"]                = onOff;
+    debugMap_["ADPhantom::phantomConversionTask"]           = onOff;
     debugMap_["ADPhantom::phantomCameraTask"]        = onOff;
     debugMap_["ADPhantom::phantomDownloadTask"]      = onOff;
     debugMap_["ADPhantom::phantomPreviewTask"]       = onOff;
