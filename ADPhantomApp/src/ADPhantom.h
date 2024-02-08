@@ -16,6 +16,7 @@
 #include <map>
 #include <algorithm>
 #include <ctime>
+#include <pthread.h>
 
 // EPICS includes
 #include <epicsThread.h>
@@ -45,6 +46,9 @@
 // PHANTOM Response OK/ERROR
 #define PHANTOM_OK_STRING    "Ok!"
 #define PHANTOM_ERROR_STRING "ERR:"
+
+// Number of Conversion Threads
+#define PHANTOM_CONV_THREADS 10
 
 // PHANTOM Run Modes
 #define PHANTOM_RUN_FAT  0
@@ -145,6 +149,7 @@
 #define PHANTOM_PostTrigCountString            "PHANTOM_POST_TRIG_COUNT"
 #define PHANTOM_TotalFrameCountString          "PHANTOM_TOTAL_FRAME_COUNT"
 #define PHANTOM_MaxFrameCountString            "PHANTOM_MAX_FRAME_COUNT"
+#define PHANTOM_FramesPerSecondString          "PHANTOM_FRAMES_PER_SECOND"
 
 #define PHANTOM_CineNameString                 "PHANTOM_CINE_NAME"
 #define PHANTOM_SelectedCineString             "PHANTOM_CINE_SELECTED"
@@ -595,6 +600,7 @@ class ADPhantom: public ADDriver
     void phantomPreviewTask();
     void phantomFlashTask();
     void phantomDownloadTask();
+    void phantomConversionTask();
     asynStatus makeConnection();
     asynStatus connect();
     asynStatus disconnect();
@@ -620,9 +626,10 @@ class ADPhantom: public ADDriver
     asynStatus downloadFlashImages(const std::string& filename, int start, int end);
     asynStatus readoutTimestamps(int start_cine, int end_cine, int start_frame, int end_frame, bool uni_frame_lim);
     asynStatus readoutDataStream(int start_cine, int end_cine, int start_frame, int end_frame, bool uni_frame_lim);
-    asynStatus convert12BitPacketTo16Bit(void *input, void *output);
-    asynStatus convert10BitPacketTo16Bit(void *input, void *output);
-    asynStatus convert8BitPacketTo16Bit(void *input, void *output, int nBytes);
+    asynStatus convertPixelData(int nBytes);
+    asynStatus convert12BitPacketTo16Bit(unsigned char *input, unsigned char *output);
+    asynStatus convert10BitPacketTo16Bit(unsigned char *input, unsigned char *output);
+    asynStatus convert8BitPacketTo16Bit(unsigned char *input, unsigned char *output, int nBytes);
     asynStatus readFrame(int bytes);
     asynStatus updatePreviewCine();
     asynStatus updateCine(int cine);
@@ -672,8 +679,8 @@ class ADPhantom: public ADDriver
     asynStatus debug(const std::string& method, const std::string& msg, const std::string& value);
     asynStatus debug(const std::string& method, const std::string& msg, std::map<std::string, std::string> value);
 
-    //Temp
-    struct timespec start_;
+    struct timespec frameStart_;
+    struct timespec readStart_;
 
   protected:
     int PHANTOMConnect_;
@@ -775,6 +782,7 @@ class ADPhantom: public ADDriver
     int PHANTOM_CfFileDate_[PHANTOM_NUMBER_OF_FLASH_FILES];
     int PHANTOM_DataFormat_;
     int PHANTOMConnected_;
+    int PHANTOM_FramesPerSecond_;
     int PHANTOM_SyncClock_;
     #define LAST_PHANTOM_PARAM PHANTOM_SyncClock_
 
@@ -803,6 +811,7 @@ class ADPhantom: public ADDriver
     char                               data_[2048000];
     char                               imgData_[2048000];
     char                               flashData_[2048000];
+    char                               downloadData_[102400000]; // 50, 2MB images
     std::vector<short_time_stamp32>    timestampData_;
     std::vector<tagTIME64>             flashTsData_;
     std::vector<uint32_t>              flashExpData_;
@@ -813,6 +822,9 @@ class ADPhantom: public ADDriver
     int                                previewWidth_;
     int                                previewHeight_;
     int                                bitDepth_;
+    int                                conversionBitDepth_;
+    int                                conversionBytes_;
+    int                                downloadingFlag_;
     std::string                        phantomToken_;
     std::map<std::string, int>         debugMap_;
     epicsEventId                       startEventId_;
@@ -821,11 +833,13 @@ class ADPhantom: public ADDriver
     epicsEventId                       startPreviewEventId_;
     epicsEventId                       stopPreviewEventId_;
     epicsEventId                       flashEventId_;
-    std::vector<PhantomMeta *>            metaArray_;
+    epicsEventId                       convStartEvt_[PHANTOM_CONV_THREADS];
+    epicsEventId                       convFinishEvt_[PHANTOM_CONV_THREADS];
+    std::vector<PhantomMeta *>         metaArray_;
     std::vector<std::string>           lensModes_;
     std::vector<std::string>           scanRanges_;
     std::vector<std::string>           runModes_;
-    std::map<std::string, phantomVal> paramMap_;
+    std::map<std::string, phantomVal>  paramMap_;
     std::map<int, std::string>         paramIndexes_;
     std::vector<std::vector<std::string> > fileInfoSet_;
     bool                               firstConnect_;

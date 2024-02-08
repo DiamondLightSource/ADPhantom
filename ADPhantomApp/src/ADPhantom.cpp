@@ -864,6 +864,15 @@ extern "C"
 }
 
 /**
+ * Function to convert pixel data in parallel
+ */
+static void phantomPixelConversionTaskC(void *drvPvt)
+{
+  ADPhantom *pPvt = (ADPhantom *)drvPvt;
+  pPvt->phantomConversionTask();
+}
+
+/**
  * Function to run the camera task within a separate thread in C++
  */
 static void phantomCameraTaskC(void *drvPvt)
@@ -956,9 +965,9 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   int status = asynSuccess;
   int index = 0;
   
-  //temp time profiling 
-  clock_gettime(CLOCK_MONOTONIC_RAW, &start_);
-  //
+  //Time profiling 
+  clock_gettime(CLOCK_MONOTONIC_RAW, &frameStart_);
+  clock_gettime(CLOCK_MONOTONIC_RAW, &readStart_);
 
   // Setup flag to state this is our first connection
   firstConnect_ = true;
@@ -1100,6 +1109,7 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   createParam(PHANTOM_AutoTriggerIntervalString,      asynParamInt32,         &PHANTOM_AutoTriggerInterval_);
   createParam(PHANTOM_AutoTriggerModeString,          asynParamInt32,         &PHANTOM_AutoTriggerMode_);
   createParam(PHANTOM_DataFormatString,               asynParamInt32,         &PHANTOM_DataFormat_);
+  createParam(PHANTOM_FramesPerSecondString,          asynParamInt32,         &PHANTOM_FramesPerSecond_);
   for (index = 0; index < PHANTOM_NUMBER_OF_CINES; index++){
     createParam(PHANTOM_CnNameString[index],            asynParamOctet,         &PHANTOM_CnName_[index]);
     createParam(PHANTOM_CnWidthString[index],           asynParamInt32,         &PHANTOM_CnWidth_[index]);
@@ -1122,8 +1132,9 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   // Initialise PHANTOM parameters
   setIntegerParam(PHANTOMConnected_, 0);
   setIntegerParam(PHANTOM_TotalFrameCount_, 0);
+  setIntegerParam(PHANTOM_FramesPerSecond_, 0);
   setIntegerParam(PHANTOM_AcquireState_, 0);
-  setStringParam(NDDataType, "UInt16");
+  setIntegerParam(NDDataType, (NDDataType_t) 3); // 3 is equal to NDUInt16 (see NDAttribute.h)
   setIntegerParam(ADSizeX, 1280);
   setIntegerParam(ADSizeY, 800);
   setIntegerParam(PHANTOM_LivePreview_, 0);
@@ -1133,7 +1144,10 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   setIntegerParam(PHANTOM_SettingsSlot_,  1);
   setIntegerParam(PHANTOM_DataFormat_,  4); //P10 by default
   bitDepth_=10;
+  conversionBitDepth_=10; // These are only updated prior to conversion start to ensure no race condition if bitDepth_ is changed before all conversion threads start
+  conversionBytes_=1280*800*1.25;
   phantomToken_ = "P10";
+  downloadingFlag_=0;
 
   // Initialise meta data to save
   metaArray_.push_back(new PhantomMeta("exposure", "Camera exposure time", "c%d.exp", NDAttrInt32, 0x674, 4));
@@ -1215,6 +1229,22 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
                                 this) == NULL);
     if (status){
       debug(functionName, "epicsThreadCreate failure for download task");
+    }
+  }
+
+  if (status == asynSuccess){
+    debug(functionName, "Starting up conversion task....");
+    for (int i =0; i<PHANTOM_CONV_THREADS; i++){
+      //All threads share the same input and output data pointers
+      convStartEvt_[i] = epicsEventCreate(epicsEventEmpty);
+      convFinishEvt_[i] = epicsEventCreate(epicsEventEmpty);
+      char threadName[30];
+      sprintf(threadName, "conversionThread%d", i); 
+      status = (epicsThreadCreate(threadName, 
+                        epicsThreadPriorityMedium, 
+                        epicsThreadGetStackSize(epicsThreadStackMedium), 
+                        (EPICSTHREADFUNC)phantomPixelConversionTaskC, 
+                        this)==NULL);
     }
   }
 
@@ -1505,7 +1535,6 @@ void ADPhantom::phantomDownloadTask()
   bool rangeValid = true;
   std::string response;
   this->lock();
-  
 
   while (1){
     debug(functionName, "Waiting for the download command");
@@ -1519,99 +1548,105 @@ void ADPhantom::phantomDownloadTask()
       setIntegerParam(ADStatus, ADStatusError);
     }
     else{
+      if (status != asynError){
+        setStringParam(ADStatusMessage, "Downloading");
+        rangeValid = true;
 
-      setStringParam(ADStatusMessage, "Downloading");
-      rangeValid = true;
+        //Read in total number of cines available
+        getIntegerParam(PHANTOM_GetCineCount_, &num_cines);
 
-      //Read in total number of cines available
-      getIntegerParam(PHANTOM_GetCineCount_, &num_cines);
+        // Read in the number of frames to download
+        getIntegerParam(PHANTOM_DownloadStartFrame_, &start_frame);
+        getIntegerParam(PHANTOM_DownloadEndFrame_, &end_frame);
+        getIntegerParam(PHANTOM_DownloadStartCine_, &start_cine);
+        getIntegerParam(PHANTOM_DownloadEndCine_, &end_cine);
+        getIntegerParam(PHANTOM_DownloadFrameMode_, &uni_frame_lim);
 
-      // Read in the number of frames to download
-      getIntegerParam(PHANTOM_DownloadStartFrame_, &start_frame);
-      getIntegerParam(PHANTOM_DownloadEndFrame_, &end_frame);
-      getIntegerParam(PHANTOM_DownloadStartCine_, &start_cine);
-      getIntegerParam(PHANTOM_DownloadEndCine_, &end_cine);
-      getIntegerParam(PHANTOM_DownloadFrameMode_, &uni_frame_lim);
+        debug(functionName, "Download start cine", start_cine);
+        debug(functionName, "Download end cine", end_cine);
+        debug(functionName, "Download start frame", start_frame);
+        debug(functionName, "Download end frame", end_frame);
 
-      debug(functionName, "Download start cine", start_cine);
-      debug(functionName, "Download end cine", end_cine);
-      debug(functionName, "Download start frame", start_frame);
-      debug(functionName, "Download end frame", end_frame);
+        if (start_cine < 1 || start_cine > num_cines){
+          rangeValid=false;
+          setStringParam(ADStatusMessage, "start_cine value invalid");
+          debug(functionName, "start_cine value invalid");
+        }  else if (end_cine < 1 || end_cine > num_cines){
+          rangeValid=false;
+          setStringParam(ADStatusMessage, "end_cine value invalid");
+          debug(functionName, "end_cine value invalid");
+        } else if(uni_frame_lim){ //Start frame and end frame are applied to every cine
+          int first_frame = 0;
+          int last_frame = 0;
+          for(int cine{start_cine}; cine <= end_cine; cine++){
+            debug(functionName, "Starting sanity checks on cine ", cine);
+            getIntegerParam(PHANTOM_CnFirstFrame_[cine], &first_frame);
+            getIntegerParam(PHANTOM_CnLastFrame_[cine], &last_frame);
+            if(start_frame < first_frame || start_frame > last_frame){
+              rangeValid=false;
+              char message[256];
+              sprintf(message, "start_frame value invalid in cine %d", cine);
+              setStringParam(ADStatusMessage, message);
+              debug(functionName, message);
+              break;
+            } else if(end_frame < first_frame || end_frame > last_frame ){
+              rangeValid=false;
+              char message[256];
+              sprintf(message, "end_frame value invalid in cine %d", cine);
+              setStringParam(ADStatusMessage, message);
+              debug(functionName, message);
+              break;
+            } else if(end_frame < start_frame){
+              rangeValid=false;
+              setStringParam(ADStatusMessage, "start_frame cannot be after end_frame");
+              debug(functionName, "start_frame cannot be after end_frame");
+              break;
+            }
+          }
+        } else{ //Start frame refers to start cine and end frame refers to end cine
+          int start_cine_first_frame = 0;
+          int start_cine_last_frame = 0;
+          int end_cine_first_frame = 0;
+          int end_cine_last_frame = 0;
+          getIntegerParam(PHANTOM_CnFirstFrame_[start_cine], &start_cine_first_frame);
+          getIntegerParam(PHANTOM_CnLastFrame_[start_cine], &start_cine_last_frame);
+          getIntegerParam(PHANTOM_CnFirstFrame_[end_cine], &end_cine_first_frame);
+          getIntegerParam(PHANTOM_CnLastFrame_[end_cine], &end_cine_last_frame);
 
-      if (start_cine < 1 || start_cine > num_cines){
-        rangeValid=false;
-        setStringParam(ADStatusMessage, "start_cine value invalid");
-        debug(functionName, "start_cine value invalid");
-      }  else if (end_cine < 1 || end_cine > num_cines){
-        rangeValid=false;
-        setStringParam(ADStatusMessage, "end_cine value invalid");
-        debug(functionName, "end_cine value invalid");
-      } else if(uni_frame_lim){ //Start frame and end frame are applied to every cine
-        int first_frame = 0;
-        int last_frame = 0;
-        for(int cine{start_cine}; cine <= end_cine; cine++){
-          debug(functionName, "Starting sanity checks on cine ", cine);
-          getIntegerParam(PHANTOM_CnFirstFrame_[cine], &first_frame);
-          getIntegerParam(PHANTOM_CnLastFrame_[cine], &last_frame);
-          if(start_frame < first_frame || start_frame > last_frame){
+          if (start_frame < start_cine_first_frame || start_frame > start_cine_last_frame) {
             rangeValid=false;
-            char message[256];
-            sprintf(message, "start_frame value invalid in cine %d", cine);
-            setStringParam(ADStatusMessage, message);
-            debug(functionName, message);
-            break;
-          } else if(end_frame < first_frame || end_frame > last_frame ){
+            setStringParam(ADStatusMessage, "start_frame value invalid");
+          } else if(end_frame < end_cine_first_frame || end_frame > end_cine_last_frame) {
             rangeValid=false;
-            char message[256];
-            sprintf(message, "end_frame value invalid in cine %d", cine);
-            setStringParam(ADStatusMessage, message);
-            debug(functionName, message);
-            break;
-          } else if(end_frame < start_frame){
+            setStringParam(ADStatusMessage, "end_frame value invalid");
+          } else if (start_cine == end_cine && end_frame < start_frame) {
             rangeValid=false;
-            setStringParam(ADStatusMessage, "start_frame cannot be after end_frame");
-            debug(functionName, "start_frame cannot be after end_frame");
-            break;
+            setStringParam(ADStatusMessage, "end_frame cannot be less than start_frame within a cine");
           }
         }
-      } else{ //Start frame refers to start cine and end frame refers to end cine
-        int start_cine_first_frame = 0;
-        int start_cine_last_frame = 0;
-        int end_cine_first_frame = 0;
-        int end_cine_last_frame = 0;
-        getIntegerParam(PHANTOM_CnFirstFrame_[start_cine], &start_cine_first_frame);
-        getIntegerParam(PHANTOM_CnLastFrame_[start_cine], &start_cine_last_frame);
-        getIntegerParam(PHANTOM_CnFirstFrame_[end_cine], &end_cine_first_frame);
-        getIntegerParam(PHANTOM_CnLastFrame_[end_cine], &end_cine_last_frame);
 
-        if (start_frame < start_cine_first_frame || start_frame > start_cine_last_frame) {
-          rangeValid=false;
-          setStringParam(ADStatusMessage, "start_frame value invalid");
-        } else if(end_frame < end_cine_first_frame || end_frame > end_cine_last_frame) {
-          rangeValid=false;
-          setStringParam(ADStatusMessage, "end_frame value invalid");
-        } else if (start_cine == end_cine && end_frame < start_frame) {
-          rangeValid=false;
-          setStringParam(ADStatusMessage, "end_frame cannot be less than start_frame within a cine");
+        if(rangeValid){
+          // Attach to the correct port
+          //status = attachToPort("dataPort");
+
+          // Download the timestamp information
+          status = readoutTimestamps(start_cine, end_cine, start_frame, end_frame, uni_frame_lim);
+
+          // Download the data and process arrays
+          status = readoutDataStream(start_cine, end_cine, start_frame, end_frame, uni_frame_lim);
+
+          setStringParam(ADStatusMessage, "Ready");
+        }
+        else{
+          setIntegerParam(ADStatus, ADStatusError);
         }
       }
-
-      if(rangeValid){
-        // Attach to the correct port
-        //status = attachToPort("dataPort");
-
-        // Download the timestamp information
-        status = readoutTimestamps(start_cine, end_cine, start_frame, end_frame, uni_frame_lim);
-
-        // Download the data and process arrays
-        status = readoutDataStream(start_cine, end_cine, start_frame, end_frame, uni_frame_lim);
-
-        setStringParam(ADStatusMessage, "Ready");
+      else {
+        setStringParam(ADStatusMessage, "Error in download task");
+        setIntegerParam(ADStatus, status);
       }
-      else{
-        setIntegerParam(ADStatus, ADStatusError);
-      }
-   }  
+    }  
+   downloadingFlag_ = 0;
   }
 }
 
@@ -1629,6 +1664,10 @@ void ADPhantom::phantomStatusTask()
   debug(functionName, "Starting thread...");
   while (1){
     epicsThreadSleep(0.25);
+    if (downloadingFlag_){
+      // This thread has a large effect on performance so reduce update rate while downloading
+      epicsThreadSleep(5);
+    }
     this->lock();
 
     // Read out the preview cine status
@@ -1703,8 +1742,13 @@ void ADPhantom::phantomPreviewTask()
 
     if (preview){
       this->unlock();
-      status = epicsEventWaitWithTimeout(this->stopPreviewEventId_, 0.1);
+      status = epicsEventWaitWithTimeout(this->stopPreviewEventId_, 0.5);
       this->lock();
+    }
+
+    if (status){
+      setStringParam(ADStatusMessage, "Error in preview task");
+      setIntegerParam(ADStatus, status);
     }
   }
 }
@@ -1738,6 +1782,50 @@ void ADPhantom::phantomFlashTask()
       setIntegerParam(PHANTOM_CFSFileDelete_, 0);
     }
     callParamCallbacks();
+
+    if (status){
+      setStringParam(ADStatusMessage, "Error in flash task");
+      setIntegerParam(ADStatus, status);
+    }
+  }
+}
+
+void ADPhantom::phantomConversionTask()
+{
+  // This task is run by 10 threads in parallel to convert data faster for P10 and P12L types
+  static const char *functionName = "ADPhantom::phantomConversionTask";
+  unsigned char *input = (unsigned char *)data_;
+  unsigned char *output = (unsigned char *)flashData_;
+  std::string threadName = epicsThreadGetNameSelf();
+  std::string newString = threadName.substr(threadName.find("conversionThread") + 16);
+  int i = std::stoi(newString);
+
+  while (1){
+    // Wait for the main download thread to send the signal to each thread to start
+    epicsEventWait(this->convStartEvt_[i]);
+
+    // Convert a slice of the new data
+    int myBytes=conversionBytes_/PHANTOM_CONV_THREADS;
+    int startByte = i*myBytes;
+    if (bitDepth_==8){
+      debug(functionName, "Starting 8 bit conversion");
+      this->convert8BitPacketTo16Bit(input+startByte, output+startByte*2, myBytes);
+    }
+    else if (conversionBitDepth_ == 10){
+      debug(functionName, "Starting 10 bit conversion");
+      for (int bIndex = startByte/5; bIndex < (startByte+myBytes)/5; bIndex++){
+        this->convert10BitPacketTo16Bit(input+(bIndex*5), output+(bIndex*8));
+      }
+    }
+    else if (conversionBitDepth_ == 12){
+      debug(functionName, "Starting 12 bit conversion");
+      for (int bIndex = startByte/3; bIndex < (startByte+myBytes)/3; bIndex++){
+        this->convert12BitPacketTo16Bit(input+(bIndex*3), output+(bIndex*4));
+      }
+    }
+
+    // Send the signal to the main thread that processing is done
+    epicsEventSignal(convFinishEvt_[i]);
   }
 }
 
@@ -1925,6 +2013,12 @@ asynStatus ADPhantom::asynWriteRead(const char *command, char *response, double 
 	  	inpPtr += nread;
 	  }
   }
+
+  if (status){
+    setStringParam(ADStatusMessage, "Error in asynWriteRead");
+    setIntegerParam(ADStatus, status);
+  }
+
   // Return error if no data read
   return (tot == 0 ? asynError : asynSuccess);
 }
@@ -2105,6 +2199,7 @@ asynStatus ADPhantom::writeInt32(asynUser *pasynUser, epicsInt32 value)
       }
       //Send an event to start the download
       epicsEventSignal(this->startDownloadEventId_);
+      downloadingFlag_ = 1;
     }
   } else if(function == PHANTOM_Delete_){
     if(value > 0 && value < PHANTOM_NUMBER_OF_CINES){ 
@@ -2194,7 +2289,7 @@ asynStatus ADPhantom::writeInt32(asynUser *pasynUser, epicsInt32 value)
   } else if (function == PHANTOM_SyncClock_){
     char command[PHANTOM_MAX_STRING];
     std::string response;
-    sprintf(command, "setrtc %d", std::time(NULL));
+    sprintf(command, "setrtc %ld", std::time(NULL));
     sendSimpleCommand(command, &response);
   } else if (function == PHANTOM_AutoTriggerX_){
     //Apply corrections such that PV has coord origin in top left corner
@@ -2239,6 +2334,14 @@ asynStatus ADPhantom::writeInt32(asynUser *pasynUser, epicsInt32 value)
   }
   else if (function == PHANTOM_DataFormat_){
     //Update the selected token and associated bit depth
+    int downloadCount = 0;
+    getIntegerParam(PHANTOM_DownloadCount_, &downloadCount);
+    if(downloadCount){
+      setStringParam(ADStatusMessage, "Cannot change pixel type while downloading!");  
+      setIntegerParam(ADStatus, ADStatusError);
+      status |= asynError;
+    }
+    else{
       if (value==0){
         bitDepth_ = 8;
         phantomToken_ = "8";
@@ -2267,6 +2370,7 @@ asynStatus ADPhantom::writeInt32(asynUser *pasynUser, epicsInt32 value)
         printf("Invalid Data Format selected!\n");
         status = asynError;
       }
+    }
   }
 
   // If the status is bad reset the original value
@@ -2473,9 +2577,8 @@ asynStatus ADPhantom::readoutPreviewData()
   size_t dims[2];
   NDDataType_t dataType;
   int acquire;
-  int nbytes;
   int arrayCallbacks   = 0;
-  asynStatus status = asynSuccess;
+  int status = asynSuccess;
 
   // Calculate the number of bytes to read
   nBytes = (int)((double)previewWidth_ * (double)previewHeight_ * ((float)bitDepth_/8));
@@ -2496,42 +2599,45 @@ asynStatus ADPhantom::readoutPreviewData()
   }
   debug(functionName, "Response", response);
 
+  struct timespec endTime;
+  clock_gettime(CLOCK_MONOTONIC_RAW, &endTime);
+  uint64_t delta_ms = (endTime.tv_sec - frameStart_.tv_sec) * 1000 + (endTime.tv_nsec - frameStart_.tv_nsec) / 1000000; 
+  debug(functionName, "Time taken for driver to process preview data", (int)delta_ms);
+
   this->readFrame(nBytes);
 
-  if (bitDepth_==8){
-    unsigned char *input = (unsigned char *)data_;
-    unsigned char *output = (unsigned char *)flashData_;
-    this->convert8BitPacketTo16Bit(input, output, nBytes);
+  // Lock the number of bytes to prevent race condition
+  // Send event to conversion threads to start converting their slice of the new data
+  // Wait for all conv threads to send the finished event
+  // Unlock
+  conversionBitDepth_ = bitDepth_;
+  conversionBytes_ = nBytes;
+  for (int i =0; i<PHANTOM_CONV_THREADS; i++){
+    epicsEventSignal(convStartEvt_[i]);
   }
-  else if (bitDepth_==10){
-    unsigned char *input = (unsigned char *)data_;
-    unsigned char *output = (unsigned char *)flashData_;
-    for (int bIndex = 0; bIndex < nBytes/5; bIndex++){
-      this->convert10BitPacketTo16Bit(input+(bIndex*5), output+(bIndex*8));
+  this->unlock();
+  for (int i =0; i<PHANTOM_CONV_THREADS; i++){
+    status = epicsEventWaitWithTimeout(convFinishEvt_[i], 0.1);
+    if (status == epicsEventWaitTimeout){
+      printf("Asyn timeout on conversion! This shouldnt happen\n");
     }
   }
-  else if (bitDepth_==12){
-    unsigned char *input = (unsigned char *)data_;
-    unsigned char *output = (unsigned char *)flashData_;
-    for (int bIndex = 0; bIndex < nBytes/3; bIndex++){
-      this->convert12BitPacketTo16Bit(input+(bIndex*3), output+(bIndex*4));
-    }
-  }
+  this->lock();
 
   // Allocate NDArray memory
   dims[0] = previewWidth_;
   dims[1] = previewHeight_;
-  nbytes = (dims[0] * dims[1]) * sizeof(int16_t);
+  nBytes = (dims[0] * dims[1]) * sizeof(int16_t);
   dataType= NDUInt16;
-  pImage = this->pNDArrayPool->alloc(2, dims, dataType, nbytes, NULL);
+  pImage = this->pNDArrayPool->alloc(2, dims, dataType, nBytes, NULL);
 
   if (bitDepth_!=16){
     //must use converted data
-    memcpy(pImage->pData, flashData_, nbytes);
+    memcpy(pImage->pData, flashData_, nBytes);
   }
   else if (bitDepth_==16){
     //raw data can be used
-    memcpy(pImage->pData, data_, nbytes);
+    memcpy(pImage->pData, data_, nBytes);
   }
   pImage->dims[0].size = dims[0];
   pImage->dims[1].size = dims[1];
@@ -2549,7 +2655,7 @@ asynStatus ADPhantom::readoutPreviewData()
   // Free the image buffer
   pImage->release();
 
-  return status;
+  return (asynStatus) status;
 }
 
 asynStatus ADPhantom::sendSoftwareTrigger()
@@ -2970,7 +3076,7 @@ asynStatus ADPhantom::downloadFlashImages(const std::string& filename, int start
   int postTrig = 0;
   int first_tv_sec = 0;
   int first_tv_usec = 0;
-  asynStatus status = asynSuccess;
+  int status = asynSuccess;
 
   // Attach to the correct port
   //status = attachToPort("dataPort");
@@ -3030,25 +3136,23 @@ asynStatus ADPhantom::downloadFlashImages(const std::string& filename, int start
     debug(functionName, "Response", response);
     status = this->readFrame(nBytes);
 
-  if (bitDepth_==8){
-    unsigned char *input = (unsigned char *)data_;
-    unsigned char *output = (unsigned char *)flashData_;
-    this->convert8BitPacketTo16Bit(input, output, nBytes);
-  }
-  else if (bitDepth_==10){
-    unsigned char *input = (unsigned char *)data_;
-    unsigned char *output = (unsigned char *)flashData_;
-    for (int bIndex = 0; bIndex < nBytes/5; bIndex++){
-      this->convert10BitPacketTo16Bit(input+(bIndex*5), output+(bIndex*8));
+    // Lock the number of bytes to prevent race condition
+    // Send event to conversion threads to start converting their slice of the new data
+    // Wait for all conv threads to send the finished event
+    // Unlock
+    conversionBitDepth_ = bitDepth_;
+    conversionBytes_ = nBytes;
+    for (int i =0; i<PHANTOM_CONV_THREADS; i++){
+      epicsEventSignal(convStartEvt_[i]);
     }
-  }
-  else if (bitDepth_==12){
-    unsigned char *input = (unsigned char *)data_;
-    unsigned char *output = (unsigned char *)flashData_;
-    for (int bIndex = 0; bIndex < nBytes/3; bIndex++){
-      this->convert12BitPacketTo16Bit(input+(bIndex*3), output+(bIndex*4));
+    this->unlock();
+    for (int i =0; i<PHANTOM_CONV_THREADS; i++){
+      status = epicsEventWaitWithTimeout(convFinishEvt_[i], 0.1);
+      if (status == epicsEventWaitTimeout){
+        printf("Asyn timeout on conversion! This shouldnt happen\n");
+      }
     }
-  }
+    this->lock();
 
     if (status == asynSuccess){
       // Allocate NDArray memory
@@ -3150,18 +3254,13 @@ asynStatus ADPhantom::downloadFlashImages(const std::string& filename, int start
     callParamCallbacks();
   }
 
-  return status;
+  return (asynStatus) status;
 }
 
-asynStatus ADPhantom::convert12BitPacketTo16Bit(void *input, void *output)
+asynStatus ADPhantom::convert12BitPacketTo16Bit(unsigned char *inBytes, unsigned char *outBytes)
 {
-  const char * functionName = "convert12BitPacketTo16Bit";
   asynStatus status = asynSuccess;
 
-  debug(functionName, "Method called");
-
-  unsigned char *inBytes = (unsigned char *)input;
-  unsigned char *outBytes = (unsigned char *)output;
   int pIndex = 0;
   int rawValue = (inBytes[0]<<4) + ((inBytes[1]&0xF0)>>4);
   outBytes[pIndex] = (rawValue&0x00FF);
@@ -3178,15 +3277,10 @@ asynStatus ADPhantom::convert12BitPacketTo16Bit(void *input, void *output)
   return status;
 }
 
-asynStatus ADPhantom::convert10BitPacketTo16Bit(void *input, void *output)
+asynStatus ADPhantom::convert10BitPacketTo16Bit(unsigned char *inBytes, unsigned char *outBytes)
 {
-  const char * functionName = "convert10BitPacketTo16Bit";
   asynStatus status = asynSuccess;
 
-  debug(functionName, "Method called");
-
-  unsigned char *inBytes = (unsigned char *)input;
-  unsigned char *outBytes = (unsigned char *)output;
   int pIndex = 0;
   int rawValue = PHANTOM_LinLUT[(inBytes[0]<<2) + ((inBytes[1]&0xC0)>>6)];
   outBytes[pIndex] = (rawValue&0x00FF);
@@ -3211,28 +3305,21 @@ asynStatus ADPhantom::convert10BitPacketTo16Bit(void *input, void *output)
   pIndex++;
   outBytes[pIndex] = (rawValue&0xFF00)>>8;
   pIndex++;
-
   return status;
 }
 
 
-asynStatus ADPhantom::convert8BitPacketTo16Bit(void *input, void *output, int nBytes)
+asynStatus ADPhantom::convert8BitPacketTo16Bit(unsigned char *inBytes, unsigned char *outBytes, int nBytes)
 {
-  const char * functionName = "convert8BitPacketTo16Bit";
   asynStatus status = asynSuccess;
-
-  debug(functionName, "Method called");
-
-  unsigned char *inBytes = (unsigned char *)input;
-  unsigned char *outBytes = (unsigned char *)output;
   
   for (int i=0;i<nBytes;i++)
   {
     outBytes[(i*2)+1]=inBytes[i];
     outBytes[(i*2)]=0;
   }
-  uint8_t byte1 = inBytes[0];
-  uint16_t byte2 = (outBytes[0] << 8) + outBytes[1];
+  //uint8_t byte1 = inBytes[0];
+  //uint16_t byte2 = (outBytes[0] << 8) + outBytes[1];
   //printf("8bit val = %d  16bit val= %d\n",byte1,byte2);
   return status;
 }
@@ -3321,11 +3408,10 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
 {
   const char * functionName = "ADPhantom::readoutDataStream";
   // Time profiling
-  struct timespec end_time;
-  clock_gettime(CLOCK_MONOTONIC_RAW, &end_time);
-  uint64_t delta_ms = (end_time.tv_sec - start_.tv_sec) * 1000 + (end_time.tv_nsec - start_.tv_nsec) / 1000000; 
-  debug(functionName, "msec since last download/init", (int)delta_ms);
-  clock_gettime(CLOCK_MONOTONIC_RAW, &start_);
+  struct timespec endTime;
+  clock_gettime(CLOCK_MONOTONIC_RAW, &endTime);
+  uint64_t delta_ms = (endTime.tv_sec - frameStart_.tv_sec) * 1000 + (endTime.tv_nsec - frameStart_.tv_nsec) / 1000000; 
+  debug(functionName, "Time since last download/init (msec)", (int)delta_ms);
   //
 
   char command[PHANTOM_MAX_STRING];
@@ -3355,7 +3441,7 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
   int markSaved = 0;
   unsigned int first_tv_sec = 0;
   unsigned int first_tv_usec = 0;
-  asynStatus status = asynSuccess;
+  int status = asynSuccess;
 
   status = getCameraDataStruc("irig", paramMap_);
   status = stringToInteger(paramMap_["irig.yearbegin"].getValue(), irigYear);
@@ -3429,7 +3515,6 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
     status = sendSimpleCommand(command, &response);
     debug(functionName, "Command", command);
     debug(functionName, "Response", response);
-
     if (frame == 0){
       short_time_stamp32 tss = timestampData_[total_frame];
       first_tv_sec = (ntohl(tss.csecs) / 100) + irigYear;
@@ -3470,32 +3555,33 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
       callParamCallbacks();
           
       //Time profiling
-      struct timespec end;
-      clock_gettime(CLOCK_MONOTONIC_RAW, &end);
-      uint64_t delta_ms = (end.tv_sec - start_.tv_sec) * 1000 + (end.tv_nsec - start_.tv_nsec) / 1000000; 
-      debug(functionName, "msec to ready for next read, since last frame", (int)delta_ms);
+      struct timespec endTime;
+      clock_gettime(CLOCK_MONOTONIC_RAW, &endTime);
+      uint64_t delta_ms = (endTime.tv_sec - frameStart_.tv_sec) * 1000 + (endTime.tv_nsec - frameStart_.tv_nsec) / 1000000; 
+      debug(functionName, "Time taken for driver to process new data", (int)delta_ms);
+      //printf("Time taken for driver to process new data %d\n", (int)delta_ms);
       //
 
       status = this->readFrame(nBytes);
-      if (bitDepth_==8){
-        unsigned char *input = (unsigned char *)data_;
-        unsigned char *output = (unsigned char *)flashData_;
-        this->convert8BitPacketTo16Bit(input, output, nBytes);
+
+      // Lock the number of bytes to prevent race condition
+      // Send event to conversion threads to start converting their slice of the new data
+      // Unlock
+      // Wait for all conv threads to send the finished event
+      // Lock
+      conversionBitDepth_ = bitDepth_;
+      conversionBytes_ = nBytes;
+      for (int i =0; i<PHANTOM_CONV_THREADS; i++){
+        epicsEventSignal(convStartEvt_[i]);
       }
-      else if (bitDepth_==10){
-        unsigned char *input = (unsigned char *)data_;
-        unsigned char *output = (unsigned char *)flashData_;
-        for (int bIndex = 0; bIndex < nBytes/5; bIndex++){
-          this->convert10BitPacketTo16Bit(input+(bIndex*5), output+(bIndex*8));
+      this->unlock();
+      for (int i =0; i<PHANTOM_CONV_THREADS; i++){
+        status = epicsEventWaitWithTimeout(convFinishEvt_[i], 0.1);
+        if (status == epicsEventWaitTimeout){
+          printf("Asyn timeout on conversion! This shouldnt happen\n");
         }
       }
-      else if (bitDepth_==12){
-        unsigned char *input = (unsigned char *)data_;
-        unsigned char *output = (unsigned char *)flashData_;
-        for (int bIndex = 0; bIndex < nBytes/3; bIndex++){
-          this->convert12BitPacketTo16Bit(input+(bIndex*3), output+(bIndex*4));
-        }
-      }
+      this->lock();
 
       if (status == asynSuccess){
         // Allocate NDArray memory
@@ -3622,7 +3708,7 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
   setIntegerParam(PHANTOM_DownloadCount_, 0);
   callParamCallbacks();
 
-  return status;
+  return (asynStatus) status;
 }
 
 asynStatus ADPhantom::readFrame(int bytes)
@@ -3635,6 +3721,7 @@ asynStatus ADPhantom::readFrame(int bytes)
 
   char *dataPtr = data_;
   int totalRead = 0;
+  clock_gettime(CLOCK_MONOTONIC_RAW, &readStart_);
   while (status == asynSuccess && totalRead < bytes){
     status = pasynOctetSyncIO->read(dataChannel_,
                                     dataPtr,
@@ -3651,11 +3738,22 @@ asynStatus ADPhantom::readFrame(int bytes)
     dataPtr += nread;
 
     //Time Profiling
-    struct timespec end;
-    clock_gettime(CLOCK_MONOTONIC_RAW, &end);
-    uint64_t delta_ms = (end.tv_sec - start_.tv_sec) * 1000 + (end.tv_nsec - start_.tv_nsec) / 1000000; 
-    debug(functionName, "msec since last data read", (int)delta_ms);
-    clock_gettime(CLOCK_MONOTONIC_RAW, &start_);
+    struct timespec endTime;
+    clock_gettime(CLOCK_MONOTONIC_RAW, &endTime);
+
+    uint64_t delta_ms = (endTime.tv_sec - readStart_.tv_sec) * 1000 + (endTime.tv_nsec - readStart_.tv_nsec) / 1000000; 
+    debug(functionName, "Time taken to get frame from network interface (msec)", (int)delta_ms);
+    //printf("Time taken to get frame from network interface (msec) %d\n", (int)delta_ms);
+
+    delta_ms = (endTime.tv_sec - frameStart_.tv_sec) * 1000 + (endTime.tv_nsec - frameStart_.tv_nsec) / 1000000; 
+    debug(functionName, "Total time taken to read 1 frame (msec)", (int)delta_ms);
+    //printf("Total time taken to read 1 frame (msec) %d\n", (int)delta_ms);
+    //printf("======================================\n");
+    if (delta_ms>0){
+      setIntegerParam(PHANTOM_FramesPerSecond_, (int)(1000/delta_ms));
+    }
+    callParamCallbacks();
+    clock_gettime(CLOCK_MONOTONIC_RAW, &frameStart_);
     //
   }
   return status;
@@ -4224,7 +4322,7 @@ asynStatus ADPhantom::updateDefcStatus()
     double value = 0.0;
     stringToInteger(paramMap_["defc.exp"].getValue(), exposure);
     value = (double)exposure/1000000000.0;
-    setDoubleParam(ADAcquireTime, (double)exposure/1000000000.0);
+    setDoubleParam(ADAcquireTime, value);
   }
 
   if (status == asynSuccess){
@@ -4566,6 +4664,7 @@ asynStatus ADPhantom::debugLevel(const std::string& method, int onOff)
 {
   if (method == "all"){
     debugMap_["ADPhantom::ADPhantom"]                = onOff;
+    debugMap_["ADPhantom::phantomConversionTask"]           = onOff;
     debugMap_["ADPhantom::phantomCameraTask"]        = onOff;
     debugMap_["ADPhantom::phantomDownloadTask"]      = onOff;
     debugMap_["ADPhantom::phantomPreviewTask"]       = onOff;
