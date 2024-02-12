@@ -50,6 +50,9 @@
 // Number of Conversion Threads
 #define PHANTOM_CONV_THREADS 10
 
+// Max number of raw frames to store
+#define PHANTOM_MAX_FRAME_BUFFER_SIZE 20
+
 // PHANTOM Run Modes
 #define PHANTOM_RUN_FAT  0
 #define PHANTOM_RUN_SFAT 1
@@ -595,6 +598,7 @@ class ADPhantom: public ADDriver
   public:
     ADPhantom(const char *portName, const char *ctrlPort, const char *dataPort, int maxBuffers, size_t maxMemory, int priority, int stackSize);
     virtual ~ADPhantom();
+    void phantomDataFetchTask();
     void phantomCameraTask();
     void phantomStatusTask();
     void phantomPreviewTask();
@@ -808,10 +812,10 @@ class ADPhantom: public ADDriver
     asynUser                           *commonDataport_;
     char                               ctrlPort_[128];
     char                               dataPort_[128];
-    char                               data_[2048000];
+    char                               data_[2048000]; // Stores the raw frame being processed
     char                               imgData_[2048000];
-    char                               flashData_[2048000];
-    char                               downloadData_[102400000]; // 50, 2MB images
+    char                               flashData_[2048000]; // Stores the converted data
+    std::vector<char *>                frameBuffer_; // A stack which stores raw data from asyn
     std::vector<short_time_stamp32>    timestampData_;
     std::vector<tagTIME64>             flashTsData_;
     std::vector<uint32_t>              flashExpData_;
@@ -824,7 +828,10 @@ class ADPhantom: public ADDriver
     int                                bitDepth_;
     int                                conversionBitDepth_;
     int                                conversionBytes_;
-    int                                downloadingFlag_;
+    int                                downloadingFlag_; // Tracks when a download is active so other threads can be paused
+    int                                readDataFlag_; // While active, the data fetch thread requests data from asyn
+    int                                readDataFinishedFlag_; // Actived when a preview/download finishes or is aborted
+
     std::string                        phantomToken_;
     std::map<std::string, int>         debugMap_;
     epicsEventId                       startEventId_;

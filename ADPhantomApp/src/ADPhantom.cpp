@@ -864,6 +864,16 @@ extern "C"
 }
 
 /**
+ * Function to get data from asyn and store it in the main data buffer
+ */
+static void phantomDataFetchTaskC(void *drvPvt)
+{
+  ADPhantom *pPvt = (ADPhantom *)drvPvt;
+  pPvt->phantomDataFetchTask();
+}
+
+
+/**
  * Function to convert pixel data in parallel
  */
 static void phantomPixelConversionTaskC(void *drvPvt)
@@ -980,7 +990,7 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   dataChannel_ = NULL;
   strcpy(ctrlPort_, ctrlPort);
   strcpy(dataPort_, dataPort);
-  
+
   // Create the epicsEvents for signalling to the PHANTOM task when acquisition starts
   this->startEventId_ = epicsEventCreate(epicsEventEmpty);
   if (!this->startEventId_){
@@ -1148,6 +1158,7 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   conversionBytes_=1280*800*1.25;
   phantomToken_ = "P10";
   downloadingFlag_=0;
+  readDataFlag_=0;
 
   // Initialise meta data to save
   metaArray_.push_back(new PhantomMeta("exposure", "Camera exposure time", "c%d.exp", NDAttrInt32, 0x674, 4));
@@ -1166,6 +1177,20 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   metaArray_.push_back(new PhantomMeta("first_frame", "First frame number", "c%d.firstfr", NDAttrInt32, 0x010, 4));
   metaArray_.push_back(new PhantomMeta("frame_count", "Total frame count", "c%d.frcount", NDAttrInt32, 0x014, 4));
 //  metaArray_.push_back(new PhantomMeta("post_trig_frames", "Post trigger frame count", "c%d.lastfr", NDAttrInt32, 0x0, 0));
+
+  if (status == asynSuccess){
+    debug(functionName, "Starting up data fetch task....");
+    // Create the thread that gets data from asyn and stores it in a buffer
+    // epicsThreadStackBig as it will own a 2MB buffer for the current frame being capured
+    status = (epicsThreadCreate("PhantomDataFetchTask",
+                                epicsThreadPriorityMedium,
+                                epicsThreadGetStackSize(epicsThreadStackBig),
+                                (EPICSTHREADFUNC)phantomDataFetchTaskC,
+                                this) == NULL);
+    if (status){
+      debug(functionName, "epicsThreadCreate failure for data fetch task");
+    }
+  }
 
   if (status == asynSuccess){
     debug(functionName, "Starting up polling task....");
@@ -1360,6 +1385,83 @@ asynStatus ADPhantom::disconnect()
     }
   }
   return status;
+}
+
+/** 
+ *  This function gets data from asyn and stores it in dataBuffer_ to be processed.
+ *  It is started in the class constructor and must not return until the IOC stops.
+ *
+*/ 
+
+void ADPhantom::phantomDataFetchTask()
+{
+  const char *functionName = "ADPhantom::phantomDataFetchTask";
+  while (1)
+  {
+    //While we are suppost to be reading data, check asyn for data, 
+    //when a full frame if acquired stick it into the buffer
+    if (readDataFinishedFlag_)
+    {
+      //triggers when the preview mode is disabled, a download finishes or a download aborts
+      //clear buffer and prep for new data stream
+      this->lock();
+      frameBuffer_.clear();
+      // need to check that there is a dataChannel_ to flush ...
+      pasynOctetSyncIO->flush(dataChannel_);
+      readDataFinishedFlag_=0;
+      debug(functionName, "Flushing frameBuffer_ ready for new acuqisition");
+      this->unlock();
+    }
+    if (readDataFlag_)
+    {
+      if (frameBuffer_.size() < PHANTOM_MAX_FRAME_BUFFER_SIZE)
+      {
+        char newFrame[2048000];
+        char * dataPtr = newFrame;
+        int bytes = conversionBytes_;
+        size_t nread = 0;
+        int eomReason = 0;
+        std::string response;
+        asynStatus status = asynSuccess;
+        int totalRead = 0;
+        clock_gettime(CLOCK_MONOTONIC_RAW, &readStart_);
+        while (status == asynSuccess && totalRead < bytes)
+        {
+          status = pasynOctetSyncIO->read(dataChannel_,
+                                          dataPtr,
+                                          (bytes-totalRead),
+                                          PHANTOM_TIMEOUT,
+                                          &nread,
+                                          &eomReason);
+          totalRead += nread;
+          dataPtr += nread;
+        }
+
+        if (status == asynSuccess)
+        {      
+          frameBuffer_.push_back(newFrame);
+          debug(functionName, "Pushing new frame to buffer");
+
+          //Time Profiling
+          struct timespec endTime;
+          clock_gettime(CLOCK_MONOTONIC_RAW, &endTime);
+
+          uint64_t delta_ms = (endTime.tv_sec - readStart_.tv_sec) * 1000 + (endTime.tv_nsec - readStart_.tv_nsec) / 1000000; 
+          debug(functionName, "Time taken to get data from asyn (msec)", (int)delta_ms);
+          //printf("Total time taken to read 1 frame (msec) %d\n", (int)delta_ms);
+          //printf("======================================\n");
+          if (delta_ms>0){
+            setIntegerParam(PHANTOM_FramesPerSecond_, (int)(1000/delta_ms));
+          }
+          callParamCallbacks();
+        }
+        else
+        {
+          debug(functionName,"Asyn data read timeout!\n");
+        }
+      }
+    }
+  }
 }
 
 /** 
@@ -1725,16 +1827,18 @@ void ADPhantom::phantomPreviewTask()
     // If we are not acquiring or encountered a problem then wait for a semaphore that is given when acquisition is started
     if (!preview){
       // Release the lock while we wait for an event that says acquire has started, then lock again
+      readDataFlag_ = 0;
       this->unlock();
       debug(functionName, "Waiting for preview to start");
       status = epicsEventWait(this->startPreviewEventId_);
       this->lock();
       getIntegerParam(PHANTOM_LivePreview_, &preview);
       status = updatePreviewCine();
-      //status = attachToPort("dataPort");
 
       // Issue the start recording for the cine
       status = sendSimpleCommand("rec 0", &response);
+
+      readDataFinishedFlag_ = 1;
     }
 
     // Now perform a readout of the preview cine
@@ -1744,11 +1848,6 @@ void ADPhantom::phantomPreviewTask()
       this->unlock();
       status = epicsEventWaitWithTimeout(this->stopPreviewEventId_, 0.5);
       this->lock();
-    }
-
-    if (status){
-      setStringParam(ADStatusMessage, "Error in preview task");
-      setIntegerParam(ADStatus, status);
     }
   }
 }
@@ -1807,7 +1906,7 @@ void ADPhantom::phantomConversionTask()
     // Convert a slice of the new data
     int myBytes=conversionBytes_/PHANTOM_CONV_THREADS;
     int startByte = i*myBytes;
-    if (bitDepth_==8){
+    if (conversionBitDepth_==8){
       debug(functionName, "Starting 8 bit conversion");
       this->convert8BitPacketTo16Bit(input+startByte, output+startByte*2, myBytes);
     }
@@ -2569,6 +2668,10 @@ asynStatus ADPhantom::attachToPort(const std::string& portName)
 
 asynStatus ADPhantom::readoutPreviewData()
 {
+  // each time this is called, 1 frame will be requested,
+  // if there is a frame that has already been fetched from asyn then process it
+  // processing involves waiting for the conversion functions to push data to flashData_
+
   const char * functionName = "ADPhantom::readoutPreviewData";
   char command[PHANTOM_MAX_STRING];
   int nBytes = 0;
@@ -2599,61 +2702,64 @@ asynStatus ADPhantom::readoutPreviewData()
   }
   debug(functionName, "Response", response);
 
-  struct timespec endTime;
-  clock_gettime(CLOCK_MONOTONIC_RAW, &endTime);
-  uint64_t delta_ms = (endTime.tv_sec - frameStart_.tv_sec) * 1000 + (endTime.tv_nsec - frameStart_.tv_nsec) / 1000000; 
-  debug(functionName, "Time taken for driver to process preview data", (int)delta_ms);
-
-  this->readFrame(nBytes);
-
-  // Lock the number of bytes to prevent race condition
-  // Send event to conversion threads to start converting their slice of the new data
-  // Wait for all conv threads to send the finished event
-  // Unlock
-  conversionBitDepth_ = bitDepth_;
-  conversionBytes_ = nBytes;
-  for (int i =0; i<PHANTOM_CONV_THREADS; i++){
-    epicsEventSignal(convStartEvt_[i]);
-  }
-  this->unlock();
-  for (int i =0; i<PHANTOM_CONV_THREADS; i++){
-    status = epicsEventWaitWithTimeout(convFinishEvt_[i], 0.1);
-    if (status == epicsEventWaitTimeout){
-      printf("Asyn timeout on conversion! This shouldnt happen\n");
+  //As we are currently expecting data from the camera set readDataFlag to 1
+  //If there is an item in the buffer, then process it and remove from queue.
+  readDataFlag_ = 1;
+  if (frameBuffer_.size()>0)
+  {
+    printf("Processing new frame from buffer. Buffer size = %d\n", frameBuffer_.size());
+    memcpy(data_, frameBuffer_.front(), 2048000);
+    frameBuffer_.erase(frameBuffer_.begin());
+    // Lock the number of bytes to prevent race condition
+    // Send event to conversion threads to start converting their slice of the new data
+    // Wait for all conv threads to send the finished event
+    // Unlock
+    conversionBitDepth_ = bitDepth_;
+    conversionBytes_ = nBytes;
+    for (int i =0; i<PHANTOM_CONV_THREADS; i++){
+      epicsEventSignal(convStartEvt_[i]);
     }
-  }
-  this->lock();
-
-  // Allocate NDArray memory
-  dims[0] = previewWidth_;
-  dims[1] = previewHeight_;
-  nBytes = (dims[0] * dims[1]) * sizeof(int16_t);
-  dataType= NDUInt16;
-  pImage = this->pNDArrayPool->alloc(2, dims, dataType, nBytes, NULL);
-
-  if (bitDepth_!=16){
-    //must use converted data
-    memcpy(pImage->pData, flashData_, nBytes);
-  }
-  else if (bitDepth_==16){
-    //raw data can be used
-    memcpy(pImage->pData, data_, nBytes);
-  }
-  pImage->dims[0].size = dims[0];
-  pImage->dims[1].size = dims[1];
-
-  getIntegerParam(NDArrayCallbacks, &arrayCallbacks);
-  if (arrayCallbacks){
-    // Must release the lock here, or we can get into a deadlock, because we can
-    // block on the plugin lock, and the plugin can be calling us
     this->unlock();
-    debug(functionName, "Calling NDArray callback");
-    doCallbacksGenericPointer(pImage, NDArrayData, 0);
+    for (int i =0; i<PHANTOM_CONV_THREADS; i++){
+      status = epicsEventWaitWithTimeout(convFinishEvt_[i], 0.1);
+      if (status == epicsEventWaitTimeout){
+        printf("Asyn timeout on conversion! This shouldnt happen\n");
+      }
+    }
     this->lock();
-  }
 
-  // Free the image buffer
-  pImage->release();
+    // Allocate NDArray memory
+    dims[0] = previewWidth_;
+    dims[1] = previewHeight_;
+    nBytes = (dims[0] * dims[1]) * sizeof(int16_t);
+    dataType= NDUInt16;
+    pImage = this->pNDArrayPool->alloc(2, dims, dataType, nBytes, NULL);
+
+    if (bitDepth_!=16){
+      //must use converted data
+      memcpy(pImage->pData, flashData_, nBytes);
+    }
+    else if (bitDepth_==16){
+      //raw data can be used
+      memcpy(pImage->pData, data_, nBytes);
+    }
+    pImage->dims[0].size = dims[0];
+    pImage->dims[1].size = dims[1];
+
+    getIntegerParam(NDArrayCallbacks, &arrayCallbacks);
+    if (arrayCallbacks){
+      // Must release the lock here, or we can get into a deadlock, because we can
+      // block on the plugin lock, and the plugin can be calling us
+      this->unlock();
+      debug(functionName, "Calling NDArray callback");
+      doCallbacksGenericPointer(pImage, NDArrayData, 0);
+      this->lock();
+    }
+
+    // Free the image buffer
+    pImage->release();
+  }
+  readDataFinishedFlag_=0;
 
   return (asynStatus) status;
 }
@@ -3407,12 +3513,6 @@ asynStatus ADPhantom::readoutTimestamps(int start_cine, int end_cine, int start_
 asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_frame, int end_frame, bool uni_frame_lim)
 {
   const char * functionName = "ADPhantom::readoutDataStream";
-  // Time profiling
-  struct timespec endTime;
-  clock_gettime(CLOCK_MONOTONIC_RAW, &endTime);
-  uint64_t delta_ms = (endTime.tv_sec - frameStart_.tv_sec) * 1000 + (endTime.tv_nsec - frameStart_.tv_nsec) / 1000000; 
-  debug(functionName, "Time since last download/init (msec)", (int)delta_ms);
-  //
 
   char command[PHANTOM_MAX_STRING];
   int width = 0;
@@ -3515,14 +3615,21 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
     status = sendSimpleCommand(command, &response);
     debug(functionName, "Command", command);
     debug(functionName, "Response", response);
+    readDataFlag_ = 1;
+    conversionBitDepth_ = bitDepth_;
+    conversionBytes_ = nBytes;
+
     if (frame == 0){
       short_time_stamp32 tss = timestampData_[total_frame];
       first_tv_sec = (ntohl(tss.csecs) / 100) + irigYear;
       first_tv_usec = ((ntohl(tss.csecs) % 100) * 10000) + (ntohs(tss.frac) >> 2);
     }
     while ((frame < frames) && (status == asynSuccess)){
+      struct timespec startTime;
+      clock_gettime(CLOCK_MONOTONIC_RAW, &startTime);
       getIntegerParam(PHANTOM_DownloadAbort_, &abort);
       if(abort){
+        readDataFinishedFlag_ = 1;
         setStringParam(ADStatusMessage, "Download aborting");
         //To abort cleanly we disconnect from the port to restart the datastream
         debug(functionName, "Running common connect");
@@ -3548,29 +3655,37 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
         break;
       }
 
+
+      //As we are currently expecting data from the camera set readDataFlag to 1
+      //If there is an item in the buffer, then process it and remove from queue.
+      this->unlock();
+      while (frameBuffer_.size()<=0)
+      {
+        //debug(functionName, "Waiting for new data buffer item!");
+        epicsThreadSleep(0.001);
+      }
+      clock_gettime(CLOCK_MONOTONIC_RAW, &frameStart_);
+      debug(functionName, "Processing new frame from buffer. Buffer size =", (int) frameBuffer_.size());
+      memcpy(data_, frameBuffer_.front(), 2048000);
+      frameBuffer_.erase(frameBuffer_.begin());
+      this->lock();
+
       metaFrame = start_frame+frame;
       frame++;
       total_frame++;
       setIntegerParam(PHANTOM_DownloadCount_, total_frame);
       callParamCallbacks();
           
-      //Time profiling
-      struct timespec endTime;
-      clock_gettime(CLOCK_MONOTONIC_RAW, &endTime);
-      uint64_t delta_ms = (endTime.tv_sec - frameStart_.tv_sec) * 1000 + (endTime.tv_nsec - frameStart_.tv_nsec) / 1000000; 
-      debug(functionName, "Time taken for driver to process new data", (int)delta_ms);
+      //printf("Time taken to get frame from network interface (msec) %d\n", (int)delta_ms);
+
       //printf("Time taken for driver to process new data %d\n", (int)delta_ms);
       //
-
-      status = this->readFrame(nBytes);
 
       // Lock the number of bytes to prevent race condition
       // Send event to conversion threads to start converting their slice of the new data
       // Unlock
       // Wait for all conv threads to send the finished event
       // Lock
-      conversionBitDepth_ = bitDepth_;
-      conversionBytes_ = nBytes;
       for (int i =0; i<PHANTOM_CONV_THREADS; i++){
         epicsEventSignal(convStartEvt_[i]);
       }
@@ -3690,8 +3805,20 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
 
         // Free the image buffer
         pImage->release();
+
       }
+      //Time profiling
+      struct timespec endTime;
+      clock_gettime(CLOCK_MONOTONIC_RAW, &endTime);
+      uint64_t delta_ms = (endTime.tv_sec - startTime.tv_sec) * 1000 + (endTime.tv_nsec - startTime.tv_nsec) / 1000000; 
+      debug(functionName, "Total time taken to read frame (msec)", (int)delta_ms);
+
+      clock_gettime(CLOCK_MONOTONIC_RAW, &endTime);
+      delta_ms = (endTime.tv_sec - frameStart_.tv_sec) * 1000 + (endTime.tv_nsec - frameStart_.tv_nsec) / 1000000; 
+      debug(functionName, "Time taken for driver to process new data", (int)delta_ms);
     }
+    readDataFinishedFlag_ = 1;
+    readDataFlag_ = 0;
     //mark cine as saved/reusable after download
     if(!abort){
       getIntegerParam(PHANTOM_MarkCineSaved_, &markSaved);
@@ -4695,6 +4822,7 @@ asynStatus ADPhantom::debugLevel(const std::string& method, int onOff)
     debugMap_["ADPhantom::commandResponse"]          = onOff;
     debugMap_["ADPhantom::asynWriteRead"]            = onOff;
     debugMap_["ADPhantom::cineStates"]               = onOff;
+    debugMap_["ADPhantom::phantomDataFetchTask"]     = onOff;
   } else {
     debugMap_[method] = onOff;
   }
