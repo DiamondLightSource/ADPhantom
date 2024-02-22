@@ -24,6 +24,8 @@ phantom_LIBS += asyn
 phantom_LIBS += ADBase
 phantom_LIBS += busy
 
+phantom_SYS_LIBS += pcap
+
 DATA += phantom_hdf5.xml
 
 # We need to link against the EPICS Base libraries

@@ -843,9 +843,9 @@ const char *ADPhantom::PHANTOM_CfFileDateString[] = {
  */
 extern "C"
 {
-  int ADPhantomConfig(const char *portName, const char *ctrlPort, const char *dataPort, int maxBuffers, size_t maxMemory, int priority,	int stackSize)
+  int ADPhantomConfig(const char *portName, const char *ctrlPort, const char *dataPort, const char *macAddress, int maxBuffers, size_t maxMemory, int priority,	int stackSize)
   {
-    new ADPhantom(portName, ctrlPort, dataPort, maxBuffers, maxMemory, priority, stackSize);
+    new ADPhantom(portName, ctrlPort, dataPort, macAddress, maxBuffers, maxMemory, priority, stackSize);
     return asynSuccess;
   }
 
@@ -924,7 +924,7 @@ ADPhantom::~ADPhantom()
 {
 }
 
-ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dataPort, int maxBuffers, size_t maxMemory, int priority, int stackSize) :
+ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dataPort, const char * macAddress, int maxBuffers, size_t maxMemory, int priority, int stackSize) :
 /** 
     Constructor for the ADDriver class. 
 [in]	portNameIn	The name of the asyn port.
@@ -980,6 +980,7 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   dataChannel_ = NULL;
   strcpy(ctrlPort_, ctrlPort);
   strcpy(dataPort_, dataPort);
+  strncpy(macAddress_, macAddress, 12);
   
   // Create the epicsEvents for signalling to the PHANTOM task when acquisition starts
   this->startEventId_ = epicsEventCreate(epicsEventEmpty);
@@ -1055,6 +1056,7 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   createParam(PHANTOM_DownloadAbortString,            asynParamInt32,         &PHANTOM_DownloadAbort_);
   createParam(PHANTOM_DownloadCountString,            asynParamInt32,         &PHANTOM_DownloadCount_);
   createParam(PHANTOM_DownloadFrameModeString,        asynParamInt32,         &PHANTOM_DownloadFrameMode_);
+  createParam(PHANTOM_DownloadSpeedString,            asynParamInt32,         &PHANTOM_DownloadSpeed_);
   createParam(PHANTOM_MarkCineSavedString,            asynParamInt32,         &PHANTOM_MarkCineSaved_);
   createParam(PHANTOM_CineSaveCFString,               asynParamInt32,         &PHANTOM_CineSaveCF_);
   createParam(PHANTOM_DeleteString,                   asynParamInt32,         &PHANTOM_Delete_);
@@ -2342,7 +2344,22 @@ asynStatus ADPhantom::writeInt32(asynUser *pasynUser, epicsInt32 value)
       status |= asynError;
     }
     else{
-      if (value==0){
+      int downloadSpeed = 0;
+      getIntegerParam(PHANTOM_DownloadSpeed_, &downloadSpeed);
+      if (value==4){
+        bitDepth_ = 10;
+        phantomToken_ = "P10";
+      }
+      else if (value==5){
+        bitDepth_ = 12;
+        phantomToken_ = "P12L";
+      }
+      else if(downloadSpeed){
+        setStringParam(ADStatusMessage, "Only P10 and P12L formats available for 10G downloads");  
+        setIntegerParam(ADStatus, ADStatusError);
+        status |= asynError;
+      }
+      else if (value==0){
         bitDepth_ = 8;
         phantomToken_ = "8";
       }
@@ -2358,17 +2375,27 @@ asynStatus ADPhantom::writeInt32(asynUser *pasynUser, epicsInt32 value)
         bitDepth_ = 16;
         phantomToken_ = "P16R";
       }
-      else if (value==4){
-        bitDepth_ = 10;
-        phantomToken_ = "P10";
-      }
-      else if (value==5){
-        bitDepth_ = 12;
-        phantomToken_ = "P12L";
-      }
       else{
         printf("Invalid Data Format selected!\n");
         status = asynError;
+      }
+    }
+  }
+  else if(function == PHANTOM_DownloadSpeed_){
+    int downloadCount = 0;
+    getIntegerParam(PHANTOM_DownloadCount_, &downloadCount);
+    if(downloadCount){
+      setStringParam(ADStatusMessage, "Cannot change download speed while downloading!");  
+      setIntegerParam(ADStatus, ADStatusError);
+      status |= asynError;
+    }
+    else if(value ==1){ //10G mode being set and so limited data formats available
+      int dataFormat =0;
+      getIntegerParam(PHANTOM_DataFormat_, &dataFormat);
+      if(dataFormat != 4 && dataFormat !=5){ //Set to P10 mode
+        setIntegerParam(PHANTOM_DataFormat_, 4);
+        bitDepth_ = 10;
+        phantomToken_ = "P10";
       }
     }
   }
@@ -3430,6 +3457,7 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
   int last_frame = 0;
   int frames = 0;
   int num_cines = 0;
+  int tenG_download = 0;
   int metaExposure = 0;
   int metaRate = 0;
   int metaFrame = 0; //Frame as specified in cine
@@ -3441,11 +3469,15 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
   int markSaved = 0;
   unsigned int first_tv_sec = 0;
   unsigned int first_tv_usec = 0;
+  unsigned char packet_id = 0; //Tracks packet_ids between frames for 10G downloads
   int status = asynSuccess;
 
   status = getCameraDataStruc("irig", paramMap_);
   status = stringToInteger(paramMap_["irig.yearbegin"].getValue(), irigYear);
 
+  //Read download speed
+  getIntegerParam(PHANTOM_DownloadSpeed_, &tenG_download);
+  
   //Read total number of cines
   getIntegerParam(PHANTOM_GetCineCount_, &num_cines);
 
@@ -3508,13 +3540,29 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
     debug(functionName, "Height", height);
     debug(functionName, "nBytes", nBytes);
 
-
-    // Flush the data connection
-    pasynOctetSyncIO->flush(dataChannel_);
-    sprintf(command, "img {cine:%d, start:%d, cnt:%d, fmt:%s}", cine, first_frame, frames, phantomToken_.c_str());  
+    if(tenG_download){
+      sprintf(command, "ximg {cine:%d, start:%d, cnt:%d, fmt:%s, dest:%s}", cine, first_frame, frames, phantomToken_.c_str(), macAddress_); 
+      const int snapshot_length = 1504;
+      handle_ = pcap_create("p1p1", error_buffer);
+      pcap_set_timeout( handle_, 10000);
+      pcap_set_snaplen( handle_, snapshot_length);
+      pcap_set_buffer_size( handle_, 2000000000);
+      pcap_set_immediate_mode(handle_, 1);
+      pcap_activate(handle_);
+      if (handle_ == NULL) {
+        debug(functionName, "Could not open device:", error_buffer);
+      }
+    }
+    else{
+      // Flush the data connection
+      pasynOctetSyncIO->flush(dataChannel_);
+      sprintf(command, "img {cine:%d, start:%d, cnt:%d, fmt:%s}", cine, first_frame, frames, phantomToken_.c_str());  
+    }
     status = sendSimpleCommand(command, &response);
     debug(functionName, "Command", command);
     debug(functionName, "Response", response);
+
+
     if (frame == 0){
       short_time_stamp32 tss = timestampData_[total_frame];
       first_tv_sec = (ntohl(tss.csecs) / 100) + irigYear;
@@ -3525,22 +3573,18 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
       if(abort){
         setStringParam(ADStatusMessage, "Download aborting");
         //To abort cleanly we disconnect from the port to restart the datastream
-        debug(functionName, "Running common connect");
         status = pasynCommonSyncIO->connect(dataPort_, 0, &commonDataport_, NULL);
         if (status){
           debug(functionName, "Common connect failed");
         }
-        debug(functionName, "Running pasynCommonSyncIO->disconnectDevice");
         status = pasynCommonSyncIO->disconnectDevice(commonDataport_);
         if (status) {
           debug(functionName, "Disconnect device failed");
         }
-        debug(functionName, "Running pasynCommonSyncIO->connectDevice");
         status = pasynCommonSyncIO->connectDevice(commonDataport_);
         if (status) {
           debug(functionName, "Connect device failed");
         }
-        debug(functionName, "Running attachToPort");
         status = attachToPort("dataPort");
         if(status){
           debug(functionName, "Failed to attach ");
@@ -3562,7 +3606,15 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
       //printf("Time taken for driver to process new data %d\n", (int)delta_ms);
       //
 
-      status = this->readFrame(nBytes);
+      if(tenG_download){
+        status = this->readFrame10G(nBytes, frame, packet_id);
+      }
+      else{
+        status = this->readFrame(nBytes);
+      }
+      if(status != asynSuccess){
+        break;
+      }
 
       // Lock the number of bytes to prevent race condition
       // Send event to conversion threads to start converting their slice of the new data
@@ -3693,7 +3745,7 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
       }
     }
     //mark cine as saved/reusable after download
-    if(!abort){
+    if(!abort && status == asynSuccess){
       getIntegerParam(PHANTOM_MarkCineSaved_, &markSaved);
       if(markSaved){
         sprintf(command, "rel %d", cine);
@@ -3703,7 +3755,7 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
       }
     }
 
-  } while (cine++ != end_cine && !abort);
+  } while (cine++ != end_cine && !abort && status == asynSuccess);
 
   setIntegerParam(PHANTOM_DownloadCount_, 0);
   callParamCallbacks();
@@ -3756,6 +3808,118 @@ asynStatus ADPhantom::readFrame(int bytes)
     clock_gettime(CLOCK_MONOTONIC_RAW, &frameStart_);
     //
   }
+  return status;
+}
+
+asynStatus ADPhantom::readFrame10G(int bytes, int frameNo, unsigned char & packet_id)
+{
+  const char * functionName = "ADPhantom::readFrame10G";
+  asynStatus status = asynSuccess;
+  char *dataPtr = data_;
+  struct pcap_pkthdr * header = (pcap_pkthdr *)calloc(1, sizeof(pcap_pkthdr));
+  struct ether_header *eth_header;
+  const unsigned char * packet;
+  const unsigned char * payload;
+  const int payload_bytes = 1472;
+  const int num_packets = bytes/payload_bytes + ((bytes%payload_bytes) ? 1 : 0);
+  const int ethernet_header_length = 14;
+  const int ethernet_extended_header_length = 5;
+  const int phantom_packet_header_length = 13;
+  int payload_length = 0;
+  int total_packets = 0;
+  int pcap_state = 0; //Tracks error state if buffer times out waiting for packet
+  struct timespec lastValidFrame; //Tracks last valid frame to avoid looping forever
+  struct timespec currTime; //Struct for reading in current time
+  const int timeout = 10; //Seconds readframe will wait without recieving a valid dataframe before exiting
+
+  clock_gettime(CLOCK_MONOTONIC_RAW, &readStart_);
+  clock_gettime(CLOCK_MONOTONIC_RAW, &lastValidFrame);
+
+  debug(functionName, "Starting download of frame ", frameNo);
+
+  while(total_packets< num_packets){
+    //packet = pcap_next(handle_, header);
+    pcap_state = pcap_next_ex(handle_, &header, &packet);
+
+    if(pcap_state == 0){
+      debug(functionName, "Buffer timeout waiting for packet in frame ", frameNo);
+      setIntegerParam(ADStatus, ADStatusError);
+      setStringParam(ADStatusMessage, "Timeout waiting for packet");
+      status = asynError;
+      break;
+    }
+
+    eth_header = (struct ether_header *) packet;
+
+    if (ntohs(eth_header->ether_type) != ETHERTYPE_IEEE802A) { //discards unrelated packets
+        clock_gettime(CLOCK_MONOTONIC_RAW, &currTime);
+        if( (currTime.tv_sec - lastValidFrame.tv_sec) > timeout){
+          debug(functionName, "Timeout waiting for valid packet in frame ", frameNo);
+          setIntegerParam(ADStatus, ADStatusError);
+          setStringParam(ADStatusMessage, "Timeout waiting for valid packet");
+          status =  asynError;
+          break;
+        }
+        else{
+          continue;
+        }
+    }
+    clock_gettime(CLOCK_MONOTONIC_RAW, &lastValidFrame);
+    unsigned char curr_packet_id = *(packet+ethernet_header_length +3); //ID which iterates by one each packet up to 256
+    unsigned char pid_difference = curr_packet_id-packet_id;
+    if(frameNo!= 0 && pid_difference > 1){
+      debug(functionName, "Packets missed in frame ", frameNo);
+      setStringParam(ADStatusMessage, "Packets missed in download");
+      const int missed_bytes = (pid_difference -1) * payload_bytes;
+      char* current_pos = dataPtr + total_packets*payload_bytes;
+      char * const end_pos = ( (current_pos + missed_bytes) < (dataPtr + sizeof(dataPtr)/sizeof(dataPtr[0]) ) ? current_pos + missed_bytes: dataPtr + sizeof(dataPtr)/sizeof(dataPtr[0])-1 );
+      while( current_pos < end_pos){
+        //Sets missed bytes to 0 such that we don't carry over data from last frame
+        *current_pos++ = 0;
+      }
+      total_packets += (pid_difference -1);
+      if( total_packets > num_packets){
+        debug(functionName, "Final packet missed in frame ", frameNo);
+        unsigned char overshot_packets = total_packets - num_packets;
+        packet_id = curr_packet_id - overshot_packets; //Sets packet_id to value last packet should have taken
+        break; //This does result in this packet being missing in the following frame
+      }
+    }
+
+    payload_length = header->caplen - (ethernet_header_length + ethernet_extended_header_length + phantom_packet_header_length);
+    payload = packet + ethernet_header_length + ethernet_extended_header_length + phantom_packet_header_length;
+    memcpy(dataPtr + total_packets*payload_bytes, payload, payload_length);
+
+    packet_id = curr_packet_id;
+    if( payload_length < payload_bytes){ //The final packet of a frame is shorter
+        if(total_packets != (num_packets-1)){
+          debug(functionName, "Final packet reached unexpectedly. A large number of packets have been dropped in frame ", frameNo);
+          setStringParam(ADStatusMessage, "Large no. of packets missed in download");
+        }
+        break;
+    }      
+    total_packets++;
+  }
+
+  //Time Profiling
+  struct timespec endTime;
+  clock_gettime(CLOCK_MONOTONIC_RAW, &endTime);
+
+  uint64_t delta_ms = (endTime.tv_sec - readStart_.tv_sec) * 1000 + (endTime.tv_nsec - readStart_.tv_nsec) / 1000000; 
+  debug(functionName, "Time taken to get frame from network interface (msec)", (int)delta_ms);
+  //printf("Time taken to get frame from network interface (msec) %d\n", (int)delta_ms);
+
+  delta_ms = (endTime.tv_sec - frameStart_.tv_sec) * 1000 + (endTime.tv_nsec - frameStart_.tv_nsec) / 1000000; 
+  debug(functionName, "Total time taken to read 1 frame (msec)", (int)delta_ms);
+  //printf("Total time taken to read 1 frame (msec) %d\n", (int)delta_ms);
+  //printf("======================================\n");
+  if (delta_ms>0){
+    setIntegerParam(PHANTOM_FramesPerSecond_, (int)(1000/delta_ms));
+  }
+  callParamCallbacks();
+  clock_gettime(CLOCK_MONOTONIC_RAW, &frameStart_);
+
+
   return status;
 }
 
@@ -4664,13 +4828,14 @@ asynStatus ADPhantom::debugLevel(const std::string& method, int onOff)
 {
   if (method == "all"){
     debugMap_["ADPhantom::ADPhantom"]                = onOff;
-    debugMap_["ADPhantom::phantomConversionTask"]           = onOff;
+    debugMap_["ADPhantom::phantomConversionTask"]    = onOff;
     debugMap_["ADPhantom::phantomCameraTask"]        = onOff;
     debugMap_["ADPhantom::phantomDownloadTask"]      = onOff;
     debugMap_["ADPhantom::phantomPreviewTask"]       = onOff;
     debugMap_["ADPhantom::readoutPreviewData"]       = onOff;
     debugMap_["ADPhantom::deleteCineFiles"]          = onOff;
     debugMap_["ADPhantom::readFrame"]                = onOff;
+    debugMap_["ADPhantom::readFrame10G"]             = onOff;
     debugMap_["ADPhantom::downloadFlashFile"]        = onOff;
     debugMap_["ADPhantom::connect"]                  = onOff;    
     debugMap_["ADPhantom::readEnum"]                 = onOff;
@@ -4781,10 +4946,11 @@ asynStatus ADPhantom::debug(const std::string& method, const std::string& msg, s
 static const iocshArg ADPhantomConfigArg0 = {"portName", iocshArgString};
 static const iocshArg ADPhantomConfigArg1 = {"Control Port Name", iocshArgString};
 static const iocshArg ADPhantomConfigArg2 = {"Data Port Name", iocshArgString};
-static const iocshArg ADPhantomConfigArg3 = {"Max number of NDArray buffers", iocshArgInt};
-static const iocshArg ADPhantomConfigArg4 = {"maxMemory", iocshArgInt};
-static const iocshArg ADPhantomConfigArg5 = {"priority", iocshArgInt};
-static const iocshArg ADPhantomConfigArg6 = {"stackSize", iocshArgInt};
+static const iocshArg ADPhantomConfigArg3 = {"Data Connection MAC address", iocshArgString};
+static const iocshArg ADPhantomConfigArg4 = {"Max number of NDArray buffers", iocshArgInt};
+static const iocshArg ADPhantomConfigArg5 = {"maxMemory", iocshArgInt};
+static const iocshArg ADPhantomConfigArg6 = {"priority", iocshArgInt};
+static const iocshArg ADPhantomConfigArg7 = {"stackSize", iocshArgInt};
 
 static const iocshArg * const ADPhantomConfigArgs[] =  {&ADPhantomConfigArg0,
                                                             &ADPhantomConfigArg1,
@@ -4792,13 +4958,14 @@ static const iocshArg * const ADPhantomConfigArgs[] =  {&ADPhantomConfigArg0,
                                                             &ADPhantomConfigArg3,
                                                             &ADPhantomConfigArg4,
                                                             &ADPhantomConfigArg5,
-                                                            &ADPhantomConfigArg6};
+                                                            &ADPhantomConfigArg6,
+                                                            &ADPhantomConfigArg7};
 
-static const iocshFuncDef configADPhantom = {"ADPhantomConfig", 7, ADPhantomConfigArgs};
+static const iocshFuncDef configADPhantom = {"ADPhantomConfig", 8, ADPhantomConfigArgs};
 
 static void configADPhantomCallFunc(const iocshArgBuf *args)
 {
-    ADPhantomConfig(args[0].sval, args[1].sval, args[2].sval, args[3].ival, args[4].ival, args[5].ival, args[6].ival);
+    ADPhantomConfig(args[0].sval, args[1].sval, args[2].sval, args[3].sval, args[4].ival, args[5].ival, args[6].ival, args[7].ival);
 }
 
 // Code required for setting the debug level of the PHANTOM camera

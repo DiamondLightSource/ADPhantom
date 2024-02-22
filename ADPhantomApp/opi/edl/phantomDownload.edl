@@ -3,10 +3,10 @@ beginScreenProperties
 major 4
 minor 0
 release 1
-x 702
-y 309
+x 816
+y 371
 w 401
-h 280
+h 318
 font "arial-bold-r-12.0"
 fontAlign "center"
 ctlFont "arial-bold-r-12.0"
@@ -48,7 +48,7 @@ release 0
 x 5
 y 9
 w 390
-h 255
+h 285
 lineColor index 14
 fill
 fillColor index 3
@@ -174,8 +174,8 @@ beginObjectProperties
 major 10
 minor 0
 release 0
-x 142
-y 228
+x 143
+y 257
 w 85
 h 20
 controlPv "$(P)$(R)DownloadCount_RBV"
@@ -193,8 +193,8 @@ beginObjectProperties
 major 4
 minor 1
 release 1
-x 17
-y 233
+x 18
+y 262
 w 112
 h 13
 font "arial-bold-r-12.0"
@@ -213,8 +213,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 270
-y 210
+x 271
+y 239
 w 85
 h 30
 
@@ -226,8 +226,8 @@ beginObjectProperties
 major 4
 minor 1
 release 1
-x 270
-y 210
+x 271
+y 239
 w 85
 h 30
 font "arial-bold-r-12.0"
@@ -255,8 +255,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 270
-y 210
+x 271
+y 239
 w 85
 h 30
 
@@ -268,8 +268,8 @@ beginObjectProperties
 major 4
 minor 1
 release 0
-x 270
-y 210
+x 271
+y 239
 w 85
 h 30
 fgColor index 20
@@ -471,8 +471,8 @@ beginObjectProperties
 major 4
 minor 1
 release 1
-x 17
-y 168
+x 18
+y 197
 w 108
 h 13
 font "arial-bold-r-12.0"
@@ -491,8 +491,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 142
-y 163
+x 143
+y 192
 w 110
 h 25
 fgColor index 14
@@ -511,8 +511,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 270
-y 175
+x 271
+y 204
 w 85
 h 30
 
@@ -524,8 +524,8 @@ beginObjectProperties
 major 4
 minor 1
 release 0
-x 270
-y 175
+x 271
+y 204
 w 85
 h 30
 fgColor index 20
@@ -555,8 +555,8 @@ beginObjectProperties
 major 4
 minor 1
 release 1
-x 17
-y 198
+x 18
+y 227
 w 106
 h 13
 font "arial-bold-r-12.0"
@@ -575,8 +575,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 142
-y 193
+x 143
+y 222
 w 110
 h 25
 fgColor index 14
@@ -595,8 +595,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 142
-y 133
+x 143
+y 162
 w 110
 h 25
 fgColor index 14
@@ -605,6 +605,7 @@ inconsistentColor index 3
 topShadowColor index 1
 botShadowColor index 11
 controlPv "$(P)$(R)SelectPixelDataFormat"
+indicatorPv "$(P)$(R)SelectPixelDataFormat_RBV"
 font "arial-bold-r-12.0"
 endObjectProperties
 
@@ -614,8 +615,8 @@ beginObjectProperties
 major 4
 minor 1
 release 1
-x 18
-y 136
+x 19
+y 165
 w 92
 h 20
 font "arial-bold-r-12.0"
@@ -624,6 +625,45 @@ bgColor index 3
 useDisplayBg
 value {
   "Pixel Token:"
+}
+endObjectProperties
+
+# (Menu Button)
+object activeMenuButtonClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 143
+y 132
+w 110
+h 25
+fgColor index 14
+bgColor index 3
+inconsistentColor index 3
+topShadowColor index 1
+botShadowColor index 11
+controlPv "$(P)$(R)DownloadSpeed"
+indicatorPv "$(P)$(R)DownloadSpeed_RBV"
+font "arial-bold-r-12.0"
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 19
+y 135
+w 110
+h 20
+font "arial-bold-r-12.0"
+fgColor index 14
+bgColor index 3
+useDisplayBg
+value {
+  "Download Speed:"
 }
 endObjectProperties
 

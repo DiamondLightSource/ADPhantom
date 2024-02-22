@@ -33,8 +33,19 @@
 #include "asynOctetSyncIO.h"
 #include "asynCommonSyncIO.h"
 
+// libpcap include
+#include <pcap/pcap.h>
+#include <netinet/in.h>
+#include <netinet/if_ether.h>
+
 // Phantom camera PH16 protocol data definitions
 #include <ph16UnitStructure.h>
+
+
+//Required for 10gig connection
+#ifndef ETHERTYPE_IEEE802A
+#define ETHERTYPE_IEEE802A 0x88B7
+#endif
 
 // Protocol buffer size is 64K
 #define PHANTOM_MAX_STRING 8192
@@ -166,6 +177,7 @@
 #define PHANTOM_DownloadAbortString            "PHANTOM_DOWNLOAD_ABORT"
 #define PHANTOM_DownloadCountString            "PHANTOM_DOWNLOAD_COUNT"
 #define PHANTOM_DownloadFrameModeString        "PHANTOM_DOWNLOAD_FRAME_MODE"
+#define PHANTOM_DownloadSpeedString            "PHANTOM_DOWNLOAD_SPEED"
 #define PHANTOM_MarkCineSavedString            "PHANTOM_MARK_CINE_SAVED"
 #define PHANTOM_CineSaveCFString               "PHANTOM_CINE_SAVE_CF"       // Save selected cine to flash
 
@@ -593,7 +605,7 @@ public:
 class ADPhantom: public ADDriver
 {
   public:
-    ADPhantom(const char *portName, const char *ctrlPort, const char *dataPort, int maxBuffers, size_t maxMemory, int priority, int stackSize);
+    ADPhantom(const char *portName, const char *ctrlPort, const char *dataPort, const char *macAddress, int maxBuffers, size_t maxMemory, int priority, int stackSize);
     virtual ~ADPhantom();
     void phantomCameraTask();
     void phantomStatusTask();
@@ -631,6 +643,7 @@ class ADPhantom: public ADDriver
     asynStatus convert10BitPacketTo16Bit(unsigned char *input, unsigned char *output);
     asynStatus convert8BitPacketTo16Bit(unsigned char *input, unsigned char *output, int nBytes);
     asynStatus readFrame(int bytes);
+    asynStatus readFrame10G(int bytes, int frame_no, unsigned char & packet_id);
     asynStatus updatePreviewCine();
     asynStatus updateCine(int cine);
     asynStatus selectCine(int cine);
@@ -715,6 +728,7 @@ class ADPhantom: public ADDriver
     int PHANTOM_DownloadAbort_;
     int PHANTOM_DownloadCount_;
     int PHANTOM_DownloadFrameMode_;
+    int PHANTOM_DownloadSpeed_;
     int PHANTOM_MarkCineSaved_;
     int PHANTOM_CineSaveCF_;
     int PHANTOM_Delete_;
@@ -806,8 +820,11 @@ class ADPhantom: public ADDriver
     asynUser                           *portUser_;
     asynUser                           *dataChannel_;
     asynUser                           *commonDataport_;
+    pcap_t                             *handle_;
+    char                               error_buffer[256];
     char                               ctrlPort_[128];
     char                               dataPort_[128];
+    char                               macAddress_[14];
     char                               data_[2048000];
     char                               imgData_[2048000];
     char                               flashData_[2048000];

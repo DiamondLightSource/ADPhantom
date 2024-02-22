@@ -32,7 +32,7 @@ class ADPhantom(AsynPort):
     DbdFileList = ['ADPhantomSupport']
     UniqueName = "PORT"
 
-    def __init__(self, PORT, P="P", R="R", ADDR=0, TIMEOUT=1000, CTRLPORT="CTRLPORT", DATAPORT="DATAPORT", CINE=0, **args):
+    def __init__(self, PORT, P="P", R="R", ADDR=0, TIMEOUT=1000, CTRLPORT="CTRLPORT", DATAPORT="DATAPORT", MACADDRESS="MACADDRESS", CINE=0, **args):
     
         # Call init on Device superclass
         self.__super.__init__(PORT)
@@ -46,6 +46,7 @@ class ADPhantom(AsynPort):
         self.TIMEOUT = TIMEOUT
         self.CTRLPORT = CTRLPORT
         self.DATAPORT = DATAPORT
+        self.MACADDRESS = MACADDRESS
         self.CINE = CINE
 
         # Update the attributes of self from the commandline args
@@ -66,8 +67,8 @@ class ADPhantom(AsynPort):
     def Initialise(self):
         # Print the command to create the device in the startup script
         print "# Create driver"
-        print "# ADPhantomConfig(const char *portName, const char *ctrlPort, const char *dataPort, int maxBuffers, size_t maxMemory, int priority,  int stackSize)"
-        print "ADPhantomConfig(\"{0}\",\"{1}\",\"{2}\", 0, 0, 0,  0)".format(self.PORT, self.CTRLPORT, self.DATAPORT)
+        print "# ADPhantomConfig(const char *portName, const char *ctrlPort, const char *dataPort, const char * macAddress, int maxBuffers, size_t maxMemory, int priority,  int stackSize)"
+        print "ADPhantomConfig(\"{0}\",\"{1}\",\"{2}\", \"{3}\",0, 0, 0,  0)".format(self.PORT, self.CTRLPORT, self.DATAPORT, self.MACADDRESS)
     
     # tell xmlbuilder what args to supply
     ArgInfo = ADBaseTemplate.ArgInfo + phantomCameraTemplate.ArgInfo + makeArgInfo(__init__,
@@ -78,6 +79,7 @@ class ADPhantom(AsynPort):
         TIMEOUT = Simple("Timeout for communications, ms", int),
         CTRLPORT = Simple("Device Ports", str),
         DATAPORT = Simple("Device Ports", str),
+        MACADDRESS = Simple("Server MAC address", str),
         CINE     = Simple("cine", int))
     
         
