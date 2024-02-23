@@ -3867,8 +3867,9 @@ asynStatus ADPhantom::readFrame10G(int bytes, int frameNo, unsigned char & packe
     clock_gettime(CLOCK_MONOTONIC_RAW, &lastValidFrame);
     unsigned char curr_packet_id = *(packet+ethernet_header_length +3); //ID which iterates by one each packet up to 256
     unsigned char pid_difference = curr_packet_id-packet_id;
-    if(frameNo!= 0 && pid_difference > 1){
+    if(frameNo!= 1 && pid_difference > 1){
       debug(functionName, "Packets missed in frame ", frameNo);
+      debug(functionName, "Number of packets missed: ", pid_difference);
       setStringParam(ADStatusMessage, "Packets missed in download");
       const int missed_bytes = (pid_difference -1) * payload_bytes;
       char* current_pos = dataPtr + total_packets*payload_bytes;
