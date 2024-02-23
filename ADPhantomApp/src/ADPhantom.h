@@ -608,7 +608,7 @@ public:
 class ADPhantom: public ADDriver
 {
   public:
-    ADPhantom(const char *portName, const char *ctrlPort, const char *dataPort, const char *macAddress, int maxBuffers, size_t maxMemory, int priority, int stackSize);
+    ADPhantom(const char *portName, const char *ctrlPort, const char *dataPort, const char *macAddress, const char *interface, int maxBuffers, size_t maxMemory, int priority, int stackSize);
     virtual ~ADPhantom();
     void phantomCameraTask();
     void phantomStatusTask();
@@ -828,6 +828,7 @@ class ADPhantom: public ADDriver
     char                               ctrlPort_[128];
     char                               dataPort_[128];
     char                               macAddress_[14];
+    char                               interface_[128];
     char                               data_[2048000];
     char                               imgData_[2048000];
     char                               flashData_[2048000];

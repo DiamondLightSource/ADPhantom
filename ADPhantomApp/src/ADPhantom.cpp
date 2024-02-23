@@ -843,9 +843,9 @@ const char *ADPhantom::PHANTOM_CfFileDateString[] = {
  */
 extern "C"
 {
-  int ADPhantomConfig(const char *portName, const char *ctrlPort, const char *dataPort, const char *macAddress, int maxBuffers, size_t maxMemory, int priority,	int stackSize)
+  int ADPhantomConfig(const char *portName, const char *ctrlPort, const char *dataPort, const char *macAddress, const char *interface, int maxBuffers, size_t maxMemory, int priority,	int stackSize)
   {
-    new ADPhantom(portName, ctrlPort, dataPort, macAddress, maxBuffers, maxMemory, priority, stackSize);
+    new ADPhantom(portName, ctrlPort, dataPort, macAddress, interface, maxBuffers, maxMemory, priority, stackSize);
     return asynSuccess;
   }
 
@@ -924,7 +924,7 @@ ADPhantom::~ADPhantom()
 {
 }
 
-ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dataPort, const char * macAddress, int maxBuffers, size_t maxMemory, int priority, int stackSize) :
+ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dataPort, const char * macAddress, const char* interface, int maxBuffers, size_t maxMemory, int priority, int stackSize) :
 /** 
     Constructor for the ADDriver class. 
 [in]	portNameIn	The name of the asyn port.
@@ -980,6 +980,7 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   dataChannel_ = NULL;
   strcpy(ctrlPort_, ctrlPort);
   strcpy(dataPort_, dataPort);
+  strcpy(interface_, interface);
   strncpy(macAddress_, macAddress, 12);
   
   // Create the epicsEvents for signalling to the PHANTOM task when acquisition starts
@@ -3566,10 +3567,10 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
       if(tenG_download){
         sprintf(command, "ximg {cine:%d, start:%d, cnt:%d, fmt:%s, dest:%s}", cine, step_first_frame, step_frames, phantomToken_.c_str(), macAddress_); 
         const int snapshot_length = 1504;
-        handle_ = pcap_create("p1p1", error_buffer);
+        handle_ = pcap_create(interface_, error_buffer);
         pcap_set_timeout( handle_, 10000);
         pcap_set_snaplen( handle_, snapshot_length);
-        pcap_set_buffer_size( handle_, 2000000000);
+        pcap_set_buffer_size( handle_, TWO_GB_IN_BYTES);
         pcap_set_immediate_mode(handle_, 1);
         pcap_activate(handle_);
         if (handle_ == NULL) {
@@ -4973,10 +4974,11 @@ static const iocshArg ADPhantomConfigArg0 = {"portName", iocshArgString};
 static const iocshArg ADPhantomConfigArg1 = {"Control Port Name", iocshArgString};
 static const iocshArg ADPhantomConfigArg2 = {"Data Port Name", iocshArgString};
 static const iocshArg ADPhantomConfigArg3 = {"Data Connection MAC address", iocshArgString};
-static const iocshArg ADPhantomConfigArg4 = {"Max number of NDArray buffers", iocshArgInt};
-static const iocshArg ADPhantomConfigArg5 = {"maxMemory", iocshArgInt};
-static const iocshArg ADPhantomConfigArg6 = {"priority", iocshArgInt};
-static const iocshArg ADPhantomConfigArg7 = {"stackSize", iocshArgInt};
+static const iocshArg ADPhantomConfigArg4 = {"Data Connection Interface", iocshArgString};
+static const iocshArg ADPhantomConfigArg5 = {"Max number of NDArray buffers", iocshArgInt};
+static const iocshArg ADPhantomConfigArg6 = {"maxMemory", iocshArgInt};
+static const iocshArg ADPhantomConfigArg7 = {"priority", iocshArgInt};
+static const iocshArg ADPhantomConfigArg8 = {"stackSize", iocshArgInt};
 
 static const iocshArg * const ADPhantomConfigArgs[] =  {&ADPhantomConfigArg0,
                                                             &ADPhantomConfigArg1,
@@ -4985,13 +4987,14 @@ static const iocshArg * const ADPhantomConfigArgs[] =  {&ADPhantomConfigArg0,
                                                             &ADPhantomConfigArg4,
                                                             &ADPhantomConfigArg5,
                                                             &ADPhantomConfigArg6,
-                                                            &ADPhantomConfigArg7};
+                                                            &ADPhantomConfigArg7,
+                                                            &ADPhantomConfigArg8};
 
-static const iocshFuncDef configADPhantom = {"ADPhantomConfig", 8, ADPhantomConfigArgs};
+static const iocshFuncDef configADPhantom = {"ADPhantomConfig", 9, ADPhantomConfigArgs};
 
 static void configADPhantomCallFunc(const iocshArgBuf *args)
 {
-    ADPhantomConfig(args[0].sval, args[1].sval, args[2].sval, args[3].sval, args[4].ival, args[5].ival, args[6].ival, args[7].ival);
+    ADPhantomConfig(args[0].sval, args[1].sval, args[2].sval, args[3].sval, args[4].sval, args[5].ival, args[6].ival, args[7].ival, args[8].ival);
 }
 
 // Code required for setting the debug level of the PHANTOM camera
