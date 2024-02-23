@@ -3447,6 +3447,7 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
   int nBytes = 0;
   int frame = 0; //Frame within cine
   int total_frame = 0; //Frame within all cines being downloaded
+  int step_frame = 0; //Frame within download step due to splitting into 2GB chunks
   std::string response;
   NDArray *pImage;
   size_t dims[2];
@@ -3540,218 +3541,242 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
     debug(functionName, "Height", height);
     debug(functionName, "nBytes", nBytes);
 
-    if(tenG_download){
-      sprintf(command, "ximg {cine:%d, start:%d, cnt:%d, fmt:%s, dest:%s}", cine, first_frame, frames, phantomToken_.c_str(), macAddress_); 
-      const int snapshot_length = 1504;
-      handle_ = pcap_create("p1p1", error_buffer);
-      pcap_set_timeout( handle_, 10000);
-      pcap_set_snaplen( handle_, snapshot_length);
-      pcap_set_buffer_size( handle_, 2000000000);
-      pcap_set_immediate_mode(handle_, 1);
-      pcap_activate(handle_);
-      if (handle_ == NULL) {
-        debug(functionName, "Could not open device:", error_buffer);
-      }
-    }
-    else{
-      // Flush the data connection
-      pasynOctetSyncIO->flush(dataChannel_);
-      sprintf(command, "img {cine:%d, start:%d, cnt:%d, fmt:%s}", cine, first_frame, frames, phantomToken_.c_str());  
-    }
-    status = sendSimpleCommand(command, &response);
-    debug(functionName, "Command", command);
-    debug(functionName, "Response", response);
+    const int frames_per_2GB = TWO_GB_IN_BYTES/nBytes;
+    const int download_steps = frames/frames_per_2GB + ((frames%frames_per_2GB) ? 1: 0);
+    int step_first_frame;
+    int step_frames;
+    debug(functionName, "No. of steps to break cine download into: ", download_steps);
 
-
-    if (frame == 0){
-      short_time_stamp32 tss = timestampData_[total_frame];
-      first_tv_sec = (ntohl(tss.csecs) / 100) + irigYear;
-      first_tv_usec = ((ntohl(tss.csecs) % 100) * 10000) + (ntohs(tss.frac) >> 2);
-    }
-    while ((frame < frames) && (status == asynSuccess)){
-      getIntegerParam(PHANTOM_DownloadAbort_, &abort);
-      if(abort){
-        setStringParam(ADStatusMessage, "Download aborting");
-        //To abort cleanly we disconnect from the port to restart the datastream
-        status = pasynCommonSyncIO->connect(dataPort_, 0, &commonDataport_, NULL);
-        if (status){
-          debug(functionName, "Common connect failed");
-        }
-        status = pasynCommonSyncIO->disconnectDevice(commonDataport_);
-        if (status) {
-          debug(functionName, "Disconnect device failed");
-        }
-        status = pasynCommonSyncIO->connectDevice(commonDataport_);
-        if (status) {
-          debug(functionName, "Connect device failed");
-        }
-        status = attachToPort("dataPort");
-        if(status){
-          debug(functionName, "Failed to attach ");
-        }
-        break;
-      }
-
-      metaFrame = start_frame+frame;
-      frame++;
-      total_frame++;
-      setIntegerParam(PHANTOM_DownloadCount_, total_frame);
-      callParamCallbacks();
-          
-      //Time profiling
-      struct timespec endTime;
-      clock_gettime(CLOCK_MONOTONIC_RAW, &endTime);
-      uint64_t delta_ms = (endTime.tv_sec - frameStart_.tv_sec) * 1000 + (endTime.tv_nsec - frameStart_.tv_nsec) / 1000000; 
-      debug(functionName, "Time taken for driver to process new data", (int)delta_ms);
-      //printf("Time taken for driver to process new data %d\n", (int)delta_ms);
-      //
-
-      if(tenG_download){
-        status = this->readFrame10G(nBytes, frame, packet_id);
+    for(int step{0}; step < download_steps; step++ ){ 
+      //Breaks downloads into 2GB chunks as individual download commands shouldn't be > 2GB according to documentation
+      debug(functionName, "Download step: ", step);
+      step_first_frame = first_frame + step*frames_per_2GB;
+      if(step == download_steps-1){
+        step_frames = last_frame - step_first_frame +1;
       }
       else{
-        status = this->readFrame(nBytes);
+        step_frames = frames_per_2GB;
       }
-      if(status != asynSuccess){
-        break;
-      }
+      step_frame = 0;
 
-      // Lock the number of bytes to prevent race condition
-      // Send event to conversion threads to start converting their slice of the new data
-      // Unlock
-      // Wait for all conv threads to send the finished event
-      // Lock
-      conversionBitDepth_ = bitDepth_;
-      conversionBytes_ = nBytes;
-      for (int i =0; i<PHANTOM_CONV_THREADS; i++){
-        epicsEventSignal(convStartEvt_[i]);
-      }
-      this->unlock();
-      for (int i =0; i<PHANTOM_CONV_THREADS; i++){
-        status = epicsEventWaitWithTimeout(convFinishEvt_[i], 0.1);
-        if (status == epicsEventWaitTimeout){
-          printf("Asyn timeout on conversion! This shouldnt happen\n");
+      debug(functionName, "Download step: ", step);
+      debug(functionName, "Step first frame: ", step_first_frame);
+      debug(functionName, "Step frames: ", step_frames);
+
+      if(tenG_download){
+        sprintf(command, "ximg {cine:%d, start:%d, cnt:%d, fmt:%s, dest:%s}", cine, step_first_frame, step_frames, phantomToken_.c_str(), macAddress_); 
+        const int snapshot_length = 1504;
+        handle_ = pcap_create("p1p1", error_buffer);
+        pcap_set_timeout( handle_, 10000);
+        pcap_set_snaplen( handle_, snapshot_length);
+        pcap_set_buffer_size( handle_, 2000000000);
+        pcap_set_immediate_mode(handle_, 1);
+        pcap_activate(handle_);
+        if (handle_ == NULL) {
+          debug(functionName, "Could not open device:", error_buffer);
         }
       }
-      this->lock();
+      else{
+        // Flush the data connection
+        pasynOctetSyncIO->flush(dataChannel_);
+        sprintf(command, "img {cine:%d, start:%d, cnt:%d, fmt:%s}", cine, step_first_frame, step_frames, phantomToken_.c_str());  
+      }
+      status = sendSimpleCommand(command, &response);
+      debug(functionName, "Command", command);
+      debug(functionName, "Response", response);
 
-      if (status == asynSuccess){
-        // Allocate NDArray memory
-        dims[0] = width;
-        dims[1] = height;
-        setIntegerParam(NDArraySizeX, width);
-        setIntegerParam(NDArraySizeY, height);
+
+      if (frame == 0){
+        short_time_stamp32 tss = timestampData_[total_frame];
+        first_tv_sec = (ntohl(tss.csecs) / 100) + irigYear;
+        first_tv_usec = ((ntohl(tss.csecs) % 100) * 10000) + (ntohs(tss.frac) >> 2);
+      }
+      while ((step_frame < step_frames) && (status == asynSuccess)){
+        getIntegerParam(PHANTOM_DownloadAbort_, &abort);
+        if(abort){
+          setStringParam(ADStatusMessage, "Download aborting");
+          //To abort cleanly we disconnect from the port to restart the datastream
+          status = pasynCommonSyncIO->connect(dataPort_, 0, &commonDataport_, NULL);
+          if (status){
+            debug(functionName, "Common connect failed");
+          }
+          status = pasynCommonSyncIO->disconnectDevice(commonDataport_);
+          if (status) {
+            debug(functionName, "Disconnect device failed");
+          }
+          status = pasynCommonSyncIO->connectDevice(commonDataport_);
+          if (status) {
+            debug(functionName, "Connect device failed");
+          }
+          status = attachToPort("dataPort");
+          if(status){
+            debug(functionName, "Failed to attach ");
+          }
+          break;
+        }
+
+        metaFrame = start_frame+frame;
+        step_frame++;
+        frame++;
+        total_frame++;
+        setIntegerParam(PHANTOM_DownloadCount_, total_frame);
+        callParamCallbacks();
+            
+        //Time profiling
+        struct timespec endTime;
+        clock_gettime(CLOCK_MONOTONIC_RAW, &endTime);
+        uint64_t delta_ms = (endTime.tv_sec - frameStart_.tv_sec) * 1000 + (endTime.tv_nsec - frameStart_.tv_nsec) / 1000000; 
+        debug(functionName, "Time taken for driver to process new data", (int)delta_ms);
+        //printf("Time taken for driver to process new data %d\n", (int)delta_ms);
+        //
+
+        if(tenG_download){
+          status = this->readFrame10G(nBytes, step_frame, packet_id);
+        }
+        else{
+          status = this->readFrame(nBytes);
+        }
+        if(status != asynSuccess){
+          break;
+        }
+
+        // Lock the number of bytes to prevent race condition
+        // Send event to conversion threads to start converting their slice of the new data
+        // Unlock
+        // Wait for all conv threads to send the finished event
+        // Lock
+        conversionBitDepth_ = bitDepth_;
+        conversionBytes_ = nBytes;
+        for (int i =0; i<PHANTOM_CONV_THREADS; i++){
+          epicsEventSignal(convStartEvt_[i]);
+        }
         this->unlock();
-        nbytes = (dims[0] * dims[1]) * sizeof(int16_t);
-        dataType= NDUInt16;
-        pImage = this->pNDArrayPool->alloc(2, dims, dataType, nbytes, NULL);
-
-        if (bitDepth_==10 || bitDepth_==8 || bitDepth_==12){
-          //Use converted data array
-          memcpy(pImage->pData, flashData_, nbytes);
-        }
-        else {
-          memcpy(pImage->pData, data_, nbytes);
-        }
-        pImage->dims[0].size = dims[0];
-        pImage->dims[1].size = dims[1];
-        // Add the frame number attribute
-        pImage->pAttributeList->add("number", "Frame number", NDAttrInt32, (void *)(&metaFrame));
-        // Add the download start frame
-        pImage->pAttributeList->add("rec_first_frame", "First frame of recording", NDAttrInt32, (void *)(&start_frame));
-        // Add the download frame count
-        pImage->pAttributeList->add("rec_frame_count", "Frame count of recording", NDAttrInt32, (void *)(&frames));
-        // Add the partition number
-        pImage->pAttributeList->add("partition", "Partition number", NDAttrInt32, (void *)(&cine));
-        // Add the post trigger frame count
-        pImage->pAttributeList->add("post_trig_frames", "Post trigger frame count", NDAttrInt32, (void *)(&lastfr));
-        // Add the image UniqueID
-        pImage->pAttributeList->add("NDArrayUniqueId", "uniqueId", NDAttrInt32, (void *)(&total_frame));      // Loop over meta array to create attributes
-        // Add the pixel token
-        pImage->pAttributeList->add("pixel_token", "Phantom pixel type token", NDAttrString, (void *)(phantomToken_.c_str()));
-        pImage->uniqueId = total_frame;
-        for (int mc = 0; mc < (int)metaArray_.size(); mc++){
-          if (metaArray_[mc]->type_ == NDAttrInt8){
-            pImage->pAttributeList->add(metaArray_[mc]->name_.c_str(),
-                metaArray_[mc]->desc_.c_str(),
-                NDAttrInt8,
-                (void *)(&metaArray_[mc]->cval_));
-          } else if (metaArray_[mc]->type_ == NDAttrInt32){
-            pImage->pAttributeList->add(metaArray_[mc]->name_.c_str(),
-                metaArray_[mc]->desc_.c_str(),
-                NDAttrInt32,
-                (void *)(&metaArray_[mc]->ival_));
-          } else if (metaArray_[mc]->type_ == NDAttrFloat64){
-            pImage->pAttributeList->add(metaArray_[mc]->name_.c_str(),
-                metaArray_[mc]->desc_.c_str(),
-                NDAttrFloat64,
-                (void *)(&metaArray_[mc]->dval_));
-          } else if (metaArray_[mc]->type_ == NDAttrString){
-            char sval[256];
-            strncpy(sval, metaArray_[mc]->sval_.c_str(), 256);
-            pImage->pAttributeList->add(metaArray_[mc]->name_.c_str(),
-                metaArray_[mc]->desc_.c_str(),
-                NDAttrString,
-                (void *)(sval));
+        for (int i =0; i<PHANTOM_CONV_THREADS; i++){
+          status = epicsEventWaitWithTimeout(convFinishEvt_[i], 0.1);
+          if (status == epicsEventWaitTimeout){
+            printf("Asyn timeout on conversion! This shouldnt happen\n");
           }
         }
-
-        // Add the timing attributes
-        short_time_stamp32 ts = timestampData_[total_frame-1];
-        unsigned int tv_sec = (ntohl(ts.csecs) / 100) + irigYear;
-        pImage->pAttributeList->add("ts_sec", "Timestamp of frames (seconds since 1970)", NDAttrUInt32, (void *)(&tv_sec));
-        unsigned int tv_usec = ((ntohl(ts.csecs) % 100) * 10000) + (ntohs(ts.frac) >> 2);
-        pImage->pAttributeList->add("ts_usec", "Timestamp of frames (microseconds)", NDAttrUInt32, (void *)(&tv_usec));
-        char locked = ntohs(ts.frac) & 0x01;
-        pImage->pAttributeList->add("irig_sync", "IRIG synchronized", NDAttrInt8, (void *)(&locked));
-        char event_active = (ntohs(ts.frac) & 0x02) >> 1;
-        pImage->pAttributeList->add("event_input", "Event Input (1 = open)", NDAttrInt8, (void *)(&event_active));
-        //unsigned int exp_time = ntohs(ts.exptime);
-        unsigned int exp_time = (ntohs(ts.exptime)*1000) + (int)(floor((double)ntohs(ts.exptime32)/65535.0*1000.0 + 0.5));
-        pImage->pAttributeList->add("exp_time", "Exposure time (nanoseconds)", NDAttrUInt32, (void *)(&exp_time));
-        int tfts = tv_sec - trigSecs;
-        int tftus = tv_usec - trigUSecs;
-        if (tftus < 0){
-          tfts--;
-          tftus += 1000000;
-        }
-        int tft = (tfts * 1000000) + tftus;
-        pImage->pAttributeList->add("tft", "Time from trigger (microseconds)", NDAttrInt32, (void *)(&tft));
-
-        int ifts = tv_sec - first_tv_sec;
-        int iftus = tv_usec - first_tv_usec;
-        if (iftus < 0){
-          ifts--;
-          iftus += 1000000;
-        }
-        int ift = (ifts * 1000000) + iftus;
-        pImage->pAttributeList->add("ift", "Inter frame time (microseconds)", NDAttrInt32, (void *)(&ift));
-        first_tv_sec = tv_sec;
-        first_tv_usec = tv_usec;
-
         this->lock();
-        getIntegerParam(NDArrayCallbacks, &arrayCallbacks);
-        if (arrayCallbacks){
-          // Must release the lock here, or we can get into a deadlock, because we can
-          // block on the plugin lock, and the plugin can be calling us
-          this->unlock();
-          debug(functionName, "Calling NDArray callback");
-          doCallbacksGenericPointer(pImage, NDArrayData, 0);
-          this->lock();
-        }
 
-        // Free the image buffer
-        pImage->release();
+        if (status == asynSuccess){
+          // Allocate NDArray memory
+          dims[0] = width;
+          dims[1] = height;
+          setIntegerParam(NDArraySizeX, width);
+          setIntegerParam(NDArraySizeY, height);
+          this->unlock();
+          nbytes = (dims[0] * dims[1]) * sizeof(int16_t);
+          dataType= NDUInt16;
+          pImage = this->pNDArrayPool->alloc(2, dims, dataType, nbytes, NULL);
+
+          if (bitDepth_==10 || bitDepth_==8 || bitDepth_==12){
+            //Use converted data array
+            memcpy(pImage->pData, flashData_, nbytes);
+          }
+          else {
+            memcpy(pImage->pData, data_, nbytes);
+          }
+          pImage->dims[0].size = dims[0];
+          pImage->dims[1].size = dims[1];
+          // Add the frame number attribute
+          pImage->pAttributeList->add("number", "Frame number", NDAttrInt32, (void *)(&metaFrame));
+          // Add the download start frame
+          pImage->pAttributeList->add("rec_first_frame", "First frame of recording", NDAttrInt32, (void *)(&start_frame));
+          // Add the download frame count
+          pImage->pAttributeList->add("rec_frame_count", "Frame count of recording", NDAttrInt32, (void *)(&frames));
+          // Add the partition number
+          pImage->pAttributeList->add("partition", "Partition number", NDAttrInt32, (void *)(&cine));
+          // Add the post trigger frame count
+          pImage->pAttributeList->add("post_trig_frames", "Post trigger frame count", NDAttrInt32, (void *)(&lastfr));
+          // Add the image UniqueID
+          pImage->pAttributeList->add("NDArrayUniqueId", "uniqueId", NDAttrInt32, (void *)(&total_frame));      // Loop over meta array to create attributes
+          // Add the pixel token
+          pImage->pAttributeList->add("pixel_token", "Phantom pixel type token", NDAttrString, (void *)(phantomToken_.c_str()));
+          pImage->uniqueId = total_frame;
+          for (int mc = 0; mc < (int)metaArray_.size(); mc++){
+            if (metaArray_[mc]->type_ == NDAttrInt8){
+              pImage->pAttributeList->add(metaArray_[mc]->name_.c_str(),
+                  metaArray_[mc]->desc_.c_str(),
+                  NDAttrInt8,
+                  (void *)(&metaArray_[mc]->cval_));
+            } else if (metaArray_[mc]->type_ == NDAttrInt32){
+              pImage->pAttributeList->add(metaArray_[mc]->name_.c_str(),
+                  metaArray_[mc]->desc_.c_str(),
+                  NDAttrInt32,
+                  (void *)(&metaArray_[mc]->ival_));
+            } else if (metaArray_[mc]->type_ == NDAttrFloat64){
+              pImage->pAttributeList->add(metaArray_[mc]->name_.c_str(),
+                  metaArray_[mc]->desc_.c_str(),
+                  NDAttrFloat64,
+                  (void *)(&metaArray_[mc]->dval_));
+            } else if (metaArray_[mc]->type_ == NDAttrString){
+              char sval[256];
+              strncpy(sval, metaArray_[mc]->sval_.c_str(), 256);
+              pImage->pAttributeList->add(metaArray_[mc]->name_.c_str(),
+                  metaArray_[mc]->desc_.c_str(),
+                  NDAttrString,
+                  (void *)(sval));
+            }
+          }
+
+          // Add the timing attributes
+          short_time_stamp32 ts = timestampData_[total_frame-1];
+          unsigned int tv_sec = (ntohl(ts.csecs) / 100) + irigYear;
+          pImage->pAttributeList->add("ts_sec", "Timestamp of frames (seconds since 1970)", NDAttrUInt32, (void *)(&tv_sec));
+          unsigned int tv_usec = ((ntohl(ts.csecs) % 100) * 10000) + (ntohs(ts.frac) >> 2);
+          pImage->pAttributeList->add("ts_usec", "Timestamp of frames (microseconds)", NDAttrUInt32, (void *)(&tv_usec));
+          char locked = ntohs(ts.frac) & 0x01;
+          pImage->pAttributeList->add("irig_sync", "IRIG synchronized", NDAttrInt8, (void *)(&locked));
+          char event_active = (ntohs(ts.frac) & 0x02) >> 1;
+          pImage->pAttributeList->add("event_input", "Event Input (1 = open)", NDAttrInt8, (void *)(&event_active));
+          //unsigned int exp_time = ntohs(ts.exptime);
+          unsigned int exp_time = (ntohs(ts.exptime)*1000) + (int)(floor((double)ntohs(ts.exptime32)/65535.0*1000.0 + 0.5));
+          pImage->pAttributeList->add("exp_time", "Exposure time (nanoseconds)", NDAttrUInt32, (void *)(&exp_time));
+          int tfts = tv_sec - trigSecs;
+          int tftus = tv_usec - trigUSecs;
+          if (tftus < 0){
+            tfts--;
+            tftus += 1000000;
+          }
+          int tft = (tfts * 1000000) + tftus;
+          pImage->pAttributeList->add("tft", "Time from trigger (microseconds)", NDAttrInt32, (void *)(&tft));
+
+          int ifts = tv_sec - first_tv_sec;
+          int iftus = tv_usec - first_tv_usec;
+          if (iftus < 0){
+            ifts--;
+            iftus += 1000000;
+          }
+          int ift = (ifts * 1000000) + iftus;
+          pImage->pAttributeList->add("ift", "Inter frame time (microseconds)", NDAttrInt32, (void *)(&ift));
+          first_tv_sec = tv_sec;
+          first_tv_usec = tv_usec;
+
+          this->lock();
+          getIntegerParam(NDArrayCallbacks, &arrayCallbacks);
+          if (arrayCallbacks){
+            // Must release the lock here, or we can get into a deadlock, because we can
+            // block on the plugin lock, and the plugin can be calling us
+            this->unlock();
+            debug(functionName, "Calling NDArray callback");
+            doCallbacksGenericPointer(pImage, NDArrayData, 0);
+            this->lock();
+          }
+
+          // Free the image buffer
+          pImage->release();
+        }
       }
-    }
-    //mark cine as saved/reusable after download
-    if(!abort && status == asynSuccess){
-      getIntegerParam(PHANTOM_MarkCineSaved_, &markSaved);
-      if(markSaved){
-        sprintf(command, "rel %d", cine);
-        status = sendSimpleCommand(command, &response);
-        debug(functionName, "Command", command);
-        debug(functionName, "Response", response);
+      //mark cine as saved/reusable after download
+      if(!abort && status == asynSuccess){
+        getIntegerParam(PHANTOM_MarkCineSaved_, &markSaved);
+        if(markSaved){
+          sprintf(command, "rel %d", cine);
+          status = sendSimpleCommand(command, &response);
+          debug(functionName, "Command", command);
+          debug(functionName, "Response", response);
+        }
       }
     }
 

@@ -47,6 +47,9 @@
 #define ETHERTYPE_IEEE802A 0x88B7
 #endif
 
+//Define 2GB in bytes
+#define TWO_GB_IN_BYTES 2147483648
+
 // Protocol buffer size is 64K
 #define PHANTOM_MAX_STRING 8192
 // Asyn timeout
