@@ -3,10 +3,10 @@ beginScreenProperties
 major 4
 minor 0
 release 1
-x 437
-y 292
+x 681
+y 267
 w 390
-h 350
+h 385
 font "arial-bold-r-12.0"
 fontAlign "center"
 ctlFont "arial-bold-r-12.0"
@@ -34,7 +34,7 @@ release 0
 x 0
 y 0
 w 400
-h 350
+h 385
 lineColor index 5
 fill
 fillColor index 5
@@ -49,7 +49,7 @@ release 0
 x 5
 y 15
 w 390
-h 330
+h 360
 lineColor index 14
 fill
 fillColor index 3
@@ -962,7 +962,7 @@ major 4
 minor 0
 release 0
 x 275
-y 310
+y 335
 w 85
 h 30
 
@@ -975,7 +975,7 @@ major 4
 minor 1
 release 1
 x 275
-y 310
+y 335
 w 85
 h 30
 font "arial-bold-r-12.0"
@@ -1004,7 +1004,7 @@ major 4
 minor 0
 release 0
 x 275
-y 310
+y 335
 w 85
 h 30
 
@@ -1017,7 +1017,7 @@ major 4
 minor 1
 release 0
 x 275
-y 310
+y 335
 w 85
 h 30
 fgColor index 20
@@ -1047,7 +1047,7 @@ major 4
 minor 0
 release 0
 x 180
-y 310
+y 335
 w 85
 h 30
 
@@ -1060,7 +1060,7 @@ major 4
 minor 1
 release 0
 x 180
-y 310
+y 335
 w 85
 h 30
 fgColor index 20
@@ -1119,6 +1119,46 @@ inconsistentColor index 3
 topShadowColor index 1
 botShadowColor index 11
 controlPv "$(P)$(R)SelectPixelDataFormat"
+indicatorPv "$(P)$(R)SelectPixelDataFormat_RBV"
+font "arial-bold-r-12.0"
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 20
+y 310
+w 110
+h 20
+font "arial-bold-r-12.0"
+fgColor index 14
+bgColor index 3
+useDisplayBg
+value {
+  "Download Speed:"
+}
+endObjectProperties
+
+# (Menu Button)
+object activeMenuButtonClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 135
+y 310
+w 74
+h 20
+fgColor index 14
+bgColor index 3
+inconsistentColor index 3
+topShadowColor index 1
+botShadowColor index 11
+controlPv "$(P)$(R)DownloadSpeed"
+indicatorPv "$(P)$(R)DownloadSpeed_RBV"
 font "arial-bold-r-12.0"
 endObjectProperties
 

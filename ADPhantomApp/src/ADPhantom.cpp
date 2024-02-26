@@ -3473,6 +3473,7 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
   int trigUSecs = 0;
   int abort = 0;
   int markSaved = 0;
+  int missed_packets = false;
   unsigned int first_tv_sec = 0;
   unsigned int first_tv_usec = 0;
   unsigned char packet_id = 0; //Tracks packet_ids between frames for 10G downloads
@@ -3644,7 +3645,7 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
         //
 
         if(tenG_download){
-          status = this->readFrame10G(nBytes, step_frame, packet_id);
+          status = this->readFrame10G(nBytes, step_frame, packet_id, missed_packets);
         }
         else{
           status = this->readFrame(nBytes);
@@ -3706,6 +3707,10 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
           pImage->pAttributeList->add("NDArrayUniqueId", "uniqueId", NDAttrInt32, (void *)(&total_frame));      // Loop over meta array to create attributes
           // Add the pixel token
           pImage->pAttributeList->add("pixel_token", "Phantom pixel type token", NDAttrString, (void *)(phantomToken_.c_str()));
+          if(tenG_download){
+            pImage->pAttributeList->add("missed_packets", "Were packets missed in download", NDAttrInt32, (void *)(&missed_packets));
+          }
+
           pImage->uniqueId = total_frame;
           for (int mc = 0; mc < (int)metaArray_.size(); mc++){
             if (metaArray_[mc]->type_ == NDAttrInt8){
@@ -3852,7 +3857,7 @@ asynStatus ADPhantom::readFrame(int bytes)
   return status;
 }
 
-asynStatus ADPhantom::readFrame10G(int bytes, int frameNo, unsigned char & packet_id)
+asynStatus ADPhantom::readFrame10G(int bytes, int frameNo, unsigned char & packet_id, int & missed_packets)
 {
   const char * functionName = "ADPhantom::readFrame10G";
   asynStatus status = asynSuccess;
@@ -3871,11 +3876,12 @@ asynStatus ADPhantom::readFrame10G(int bytes, int frameNo, unsigned char & packe
   struct timespec lastValidFrame; //Tracks last valid frame to avoid looping forever
   struct timespec currTime; //Struct for reading in current time
   const int timeout = 10; //Seconds readframe will wait without recieving a valid dataframe before exiting
+  missed_packets = false;
 
   clock_gettime(CLOCK_MONOTONIC_RAW, &readStart_);
   clock_gettime(CLOCK_MONOTONIC_RAW, &lastValidFrame);
 
-  debug(functionName, "Starting download of frame ", frameNo);
+  //debug(functionName, "Starting download of frame ", frameNo);
 
   while(total_packets< num_packets){
     pcap_state = pcap_next_ex(handle_, &header_, &packet);
@@ -3884,6 +3890,7 @@ asynStatus ADPhantom::readFrame10G(int bytes, int frameNo, unsigned char & packe
       debug(functionName, "Buffer timeout waiting for packet in frame ", frameNo);
       setIntegerParam(ADStatus, ADStatusError);
       setStringParam(ADStatusMessage, "Timeout waiting for packet");
+      missed_packets = true;
       status = asynError;
       break;
     }
@@ -3896,6 +3903,7 @@ asynStatus ADPhantom::readFrame10G(int bytes, int frameNo, unsigned char & packe
           debug(functionName, "Timeout waiting for valid packet in frame ", frameNo);
           setIntegerParam(ADStatus, ADStatusError);
           setStringParam(ADStatusMessage, "Timeout waiting for valid packet");
+          missed_packets = true;
           status =  asynError;
           break;
         }
@@ -3907,22 +3915,29 @@ asynStatus ADPhantom::readFrame10G(int bytes, int frameNo, unsigned char & packe
     unsigned char curr_packet_id = *(packet+ethernet_header_length +3); //ID which iterates by one each packet up to 256
     unsigned char pid_difference = curr_packet_id-packet_id;
     if(frameNo!= 1 && pid_difference > 1){
-      debug(functionName, "Packets missed in frame ", frameNo);
-      debug(functionName, "Number of packets missed: ", pid_difference);
-      setStringParam(ADStatusMessage, "Packets missed in download");
-      const int missed_bytes = (pid_difference -1) * payload_bytes;
-      char* current_pos = dataPtr + total_packets*payload_bytes;
-      char * const end_pos = ( (current_pos + missed_bytes) < (dataPtr + sizeof(dataPtr)/sizeof(dataPtr[0]) ) ? current_pos + missed_bytes: dataPtr + sizeof(dataPtr)/sizeof(dataPtr[0])-1 );
-      while( current_pos < end_pos){
-        //Sets missed bytes to 0 such that we don't carry over data from last frame
-        *current_pos++ = 0;
+      if(total_packets == 0 && curr_packet_id == 0){
+        //PID counter very occasionally resets to zero in first packet of frame and so in majority of cases this is fine
+        debug(functionName, "PID reset to zero at start of frame ", frameNo);
       }
-      total_packets += (pid_difference -1);
-      if( total_packets > num_packets){
-        debug(functionName, "Final packet missed in frame ", frameNo);
-        unsigned char overshot_packets = total_packets - num_packets;
-        packet_id = curr_packet_id - overshot_packets; //Sets packet_id to value last packet should have taken
-        break; //This does result in this packet being missing in the following frame
+      else{
+        missed_packets = true;
+        debug(functionName, "Packets missed in frame ", frameNo);
+        debug(functionName, "Number of packets missed: ", pid_difference);
+        setStringParam(ADStatusMessage, "Packets missed in download");
+        const int missed_bytes = (pid_difference -1) * payload_bytes;
+        char* current_pos = dataPtr + total_packets*payload_bytes;
+        char * const end_pos = ( (current_pos + missed_bytes) < (dataPtr + sizeof(dataPtr)/sizeof(dataPtr[0]) ) ? current_pos + missed_bytes: dataPtr + sizeof(dataPtr)/sizeof(dataPtr[0])-1 );
+        while( current_pos < end_pos){
+          //Sets missed bytes to 0 such that we don't carry over data from last frame
+          *current_pos++ = 0;
+        }
+        total_packets += (pid_difference -1);
+        if( total_packets > num_packets){
+          debug(functionName, "Final packet missed in frame ", frameNo);
+          unsigned char overshot_packets = total_packets - num_packets;
+          packet_id = curr_packet_id - overshot_packets; //Sets packet_id to value last packet should have taken
+          break; //This does result in this packet being missing in the following frame
+        }
       }
     }
 
@@ -3933,8 +3948,9 @@ asynStatus ADPhantom::readFrame10G(int bytes, int frameNo, unsigned char & packe
     packet_id = curr_packet_id;
     if( payload_length < payload_bytes){ //The final packet of a frame is shorter
         if(total_packets != (num_packets-1)){
-          debug(functionName, "Final packet reached unexpectedly. A large number of packets have been dropped in frame ", frameNo);
+          debug(functionName, "Final packet reached unexpectedly. Many packets dropped in frame ", frameNo);
           setStringParam(ADStatusMessage, "Large no. of packets missed in download");
+          missed_packets = true;
         }
         break;
     }      
@@ -3946,11 +3962,11 @@ asynStatus ADPhantom::readFrame10G(int bytes, int frameNo, unsigned char & packe
   clock_gettime(CLOCK_MONOTONIC_RAW, &endTime);
 
   uint64_t delta_ms = (endTime.tv_sec - readStart_.tv_sec) * 1000 + (endTime.tv_nsec - readStart_.tv_nsec) / 1000000; 
-  debug(functionName, "Time taken to get frame from network interface (msec)", (int)delta_ms);
+  //debug(functionName, "Time taken to get frame from network interface (msec)", (int)delta_ms);
   //printf("Time taken to get frame from network interface (msec) %d\n", (int)delta_ms);
 
   delta_ms = (endTime.tv_sec - frameStart_.tv_sec) * 1000 + (endTime.tv_nsec - frameStart_.tv_nsec) / 1000000; 
-  debug(functionName, "Total time taken to read 1 frame (msec)", (int)delta_ms);
+ // debug(functionName, "Total time taken to read 1 frame (msec)", (int)delta_ms);
   //printf("Total time taken to read 1 frame (msec) %d\n", (int)delta_ms);
   //printf("======================================\n");
   if (delta_ms>0){
