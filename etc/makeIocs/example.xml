@@ -4,7 +4,7 @@
 	<devIocStats.devIocStatsHelper ioc="BL12I-EA-IOC-38" name="EA38_STAT"/>
 	<asyn.AsynIP name="dataPort" port="i12-phantom2:7116"/>
 	<asyn.AsynIP name="ctrlPort" port="i12-phantom2:7115"/>
-	<ADPhantom.ADPhantom CTRLPORT="ctrlPort" DATAPORT="dataPort" P="BL12I-EA-DET-38" PORT="phantom.cam" R=":CAM:" SCANRATE=".1 second" TIMEOUT="1"/>
+	<ADPhantom.ADPhantom CTRLPORT="ctrlPort" DATAPORT="dataPort" MACADDRESS = "1423f21fdeb0" INTERFACE = "p1p1" P="BL12I-EA-DET-38" PORT="phantom.cam" R=":CAM:" SCANRATE=".1 second" TIMEOUT="1"/>
 	<!--<ADCore.NDROI ADDR="0" NDARRAY_PORT="phantom.cam" P="BL12I-EA-DET-38" PORT="phantom.roi" QUEUE="16" R=":ROI:" TIMEOUT="1"/>-->
 	<!--<ADCore.NDROI ADDR="0" NDARRAY_PORT="phantom.cam" P="BL12I-EA-DET-38" PORT="phantom.roi.roi1" QUEUE="16" R=":ROI1:" TIMEOUT="1"/>-->
 	<!--<ADCore.NDROI ADDR="0" NDARRAY_PORT="phantom.cam" P="BL12I-EA-DET-38" PORT="phantom.roi.roi2" QUEUE="16" R=":ROI2:" TIMEOUT="1"/>-->
@@ -43,10 +43,6 @@
 	<EPICS_BASE.dbpf pv="BL12I-EA-DET-38:PROC:EnableOffsetScale" value="Enable"/>
 	<EPICS_BASE.dbpf pv="BL12I-EA-DET-38:PROC:NDArrayPort" value="phantom.roi"/>
 	<EPICS_BASE.dbpf pv="BL12I-EA-DET-38:ROI:NDArrayPort" value="phantom.cam"/>
-	<!--<EPICS_BASE.dbpf pv="BL12I-EA-DET-38:ROI:EnableX" value="Enable"/>-->
-	<!--<EPICS_BASE.dbpf pv="BL12I-EA-DET-38:ROI:ReverseX" value="Yes"/>-->
-	<!--<EPICS_BASE.dbpf pv="BL12I-EA-DET-38:ROI:EnableY" value="Enable"/>-->
-	<!--<EPICS_BASE.dbpf pv="BL12I-EA-DET-38:ROI:ReverseY" value="Yes"/>-->
 	<EPICS_BASE.dbpf pv="BL12I-EA-DET-38:HDF5:NDArrayPort" value="phantom.roi"/>
 	<EPICS_BASE.dbpf pv="BL12I-EA-DET-38:TIFF:NDArrayPort" value="phantom.roi"/>
 	<EPICS_BASE.dbpf pv="BL12I-EA-DET-38:OVER:1:SizeXLink.DOL" value="BL12I-EA-DET-38:CAM:AutoTriggerW_RBV CP"/>
