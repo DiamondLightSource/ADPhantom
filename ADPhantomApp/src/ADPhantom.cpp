@@ -975,9 +975,6 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
 
   // Initialise the debugger
   initDebugger(0);
-  debugLevel("ADPhantom::readoutDataStream", 1);
-  debugLevel("ADPhantom::readFrame", 1); 
-  debugLevel("ADPhantom::connect", 1);
 
   //Initialize non static data members
   portUser_  = NULL;
