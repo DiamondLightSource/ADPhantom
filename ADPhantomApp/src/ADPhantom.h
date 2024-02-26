@@ -824,6 +824,7 @@ class ADPhantom: public ADDriver
     asynUser                           *dataChannel_;
     asynUser                           *commonDataport_;
     pcap_t                             *handle_;
+    struct pcap_pkthdr                 *header_;
     char                               error_buffer[256];
     char                               ctrlPort_[128];
     char                               dataPort_[128];

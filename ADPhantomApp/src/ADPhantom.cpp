@@ -922,6 +922,7 @@ static void phantomDownloadTaskC(void *drvPvt)
  */
 ADPhantom::~ADPhantom()
 {
+  free(header_);
 }
 
 ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dataPort, const char * macAddress, const char* interface, int maxBuffers, size_t maxMemory, int priority, int stackSize) :
@@ -974,6 +975,9 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
 
   // Initialise the debugger
   initDebugger(0);
+  debugLevel("ADPhantom::readoutDataStream", 1);
+  debugLevel("ADPhantom::readFrame", 1); 
+  debugLevel("ADPhantom::connect", 1);
 
   //Initialize non static data members
   portUser_  = NULL;
@@ -982,6 +986,9 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   strcpy(dataPort_, dataPort);
   strcpy(interface_, interface);
   strncpy(macAddress_, macAddress, 12);
+
+  //Allocate 10G download header memory
+  header_ = (pcap_pkthdr *)calloc(1, sizeof(pcap_pkthdr));
   
   // Create the epicsEvents for signalling to the PHANTOM task when acquisition starts
   this->startEventId_ = epicsEventCreate(epicsEventEmpty);
@@ -3548,7 +3555,7 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
     int step_frames;
     debug(functionName, "No. of steps to break cine download into: ", download_steps);
 
-    for(int step{0}; step < download_steps; step++ ){ 
+    for(int step{0}; (step < download_steps) && !abort; step++ ){ 
       //Breaks downloads into 2GB chunks as individual download commands shouldn't be > 2GB according to documentation
       debug(functionName, "Download step: ", step);
       step_first_frame = first_frame + step*frames_per_2GB;
@@ -3575,9 +3582,12 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
         pcap_activate(handle_);
         if (handle_ == NULL) {
           debug(functionName, "Could not open device:", error_buffer);
+          setStringParam(ADStatusMessage, "Could not connect to interface");
+          setIntegerParam(ADStatus, ADStatusError);
+          break;
         }
       }
-      else{
+      else{ //1G download
         // Flush the data connection
         pasynOctetSyncIO->flush(dataChannel_);
         sprintf(command, "img {cine:%d, start:%d, cnt:%d, fmt:%s}", cine, step_first_frame, step_frames, phantomToken_.c_str());  
@@ -3585,7 +3595,6 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
       status = sendSimpleCommand(command, &response);
       debug(functionName, "Command", command);
       debug(functionName, "Response", response);
-
 
       if (frame == 0){
         short_time_stamp32 tss = timestampData_[total_frame];
@@ -3596,24 +3605,27 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
         getIntegerParam(PHANTOM_DownloadAbort_, &abort);
         if(abort){
           setStringParam(ADStatusMessage, "Download aborting");
-          //To abort cleanly we disconnect from the port to restart the datastream
-          status = pasynCommonSyncIO->connect(dataPort_, 0, &commonDataport_, NULL);
-          if (status){
-            debug(functionName, "Common connect failed");
+          if(!tenG_download){
+            //To abort 1G downloads cleanly we disconnect from the port to restart the datastream
+            //10G downloads wait until the end of the next 2GB chunk to abort
+            status = pasynCommonSyncIO->connect(dataPort_, 0, &commonDataport_, NULL);
+            if (status){
+              debug(functionName, "Common connect failed");
+            }
+            status = pasynCommonSyncIO->disconnectDevice(commonDataport_);
+            if (status) {
+              debug(functionName, "Disconnect device failed");
+            }
+            status = pasynCommonSyncIO->connectDevice(commonDataport_);
+            if (status) {
+              debug(functionName, "Connect device failed");
+            }
+            status = attachToPort("dataPort");
+            if(status){
+              debug(functionName, "Failed to attach ");
+            }
+            break;
           }
-          status = pasynCommonSyncIO->disconnectDevice(commonDataport_);
-          if (status) {
-            debug(functionName, "Disconnect device failed");
-          }
-          status = pasynCommonSyncIO->connectDevice(commonDataport_);
-          if (status) {
-            debug(functionName, "Connect device failed");
-          }
-          status = attachToPort("dataPort");
-          if(status){
-            debug(functionName, "Failed to attach ");
-          }
-          break;
         }
 
         metaFrame = start_frame+frame;
@@ -3842,7 +3854,6 @@ asynStatus ADPhantom::readFrame10G(int bytes, int frameNo, unsigned char & packe
   const char * functionName = "ADPhantom::readFrame10G";
   asynStatus status = asynSuccess;
   char *dataPtr = data_;
-  struct pcap_pkthdr * header = (pcap_pkthdr *)calloc(1, sizeof(pcap_pkthdr));
   struct ether_header *eth_header;
   const unsigned char * packet;
   const unsigned char * payload;
@@ -3864,8 +3875,7 @@ asynStatus ADPhantom::readFrame10G(int bytes, int frameNo, unsigned char & packe
   debug(functionName, "Starting download of frame ", frameNo);
 
   while(total_packets< num_packets){
-    //packet = pcap_next(handle_, header);
-    pcap_state = pcap_next_ex(handle_, &header, &packet);
+    pcap_state = pcap_next_ex(handle_, &header_, &packet);
 
     if(pcap_state == 0){
       debug(functionName, "Buffer timeout waiting for packet in frame ", frameNo);
@@ -3913,7 +3923,7 @@ asynStatus ADPhantom::readFrame10G(int bytes, int frameNo, unsigned char & packe
       }
     }
 
-    payload_length = header->caplen - (ethernet_header_length + ethernet_extended_header_length + phantom_packet_header_length);
+    payload_length = header_->caplen - (ethernet_header_length + ethernet_extended_header_length + phantom_packet_header_length);
     payload = packet + ethernet_header_length + ethernet_extended_header_length + phantom_packet_header_length;
     memcpy(dataPtr + total_packets*payload_bytes, payload, payload_length);
 
