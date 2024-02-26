@@ -3487,6 +3487,22 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
   //Read total number of cines
   getIntegerParam(PHANTOM_GetCineCount_, &num_cines);
 
+  if(tenG_download){
+    const int snapshot_length = 1504;
+    handle_ = pcap_create(interface_, error_buffer);
+    pcap_set_timeout( handle_, 10000);
+    pcap_set_snaplen( handle_, snapshot_length);
+    pcap_set_buffer_size( handle_, TWO_GB_IN_BYTES);
+    pcap_set_immediate_mode(handle_, 1);
+    pcap_activate(handle_);
+    if (handle_ == NULL) {
+      debug(functionName, "Could not open device:", error_buffer);
+      setStringParam(ADStatusMessage, "Could not connect to interface");
+      setIntegerParam(ADStatus, ADStatusError);
+      return asynError;
+    }
+  }
+
   int cine{start_cine};
   do{ //do/while loop ending when cine == end_cine
 
@@ -3570,19 +3586,6 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
 
       if(tenG_download){
         sprintf(command, "ximg {cine:%d, start:%d, cnt:%d, fmt:%s, dest:%s}", cine, step_first_frame, step_frames, phantomToken_.c_str(), macAddress_); 
-        const int snapshot_length = 1504;
-        handle_ = pcap_create(interface_, error_buffer);
-        pcap_set_timeout( handle_, 10000);
-        pcap_set_snaplen( handle_, snapshot_length);
-        pcap_set_buffer_size( handle_, TWO_GB_IN_BYTES);
-        pcap_set_immediate_mode(handle_, 1);
-        pcap_activate(handle_);
-        if (handle_ == NULL) {
-          debug(functionName, "Could not open device:", error_buffer);
-          setStringParam(ADStatusMessage, "Could not connect to interface");
-          setIntegerParam(ADStatus, ADStatusError);
-          break;
-        }
       }
       else{ //1G download
         // Flush the data connection
@@ -3778,19 +3781,22 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
           pImage->release();
         }
       }
-      //mark cine as saved/reusable after download
-      if(!abort && status == asynSuccess){
-        getIntegerParam(PHANTOM_MarkCineSaved_, &markSaved);
-        if(markSaved){
-          sprintf(command, "rel %d", cine);
-          status = sendSimpleCommand(command, &response);
-          debug(functionName, "Command", command);
-          debug(functionName, "Response", response);
-        }
+    }
+    //mark cine as saved/reusable after download
+    if(!abort && status == asynSuccess){
+      getIntegerParam(PHANTOM_MarkCineSaved_, &markSaved);
+      if(markSaved){
+        sprintf(command, "rel %d", cine);
+        status = sendSimpleCommand(command, &response);
+        debug(functionName, "Command", command);
+        debug(functionName, "Response", response);
       }
     }
-
   } while (cine++ != end_cine && !abort && status == asynSuccess);
+
+  if(tenG_download){
+    pcap_close(handle_);
+  }
 
   setIntegerParam(PHANTOM_DownloadCount_, 0);
   callParamCallbacks();
