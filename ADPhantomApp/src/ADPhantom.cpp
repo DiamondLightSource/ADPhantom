@@ -1742,6 +1742,11 @@ void ADPhantom::phantomPreviewTask()
 
       // Issue the start recording for the cine
       status = sendSimpleCommand("rec 0", &response);
+
+      if (status){
+        setStringParam(ADStatusMessage, "Error in preview task");
+        setIntegerParam(ADStatus, status);
+      }
     }
 
     // Now perform a readout of the preview cine
@@ -1751,11 +1756,6 @@ void ADPhantom::phantomPreviewTask()
       this->unlock();
       status = epicsEventWaitWithTimeout(this->stopPreviewEventId_, 0.5);
       this->lock();
-    }
-
-    if (status){
-      setStringParam(ADStatusMessage, "Error in preview task");
-      setIntegerParam(ADStatus, status);
     }
   }
 }
@@ -3961,16 +3961,16 @@ asynStatus ADPhantom::readFrame10G(int bytes, int frameNo, unsigned char & packe
   struct timespec endTime;
   clock_gettime(CLOCK_MONOTONIC_RAW, &endTime);
 
-  uint64_t delta_ms = (endTime.tv_sec - readStart_.tv_sec) * 1000 + (endTime.tv_nsec - readStart_.tv_nsec) / 1000000; 
-  //debug(functionName, "Time taken to get frame from network interface (msec)", (int)delta_ms);
-  //printf("Time taken to get frame from network interface (msec) %d\n", (int)delta_ms);
+  uint64_t delta_ns = (endTime.tv_sec - readStart_.tv_sec) * 1000000000 + (endTime.tv_nsec - readStart_.tv_nsec); 
+  debug(functionName, "Time taken to get frame from network interface (nsec)", (int)delta_ms);
+  //printf("Time taken to get frame from network interface (nsec) %d\n", (int)delta_ms);
 
-  delta_ms = (endTime.tv_sec - frameStart_.tv_sec) * 1000 + (endTime.tv_nsec - frameStart_.tv_nsec) / 1000000; 
- // debug(functionName, "Total time taken to read 1 frame (msec)", (int)delta_ms);
-  //printf("Total time taken to read 1 frame (msec) %d\n", (int)delta_ms);
+  delta_ns = (endTime.tv_sec - frameStart_.tv_sec) * 1000000000 + (endTime.tv_nsec - frameStart_.tv_nsec); 
+  debug(functionName, "Total time taken to read 1 frame (nsec)", (int)delta_ns);
+  //printf("Total time taken to read 1 frame (nsec) %d\n", (int)delta_ns);
   //printf("======================================\n");
-  if (delta_ms>0){
-    setIntegerParam(PHANTOM_FramesPerSecond_, (int)(1000/delta_ms));
+  if (delta_ns>0){
+    setIntegerParam(PHANTOM_FramesPerSecond_, (int)(1000000000/delta_ns));
   }
   callParamCallbacks();
   clock_gettime(CLOCK_MONOTONIC_RAW, &frameStart_);
