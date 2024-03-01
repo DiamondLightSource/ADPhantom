@@ -3,8 +3,8 @@ beginScreenProperties
 major 4
 minor 0
 release 1
-x 681
-y 267
+x 1125
+y 727
 w 390
 h 385
 font "arial-bold-r-12.0"
@@ -922,7 +922,7 @@ beginObjectProperties
 major 10
 minor 0
 release 0
-x 275
+x 145
 y 255
 w 85
 h 20
@@ -1046,8 +1046,8 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 180
-y 335
+x 275
+y 300
 w 85
 h 30
 
@@ -1059,8 +1059,8 @@ beginObjectProperties
 major 4
 minor 1
 release 0
-x 180
-y 335
+x 275
+y 300
 w 85
 h 30
 fgColor index 20
@@ -1091,7 +1091,7 @@ major 4
 minor 1
 release 1
 x 20
-y 280
+y 310
 w 92
 h 20
 font "arial-bold-r-12.0"
@@ -1110,7 +1110,7 @@ major 4
 minor 0
 release 0
 x 135
-y 280
+y 310
 w 74
 h 20
 fgColor index 14
@@ -1130,7 +1130,7 @@ major 4
 minor 1
 release 1
 x 20
-y 310
+y 340
 w 110
 h 20
 font "arial-bold-r-12.0"
@@ -1149,7 +1149,7 @@ major 4
 minor 0
 release 0
 x 135
-y 310
+y 340
 w 74
 h 20
 fgColor index 14
@@ -1160,5 +1160,44 @@ botShadowColor index 11
 controlPv "$(P)$(R)DownloadSpeed"
 indicatorPv "$(P)$(R)DownloadSpeed_RBV"
 font "arial-bold-r-12.0"
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 20
+y 285
+w 101
+h 13
+font "arial-bold-r-12.0"
+fgColor index 14
+bgColor index 3
+useDisplayBg
+value {
+  "Dropped packets:"
+}
+autoSize
+endObjectProperties
+
+# (Textupdate)
+object TextupdateClass
+beginObjectProperties
+major 10
+minor 0
+release 0
+x 145
+y 280
+w 85
+h 20
+controlPv "$(P)$(R)DroppedPackets_RBV"
+fgColor index 16
+fgAlarm
+bgColor index 10
+fill
+font "arial-bold-r-12.0"
+fontAlign "center"
 endObjectProperties
 

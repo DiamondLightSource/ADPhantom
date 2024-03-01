@@ -181,6 +181,7 @@
 #define PHANTOM_DownloadCountString            "PHANTOM_DOWNLOAD_COUNT"
 #define PHANTOM_DownloadFrameModeString        "PHANTOM_DOWNLOAD_FRAME_MODE"
 #define PHANTOM_DownloadSpeedString            "PHANTOM_DOWNLOAD_SPEED"
+#define PHANTOM_DroppedPacketsString           "PHANTOM_DROPPED_PACKETS"
 #define PHANTOM_MarkCineSavedString            "PHANTOM_MARK_CINE_SAVED"
 #define PHANTOM_CineSaveCFString               "PHANTOM_CINE_SAVE_CF"       // Save selected cine to flash
 
@@ -732,6 +733,7 @@ class ADPhantom: public ADDriver
     int PHANTOM_DownloadCount_;
     int PHANTOM_DownloadFrameMode_;
     int PHANTOM_DownloadSpeed_;
+    int PHANTOM_DroppedPackets_;
     int PHANTOM_MarkCineSaved_;
     int PHANTOM_CineSaveCF_;
     int PHANTOM_Delete_;

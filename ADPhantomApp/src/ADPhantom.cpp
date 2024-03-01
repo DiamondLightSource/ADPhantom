@@ -1062,6 +1062,7 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   createParam(PHANTOM_DownloadCountString,            asynParamInt32,         &PHANTOM_DownloadCount_);
   createParam(PHANTOM_DownloadFrameModeString,        asynParamInt32,         &PHANTOM_DownloadFrameMode_);
   createParam(PHANTOM_DownloadSpeedString,            asynParamInt32,         &PHANTOM_DownloadSpeed_);
+  createParam(PHANTOM_DroppedPacketsString,           asynParamInt32,         &PHANTOM_DroppedPackets_);
   createParam(PHANTOM_MarkCineSavedString,            asynParamInt32,         &PHANTOM_MarkCineSaved_);
   createParam(PHANTOM_CineSaveCFString,               asynParamInt32,         &PHANTOM_CineSaveCF_);
   createParam(PHANTOM_DeleteString,                   asynParamInt32,         &PHANTOM_Delete_);
@@ -3473,7 +3474,8 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
   int trigUSecs = 0;
   int abort = 0;
   int markSaved = 0;
-  int missed_packets = false;
+  int missed_packets = 0;
+  int total_missed_packets = 0; //Missed packets accross all frames
   unsigned int first_tv_sec = 0;
   unsigned int first_tv_usec = 0;
   unsigned char packet_id = 0; //Tracks packet_ids between frames for 10G downloads
@@ -3487,6 +3489,8 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
   
   //Read total number of cines
   getIntegerParam(PHANTOM_GetCineCount_, &num_cines);
+
+  setIntegerParam(PHANTOM_DroppedPackets_, 0);
 
   if(tenG_download){
     const int snapshot_length = 1504;
@@ -3569,7 +3573,7 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
     int step_frames;
     debug(functionName, "No. of steps to break cine download into: ", download_steps);
 
-    for(int step{0}; (step < download_steps) && !abort; step++ ){ 
+    for(int step{0}; (step < download_steps) && !abort &&!status; step++ ){ 
       //Breaks downloads into 2GB chunks as individual download commands shouldn't be > 2GB according to documentation
       debug(functionName, "Download step: ", step);
       step_first_frame = first_frame + step*frames_per_2GB;
@@ -3646,6 +3650,8 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
 
         if(tenG_download){
           status = this->readFrame10G(nBytes, step_frame, packet_id, missed_packets);
+          total_missed_packets += missed_packets;
+          setIntegerParam(PHANTOM_DroppedPackets_, total_missed_packets);
         }
         else{
           status = this->readFrame(nBytes);
@@ -3876,7 +3882,7 @@ asynStatus ADPhantom::readFrame10G(int bytes, int frameNo, unsigned char & packe
   struct timespec lastValidFrame; //Tracks last valid frame to avoid looping forever
   struct timespec currTime; //Struct for reading in current time
   const int timeout = 10; //Seconds readframe will wait without recieving a valid dataframe before exiting
-  missed_packets = false;
+  missed_packets = 0;
 
   clock_gettime(CLOCK_MONOTONIC_RAW, &readStart_);
   clock_gettime(CLOCK_MONOTONIC_RAW, &lastValidFrame);
@@ -3890,7 +3896,7 @@ asynStatus ADPhantom::readFrame10G(int bytes, int frameNo, unsigned char & packe
       debug(functionName, "Buffer timeout waiting for packet in frame ", frameNo);
       setIntegerParam(ADStatus, ADStatusError);
       setStringParam(ADStatusMessage, "Timeout waiting for packet");
-      missed_packets = true;
+      missed_packets += (num_packets - total_packets);
       status = asynError;
       break;
     }
@@ -3903,7 +3909,7 @@ asynStatus ADPhantom::readFrame10G(int bytes, int frameNo, unsigned char & packe
           debug(functionName, "Timeout waiting for valid packet in frame ", frameNo);
           setIntegerParam(ADStatus, ADStatusError);
           setStringParam(ADStatusMessage, "Timeout waiting for valid packet");
-          missed_packets = true;
+          missed_packets += (num_packets - total_packets);
           status =  asynError;
           break;
         }
@@ -3920,7 +3926,6 @@ asynStatus ADPhantom::readFrame10G(int bytes, int frameNo, unsigned char & packe
         debug(functionName, "PID reset to zero at start of frame ", frameNo);
       }
       else{
-        missed_packets = true;
         debug(functionName, "Packets missed in frame ", frameNo);
         debug(functionName, "Number of packets missed: ", pid_difference);
         setStringParam(ADStatusMessage, "Packets missed in download");
@@ -3932,10 +3937,12 @@ asynStatus ADPhantom::readFrame10G(int bytes, int frameNo, unsigned char & packe
           *current_pos++ = 0;
         }
         total_packets += (pid_difference -1);
+        missed_packets += (pid_difference-1);
         if( total_packets > num_packets){
           debug(functionName, "Final packet missed in frame ", frameNo);
           unsigned char overshot_packets = total_packets - num_packets;
           packet_id = curr_packet_id - overshot_packets; //Sets packet_id to value last packet should have taken
+          missed_packets -= overshot_packets;
           break; //This does result in this packet being missing in the following frame
         }
       }
@@ -3950,7 +3957,7 @@ asynStatus ADPhantom::readFrame10G(int bytes, int frameNo, unsigned char & packe
         if(total_packets != (num_packets-1)){
           debug(functionName, "Final packet reached unexpectedly. Many packets dropped in frame ", frameNo);
           setStringParam(ADStatusMessage, "Large no. of packets missed in download");
-          missed_packets = true;
+          missed_packets += (num_packets - total_packets -1); //This is the minimum number of packets missed
         }
         break;
     }      
@@ -3962,7 +3969,7 @@ asynStatus ADPhantom::readFrame10G(int bytes, int frameNo, unsigned char & packe
   clock_gettime(CLOCK_MONOTONIC_RAW, &endTime);
 
   uint64_t delta_ns = (endTime.tv_sec - readStart_.tv_sec) * 1000000000 + (endTime.tv_nsec - readStart_.tv_nsec); 
-  debug(functionName, "Time taken to get frame from network interface (nsec)", (int)delta_ms);
+  debug(functionName, "Time taken to get frame from network interface (nsec)", (int)delta_ns);
   //printf("Time taken to get frame from network interface (nsec) %d\n", (int)delta_ms);
 
   delta_ns = (endTime.tv_sec - frameStart_.tv_sec) * 1000000000 + (endTime.tv_nsec - frameStart_.tv_nsec); 

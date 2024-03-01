@@ -356,6 +356,14 @@ record(bi, "$(P)$(R)DownloadSpeed_RBV")
   field(SCAN, "I/O Intr")
 }
 
+### Dropped packet tracker
+
+record(longin, "$(P)$(R)DroppedPackets_RBV")
+{
+  field(DTYP, "asynInt32")
+  field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_DROPPED_PACKETS")
+  field(SCAN, "I/O Intr")
+}
 ### Cine save mode 
 # Determines whether cines downloaded from are marked as saved/reusable
 
