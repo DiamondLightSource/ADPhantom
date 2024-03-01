@@ -966,9 +966,6 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   int status = asynSuccess;
   int index = 0;
   
-  //Time profiling 
-  clock_gettime(CLOCK_MONOTONIC_RAW, &frameStart_);
-  clock_gettime(CLOCK_MONOTONIC_RAW, &readStart_);
 
   // Setup flag to state this is our first connection
   firstConnect_ = true;
@@ -2632,11 +2629,6 @@ asynStatus ADPhantom::readoutPreviewData()
   }
   debug(functionName, "Response", response);
 
-  struct timespec endTime;
-  clock_gettime(CLOCK_MONOTONIC_RAW, &endTime);
-  uint64_t delta_ms = (endTime.tv_sec - frameStart_.tv_sec) * 1000 + (endTime.tv_nsec - frameStart_.tv_nsec) / 1000000; 
-  debug(functionName, "Time taken for driver to process preview data", (int)delta_ms);
-
   this->readFrame(nBytes);
 
   // Lock the number of bytes to prevent race condition
@@ -3440,12 +3432,6 @@ asynStatus ADPhantom::readoutTimestamps(int start_cine, int end_cine, int start_
 asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_frame, int end_frame, bool uni_frame_lim)
 {
   const char * functionName = "ADPhantom::readoutDataStream";
-  // Time profiling
-  struct timespec endTime;
-  clock_gettime(CLOCK_MONOTONIC_RAW, &endTime);
-  uint64_t delta_ms = (endTime.tv_sec - frameStart_.tv_sec) * 1000 + (endTime.tv_nsec - frameStart_.tv_nsec) / 1000000; 
-  debug(functionName, "Time since last download/init (msec)", (int)delta_ms);
-  //
 
   char command[PHANTOM_MAX_STRING];
   int width = 0;
@@ -3480,6 +3466,14 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
   unsigned int first_tv_usec = 0;
   unsigned char packet_id = 0; //Tracks packet_ids between frames for 10G downloads
   int status = asynSuccess;
+
+  struct timespec frameStart;
+  struct timespec readStart;
+  struct timespec readEnd;
+  struct timespec convEnd;
+  struct timespec frameEnd;
+  const int fps_update_period = 50; //How many frames between frame read speed PV updates
+  uint64_t cumul_time = 0; //Cumulative time taken over the update period
 
   status = getCameraDataStruc("irig", paramMap_);
   status = stringToInteger(paramMap_["irig.yearbegin"].getValue(), irigYear);
@@ -3607,6 +3601,7 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
         first_tv_usec = ((ntohl(tss.csecs) % 100) * 10000) + (ntohs(tss.frac) >> 2);
       }
       while ((step_frame < step_frames) && (status == asynSuccess)){
+        clock_gettime(CLOCK_MONOTONIC_RAW, &frameStart);
         getIntegerParam(PHANTOM_DownloadAbort_, &abort);
         if(abort){
           setStringParam(ADStatusMessage, "Download aborting");
@@ -3639,14 +3634,8 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
         total_frame++;
         setIntegerParam(PHANTOM_DownloadCount_, total_frame);
         callParamCallbacks();
-            
-        //Time profiling
-        struct timespec endTime;
-        clock_gettime(CLOCK_MONOTONIC_RAW, &endTime);
-        uint64_t delta_ms = (endTime.tv_sec - frameStart_.tv_sec) * 1000 + (endTime.tv_nsec - frameStart_.tv_nsec) / 1000000; 
-        debug(functionName, "Time taken for driver to process new data", (int)delta_ms);
-        //printf("Time taken for driver to process new data %d\n", (int)delta_ms);
-        //
+
+        clock_gettime(CLOCK_MONOTONIC_RAW, &readStart);
 
         if(tenG_download){
           status = this->readFrame10G(nBytes, step_frame, packet_id, missed_packets);
@@ -3659,6 +3648,11 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
         if(status != asynSuccess){
           break;
         }
+
+        //Time Profiling
+        clock_gettime(CLOCK_MONOTONIC_RAW, &readEnd);
+        uint64_t delta_ns = (readEnd.tv_sec - readStart.tv_sec) * 1000000000 + (readEnd.tv_nsec - readStart.tv_nsec); 
+        debug(functionName, "Time taken to get frame from network interface (nsec)", (int)delta_ns);
 
         // Lock the number of bytes to prevent race condition
         // Send event to conversion threads to start converting their slice of the new data
@@ -3677,6 +3671,12 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
             printf("Asyn timeout on conversion! This shouldnt happen\n");
           }
         }
+
+        //Time Profiling
+        clock_gettime(CLOCK_MONOTONIC_RAW, &convEnd);
+        delta_ns = (convEnd.tv_sec - readEnd.tv_sec) * 1000000000 + (convEnd.tv_nsec - readEnd.tv_nsec); 
+        debug(functionName, "Time taken for frame conversion (nsec)", (int)delta_ns);
+
         this->lock();
 
         if (status == asynSuccess){
@@ -3790,6 +3790,19 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
 
           // Free the image buffer
           pImage->release();
+
+          clock_gettime(CLOCK_MONOTONIC_RAW, &frameEnd);
+          delta_ns = (frameEnd.tv_sec - convEnd.tv_sec) * 1000000000 + (frameEnd.tv_nsec - convEnd.tv_nsec); 
+          debug(functionName, "Time taken to copy data to NDArrayPool and add metadata (nsec)", (int)delta_ns);
+          delta_ns = (frameEnd.tv_sec - frameStart.tv_sec) * 1000000000 + (frameEnd.tv_nsec - frameStart.tv_nsec); 
+          debug(functionName, "Total time taken to read and process frame (nsec)", (int)delta_ns);
+          cumul_time += delta_ns;
+
+          if ( (frame % fps_update_period == fps_update_period -1 ) && cumul_time>0){
+            setIntegerParam(PHANTOM_FramesPerSecond_, (int)(fps_update_period*(1000000000.0/cumul_time)));
+            callParamCallbacks();
+            cumul_time = 0;
+          }
         }
       }
     }
@@ -3810,6 +3823,7 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
   }
 
   setIntegerParam(PHANTOM_DownloadCount_, 0);
+  setIntegerParam(PHANTOM_FramesPerSecond_, 0);
   callParamCallbacks();
 
   return (asynStatus) status;
@@ -3825,7 +3839,6 @@ asynStatus ADPhantom::readFrame(int bytes)
 
   char *dataPtr = data_;
   int totalRead = 0;
-  clock_gettime(CLOCK_MONOTONIC_RAW, &readStart_);
   while (status == asynSuccess && totalRead < bytes){
     status = pasynOctetSyncIO->read(dataChannel_,
                                     dataPtr,
@@ -3840,25 +3853,6 @@ asynStatus ADPhantom::readFrame(int bytes)
     totalRead += nread;
     debug(functionName, "total read bytes", (int)totalRead);
     dataPtr += nread;
-
-    //Time Profiling
-    struct timespec endTime;
-    clock_gettime(CLOCK_MONOTONIC_RAW, &endTime);
-
-    uint64_t delta_ms = (endTime.tv_sec - readStart_.tv_sec) * 1000 + (endTime.tv_nsec - readStart_.tv_nsec) / 1000000; 
-    debug(functionName, "Time taken to get frame from network interface (msec)", (int)delta_ms);
-    //printf("Time taken to get frame from network interface (msec) %d\n", (int)delta_ms);
-
-    delta_ms = (endTime.tv_sec - frameStart_.tv_sec) * 1000 + (endTime.tv_nsec - frameStart_.tv_nsec) / 1000000; 
-    debug(functionName, "Total time taken to read 1 frame (msec)", (int)delta_ms);
-    //printf("Total time taken to read 1 frame (msec) %d\n", (int)delta_ms);
-    //printf("======================================\n");
-    if (delta_ms>0){
-      setIntegerParam(PHANTOM_FramesPerSecond_, (int)(1000/delta_ms));
-    }
-    callParamCallbacks();
-    clock_gettime(CLOCK_MONOTONIC_RAW, &frameStart_);
-    //
   }
   return status;
 }
@@ -3884,7 +3878,6 @@ asynStatus ADPhantom::readFrame10G(int bytes, int frameNo, unsigned char & packe
   const int timeout = 10; //Seconds readframe will wait without recieving a valid dataframe before exiting
   missed_packets = 0;
 
-  clock_gettime(CLOCK_MONOTONIC_RAW, &readStart_);
   clock_gettime(CLOCK_MONOTONIC_RAW, &lastValidFrame);
 
   //debug(functionName, "Starting download of frame ", frameNo);
@@ -3963,26 +3956,6 @@ asynStatus ADPhantom::readFrame10G(int bytes, int frameNo, unsigned char & packe
     }      
     total_packets++;
   }
-
-  //Time Profiling
-  struct timespec endTime;
-  clock_gettime(CLOCK_MONOTONIC_RAW, &endTime);
-
-  uint64_t delta_ns = (endTime.tv_sec - readStart_.tv_sec) * 1000000000 + (endTime.tv_nsec - readStart_.tv_nsec); 
-  debug(functionName, "Time taken to get frame from network interface (nsec)", (int)delta_ns);
-  //printf("Time taken to get frame from network interface (nsec) %d\n", (int)delta_ms);
-
-  delta_ns = (endTime.tv_sec - frameStart_.tv_sec) * 1000000000 + (endTime.tv_nsec - frameStart_.tv_nsec); 
-  debug(functionName, "Total time taken to read 1 frame (nsec)", (int)delta_ns);
-  //printf("Total time taken to read 1 frame (nsec) %d\n", (int)delta_ns);
-  //printf("======================================\n");
-  if (delta_ns>0){
-    setIntegerParam(PHANTOM_FramesPerSecond_, (int)(1000000000/delta_ns));
-  }
-  callParamCallbacks();
-  clock_gettime(CLOCK_MONOTONIC_RAW, &frameStart_);
-
-
   return status;
 }
 
