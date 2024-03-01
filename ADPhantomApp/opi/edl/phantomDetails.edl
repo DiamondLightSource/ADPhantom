@@ -4,7 +4,7 @@ major 4
 minor 0
 release 1
 x 300
-y 111
+y 148
 w 1060
 h 314
 font "arial-bold-r-12.0"
@@ -446,26 +446,6 @@ h 215
 lineColor index 14
 fill
 fillColor index 3
-endObjectProperties
-
-# (Static Text)
-object activeXTextClass
-beginObjectProperties
-major 4
-minor 1
-release 1
-x 365
-y 10
-w 2
-h 13
-font "arial-medium-r-12.0"
-fgColor index 14
-bgColor index 5
-value {
-  "  Camera Details   "
-}
-autoSize
-border
 endObjectProperties
 
 # (Textupdate)
@@ -1022,7 +1002,7 @@ font "arial-medium-r-12.0"
 fgColor index 14
 bgColor index 5
 value {
-  "  Camera Details   "
+  "  Auto Trigger"
 }
 autoSize
 border
@@ -1626,3 +1606,4 @@ fill
 font "arial-bold-r-12.0"
 fontAlign "center"
 endObjectProperties
+
