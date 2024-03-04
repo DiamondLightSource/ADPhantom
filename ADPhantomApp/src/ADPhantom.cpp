@@ -1158,7 +1158,7 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   downloadingFlag_=0;
 
   // Initialise meta data to save
-  metaArray_.push_back(new PhantomMeta("exposure", "Camera exposure time", "c%d.exp", NDAttrInt32, 0x674, 4));
+  metaArray_.push_back(new PhantomMeta("exposure", "Camera exposure time (nanoseconds)", "c%d.exp", NDAttrInt32, 0x674, 4));
   metaArray_.push_back(new PhantomMeta("rate", "Camera frame rate", "c%d.rate", NDAttrInt32, 0x354, 4));
   metaArray_.push_back(new PhantomMeta("trigger_secs", "Trigger time (seconds since 1970)", "c%d.trigtime.secs", NDAttrInt32, 0x028, 4));
   metaArray_.push_back(new PhantomMeta("trigger_usecs", "Trigger time fraction (micro seconds)", "c%d.trigtime.frac", NDAttrInt32, 0x024, 4));
@@ -3714,7 +3714,7 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
           // Add the pixel token
           pImage->pAttributeList->add("pixel_token", "Phantom pixel type token", NDAttrString, (void *)(phantomToken_.c_str()));
           if(tenG_download){
-            pImage->pAttributeList->add("missed_packets", "Were packets missed in download", NDAttrInt32, (void *)(&missed_packets));
+            pImage->pAttributeList->add("missed_packets", "No. of packets missed in download", NDAttrInt32, (void *)(&missed_packets));
           }
 
           pImage->uniqueId = total_frame;
