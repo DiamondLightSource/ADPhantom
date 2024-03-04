@@ -696,8 +696,6 @@ class ADPhantom: public ADDriver
     asynStatus debug(const std::string& method, const std::string& msg, const std::string& value);
     asynStatus debug(const std::string& method, const std::string& msg, std::map<std::string, std::string> value);
 
-    struct timespec frameStart_;
-    struct timespec readStart_;
 
   protected:
     int PHANTOMConnect_;
@@ -854,6 +852,7 @@ class ADPhantom: public ADDriver
     epicsEventId                       startEventId_;
     epicsEventId                       stopEventId_;
     epicsEventId                       startDownloadEventId_;
+    epicsEventId                       stopDownloadEventId_;
     epicsEventId                       startPreviewEventId_;
     epicsEventId                       stopPreviewEventId_;
     epicsEventId                       flashEventId_;
