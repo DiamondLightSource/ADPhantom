@@ -1026,6 +1026,13 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
     status = asynError;
   }
 
+  // Create the epicsEvents for signalling to the PHANTOM task when download stops
+  this->stopDownloadEventId_ = epicsEventCreate(epicsEventEmpty);
+  if (!this->stopDownloadEventId_){
+    debug(functionName, "epicsEventCreate failure for stop download event");
+    status = asynError;
+  }
+
   // Create all PHANTOM parameters
   createParam(PHANTOMConnectString,                   asynParamInt32,         &PHANTOMConnect_);
   createParam(PHANTOMConnectedString,                 asynParamInt32,         &PHANTOMConnected_);
@@ -1652,6 +1659,7 @@ void ADPhantom::phantomDownloadTask()
       }
     }  
    downloadingFlag_ = 0;
+   epicsEventSignal(this->stopDownloadEventId_);
   }
 }
 
@@ -1671,7 +1679,7 @@ void ADPhantom::phantomStatusTask()
     epicsThreadSleep(0.25);
     if (downloadingFlag_){
       // This thread has a large effect on performance so reduce update rate while downloading
-      epicsThreadSleep(5);
+      status = epicsEventWaitWithTimeout(this->stopDownloadEventId_, 4.75);
     }
     this->lock();
 

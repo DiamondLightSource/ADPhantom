@@ -852,6 +852,7 @@ class ADPhantom: public ADDriver
     epicsEventId                       startEventId_;
     epicsEventId                       stopEventId_;
     epicsEventId                       startDownloadEventId_;
+    epicsEventId                       stopDownloadEventId_;
     epicsEventId                       startPreviewEventId_;
     epicsEventId                       stopPreviewEventId_;
     epicsEventId                       flashEventId_;
