@@ -3357,22 +3357,6 @@ asynStatus ADPhantom::convert10BitPacketTo16Bit(unsigned char *inBytes, unsigned
   return status;
 }
 
-
-asynStatus ADPhantom::convert8BitPacketTo16Bit(unsigned char *inBytes, unsigned char *outBytes, int nBytes)
-{
-  asynStatus status = asynSuccess;
-  
-  for (int i=0;i<nBytes;i++)
-  {
-    outBytes[(i*2)+1]=inBytes[i];
-    outBytes[(i*2)]=0;
-  }
-  //uint8_t byte1 = inBytes[0];
-  //uint16_t byte2 = (outBytes[0] << 8) + outBytes[1];
-  //printf("8bit val = %d  16bit val= %d\n",byte1,byte2);
-  return status;
-}
-
 asynStatus ADPhantom::readoutTimestamps(int start_cine, int end_cine, int start_frame, int end_frame, bool uni_frame_lim)
 {
   const char * functionName = "ADPhantom::readoutTimestamps";
