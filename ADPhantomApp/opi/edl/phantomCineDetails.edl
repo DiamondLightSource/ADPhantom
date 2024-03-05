@@ -4,7 +4,7 @@ major 4
 minor 0
 release 1
 x 1125
-y 727
+y 764
 w 390
 h 385
 font "arial-bold-r-12.0"
@@ -694,112 +694,6 @@ value {
   "Name"
 }
 autoSize
-endObjectProperties
-
-# (Static Text)
-object activeXTextClass
-beginObjectProperties
-major 4
-minor 1
-release 1
-x 20
-y 180
-w 81
-h 26
-font "arial-bold-r-12.0"
-fgColor index 14
-bgColor index 3
-useDisplayBg
-value {
-  "Save this cine"
-  "to Flash."
-}
-autoSize
-endObjectProperties
-
-# (Group)
-object activeGroupClass
-beginObjectProperties
-major 4
-minor 0
-release 0
-x 120
-y 180
-w 85
-h 25
-
-beginGroup
-
-# (Message Button)
-object activeMessageButtonClass
-beginObjectProperties
-major 4
-minor 1
-release 0
-x 120
-y 180
-w 85
-h 25
-fgColor index 20
-onColor index 3
-offColor index 3
-topShadowColor index 1
-botShadowColor index 11
-controlPv "$(P)$(R)SaveToCF"
-pressValue "$(cine)"
-onLabel "Flash"
-offLabel "Flash"
-3d
-font "arial-bold-r-12.0"
-endObjectProperties
-
-endGroup
-
-visPv "$(P)$(R)CFProgress_RBV"
-visMin "0"
-visMax "1"
-endObjectProperties
-
-# (Group)
-object activeGroupClass
-beginObjectProperties
-major 4
-minor 0
-release 0
-x 120
-y 180
-w 85
-h 30
-
-beginGroup
-
-# (Static Text)
-object activeXTextClass
-beginObjectProperties
-major 4
-minor 1
-release 1
-x 120
-y 180
-w 85
-h 30
-font "arial-bold-r-12.0"
-fontAlign "center"
-fgColor index 20
-bgColor index 3
-value {
-  "Save in"
-  "progress."
-}
-border
-endObjectProperties
-
-endGroup
-
-visPv "$(P)$(R)CFProgress_RBV"
-visInvert
-visMin "0"
-visMax "1"
 endObjectProperties
 
 # (Textupdate)

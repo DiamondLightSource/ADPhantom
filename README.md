@@ -18,4 +18,3 @@ Notes
 -------------------
 
 This driver uses the [libpcap library](https://www.tcpdump.org/) to allow downloads over the camera's 10 Gb connection. This requires the driver to either be run using sudo or to be given the CAP_NET_RAW and CAP_NET_ADMIN kernel permissions.
-Support for the RAM flash unit is deprecated and has not been updated or tested.
