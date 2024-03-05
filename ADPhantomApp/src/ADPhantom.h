@@ -38,9 +38,6 @@
 #include <netinet/in.h>
 #include <netinet/if_ether.h>
 
-// Phantom camera PH16 protocol data definitions
-#include <ph16UnitStructure.h>
-
 
 //Required for 10gig connection
 #ifndef ETHERTYPE_IEEE802A
