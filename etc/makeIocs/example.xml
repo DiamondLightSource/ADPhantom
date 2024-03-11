@@ -26,7 +26,7 @@
 	<!--<ADCore.NDFileTIFF ADDR="0" NDARRAY_PORT="phantom.cam" P="BL12I-EA-DET-38" PORT="phantom.tiff" QUEUE="5000" R=":TIFF:" TIMEOUT="1"/>-->
 	<!--<ADCore.NDFileHDF5 ADDR="0" NDARRAY_PORT="phantom.cam" P="BL12I-EA-DET-38" PORT="phantom.hdf" QUEUE="5000" R=":HDF5:" TIMEOUT="1"/>-->
 	<!--<ffmpegServer.ffmpegStream ADDR="0" NDARRAY_PORT="phantom.over" P="BL12I-EA-DET-38" PORT="phantom.mjpg" R=":MJPG:" TIMEOUT="1"/>-->
-	<adUtil.gdaPlugins ARRFTVL="UCHAR" CAM="phantom.cam" HTTP_PORT="8090" NCHANS="20000" P="BL12I-EA-DET-38" PLUGINQUEUE="5000" PORTPREFIX="phantom"/>
+	<adUtil.gdaPlugins ARRFTVL="UCHAR" CAM="phantom.cam" HTTP_PORT="8090" NCHANS="20000" P="BL12I-EA-DET-38" PLUGINQUEUE="10000" PORTPREFIX="phantom"/>
 	<ADCore.NDPosPlugin NDARRAY_PORT="phantom.cam" P="BL12I-EA-DET-38" PORT="phantom.pos" R=":POS:"/>
 	<!--<EPICS_BASE.dbpf pv="BL12I-EA-DET-38:HDF5:XMLFileName" value="/dls_sw/prod/R3.14.12.3/support/miroCamera/3-4/data/miro_hdf5.xml"/>-->
 	<EPICS_BASE.dbpf pv="BL12I-EA-DET-38:FIMG:CreateDirectory" value="5"/>

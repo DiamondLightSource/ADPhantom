@@ -1691,11 +1691,7 @@ void ADPhantom::phantomConversionTask()
     // Convert a slice of the new data
     int myBytes=conversionBytes_/PHANTOM_CONV_THREADS;
     int startByte = i*myBytes;
-    if (bitDepth_==8){
-      debug(functionName, "Starting 8 bit conversion");
-      this->convert8BitPacketTo16Bit(input+startByte, output+startByte*2, myBytes);
-    }
-    else if (conversionBitDepth_ == 10){
+    if (conversionBitDepth_ == 10){
       debug(functionName, "Starting 10 bit conversion");
       for (int bIndex = startByte/5; bIndex < (startByte+myBytes)/5; bIndex++){
         this->convert10BitPacketTo16Bit(input+(bIndex*5), output+(bIndex*8));
@@ -2198,10 +2194,12 @@ asynStatus ADPhantom::writeInt32(asynUser *pasynUser, epicsInt32 value)
       if (value==4){
         bitDepth_ = 10;
         phantomToken_ = "P10";
+        setIntegerParam(NDDataType, (NDDataType_t) 3); // 3 is equal to NDUInt16 (see NDAttribute.h)
       }
       else if (value==5){
         bitDepth_ = 12;
         phantomToken_ = "P12L";
+        setIntegerParam(NDDataType, (NDDataType_t) 3);
       }
       else if(downloadSpeed){
         setStringParam(ADStatusMessage, "Only P10 and P12L formats available for 10G downloads");  
@@ -2211,18 +2209,22 @@ asynStatus ADPhantom::writeInt32(asynUser *pasynUser, epicsInt32 value)
       else if (value==0){
         bitDepth_ = 8;
         phantomToken_ = "8";
+        setIntegerParam(NDDataType, (NDDataType_t) 1); // 1 is equal to NDUInt8 (see NDAttribute.h)
       }
       else if (value==1){
         bitDepth_ = 8;
         phantomToken_ = "8R";
+        setIntegerParam(NDDataType, (NDDataType_t) 1); 
       }
       else if (value==2){
         bitDepth_ = 16;
         phantomToken_ = "P16";
+        setIntegerParam(NDDataType, (NDDataType_t) 3);
       }
       else if (value==3){
         bitDepth_ = 16;
         phantomToken_ = "P16R";
+        setIntegerParam(NDDataType, (NDDataType_t) 3); 
       }
       else{
         printf("Invalid Data Format selected!\n");
@@ -2243,6 +2245,7 @@ asynStatus ADPhantom::writeInt32(asynUser *pasynUser, epicsInt32 value)
       getIntegerParam(PHANTOM_DataFormat_, &dataFormat);
       if(dataFormat != 4 && dataFormat !=5){ //Set to P10 mode
         setIntegerParam(PHANTOM_DataFormat_, 4);
+        setIntegerParam(NDDataType, (NDDataType_t) 3); //Sets datatype to UInt16
         bitDepth_ = 10;
         phantomToken_ = "P10";
       }
@@ -2481,30 +2484,38 @@ asynStatus ADPhantom::readoutPreviewData()
   // Unlock
   conversionBitDepth_ = bitDepth_;
   conversionBytes_ = nBytes;
-  for (int i =0; i<PHANTOM_CONV_THREADS; i++){
-    epicsEventSignal(convStartEvt_[i]);
-  }
-  this->unlock();
-  for (int i =0; i<PHANTOM_CONV_THREADS; i++){
-    status = epicsEventWaitWithTimeout(convFinishEvt_[i], 0.1);
-    if (status == epicsEventWaitTimeout){
-      printf("Asyn timeout on conversion! This shouldnt happen\n");
+  if(conversionBitDepth_ == 10 || conversionBitDepth_ == 12){
+    for (int i =0; i<PHANTOM_CONV_THREADS; i++){
+      epicsEventSignal(convStartEvt_[i]);
     }
-  }
+    this->unlock();
+    for (int i =0; i<PHANTOM_CONV_THREADS; i++){
+      status = epicsEventWaitWithTimeout(convFinishEvt_[i], 0.1);
+      if (status == epicsEventWaitTimeout){
+        printf("Asyn timeout on conversion! This shouldnt happen\n");
+      }
+    }
   this->lock();
+  }
 
   // Allocate NDArray memory
   dims[0] = previewWidth_;
   dims[1] = previewHeight_;
-  nBytes = (dims[0] * dims[1]) * sizeof(int16_t);
-  dataType= NDUInt16;
+  if(conversionBitDepth_ == 8){
+    dataType = NDUInt8;
+    nBytes = (dims[0] * dims[1]) * sizeof(int8_t);
+  } else{
+    dataType= NDUInt16;
+    nBytes = (dims[0] * dims[1]) * sizeof(int16_t);
+  }
+  
   pImage = this->pNDArrayPool->alloc(2, dims, dataType, nBytes, NULL);
 
-  if (bitDepth_!=16){
+  if (bitDepth_!=16 && bitDepth_!=8 ){
     //must use converted data
     memcpy(pImage->pData, flashData_, nBytes);
   }
-  else if (bitDepth_==16){
+  else{
     //raw data can be used
     memcpy(pImage->pData, data_, nBytes);
   }
@@ -2668,22 +2679,6 @@ asynStatus ADPhantom::convert10BitPacketTo16Bit(unsigned char *inBytes, unsigned
   return status;
 }
 
-
-asynStatus ADPhantom::convert8BitPacketTo16Bit(unsigned char *inBytes, unsigned char *outBytes, int nBytes)
-{
-  asynStatus status = asynSuccess;
-  
-  for (int i=0;i<nBytes;i++)
-  {
-    outBytes[(i*2)+1]=inBytes[i];
-    outBytes[(i*2)]=0;
-  }
-  //uint8_t byte1 = inBytes[0];
-  //uint16_t byte2 = (outBytes[0] << 8) + outBytes[1];
-  //printf("8bit val = %d  16bit val= %d\n",byte1,byte2);
-  return status;
-}
-
 asynStatus ADPhantom::readoutTimestamps(int start_cine, int end_cine, int start_frame, int end_frame, bool uni_frame_lim)
 {
   const char * functionName = "ADPhantom::readoutTimestamps";
@@ -2771,7 +2766,7 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
   char command[PHANTOM_MAX_STRING];
   int width = 0;
   int height = 0;
-  int nBytes = 0;
+  int nBytes = 0; //Bytes in downloaded frame
   int frame = 0; //Frame within cine
   int total_frame = 0; //Frame within all cines being downloaded
   int step_frame = 0; //Frame within download step due to splitting into 2GB chunks
@@ -2779,7 +2774,7 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
   NDArray *pImage;
   size_t dims[2];
   NDDataType_t dataType;
-  int nbytes;
+  int nbytes = 0; //Bytes in final converted frame
   int arrayCallbacks   = 0;
   int first_frame = 0;
   int last_frame = 0;
@@ -2996,23 +2991,24 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
         // Lock
         conversionBitDepth_ = bitDepth_;
         conversionBytes_ = nBytes;
-        for (int i =0; i<PHANTOM_CONV_THREADS; i++){
-          epicsEventSignal(convStartEvt_[i]);
-        }
-        this->unlock();
-        for (int i =0; i<PHANTOM_CONV_THREADS; i++){
-          status = epicsEventWaitWithTimeout(convFinishEvt_[i], 0.1);
-          if (status == epicsEventWaitTimeout){
-            printf("Asyn timeout on conversion! This shouldnt happen\n");
+        if(conversionBitDepth_ == 10 || conversionBitDepth_ == 12){
+          for (int i =0; i<PHANTOM_CONV_THREADS; i++){
+            epicsEventSignal(convStartEvt_[i]);
           }
+          this->unlock();
+          for (int i =0; i<PHANTOM_CONV_THREADS; i++){
+            status = epicsEventWaitWithTimeout(convFinishEvt_[i], 0.1);
+            if (status == epicsEventWaitTimeout){
+              printf("Asyn timeout on conversion! This shouldnt happen\n");
+            }
+          }
+          this->lock();
         }
 
         //Time Profiling
         clock_gettime(CLOCK_MONOTONIC_RAW, &convEnd);
         delta_ns = (convEnd.tv_sec - readEnd.tv_sec) * 1000000000 + (convEnd.tv_nsec - readEnd.tv_nsec); 
         debug(functionName, "Time taken for frame conversion (nsec)", (int)delta_ns);
-
-        this->lock();
 
         if (status == asynSuccess){
           // Allocate NDArray memory
@@ -3021,15 +3017,20 @@ asynStatus ADPhantom::readoutDataStream(int start_cine, int end_cine, int start_
           setIntegerParam(NDArraySizeX, width);
           setIntegerParam(NDArraySizeY, height);
           this->unlock();
-          nbytes = (dims[0] * dims[1]) * sizeof(int16_t);
-          dataType= NDUInt16;
+          if(conversionBitDepth_ == 8){
+            dataType = NDUInt8;
+            nbytes = (dims[0] * dims[1]) * sizeof(int8_t);
+          } else{
+            dataType= NDUInt16;
+            nbytes = (dims[0] * dims[1]) * sizeof(int16_t);
+          }
           pImage = this->pNDArrayPool->alloc(2, dims, dataType, nbytes, NULL);
 
-          if (bitDepth_==10 || bitDepth_==8 || bitDepth_==12){
+          if (bitDepth_==10 || bitDepth_==12){
             //Use converted data array
             memcpy(pImage->pData, flashData_, nbytes);
           }
-          else {
+          else { //8 bit and 16 bit do not need conversion
             memcpy(pImage->pData, data_, nbytes);
           }
           pImage->dims[0].size = dims[0];

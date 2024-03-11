@@ -606,7 +606,6 @@ class ADPhantom: public ADDriver
     asynStatus convertPixelData(int nBytes);
     asynStatus convert12BitPacketTo16Bit(unsigned char *input, unsigned char *output);
     asynStatus convert10BitPacketTo16Bit(unsigned char *input, unsigned char *output);
-    asynStatus convert8BitPacketTo16Bit(unsigned char *input, unsigned char *output, int nBytes);
     asynStatus readFrame(int bytes);
     asynStatus readFrame10G(int bytes, int frame_no, unsigned char & packet_id, int & missed_packets);
     asynStatus updatePreviewCine();
