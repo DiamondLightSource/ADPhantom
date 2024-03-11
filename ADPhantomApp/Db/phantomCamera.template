@@ -446,15 +446,6 @@ record(longin, "$(P)$(R)DeleteEndCine_RBV")
   field(SCAN, "I/O Intr")
 }
 
-### Cine save to flash command
-
-record(longout, "$(P)$(R)SaveToCF")
-{
-  field(DESC, "Save selected cine to CF")
-  field(DTYP, "asynInt32")
-  field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_CINE_SAVE_CF")
-}
-
 record(longin, "$(P)$(R)DownloadCount_RBV") {
   field(DTYP, "asynInt32")
   field(SCAN, "I/O Intr")
@@ -1246,7 +1237,5 @@ record(longin, "$(P)$(R)FrameReadSpeed_RBV")
   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_FRAMES_PER_SECOND")
   field(SCAN, "I/O Intr")
 }
-
-include "phantomFlash.template"
 
 

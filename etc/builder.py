@@ -9,9 +9,6 @@ from iocbuilder.modules.ADCore import ADCore, ADBaseTemplate, NDFileTemplate, ma
 class phantomCineTemplate(AutoSubstitution):
     TemplateFile="phantomCine.template"
 
-class phantomFlashTemplate(AutoSubstitution):
-    TemplateFile="phantomFlash.template"
-
 @includesTemplates(ADBaseTemplate, NDFileTemplate)
 class phantomCameraTemplate (AutoSubstitution):
     TemplateFile = 'phantomCamera.template'

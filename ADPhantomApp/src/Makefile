@@ -7,14 +7,12 @@ include $(TOP)/configure/CONFIG
 # -------------------------------
 
 LIBRARY_IOC += phantom
-PROD += createParamIncludes
 
 DBD += ADPhantomSupport.dbd
 
 # The following are compiled and added to the support library
 HDEPENDS = YES
 
-createParamIncludes_SRCS += createParamIncludes.cpp
 createParamIncludes_SRCS += ADPhantomSupport.cpp
 
 phantom_SRCS += ADPhantom.cpp

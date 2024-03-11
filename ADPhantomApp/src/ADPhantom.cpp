@@ -805,39 +805,6 @@ const char *ADPhantom::PHANTOM_CnRecordCountString[] = {
     "PHANTOM_C63_REC_COUNT"
 };
 
-const char *ADPhantom::PHANTOM_CfFileNameString[] = {
-    "PHANTOM_CF1_FILE_NAME",
-    "PHANTOM_CF2_FILE_NAME",
-    "PHANTOM_CF3_FILE_NAME",
-    "PHANTOM_CF4_FILE_NAME",
-    "PHANTOM_CF5_FILE_NAME",
-    "PHANTOM_CF6_FILE_NAME",
-    "PHANTOM_CF7_FILE_NAME",
-    "PHANTOM_CF8_FILE_NAME"
-};
-
-const char *ADPhantom::PHANTOM_CfFileSizeString[] = {
-    "PHANTOM_CF1_FILE_SIZE",
-    "PHANTOM_CF2_FILE_SIZE",
-    "PHANTOM_CF3_FILE_SIZE",
-    "PHANTOM_CF4_FILE_SIZE",
-    "PHANTOM_CF5_FILE_SIZE",
-    "PHANTOM_CF6_FILE_SIZE",
-    "PHANTOM_CF7_FILE_SIZE",
-    "PHANTOM_CF8_FILE_SIZE"
-};
-
-const char *ADPhantom::PHANTOM_CfFileDateString[] = {
-    "PHANTOM_CF1_FILE_DATE",
-    "PHANTOM_CF2_FILE_DATE",
-    "PHANTOM_CF3_FILE_DATE",
-    "PHANTOM_CF4_FILE_DATE",
-    "PHANTOM_CF5_FILE_DATE",
-    "PHANTOM_CF6_FILE_DATE",
-    "PHANTOM_CF7_FILE_DATE",
-    "PHANTOM_CF8_FILE_DATE"
-};
-
 /**
  * A bit of C glue to make the config function available in the startup script (ioc shell) 
  */
@@ -897,15 +864,6 @@ static void phantomPreviewTaskC(void *drvPvt)
 {
   ADPhantom *pPvt = (ADPhantom *)drvPvt;
   pPvt->phantomPreviewTask();
-}
-
-/**
- * Function to run the flash delete and format task within a separate thread in C++
- */
-static void phantomFlashTaskC(void *drvPvt)
-{
-  ADPhantom *pPvt = (ADPhantom *)drvPvt;
-  pPvt->phantomFlashTask();
 }
 
 /**
@@ -1011,14 +969,7 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
     debug(functionName, "epicsEventCreate failure for stop preview event");
     status = asynError;
   }
-
-  // Create the epicsEvents for signalling to the PHANTOM flash task when format or file delete occurs
-  this->flashEventId_ = epicsEventCreate(epicsEventEmpty);
-  if (!this->flashEventId_){
-    debug(functionName, "epicsEventCreate failure to create flash event");
-    status = asynError;
-  }
-
+  
   // Create the epicsEvents for signalling to the PHANTOM task when download starts
   this->startDownloadEventId_ = epicsEventCreate(epicsEventEmpty);
   if (!this->startDownloadEventId_){
@@ -1068,35 +1019,12 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   createParam(PHANTOM_DownloadSpeedString,            asynParamInt32,         &PHANTOM_DownloadSpeed_);
   createParam(PHANTOM_DroppedPacketsString,           asynParamInt32,         &PHANTOM_DroppedPackets_);
   createParam(PHANTOM_MarkCineSavedString,            asynParamInt32,         &PHANTOM_MarkCineSaved_);
-  createParam(PHANTOM_CineSaveCFString,               asynParamInt32,         &PHANTOM_CineSaveCF_);
   createParam(PHANTOM_DeleteString,                   asynParamInt32,         &PHANTOM_Delete_);
   createParam(PHANTOM_DeleteStartCineString,          asynParamInt32,         &PHANTOM_DeleteStartCine_);
   createParam(PHANTOM_DeleteEndCineString,            asynParamInt32,         &PHANTOM_DeleteEndCine_);
   createParam(PHANTOM_LivePreviewString,              asynParamInt32,         &PHANTOM_LivePreview_);
   createParam(PHANTOM_SetPartitionString,             asynParamInt32,         &PHANTOM_SetPartition_);
   createParam(PHANTOM_GetCineCountString,             asynParamInt32,         &PHANTOM_GetCineCount_);
-  createParam(PHANTOM_CFStateString,                  asynParamInt32,         &PHANTOM_CFState_);
-  createParam(PHANTOM_CFActionString,                 asynParamInt32,         &PHANTOM_CFAction_);
-  createParam(PHANTOM_CFSizeString,                   asynParamInt32,         &PHANTOM_CFSize_);
-  createParam(PHANTOM_CFUsedString,                   asynParamInt32,         &PHANTOM_CFUsed_);
-  createParam(PHANTOM_CFProgressString,               asynParamInt32,         &PHANTOM_CFProgress_);
-  createParam(PHANTOM_CFErrorString,                  asynParamInt32,         &PHANTOM_CFError_);
-  createParam(PHANTOM_CFNumFilesString,               asynParamInt32,         &PHANTOM_CFNumFiles_);
-  createParam(PHANTOM_CFFormatString,                 asynParamInt32,         &PHANTOM_CFFormat_);
-  createParam(PHANTOM_CFMaxPagesString,               asynParamInt32,         &PHANTOM_CFMaxPages_);
-  createParam(PHANTOM_CFCurPageString,                asynParamInt32,         &PHANTOM_CFCurPage_);
-  createParam(PHANTOM_CFFileNameString,               asynParamOctet,         &PHANTOM_CFFileName_);
-  createParam(PHANTOM_CFSIndexString,                 asynParamInt32,         &PHANTOM_CFSIndex_);
-  createParam(PHANTOM_CFSWidthString,                 asynParamInt32,         &PHANTOM_CFSWidth_);
-  createParam(PHANTOM_CFSHeightString,                asynParamInt32,         &PHANTOM_CFSHeight_);
-  createParam(PHANTOM_CFSFrameCountString,            asynParamInt32,         &PHANTOM_CFSFrameCount_);
-  createParam(PHANTOM_CFSFirstFrameString,            asynParamInt32,         &PHANTOM_CFSFirstFrame_);
-  createParam(PHANTOM_CFSLastFrameString,             asynParamInt32,         &PHANTOM_CFSLastFrame_);
-  createParam(PHANTOM_CFSRecordStartString,           asynParamInt32,         &PHANTOM_CFSRecordStart_);
-  createParam(PHANTOM_CFSRecordEndString,             asynParamInt32,         &PHANTOM_CFSRecordEnd_);
-  createParam(PHANTOM_CFSRecordString,                asynParamInt32,         &PHANTOM_CFSRecord_);
-  createParam(PHANTOM_CFSRecordCountString,           asynParamInt32,         &PHANTOM_CFSRecordCount_);
-  createParam(PHANTOM_CFSFileDeleteString,            asynParamInt32,         &PHANTOM_CFSFileDelete_);
   createParam(PHANTOM_InfoSensorTempString,           asynParamInt32,         &PHANTOM_InfoSensorTemp_);
   createParam(PHANTOM_InfoThermoPowerString,          asynParamInt32,         &PHANTOM_InfoThermoPower_);
   createParam(PHANTOM_InfoCameraTempString,           asynParamInt32,         &PHANTOM_InfoCameraTemp_);
@@ -1135,11 +1063,6 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
     createParam(PHANTOM_CnRecordString[index],          asynParamInt32,         &PHANTOM_CnRecord_[index]);
     createParam(PHANTOM_CnRecordCountString[index],     asynParamInt32,         &PHANTOM_CnRecordCount_[index]);
   }
-  for (index = 0; index < PHANTOM_NUMBER_OF_FLASH_FILES; index++){
-    createParam(PHANTOM_CfFileNameString[index],        asynParamOctet,         &PHANTOM_CfFileName_[index]);
-    createParam(PHANTOM_CfFileSizeString[index],        asynParamOctet,         &PHANTOM_CfFileSize_[index]);
-    createParam(PHANTOM_CfFileDateString[index],        asynParamOctet,         &PHANTOM_CfFileDate_[index]);
-  }
  
   // Initialise PHANTOM parameters
   setIntegerParam(PHANTOMConnected_, 0);
@@ -1152,7 +1075,6 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
   setIntegerParam(PHANTOM_LivePreview_, 0);
   setIntegerParam(PHANTOM_SelectedCine_, 1);
   setStringParam(ADManufacturer,  "Vision Research");
-  setStringParam(PHANTOM_CFFileName_,  "");
   setIntegerParam(PHANTOM_SettingsSlot_,  1);
   setIntegerParam(PHANTOM_DataFormat_,  4); //P10 by default
   bitDepth_=10;
@@ -1215,19 +1137,6 @@ ADPhantom::ADPhantom(const char *portName, const char *ctrlPort, const char *dat
                                 this) == NULL);
     if (status){
       debug(functionName, "epicsThreadCreate failure for status task");
-    }
-  }
-
-  if (status == asynSuccess){
-    debug(functionName, "Starting up flash task....");
-    // Create the thread that runs the flash format and delete
-    status = (epicsThreadCreate("PhantomFlashTask",
-                                epicsThreadPriorityMedium,
-                                epicsThreadGetStackSize(epicsThreadStackMedium),
-                                (EPICSTHREADFUNC)phantomFlashTaskC,
-                                this) == NULL);
-    if (status){
-      debug(functionName, "epicsThreadCreate failure for flash task");
     }
   }
 
@@ -1698,7 +1607,6 @@ void ADPhantom::phantomStatusTask()
     updateCameraStatus();
     updateDefcStatus();
     updateMetaStatus();
-    updateFlash();
     updateAutoStatus();
 
     for( int index{1}; index < PHANTOM_NUMBER_OF_CINES; index++){
@@ -1762,43 +1670,6 @@ void ADPhantom::phantomPreviewTask()
       this->unlock();
       status = epicsEventWaitWithTimeout(this->stopPreviewEventId_, 0.5);
       this->lock();
-    }
-  }
-}
-
-void ADPhantom::phantomFlashTask()
-{
-  static const char *functionName = "ADPhantom::phantomFlashTask";
-  int status = asynSuccess;
-  int formatFlash = 0;
-  int deleteFile = 0;
-
-  this->lock();
-  while (1){
-    // Release the lock while we wait for an event that says acquire has started, then lock again
-    this->unlock();
-    debug(functionName, "Waiting for flash event");
-    status = epicsEventWait(this->flashEventId_);
-    this->lock();
-    getIntegerParam(PHANTOM_CFFormat_, &formatFlash);
-    if (formatFlash){
-      this->unlock();
-      this->formatFlash();
-      this->lock();
-      setIntegerParam(PHANTOM_CFFormat_, 0);
-    }
-    getIntegerParam(PHANTOM_CFSFileDelete_, &deleteFile);
-    if (deleteFile){
-      this->unlock();
-      this->deleteFlashFile();
-      this->lock();
-      setIntegerParam(PHANTOM_CFSFileDelete_, 0);
-    }
-    callParamCallbacks();
-
-    if (status){
-      setStringParam(ADStatusMessage, "Error in flash task");
-      setIntegerParam(ADStatus, status);
     }
   }
 }
@@ -2217,8 +2088,6 @@ asynStatus ADPhantom::writeInt32(asynUser *pasynUser, epicsInt32 value)
         setIntegerParam(PHANTOM_DeleteEndCine_, value);
     }
     status = deleteCineFiles();
-  } else if (function == PHANTOM_CineSaveCF_){
-    status |= saveCineToFlash(value);
   } else if (function == PHANTOM_SettingsSave_){
     status |= saveSettings();
   } else if (function == PHANTOM_SettingsLoad_){
@@ -2229,37 +2098,6 @@ asynStatus ADPhantom::writeInt32(asynUser *pasynUser, epicsInt32 value)
   } else if (function == PHANTOM_SetPartition_){
     // Set up the partition
     status |= setPartition(value);
-  } else if (function == PHANTOM_CFCurPage_){
-    // Set the current page
-    status |= updateFlashFileTable();
-  } else if (function == PHANTOM_CFSIndex_){
-    // Select the flash file from the table by index
-    status |= selectFlashByIndex(value);
-  } else if (function == PHANTOM_CFSRecord_){
-    // Download the flash file
-    int preview = 0;
-    getIntegerParam(PHANTOM_LivePreview_, &preview);
-    if (preview){
-      setStringParam(ADStatusMessage, "Cannot download while live previewing");
-      setIntegerParam(ADStatus, ADStatusError);
-      status |= asynError;
-    } else {
-      int downloadCount = 0;
-      getIntegerParam(PHANTOM_DownloadCount_, &downloadCount);
-      if(downloadCount){
-        setStringParam(ADStatusMessage, "Cannot download to flash while downloading to file");  
-        setIntegerParam(ADStatus, ADStatusError);
-        status |= asynError;
-      } else{
-        status |= downloadFlashFile();
-      }
-    }
-  } else if (function == PHANTOM_CFSFileDelete_){
-    // Delete the flash file
-    epicsEventSignal(this->flashEventId_);
-  } else if (function == PHANTOM_CFFormat_){
-    // Format the flash disk
-    epicsEventSignal(this->flashEventId_);
   } else if (function == PHANTOM_CamExtSync_){
     status |= setCameraParameter("cam.syncimg", value);
   } else if (function == PHANTOM_CamFrameDelay_){
@@ -2527,9 +2365,7 @@ asynStatus ADPhantom::writeOctet(asynUser *pasynUser, const char *value, size_t 
   status = (asynStatus)setStringParam(addr, function, (char *)value);
   if (status != asynSuccess) return(status);
 
-  if (function == PHANTOM_CFFileName_){
-    status = this->downloadFlashHeader(value);
-  } else if (function == PHANTOM_CineName_){
+  if (function == PHANTOM_CineName_){
     status = this->setCameraParameter("meta.name", value);
   }
 
@@ -2762,28 +2598,6 @@ asynStatus ADPhantom::deleteCineFiles()
   return status;
 }
 
-asynStatus ADPhantom::saveCineToFlash(int cine)
-{
-  const char * functionName = "ADPhantom::saveCineToFlash";
-  char command[PHANTOM_MAX_STRING];
-  std::string response = "";
-  asynStatus status = asynSuccess;
-
-  // Verify the cine file is valid
-  if (cine < 1 || cine >= PHANTOM_NUMBER_OF_CINES ){
-    printf("%s: Error - Invalid cine index %d\n", functionName, cine);
-    status = asynError;
-  }
-
-  if (status == asynSuccess){
-    // Execute the save cine command
-    sprintf(command, "%s {cine: %d}", PHANTOM_CMD_CFSAVE, cine);
-    status = sendSimpleCommand(command, &response);
-  }
-
-  return status;
-}
-
 asynStatus ADPhantom::saveSettings()
 {
   const char * functionName = "ADPhantom::saveSettings";
@@ -2812,498 +2626,6 @@ asynStatus ADPhantom::loadSettings()
   status = sendSimpleCommand(command, &response);
   debug(functionName, response.c_str());
   return status;
-}
-
-asynStatus ADPhantom::formatFlash()
-{
-  const char * functionName = "ADPhantom::formatFlash";
-  std::string response = "";
-  asynStatus status = asynSuccess;
-
-  status = sendSimpleCommand(PHANTOM_CMD_CFFORMAT, &response, PHANTOM_EXTENDED_TIMEOUT);
-  debug(functionName, response.c_str());
-  return status;
-}
-
-asynStatus ADPhantom::deleteFlashFile()
-{
-  const char * functionName = "ADPhantom::deleteFlashFile";
-  char command[PHANTOM_MAX_STRING];
-  char filename[PHANTOM_MAX_STRING];
-  std::string response = "";
-  asynStatus status = asynSuccess;
-
-  // Read in the selected file
-  getStringParam(PHANTOM_CFFileName_, PHANTOM_MAX_STRING, filename);
-
-  // Verify the cine file is valid
-  if (strcmp(filename, "") == 0){
-    printf("%s: Error - Invalid empty filename\n", functionName);
-    status = asynError;
-  }
-
-  if (status == asynSuccess){
-    // Execute the save cine command
-    sprintf(command, "%s {filename: \"%s\"}", PHANTOM_CMD_CFRM, filename);
-    status = sendSimpleCommand(command, &response);
-  }
-
-  return status;
-}
-
-asynStatus ADPhantom::selectFlashByIndex(int index)
-{
-  const char * functionName = "ADPhantom::selectFlashByIndex";
-  char filename[PHANTOM_MAX_STRING];
-  asynStatus status = asynSuccess;
-
-  // Check the index is between 1 and 8
-  if (index < 1 || index > 8){
-    debug(functionName, "Select flash index out of range (1-8)");
-    status = asynError;
-  }
-  if (status == asynSuccess){
-    getStringParam(PHANTOM_CfFileName_[index-1], PHANTOM_MAX_STRING, filename);
-    if (strcmp(filename, "")){
-      setStringParam(PHANTOM_CFFileName_, filename);
-      status = downloadFlashHeader(filename);
-    }
-  }
-  return status;
-}
-
-asynStatus ADPhantom::downloadFlashFile()
-{
-  const char * functionName = "ADPhantom::downloadFlashFile";
-  int start = 0;
-  int end = 0;
-  char filename[PHANTOM_MAX_STRING];
-  asynStatus status = asynSuccess;
-
-  // Read in the number of frames to download
-  getIntegerParam(PHANTOM_CFSRecordStart_, &start);
-  getIntegerParam(PHANTOM_CFSRecordEnd_, &end);
-
-  // Attach to the correct port
-  //status = attachToPort("dataPort");
-
-  // Read in the selected file
-  getStringParam(PHANTOM_CFFileName_, PHANTOM_MAX_STRING, filename);
-
-  // Verify the file is valid
-  if (strcmp(filename, "") == 0){
-    printf("%s: Error - Invalid empty filename\n", functionName);
-    status = asynError;
-  }
-
-  if (start < (int)cineHeader_.FirstImageNo || start > (int)(cineHeader_.FirstImageNo + cineHeader_.ImageCount)){
-    printf("Flash Download failed: Invalid start index\n");
-    setStringParam(ADStatusMessage, "Flash Download failed: Index error");
-    setIntegerParam(ADStatus, ADStatusError);
-    callParamCallbacks();
-    status = asynError;
-  }
-  if (end < (int)cineHeader_.FirstImageNo || end > (int)(cineHeader_.FirstImageNo + cineHeader_.ImageCount)){
-    printf("Flash Download failed: Invalid end index\n");
-    setStringParam(ADStatusMessage, "Flash Download failed: Index error");
-    setIntegerParam(ADStatus, ADStatusError);
-    callParamCallbacks();
-    status = asynError;
-  }
-  if (start > end){
-    printf("Flash Download failed: End index must be greater than start index\n");
-    setStringParam(ADStatusMessage, "Flash Download failed: Index error");
-    setIntegerParam(ADStatus, ADStatusError);
-    callParamCallbacks();
-    status = asynError;
-  }
-
-  // we need to calculate the index values of the frames (starting at index 0)
-  start = start - cineHeader_.FirstImageNo;
-  end = end - cineHeader_.FirstImageNo;
-
-  //printf("*** Flash: first image index: %d\n", start);
-  //printf("*** Flash: last image index: %d\n", end);
-
-  if (status == asynSuccess){
-    // Download the data and process arrays
-    status = downloadFlashImages(filename, start, end);
-  }
-  return status;
-}
-
-asynStatus ADPhantom::downloadFlashHeader(const std::string& filename)
-{
-  const char * functionName = "ADPhantom::downloadFlashHeader";
-  char command[PHANTOM_MAX_STRING];
-  std::string response;
-  short setupLength = 0;
-  int noOfTimes = 0;
-  int ofsBlock = 0;
-  int defaultExposure = 0;
-  INFOBLOCK block;
-  asynStatus status = asynSuccess;
-
-  // Attach to the correct port
-  //status = attachToPort("dataPort");
-  // Clear out timestamp data
-  flashTsData_.clear();
-  flashExpData_.clear();
-
-  if (status == asynSuccess){
-    // Flush the data connection
-    pasynOctetSyncIO->flush(dataChannel_);
-
-    sprintf(command, "cfread {filename: \"%s\", offset: 0, count:44 }", filename.c_str());
-    status = sendSimpleCommand(command, &response);
-    debug(functionName, "Response", response);
-  }
-
-  if (status == asynSuccess){
-    status = this->readFrame(44);
-  }
-
-  if (status == asynSuccess){
-    memcpy(&cineHeader_, data_, 44);
-    char stype[3];
-    strncpy(stype, (char *)&(cineHeader_.Type), 2);
-    stype[2] = 0;
-    debug(functionName, "OffImageOffsets", (int)cineHeader_.OffImageOffsets);
-  }
-
-  if (status == asynSuccess){
-    sprintf(command, "cfread {filename: \"%s\", offset: 44, count:40 }", filename.c_str());
-    status = sendSimpleCommand(command, &response);
-    debug(functionName, "Response", response);
-  }
-
-  if (status == asynSuccess){
-    status = this->readFrame(40);
-    memcpy(&cineBitmapHeader_, data_, 40);
-    setIntegerParam(PHANTOM_CFSWidth_, cineBitmapHeader_.biWidth);
-    setIntegerParam(PHANTOM_CFSHeight_, cineBitmapHeader_.biHeight);
-    setIntegerParam(PHANTOM_CFSFrameCount_, cineHeader_.TotalImageCount);
-    setIntegerParam(PHANTOM_CFSFirstFrame_, cineHeader_.FirstImageNo);
-    std::cout<<"cineHeader_.FirstImageNo: "<<cineHeader_.FirstImageNo<<std::endl;
-    setIntegerParam(PHANTOM_CFSLastFrame_, cineHeader_.FirstImageNo + cineHeader_.ImageCount - 1);
-  }
-
-  // Read in the default exposure time ns
-  if (status == asynSuccess){
-    sprintf(command, "cfread {filename: \"%s\", offset: 1652, count:4 }", filename.c_str());
-    status = sendSimpleCommand(command, &response);
-    debug(functionName, "Response", response);
-  }
-  if (status == asynSuccess){
-    status = this->readFrame(4);
-    memcpy(&defaultExposure, data_, 4);
-  }
-
-  // Read in the setup length
-  if (status == asynSuccess){
-    sprintf(command, "cfread {filename: \"%s\", offset: 226, count:2 }", filename.c_str());
-    status = sendSimpleCommand(command, &response);
-    debug(functionName, "Response", response);
-  }
-  if (status == asynSuccess){
-    status = this->readFrame(2);
-    memcpy(&setupLength, data_, 2);
-    // Now read in the first tagged information block header
-    ofsBlock = 84 + setupLength;
-    sprintf(command, "cfread {filename: \"%s\", offset: %d, count:8 }", filename.c_str(), ofsBlock);
-    status = sendSimpleCommand(command, &response);
-    debug(functionName, "Response", response);
-  }
-  if (status == asynSuccess){
-    status = this->readFrame(8);
-    memcpy(&block, data_, 8);
-    noOfTimes = (block.size - 8) / 8;
-    // Read out the data block and record the time values
-    ofsBlock += 8;
-    sprintf(command, "cfread {filename: \"%s\", offset: %d, count:%d }", filename.c_str(), ofsBlock, (block.size-8));
-    status = sendSimpleCommand(command, &response);
-    debug(functionName, "Response", response);
-  }
-  if (status == asynSuccess){
-    tagTIME64 ts;
-    status = this->readFrame(block.size-8);
-    char *ptr = data_;
-    for (int count = 0; count < noOfTimes; count++){
-      memcpy(&ts, ptr, 8);
-      char locked = ts.frac & 0x01;
-      flashIrigData_.push_back(locked);
-      char event_active = (ts.frac & 0x02) >> 1;
-      flashEventData_.push_back(event_active);
-      //printf("tsec: %d\n", ts.secs);
-      //printf("tusec: %d\n", (int32_t)round((double)(ts.frac) / 4294.967296));
-      ts.frac = (uint32_t)round((double)(ts.frac) / 4294.967296);
-      flashTsData_.push_back(ts);
-      ptr+= 8;
-    }
-  }
-  if (status == asynSuccess){
-    // Now read in the second tagged information block header
-    ofsBlock += (block.size - 16);
-    sprintf(command, "cfread {filename: \"%s\", offset: %d, count:8 }", filename.c_str(), ofsBlock);
-    status = sendSimpleCommand(command, &response);
-    debug(functionName, "Response", response);
-  }
-  if (status == asynSuccess){
-    status = this->readFrame(8);
-    memcpy(&block, data_, 8);
-    noOfTimes = (block.size - 8) / 4;
-    // Read out the data block and record the time values
-    ofsBlock += 8;
-    sprintf(command, "cfread {filename: \"%s\", offset: %d, count:%d }", filename.c_str(), ofsBlock, (block.size-8));
-    status = sendSimpleCommand(command, &response);
-    debug(functionName, "Response", response);
-  }
-  if (status == asynSuccess){
-    status = this->readFrame(block.size-8);
-    uint32_t *exp = (uint32_t *)data_;
-    for (int count = 0; count < noOfTimes; count++){
-      if (*exp == 0){
-        flashExpData_.push_back((uint32_t)defaultExposure);
-      } else {
-        flashExpData_.push_back((uint32_t)round((double)(*exp) / 4294.967296));
-      }
-      exp++;
-    }
-  }
-
-  // Loop over meta array to read values
-  for (int mc = 0; mc < (int)metaArray_.size(); mc++){
-    if (metaArray_[mc]->offset_ > 0){
-      sprintf(command, "cfread {filename: \"%s\", offset: %d, count:%d }", filename.c_str(), metaArray_[mc]->offset_, metaArray_[mc]->size_);
-      status = sendSimpleCommand(command, &response);
-      debug(functionName, "Response", response);
-      status = this->readFrame(metaArray_[mc]->size_);
-      memcpy(metaArray_[mc]->vPtr_, data_, metaArray_[mc]->size_);
-      if (metaArray_[mc]->type_ == NDAttrInt32){
-        int32_t *ival = (int32_t *)metaArray_[mc]->vPtr_;
-        if (metaArray_[mc]->name_ == "trigger_usecs"){
-          uint32_t uival = (uint32_t)*ival;
-          double timeVal = (double)(uival) / 4294.967296;
-          int32_t tival = (int32_t)round(timeVal);
-          flashTrigUsecs_ = tival;
-          memcpy(metaArray_[mc]->vPtr_, &tival, 4);
-          ival = (int32_t *)metaArray_[mc]->vPtr_;
-        }
-        if (metaArray_[mc]->name_ == "trigger_secs"){
-          uint32_t uival = (uint32_t)*ival;
-          flashTrigSecs_ = uival;
-        }
-      }
-    }
-  }
-
-  return status;
-}
-
-asynStatus ADPhantom::downloadFlashImages(const std::string& filename, int start, int end)
-{
-  const char * functionName = "ADPhantom::downloadFlashFile";
-  char command[PHANTOM_MAX_STRING];
-  std::string response;
-  NDArray *pImage;
-  size_t dims[2];
-  NDDataType_t dataType;
-  int width = 0;
-  int height = 0;
-  int nBytes = 0;
-  int nbytes = 0;
-  int arrayCallbacks   = 0;
-  int recordCount = 0;
-  int metaFrame = 0;
-  int frames = end - start + 1;
-  int firstfr = 0;
-  int postTrig = 0;
-  int first_tv_sec = 0;
-  int first_tv_usec = 0;
-  int status = asynSuccess;
-
-  // Attach to the correct port
-  //status = attachToPort("dataPort");
-
-  // Flush the data connection
-  pasynOctetSyncIO->flush(dataChannel_);
-
-  // Obtain the post trig count
-  postTrig = cineHeader_.FirstImageNo + cineHeader_.TotalImageCount;
-  // Obtain the first frame number
-  firstfr = start + cineHeader_.FirstImageNo;
-
-  sprintf(command, "cfread {filename: \"%s\", offset:%d, count:%d }", filename.c_str(), cineHeader_.OffImageOffsets, (8*cineHeader_.TotalImageCount) );
-  status = sendSimpleCommand(command, &response);
-  debug(functionName, "Response", response);
-  status = this->readFrame(8*cineHeader_.TotalImageCount);
-  unsigned long imagePtr[8*cineHeader_.TotalImageCount];
-  memcpy(imagePtr, data_, 8*cineHeader_.TotalImageCount);
-
-  // Read the frame size for the selected cine file
-  width = cineBitmapHeader_.biWidth;
-  height = cineBitmapHeader_.biHeight;
-  // Calculate the number of bytes to read
-  nBytes = (int)((double)width * (double)height * ((float)bitDepth_/8));
-  debug(functionName, "Width", width);
-  debug(functionName, "Height", height);
-  debug(functionName, "nBytes", nBytes);
-
-  first_tv_sec = flashTsData_[start].secs;
-  first_tv_usec = flashTsData_[start].frac;
-  recordCount = 0;
-  for (int count = start; count <= end; count++){
-    metaFrame = count + cineHeader_.FirstImageNo;
-    //printf("Image %d offset value: %lX\n", count, imagePtr[count]);
-    sprintf(command, "cfread {filename: \"%s\", offset:%lu, count:4 }", filename.c_str(), imagePtr[count]);
-    status = sendSimpleCommand(command, &response);
-    debug(functionName, "Response", response);
-    status = this->readFrame(4);
-    unsigned int *iPtr = (unsigned int *)data_;
-    //printf("Annotation size %d\n", *iPtr);
-    unsigned long pixelCountAddress = imagePtr[count] + *iPtr - 4;
-    //printf("Pixel count address: %lX\n", pixelCountAddress);
-    sprintf(command, "cfread {filename: \"%s\", offset:%lu, count:4 }", filename.c_str(), pixelCountAddress );
-    status = sendSimpleCommand(command, &response);
-    debug(functionName, "Response", response);
-    status = this->readFrame(4);
-    iPtr = (unsigned int *)data_;
-    debug(functionName, "Pixel count", (int)(*iPtr));
-    pixelCountAddress += 4;
-    sprintf(command, "cfread {filename: \"%s\", offset:%lu, count:%d }", filename.c_str(), pixelCountAddress, nBytes/2);
-    status = sendSimpleCommand(command, &response);
-    //printf("%s Response: %s\n", functionName, response.c_str());
-    pixelCountAddress += nBytes/2;
-    sprintf(command, "cfread {filename: \"%s\", offset:%lu, count:%d }", filename.c_str(), pixelCountAddress, nBytes/2);
-    status = sendSimpleCommand(command, &response);
-    //printf("%s Response: %s\n", functionName, response.c_str());
-    debug(functionName, "Response", response);
-    status = this->readFrame(nBytes);
-
-    // Lock the number of bytes to prevent race condition
-    // Send event to conversion threads to start converting their slice of the new data
-    // Wait for all conv threads to send the finished event
-    // Unlock
-    conversionBitDepth_ = bitDepth_;
-    conversionBytes_ = nBytes;
-    for (int i =0; i<PHANTOM_CONV_THREADS; i++){
-      epicsEventSignal(convStartEvt_[i]);
-    }
-    this->unlock();
-    for (int i =0; i<PHANTOM_CONV_THREADS; i++){
-      status = epicsEventWaitWithTimeout(convFinishEvt_[i], 0.1);
-      if (status == epicsEventWaitTimeout){
-        printf("Asyn timeout on conversion! This shouldnt happen\n");
-      }
-    }
-    this->lock();
-
-    if (status == asynSuccess){
-      // Allocate NDArray memory
-      dims[0] = cineBitmapHeader_.biWidth;
-      dims[1] = cineBitmapHeader_.biHeight;
-      setIntegerParam(NDArraySizeX, cineBitmapHeader_.biWidth);
-      setIntegerParam(NDArraySizeY, cineBitmapHeader_.biHeight);
-      if(conversionBitDepth_ == 8){
-        dataType = NDUInt8;
-        nbytes = (dims[0] * dims[1]) * sizeof(int8_t);
-      } else{
-        dataType= NDUInt16;
-        nbytes = (dims[0] * dims[1]) * sizeof(int16_t);
-      }
-      pImage = this->pNDArrayPool->alloc(2, dims, dataType, nbytes, NULL);
-
-      memcpy(pImage->pData, flashData_, nbytes);
-      pImage->dims[0].size = dims[0];
-      pImage->dims[1].size = dims[1];
-      // Add the frame number attribute
-      pImage->pAttributeList->add("number", "Frame number", NDAttrInt32, (void *)(&metaFrame));
-      // Add the download start frame
-      pImage->pAttributeList->add("rec_first_frame", "First frame of recording", NDAttrInt32, (void *)(&firstfr));
-      // Add the download frame count
-      pImage->pAttributeList->add("rec_frame_count", "Frame count of recording", NDAttrInt32, (void *)(&frames));
-      // Add the flash filename
-      char sval[256];
-      strncpy(sval, (char *)filename.c_str(), 256);
-      pImage->pAttributeList->add("filename", "Flash file name", NDAttrString, (void *)(sval));
-      // Add the post trigger frame count
-      pImage->pAttributeList->add("post_trig_frames", "Post trigger frame count", NDAttrInt32, (void *)(&postTrig));
-
-      int tv_sec = flashTsData_[count].secs;
-      pImage->pAttributeList->add("ts_sec", "Timestamp of frames (seconds since 1970)", NDAttrUInt32, (void *)(&tv_sec));
-      int tv_usec = flashTsData_[count].frac;
-      pImage->pAttributeList->add("ts_usec", "Timestamp of frames (microseconds)", NDAttrUInt32, (void *)(&tv_usec));
-
-      pImage->pAttributeList->add("exp_time", "Exposure time (nanoseconds)", NDAttrUInt32, (void *)(&(flashExpData_[count])));
-      pImage->pAttributeList->add("irig_sync", "IRIG synchronized", NDAttrInt8, (void *)(&(flashIrigData_[count])));
-      pImage->pAttributeList->add("event_input", "Event Input (1 = open)", NDAttrInt8, (void *)(&(flashEventData_[count])));
-      //pixel token
-      pImage->pAttributeList->add("pixel_token", "Phantom pixel type token", NDAttrString, (void *)(phantomToken_.c_str()));
-      // Loop over meta array to create attributes
-      for (int mc = 0; mc < (int)metaArray_.size(); mc++){
-        if (metaArray_[mc]->type_ == NDAttrInt8){
-          pImage->pAttributeList->add(metaArray_[mc]->name_.c_str(),
-              metaArray_[mc]->desc_.c_str(),
-              NDAttrInt8,
-              metaArray_[mc]->vPtr_);
-        } else if (metaArray_[mc]->type_ == NDAttrInt32){
-          pImage->pAttributeList->add(metaArray_[mc]->name_.c_str(),
-              metaArray_[mc]->desc_.c_str(),
-              NDAttrInt32,
-              metaArray_[mc]->vPtr_);
-        } else if (metaArray_[mc]->type_ == NDAttrFloat64){
-          pImage->pAttributeList->add(metaArray_[mc]->name_.c_str(),
-              metaArray_[mc]->desc_.c_str(),
-              NDAttrFloat64,
-              metaArray_[mc]->vPtr_);
-        } else if (metaArray_[mc]->type_ == NDAttrString){
-          char sval[256];
-          strncpy(sval, (char *)metaArray_[mc]->vPtr_, metaArray_[mc]->size_);
-          pImage->pAttributeList->add(metaArray_[mc]->name_.c_str(),
-              metaArray_[mc]->desc_.c_str(),
-              NDAttrString,
-              (void *)(sval));
-        }
-      }
-      int tfts = tv_sec - flashTrigSecs_;
-      int tftus = tv_usec - flashTrigUsecs_;
-      if (tftus < 0){
-        tfts--;
-        tftus += 1000000;
-      }
-      int tft = (tfts * 1000000) + tftus;
-      pImage->pAttributeList->add("tft", "Time from trigger (microseconds)", NDAttrInt32, (void *)(&tft));
-
-      int ifts = tv_sec - first_tv_sec;
-      int iftus = tv_usec - first_tv_usec;
-      if (iftus < 0){
-        ifts--;
-        iftus += 1000000;
-      }
-      int ift = (ifts * 1000000) + iftus;
-      pImage->pAttributeList->add("ift", "Inter frame time (microseconds)", NDAttrInt32, (void *)(&ift));
-      first_tv_sec = tv_sec;
-      first_tv_usec = tv_usec;
-
-      getIntegerParam(NDArrayCallbacks, &arrayCallbacks);
-      if (arrayCallbacks){
-        // Must release the lock here, or we can get into a deadlock, because we can
-        // block on the plugin lock, and the plugin can be calling us
-        this->unlock();
-        debug(functionName, "Calling NDArray callback");
-        doCallbacksGenericPointer(pImage, NDArrayData, 0);
-        this->lock();
-      }
-
-      // Free the image buffer
-      pImage->release();
-    }
-    recordCount++;
-    setIntegerParam(PHANTOM_CFSRecordCount_, recordCount);
-    callParamCallbacks();
-  }
-
-  return (asynStatus) status;
 }
 
 asynStatus ADPhantom::convert12BitPacketTo16Bit(unsigned char *inBytes, unsigned char *outBytes)
@@ -4194,144 +3516,6 @@ asynStatus ADPhantom::setPartition(int count)
   return status;
 }
 
-asynStatus ADPhantom::updateFlash()
-{
-  const char * functionName = "ADPhantom::updateFlash";
-  asynStatus status = asynSuccess;
-  std::string data;
-  std::vector<std::string> names;
-  std::vector<phantomVal> values;
-
-  debug(functionName, "Method called");
-
-  // Read out the flash status
-  status = getCameraDataStruc("cf", paramMap_);
-
-  if (status == asynSuccess){
-    // Update the flash state
-    int state = 0;
-    std::string sstate = paramMap_["cf.state"].getValue();
-    cleanString(sstate, " ");
-    status = stringToInteger(sstate, state);
-    setIntegerParam(PHANTOM_CFState_, state);
-  }
-
-  if (status == asynSuccess){
-    // Update the flash action
-    int action = 0;
-    std::string saction = paramMap_["cf.action"].getValue();
-    cleanString(saction, " ");
-    status = stringToInteger(saction, action);
-    setIntegerParam(PHANTOM_CFAction_, action);
-  }
-
-  if (status == asynSuccess){
-    // Update the flash size
-    int size = 0;
-    std::string ssize = paramMap_["cf.size"].getValue();
-    cleanString(ssize, " ");
-    status = stringToInteger(ssize, size);
-    setIntegerParam(PHANTOM_CFSize_, size);
-  }
-
-  if (status == asynSuccess){
-    // Update the flash used memory
-    int used = 0;
-    std::string sused = paramMap_["cf.used"].getValue();
-    cleanString(sused, " ");
-    status = stringToInteger(sused, used);
-    setIntegerParam(PHANTOM_CFUsed_, used);
-  }
-
-  if (status == asynSuccess){
-    // Update the flash progress
-    int prog = 0;
-    std::string sprog = paramMap_["cf.progress"].getValue();
-    cleanString(sprog, " ");
-    status = stringToInteger(sprog, prog);
-    setIntegerParam(PHANTOM_CFProgress_, prog);
-  }
-
-  if (status == asynSuccess){
-    // Update the flash error code
-    int err = 0;
-    std::string serr = paramMap_["cf.errcode"].getValue();
-    cleanString(serr, " ");
-    status = stringToInteger(serr, err);
-    setIntegerParam(PHANTOM_CFError_, err);
-  }
-
-  // Require vector of file set information
-  fileInfoSet_.clear();
-  std::vector<std::string> fileInfo;
-  int item = 0;
-  // Read out the file list
-  status = sendSimpleCommand(PHANTOM_CMD_CFLS, &data);
-  // Strip out unwanted characters
-  std::string iline = stripControl(data);
-  iline = deleteParen(iline);
-  // Parse the structure
-  parseDataStruc(iline, names, values);
-  while (iline.find(",") != std::string::npos){
-    std::string value = iline.substr(0, iline.find(","));
-    fileInfo.push_back(stripControl(value, " \""));
-    item++;
-    if (item == 3){
-      item = 0;
-      fileInfoSet_.push_back(fileInfo);
-      fileInfo.clear();
-    }
-    iline = iline.substr(iline.find(",")+1);
-  }
-  if (item == 2){
-    fileInfo.push_back(stripControl(iline, " \""));
-    fileInfoSet_.push_back(fileInfo);
-  }
-  updateFlashFileTable();
-
-  callParamCallbacks();
-
-  return status;
-}
-
-asynStatus ADPhantom::updateFlashFileTable()
-{
-  const char * functionName = "ADPhantom::updateFlashFileTable";
-  asynStatus status = asynSuccess;
-
-  debug(functionName, "Number of files", (int)fileInfoSet_.size());
-  setIntegerParam(PHANTOM_CFNumFiles_, fileInfoSet_.size());
-  int max_pages = (fileInfoSet_.size() / 8) + (fileInfoSet_.size() % 8 == 0?0:1);
-  if (max_pages == 0){
-    max_pages = 1;
-  }
-  setIntegerParam(PHANTOM_CFMaxPages_, max_pages);
-  int current_page = 0;
-  // Check the page number
-  getIntegerParam(PHANTOM_CFCurPage_, &current_page);
-  if (current_page > max_pages){
-    current_page = max_pages;
-  }
-  if (current_page == 0){
-    current_page = 1;
-  }
-  setIntegerParam(PHANTOM_CFCurPage_, current_page);
-
-  for (int index=0; index < 8; index++ ){
-    int pindex = ((current_page - 1) * 8) + index;
-    if (pindex < (int)fileInfoSet_.size()){
-      setStringParam(PHANTOM_CfFileName_[index], (fileInfoSet_[pindex][0]).c_str());
-      setStringParam(PHANTOM_CfFileSize_[index], (fileInfoSet_[pindex][1]).c_str());
-      setStringParam(PHANTOM_CfFileDate_[index], (fileInfoSet_[pindex][2]).c_str());
-    } else {
-      setStringParam(PHANTOM_CfFileName_[index], "");
-      setStringParam(PHANTOM_CfFileSize_[index], "");
-      setStringParam(PHANTOM_CfFileDate_[index], "");
-    }
-  }
-  return status;
-}
-
 asynStatus ADPhantom::updateAutoStatus()
 {
   const char * functionName = "ADPhantom::updateAutotatus";
@@ -4886,7 +4070,6 @@ asynStatus ADPhantom::debugLevel(const std::string& method, int onOff)
     debugMap_["ADPhantom::deleteCineFiles"]          = onOff;
     debugMap_["ADPhantom::readFrame"]                = onOff;
     debugMap_["ADPhantom::readFrame10G"]             = onOff;
-    debugMap_["ADPhantom::downloadFlashFile"]        = onOff;
     debugMap_["ADPhantom::connect"]                  = onOff;    
     debugMap_["ADPhantom::readEnum"]                 = onOff;
     debugMap_["ADPhantom::writeInt32"]               = onOff;

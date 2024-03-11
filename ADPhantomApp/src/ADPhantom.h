@@ -38,9 +38,6 @@
 #include <netinet/in.h>
 #include <netinet/if_ether.h>
 
-// Phantom camera PH16 protocol data definitions
-#include <ph16UnitStructure.h>
-
 
 //Required for 10gig connection
 #ifndef ETHERTYPE_IEEE802A
@@ -92,9 +89,6 @@
 
 // Number of Cines
 #define PHANTOM_NUMBER_OF_CINES  64
-
-// Number of flash files to display at one time
-#define PHANTOM_NUMBER_OF_FLASH_FILES 8
 
 // PHANTOM Command Strings
 #define PHANTOM_CMD_GET_VALUE    "get"
@@ -183,7 +177,6 @@
 #define PHANTOM_DownloadSpeedString            "PHANTOM_DOWNLOAD_SPEED"
 #define PHANTOM_DroppedPacketsString           "PHANTOM_DROPPED_PACKETS"
 #define PHANTOM_MarkCineSavedString            "PHANTOM_MARK_CINE_SAVED"
-#define PHANTOM_CineSaveCFString               "PHANTOM_CINE_SAVE_CF"       // Save selected cine to flash
 
 #define PHANTOM_DeleteString                   "PHANTOM_DELETE"
 #define PHANTOM_DeleteStartCineString          "PHANTOM_DELETE_START_CINE"
@@ -193,30 +186,6 @@
 #define PHANTOM_GetCineCountString             "PHANTOM_GET_CINE_COUNT"
 
 #define PHANTOM_DataFormatString               "PHANTOM_DataFormat"   // Integer corresponding to format token (8,8R,P16,P16R,P10,P12L)
-
-#define PHANTOM_CFStateString                  "PHANTOM_CF_STATE"
-#define PHANTOM_CFActionString                 "PHANTOM_CF_ACTION"
-#define PHANTOM_CFSizeString                   "PHANTOM_CF_SIZE"
-#define PHANTOM_CFUsedString                   "PHANTOM_CF_USED"
-#define PHANTOM_CFProgressString               "PHANTOM_CF_PROGRESS"
-#define PHANTOM_CFErrorString                  "PHANTOM_CF_ERROR"
-#define PHANTOM_CFNumFilesString               "PHANTOM_CF_NUM_FILES"
-#define PHANTOM_CFMaxPagesString               "PHANTOM_CF_MAX_PAGES"
-#define PHANTOM_CFCurPageString                "PHANTOM_CF_CUR_PAGE"
-#define PHANTOM_CFFormatString                 "PHANTOM_CF_FORMAT"
-
-#define PHANTOM_CFFileNameString               "PHANTOM_CF_FILENAME"
-#define PHANTOM_CFSIndexString                 "PHANTOM_CFS_INDEX"
-#define PHANTOM_CFSWidthString                 "PHANTOM_CFS_WIDTH"
-#define PHANTOM_CFSHeightString                "PHANTOM_CFS_HEIGHT"
-#define PHANTOM_CFSFrameCountString            "PHANTOM_CFS_FR_COUNT"
-#define PHANTOM_CFSFirstFrameString            "PHANTOM_CFS_FIRST_FR"
-#define PHANTOM_CFSLastFrameString             "PHANTOM_CFS_LAST_FR"
-#define PHANTOM_CFSRecordStartString           "PHANTOM_CFS_REC_START"
-#define PHANTOM_CFSRecordEndString             "PHANTOM_CFS_REC_END"
-#define PHANTOM_CFSRecordString                "PHANTOM_CFS_RECORD"
-#define PHANTOM_CFSRecordCountString           "PHANTOM_CFS_REC_COUNT"
-#define PHANTOM_CFSFileDeleteString            "PHANTOM_CFS_DELETE"         // Delete the (C)ompact (F)lash (S)elected file
 
 #define PHANTOM_InfoSensorTempString           "PHANTOM_SENSOR_TEMP"
 #define PHANTOM_InfoThermoPowerString          "PHANTOM_THERMO_POWER"
@@ -560,7 +529,7 @@ public:
   std::string desc_;
   std::string param_;
   NDAttrDataType_t type_;
-  int offset_;
+  int offset_; //This is a legacy variable relating to flash storage
   int size_;
   std::string sval_;
   int ival_;
@@ -614,7 +583,6 @@ class ADPhantom: public ADDriver
     void phantomCameraTask();
     void phantomStatusTask();
     void phantomPreviewTask();
-    void phantomFlashTask();
     void phantomDownloadTask();
     void phantomConversionTask();
     asynStatus makeConnection();
@@ -631,15 +599,8 @@ class ADPhantom: public ADDriver
     asynStatus readoutPreviewData();
     asynStatus sendSoftwareTrigger();
     asynStatus deleteCineFiles();
-    asynStatus saveCineToFlash(int cine);
     asynStatus saveSettings();
     asynStatus loadSettings();
-    asynStatus formatFlash();
-    asynStatus deleteFlashFile();
-    asynStatus selectFlashByIndex(int index);
-    asynStatus downloadFlashFile();
-    asynStatus downloadFlashHeader(const std::string& filename);
-    asynStatus downloadFlashImages(const std::string& filename, int start, int end);
     asynStatus readoutTimestamps(int start_cine, int end_cine, int start_frame, int end_frame, bool uni_frame_lim);
     asynStatus readoutDataStream(int start_cine, int end_cine, int start_frame, int end_frame, bool uni_frame_lim);
     asynStatus convertPixelData(int nBytes);
@@ -651,8 +612,6 @@ class ADPhantom: public ADDriver
     asynStatus updateCine(int cine);
     asynStatus selectCine(int cine);
     asynStatus setPartition(int count);
-    asynStatus updateFlash();
-    asynStatus updateFlashFileTable();
     asynStatus updateAutoStatus();
     asynStatus updateAutoTrigPos();
     asynStatus updateInfoStatus();
@@ -732,34 +691,11 @@ class ADPhantom: public ADDriver
     int PHANTOM_DownloadSpeed_;
     int PHANTOM_DroppedPackets_;
     int PHANTOM_MarkCineSaved_;
-    int PHANTOM_CineSaveCF_;
     int PHANTOM_Delete_;
     int PHANTOM_DeleteStartCine_;
     int PHANTOM_DeleteEndCine_;
     int PHANTOM_SetPartition_;
     int PHANTOM_GetCineCount_;
-    int PHANTOM_CFState_;
-    int PHANTOM_CFAction_;
-    int PHANTOM_CFSize_;
-    int PHANTOM_CFUsed_;
-    int PHANTOM_CFProgress_;
-    int PHANTOM_CFError_;
-    int PHANTOM_CFNumFiles_;
-    int PHANTOM_CFMaxPages_;
-    int PHANTOM_CFCurPage_;
-    int PHANTOM_CFFormat_;
-    int PHANTOM_CFFileName_;
-    int PHANTOM_CFSIndex_;
-    int PHANTOM_CFSWidth_;
-    int PHANTOM_CFSHeight_;
-    int PHANTOM_CFSFrameCount_;
-    int PHANTOM_CFSFirstFrame_;
-    int PHANTOM_CFSLastFrame_;
-    int PHANTOM_CFSRecordStart_;
-    int PHANTOM_CFSRecordEnd_;
-    int PHANTOM_CFSRecord_;
-    int PHANTOM_CFSRecordCount_;
-    int PHANTOM_CFSFileDelete_;
     int PHANTOM_InfoSensorTemp_;
     int PHANTOM_InfoThermoPower_;
     int PHANTOM_InfoCameraTemp_;
@@ -793,9 +729,6 @@ class ADPhantom: public ADDriver
     int PHANTOM_CnRecordEnd_[PHANTOM_NUMBER_OF_CINES];
     int PHANTOM_CnRecord_[PHANTOM_NUMBER_OF_CINES];
     int PHANTOM_CnRecordCount_[PHANTOM_NUMBER_OF_CINES];
-    int PHANTOM_CfFileName_[PHANTOM_NUMBER_OF_FLASH_FILES];
-    int PHANTOM_CfFileSize_[PHANTOM_NUMBER_OF_FLASH_FILES];
-    int PHANTOM_CfFileDate_[PHANTOM_NUMBER_OF_FLASH_FILES];
     int PHANTOM_DataFormat_;
     int PHANTOMConnected_;
     int PHANTOM_FramesPerSecond_;
@@ -815,9 +748,6 @@ class ADPhantom: public ADDriver
     static const char *PHANTOM_CnRecordEndString[];
     static const char *PHANTOM_CnRecordString[];
     static const char *PHANTOM_CnRecordCountString[];
-    static const char *PHANTOM_CfFileNameString[];
-    static const char *PHANTOM_CfFileSizeString[];
-    static const char *PHANTOM_CfFileDateString[];
 
     asynUser                           *portUser_;
     asynUser                           *dataChannel_;
@@ -830,16 +760,8 @@ class ADPhantom: public ADDriver
     char                               macAddress_[14];
     char                               interface_[128];
     char                               data_[2048000];
-    char                               imgData_[2048000];
-    char                               flashData_[2048000];
-    char                               downloadData_[102400000]; // 50, 2MB images
+    char                               flashData_[2048000]; //Legacy naming but used to store converted images
     std::vector<short_time_stamp32>    timestampData_;
-    std::vector<tagTIME64>             flashTsData_;
-    std::vector<uint32_t>              flashExpData_;
-    std::vector<uint8_t>               flashIrigData_;
-    std::vector<uint8_t>               flashEventData_;
-    int                                flashTrigSecs_;
-    int                                flashTrigUsecs_;
     int                                previewWidth_;
     int                                previewHeight_;
     int                                bitDepth_;
@@ -854,7 +776,6 @@ class ADPhantom: public ADDriver
     epicsEventId                       stopDownloadEventId_;
     epicsEventId                       startPreviewEventId_;
     epicsEventId                       stopPreviewEventId_;
-    epicsEventId                       flashEventId_;
     epicsEventId                       convStartEvt_[PHANTOM_CONV_THREADS];
     epicsEventId                       convFinishEvt_[PHANTOM_CONV_THREADS];
     std::vector<PhantomMeta *>         metaArray_;
