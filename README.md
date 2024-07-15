@@ -6,7 +6,7 @@ An [EPICS](http://www.aps.anl.gov/epics) [areaDetector](http://cars.uchicago.edu
 Credits
 ---------------------
 
-Source code developed by [Observatory Sciences Ltd.](https://www.observatorysciences.co.uk) for [Diamond Light Source Ltd](https://www.diamond.ac.uk). Development builds on [miroCamera](https://github.com/dls-controls/miroCamera) driver.
+Source code developed by [Observatory Sciences Ltd.](https://www.observatorysciences.co.uk) for [Diamond Light Source Ltd](https://www.diamond.ac.uk). Development builds on [miroCamera](https://github.com/DiamondLightSource/miroCamera) driver.
 
 Supported platforms
 -------------------
