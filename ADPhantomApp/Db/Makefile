@@ -13,6 +13,7 @@ include $(TOP)/configure/CONFIG
 #
 DB += phantomCamera.template
 DB += phantomCine.template
+DB += phatom_settings.req
 
 #----------------------------------------------------
 # In a Diamond IOC Application, build db files from

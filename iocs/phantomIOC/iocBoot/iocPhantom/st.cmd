@@ -26,17 +26,22 @@ epicsEnvSet("NCHANS", "2048")
 # The maximum number of frames buffered in the NDPluginCircularBuff plugin
 epicsEnvSet("CBUFFS", "500")
 # The search path for database files
-epicsEnvSet("EPICS_DB_INCLUDE_PATH", "$(AREADETECTOR)/db:$(ADPHANTOM)/db")
+epicsEnvSet("EPICS_DB_INCLUDE_PATH", "$(ADCORE)/db:$(ADPHANTOM)/db")
 # Size of data allowed 
 epicsEnvSet("EPICS_CA_MAX_ARRAY_BYTES", 20000000)
 
 
 # Configure control and data TCP/IP socket connections. Default ports should be 7115 and 7116 respectively.
+# 10 gigabit connection
 drvAsynIPPortConfigure("ctrlPort", "172.23.112.23:7115", 0, 0, 0)
 drvAsynIPPortConfigure("dataPort", "172.23.112.23:7116", 0, 0, 0)
 
+# 1 gigabit connection
+#drvAsynIPPortConfigure("ctrlPort", "100.100.214.107:7115", 0, 0, 0)
+#drvAsynIPPortConfigure("dataPort", "100.100.214.107:7116", 0, 0, 0)
+
 # ADPhantomConfig(const char *portName, const char *ctrlPort, const char *dataPort, const char * macAddress, const char * interface, int maxBuffers, size_t maxMemory, int priority,  int stackSize)
-ADPhantomConfig("phantom.cam","ctrlPort","dataPort", "1423f21fdeb0", "p1p1", 0, 0, 0,  0)
+ADPhantomConfig("$(PORT)","ctrlPort","dataPort", "1423f21fdeb0", "p1p1", 0, 0, 0,  0)
 # Enable debugging for certain functions
 #ADPhantomDebug("$(PORT)", "readoutDataStream", 1);
 
@@ -119,11 +124,7 @@ NDStdArraysConfigure("Image1", 3, 0, "$(PORT)", 0)
 dbLoadRecords("$(ADCORE)/db/NDStdArrays.template", "P=$(PREFIX),R=NDSA:,PORT="Image1",ADDR=0,NDARRAY_PORT=$(PORT),TIMEOUT=1,TYPE=Int16,FTVL=SHORT,NELEMENTS=6000000")
 
 # Load all other plugins using commonPlugins.cmd
-#< $(ADCORE)/iocBoot/commonPlugins.cmd
-
-# Create an HDF5 file saving plugin
-NDFileHDF5Configure("FileHDF1", $(QSIZE), 0, "$(PORT)", 0)
-dbLoadRecords("NDFileHDF5.template",  "P=$(PREFIX),R=HDF1:,PORT=FileHDF1,ADDR=0,TIMEOUT=1,XMLSIZE=2048,NDARRAY_PORT=$(PORT)")
+< $(ADCORE)/iocBoot/commonPlugins.cmd
 
 #asynSetTraceMask($(PORT),0,0x09)
 #asynSetTraceMask($(PORT),0,0x11)

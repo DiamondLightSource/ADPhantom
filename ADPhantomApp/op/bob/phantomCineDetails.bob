@@ -1,0 +1,1174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Saved on 2025-11-05 10:41:38 by jwlodek-->
+<display version="2.0.0">
+  <name>phantomCineDetails</name>
+  <x>1125</x>
+  <y>764</y>
+  <width>390</width>
+  <height>385</height>
+  <background_color>
+    <color name="GLOBAL canvas" red="200" green="200" blue="200">
+    </color>
+  </background_color>
+  <grid_step_x>5</grid_step_x>
+  <grid_step_y>5</grid_step_y>
+  <widget type="rectangle" version="2.0.0">
+    <name>EDM activeRectangleClass</name>
+    <width>401</width>
+    <height>386</height>
+    <line_width>1</line_width>
+    <line_color>
+      <color name="Wid-alt/Anno-sec" red="174" green="174" blue="174">
+      </color>
+    </line_color>
+    <background_color>
+      <color name="Wid-alt/Anno-sec" red="174" green="174" blue="174">
+      </color>
+    </background_color>
+  </widget>
+  <widget type="rectangle" version="2.0.0">
+    <name>EDM activeRectangleClass</name>
+    <x>5</x>
+    <y>15</y>
+    <width>391</width>
+    <height>361</height>
+    <line_width>1</line_width>
+    <line_color>
+      <color name="black-14" red="0" green="0" blue="0">
+      </color>
+    </line_color>
+    <background_color>
+      <color name="GLOBAL canvas" red="200" green="200" blue="200">
+      </color>
+    </background_color>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>EDM activeXTextClass</name>
+    <text>Cine File C$(cine)</text>
+    <x>5</x>
+    <y>5</y>
+    <width>89</width>
+    <height>13</height>
+    <font>
+      <font family="Liberation Sans" style="REGULAR" size="11.0">
+      </font>
+    </font>
+    <foreground_color>
+      <color name="black-14" red="0" green="0" blue="0">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="Wid-alt/Anno-sec" red="174" green="174" blue="174">
+      </color>
+    </background_color>
+    <transparent>false</transparent>
+    <auto_size>true</auto_size>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>EDM TextupdateClass</name>
+    <pv_name>$(P)$(R)C$(cine):Width_RBV</pv_name>
+    <x>120</x>
+    <y>50</y>
+    <width>85</width>
+    <font>
+      <font family="Liberation Sans" style="BOLD" size="12.0">
+      </font>
+    </font>
+    <foreground_color>
+      <color name="green-16" red="0" green="224" blue="0">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="Wid-bg/Anno-pri" red="105" green="105" blue="105">
+      </color>
+    </background_color>
+    <horizontal_alignment>1</horizontal_alignment>
+    <vertical_alignment>1</vertical_alignment>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>EDM activeXTextClass</name>
+    <text>Width</text>
+    <x>20</x>
+    <y>55</y>
+    <width>31</width>
+    <height>14</height>
+    <font>
+      <font family="Liberation Sans" style="BOLD" size="11.0">
+      </font>
+    </font>
+    <foreground_color>
+      <color name="black-14" red="0" green="0" blue="0">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="GLOBAL canvas" red="200" green="200" blue="200">
+      </color>
+    </background_color>
+    <auto_size>true</auto_size>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>EDM TextupdateClass</name>
+    <pv_name>$(P)$(R)C$(cine):FrameCount_RBV</pv_name>
+    <x>120</x>
+    <y>100</y>
+    <width>85</width>
+    <font>
+      <font family="Liberation Sans" style="BOLD" size="12.0">
+      </font>
+    </font>
+    <foreground_color>
+      <color name="green-16" red="0" green="224" blue="0">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="Wid-bg/Anno-pri" red="105" green="105" blue="105">
+      </color>
+    </background_color>
+    <horizontal_alignment>1</horizontal_alignment>
+    <vertical_alignment>1</vertical_alignment>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>EDM activeXTextClass</name>
+    <text>Frame Count</text>
+    <x>20</x>
+    <y>105</y>
+    <width>68</width>
+    <height>14</height>
+    <font>
+      <font family="Liberation Sans" style="BOLD" size="11.0">
+      </font>
+    </font>
+    <foreground_color>
+      <color name="black-14" red="0" green="0" blue="0">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="GLOBAL canvas" red="200" green="200" blue="200">
+      </color>
+    </background_color>
+    <auto_size>true</auto_size>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>EDM TextupdateClass</name>
+    <pv_name>$(P)$(R)C$(cine):FirstFrame_RBV</pv_name>
+    <x>120</x>
+    <y>125</y>
+    <width>85</width>
+    <font>
+      <font family="Liberation Sans" style="BOLD" size="12.0">
+      </font>
+    </font>
+    <foreground_color>
+      <color name="green-16" red="0" green="224" blue="0">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="Wid-bg/Anno-pri" red="105" green="105" blue="105">
+      </color>
+    </background_color>
+    <horizontal_alignment>1</horizontal_alignment>
+    <vertical_alignment>1</vertical_alignment>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>EDM activeXTextClass</name>
+    <text>First Frame</text>
+    <x>20</x>
+    <y>130</y>
+    <width>60</width>
+    <height>14</height>
+    <font>
+      <font family="Liberation Sans" style="BOLD" size="11.0">
+      </font>
+    </font>
+    <foreground_color>
+      <color name="black-14" red="0" green="0" blue="0">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="GLOBAL canvas" red="200" green="200" blue="200">
+      </color>
+    </background_color>
+    <auto_size>true</auto_size>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>EDM TextupdateClass</name>
+    <pv_name>$(P)$(R)C$(cine):LastFrame_RBV</pv_name>
+    <x>120</x>
+    <y>150</y>
+    <width>85</width>
+    <font>
+      <font family="Liberation Sans" style="BOLD" size="12.0">
+      </font>
+    </font>
+    <foreground_color>
+      <color name="green-16" red="0" green="224" blue="0">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="Wid-bg/Anno-pri" red="105" green="105" blue="105">
+      </color>
+    </background_color>
+    <horizontal_alignment>1</horizontal_alignment>
+    <vertical_alignment>1</vertical_alignment>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>EDM activeXTextClass</name>
+    <text>Last Frame</text>
+    <x>20</x>
+    <y>155</y>
+    <width>59</width>
+    <height>14</height>
+    <font>
+      <font family="Liberation Sans" style="BOLD" size="11.0">
+      </font>
+    </font>
+    <foreground_color>
+      <color name="black-14" red="0" green="0" blue="0">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="GLOBAL canvas" red="200" green="200" blue="200">
+      </color>
+    </background_color>
+    <auto_size>true</auto_size>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>EDM TextupdateClass</name>
+    <pv_name>$(P)$(R)C$(cine):Height_RBV</pv_name>
+    <x>120</x>
+    <y>75</y>
+    <width>85</width>
+    <font>
+      <font family="Liberation Sans" style="BOLD" size="12.0">
+      </font>
+    </font>
+    <foreground_color>
+      <color name="green-16" red="0" green="224" blue="0">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="Wid-bg/Anno-pri" red="105" green="105" blue="105">
+      </color>
+    </background_color>
+    <horizontal_alignment>1</horizontal_alignment>
+    <vertical_alignment>1</vertical_alignment>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>EDM activeXTextClass</name>
+    <text>Height</text>
+    <x>20</x>
+    <y>80</y>
+    <width>35</width>
+    <height>14</height>
+    <font>
+      <font family="Liberation Sans" style="BOLD" size="11.0">
+      </font>
+    </font>
+    <foreground_color>
+      <color name="black-14" red="0" green="0" blue="0">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="GLOBAL canvas" red="200" green="200" blue="200">
+      </color>
+    </background_color>
+    <auto_size>true</auto_size>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>EDM Group 0</name>
+    <x>210</x>
+    <y>20</y>
+    <width>175</width>
+    <height>210</height>
+    <style>3</style>
+    <transparent>true</transparent>
+    <widget type="label" version="2.0.0">
+      <name>EDM activeXTextClass</name>
+      <text>Complete &amp; Valid</text>
+      <x>5</x>
+      <y>25</y>
+      <width>130</width>
+      <font>
+        <font family="Liberation Sans" style="BOLD" size="12.0">
+        </font>
+      </font>
+      <foreground_color>
+        <color name="black-14" red="0" green="0" blue="0">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="GLOBAL canvas" red="200" green="200" blue="200">
+        </color>
+      </background_color>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="byte_monitor" version="2.0.0">
+      <name>EDM ByteClass</name>
+      <pv_name>$(P)$(R)C$(cine):State_RBV.B1</pv_name>
+      <x>140</x>
+      <y>25</y>
+      <width>30</width>
+      <height>15</height>
+      <numBits>1</numBits>
+      <square>true</square>
+      <off_color>
+        <color name="green-19" red="0" green="128" blue="0">
+        </color>
+      </off_color>
+      <on_color>
+        <color name="Monitor: NORMAL" red="0" green="255" blue="0">
+        </color>
+      </on_color>
+      <foreground_color>
+        <color name="black-14" red="0" green="0" blue="0">
+        </color>
+      </foreground_color>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>EDM activeXTextClass</name>
+      <text>Trigger Received</text>
+      <x>5</x>
+      <y>65</y>
+      <width>130</width>
+      <font>
+        <font family="Liberation Sans" style="BOLD" size="12.0">
+        </font>
+      </font>
+      <foreground_color>
+        <color name="black-14" red="0" green="0" blue="0">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="GLOBAL canvas" red="200" green="200" blue="200">
+        </color>
+      </background_color>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>EDM activeXTextClass</name>
+      <text>Waiting for Trigger</text>
+      <x>5</x>
+      <y>45</y>
+      <width>130</width>
+      <font>
+        <font family="Liberation Sans" style="BOLD" size="12.0">
+        </font>
+      </font>
+      <foreground_color>
+        <color name="black-14" red="0" green="0" blue="0">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="GLOBAL canvas" red="200" green="200" blue="200">
+        </color>
+      </background_color>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="byte_monitor" version="2.0.0">
+      <name>EDM ByteClass</name>
+      <pv_name>$(P)$(R)C$(cine):State_RBV.B0</pv_name>
+      <x>140</x>
+      <y>5</y>
+      <width>30</width>
+      <height>15</height>
+      <numBits>1</numBits>
+      <square>true</square>
+      <off_color>
+        <color name="green-19" red="0" green="128" blue="0">
+        </color>
+      </off_color>
+      <on_color>
+        <color name="Monitor: NORMAL" red="0" green="255" blue="0">
+        </color>
+      </on_color>
+      <foreground_color>
+        <color name="black-14" red="0" green="0" blue="0">
+        </color>
+      </foreground_color>
+    </widget>
+    <widget type="byte_monitor" version="2.0.0">
+      <name>EDM ByteClass</name>
+      <pv_name>$(P)$(R)C$(cine):State_RBV.B2</pv_name>
+      <x>140</x>
+      <y>45</y>
+      <width>30</width>
+      <height>15</height>
+      <numBits>1</numBits>
+      <square>true</square>
+      <off_color>
+        <color name="green-19" red="0" green="128" blue="0">
+        </color>
+      </off_color>
+      <on_color>
+        <color name="Monitor: NORMAL" red="0" green="255" blue="0">
+        </color>
+      </on_color>
+      <foreground_color>
+        <color name="black-14" red="0" green="0" blue="0">
+        </color>
+      </foreground_color>
+    </widget>
+    <widget type="byte_monitor" version="2.0.0">
+      <name>EDM ByteClass</name>
+      <pv_name>$(P)$(R)C$(cine):State_RBV.B3</pv_name>
+      <x>140</x>
+      <y>65</y>
+      <width>30</width>
+      <height>15</height>
+      <numBits>1</numBits>
+      <square>true</square>
+      <off_color>
+        <color name="green-19" red="0" green="128" blue="0">
+        </color>
+      </off_color>
+      <on_color>
+        <color name="Monitor: NORMAL" red="0" green="255" blue="0">
+        </color>
+      </on_color>
+      <foreground_color>
+        <color name="black-14" red="0" green="0" blue="0">
+        </color>
+      </foreground_color>
+    </widget>
+    <widget type="byte_monitor" version="2.0.0">
+      <name>EDM ByteClass</name>
+      <pv_name>$(P)$(R)C$(cine):State_RBV.B4</pv_name>
+      <x>140</x>
+      <y>85</y>
+      <width>30</width>
+      <height>15</height>
+      <numBits>1</numBits>
+      <square>true</square>
+      <off_color>
+        <color name="green-19" red="0" green="128" blue="0">
+        </color>
+      </off_color>
+      <on_color>
+        <color name="Monitor: NORMAL" red="0" green="255" blue="0">
+        </color>
+      </on_color>
+      <foreground_color>
+        <color name="black-14" red="0" green="0" blue="0">
+        </color>
+      </foreground_color>
+    </widget>
+    <widget type="byte_monitor" version="2.0.0">
+      <name>EDM ByteClass</name>
+      <pv_name>$(P)$(R)C$(cine):State_RBV.B5</pv_name>
+      <x>140</x>
+      <y>105</y>
+      <width>30</width>
+      <height>15</height>
+      <numBits>1</numBits>
+      <square>true</square>
+      <off_color>
+        <color name="green-19" red="0" green="128" blue="0">
+        </color>
+      </off_color>
+      <on_color>
+        <color name="Monitor: NORMAL" red="0" green="255" blue="0">
+        </color>
+      </on_color>
+      <foreground_color>
+        <color name="black-14" red="0" green="0" blue="0">
+        </color>
+      </foreground_color>
+    </widget>
+    <widget type="byte_monitor" version="2.0.0">
+      <name>EDM ByteClass</name>
+      <pv_name>$(P)$(R)C$(cine):State_RBV.B6</pv_name>
+      <x>140</x>
+      <y>125</y>
+      <width>30</width>
+      <height>15</height>
+      <numBits>1</numBits>
+      <square>true</square>
+      <off_color>
+        <color name="green-19" red="0" green="128" blue="0">
+        </color>
+      </off_color>
+      <on_color>
+        <color name="Monitor: NORMAL" red="0" green="255" blue="0">
+        </color>
+      </on_color>
+      <foreground_color>
+        <color name="black-14" red="0" green="0" blue="0">
+        </color>
+      </foreground_color>
+    </widget>
+    <widget type="byte_monitor" version="2.0.0">
+      <name>EDM ByteClass</name>
+      <pv_name>$(P)$(R)C$(cine):State_RBV.B7</pv_name>
+      <x>140</x>
+      <y>145</y>
+      <width>30</width>
+      <height>15</height>
+      <numBits>1</numBits>
+      <square>true</square>
+      <off_color>
+        <color name="green-19" red="0" green="128" blue="0">
+        </color>
+      </off_color>
+      <on_color>
+        <color name="Monitor: NORMAL" red="0" green="255" blue="0">
+        </color>
+      </on_color>
+      <foreground_color>
+        <color name="black-14" red="0" green="0" blue="0">
+        </color>
+      </foreground_color>
+    </widget>
+    <widget type="byte_monitor" version="2.0.0">
+      <name>EDM ByteClass</name>
+      <pv_name>$(P)$(R)C$(cine):State_RBV.B8</pv_name>
+      <x>140</x>
+      <y>165</y>
+      <width>30</width>
+      <height>15</height>
+      <numBits>1</numBits>
+      <square>true</square>
+      <off_color>
+        <color name="green-19" red="0" green="128" blue="0">
+        </color>
+      </off_color>
+      <on_color>
+        <color name="Monitor: NORMAL" red="0" green="255" blue="0">
+        </color>
+      </on_color>
+      <foreground_color>
+        <color name="black-14" red="0" green="0" blue="0">
+        </color>
+      </foreground_color>
+    </widget>
+    <widget type="byte_monitor" version="2.0.0">
+      <name>EDM ByteClass</name>
+      <pv_name>$(P)$(R)C$(cine):State_RBV.B9</pv_name>
+      <x>140</x>
+      <y>185</y>
+      <width>30</width>
+      <height>15</height>
+      <numBits>1</numBits>
+      <square>true</square>
+      <off_color>
+        <color name="green-19" red="0" green="128" blue="0">
+        </color>
+      </off_color>
+      <on_color>
+        <color name="Monitor: NORMAL" red="0" green="255" blue="0">
+        </color>
+      </on_color>
+      <foreground_color>
+        <color name="black-14" red="0" green="0" blue="0">
+        </color>
+      </foreground_color>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>EDM activeXTextClass</name>
+      <text>Invalid</text>
+      <x>5</x>
+      <y>5</y>
+      <width>130</width>
+      <font>
+        <font family="Liberation Sans" style="BOLD" size="12.0">
+        </font>
+      </font>
+      <foreground_color>
+        <color name="black-14" red="0" green="0" blue="0">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="GLOBAL canvas" red="200" green="200" blue="200">
+        </color>
+      </background_color>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>EDM activeXTextClass</name>
+      <text>Ready</text>
+      <x>5</x>
+      <y>85</y>
+      <width>130</width>
+      <font>
+        <font family="Liberation Sans" style="BOLD" size="12.0">
+        </font>
+      </font>
+      <foreground_color>
+        <color name="black-14" red="0" green="0" blue="0">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="GLOBAL canvas" red="200" green="200" blue="200">
+        </color>
+      </background_color>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>EDM activeXTextClass</name>
+      <text>Default Copy</text>
+      <x>5</x>
+      <y>105</y>
+      <width>130</width>
+      <font>
+        <font family="Liberation Sans" style="BOLD" size="12.0">
+        </font>
+      </font>
+      <foreground_color>
+        <color name="black-14" red="0" green="0" blue="0">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="GLOBAL canvas" red="200" green="200" blue="200">
+        </color>
+      </background_color>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>EDM activeXTextClass</name>
+      <text>Can Accept a Trigger</text>
+      <x>5</x>
+      <y>125</y>
+      <width>130</width>
+      <font>
+        <font family="Liberation Sans" style="BOLD" size="12.0">
+        </font>
+      </font>
+      <foreground_color>
+        <color name="black-14" red="0" green="0" blue="0">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="GLOBAL canvas" red="200" green="200" blue="200">
+        </color>
+      </background_color>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>EDM activeXTextClass</name>
+      <text>Preview Cine</text>
+      <x>5</x>
+      <y>145</y>
+      <width>130</width>
+      <font>
+        <font family="Liberation Sans" style="BOLD" size="12.0">
+        </font>
+      </font>
+      <foreground_color>
+        <color name="black-14" red="0" green="0" blue="0">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="GLOBAL canvas" red="200" green="200" blue="200">
+        </color>
+      </background_color>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>EDM activeXTextClass</name>
+      <text>Active Cine</text>
+      <x>5</x>
+      <y>165</y>
+      <width>130</width>
+      <font>
+        <font family="Liberation Sans" style="BOLD" size="12.0">
+        </font>
+      </font>
+      <foreground_color>
+        <color name="black-14" red="0" green="0" blue="0">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="GLOBAL canvas" red="200" green="200" blue="200">
+        </color>
+      </background_color>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>EDM activeXTextClass</name>
+      <text>Cine Content Saved</text>
+      <x>5</x>
+      <y>185</y>
+      <width>130</width>
+      <font>
+        <font family="Liberation Sans" style="BOLD" size="12.0">
+        </font>
+      </font>
+      <foreground_color>
+        <color name="black-14" red="0" green="0" blue="0">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="GLOBAL canvas" red="200" green="200" blue="200">
+        </color>
+      </background_color>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>EDM TextupdateClass</name>
+    <pv_name>$(P)$(R)C$(cine):Name_RBV</pv_name>
+    <x>60</x>
+    <y>25</y>
+    <width>145</width>
+    <font>
+      <font family="Liberation Sans" style="BOLD" size="12.0">
+      </font>
+    </font>
+    <foreground_color>
+      <color name="green-16" red="0" green="224" blue="0">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="Wid-bg/Anno-pri" red="105" green="105" blue="105">
+      </color>
+    </background_color>
+    <format>6</format>
+    <horizontal_alignment>1</horizontal_alignment>
+    <vertical_alignment>1</vertical_alignment>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>EDM activeXTextClass</name>
+    <text>Name</text>
+    <x>20</x>
+    <y>30</y>
+    <width>30</width>
+    <height>14</height>
+    <font>
+      <font family="Liberation Sans" style="BOLD" size="11.0">
+      </font>
+    </font>
+    <foreground_color>
+      <color name="black-14" red="0" green="0" blue="0">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="GLOBAL canvas" red="200" green="200" blue="200">
+      </color>
+    </background_color>
+    <auto_size>true</auto_size>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>EDM TextupdateClass</name>
+    <pv_name>$(P)$(R)DownloadStartFrame_RBV</pv_name>
+    <x>185</x>
+    <y>230</y>
+    <width>50</width>
+    <font>
+      <font family="Liberation Sans" style="BOLD" size="12.0">
+      </font>
+    </font>
+    <foreground_color>
+      <color name="green-16" red="0" green="224" blue="0">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="Wid-bg/Anno-pri" red="105" green="105" blue="105">
+      </color>
+    </background_color>
+    <horizontal_alignment>1</horizontal_alignment>
+    <vertical_alignment>1</vertical_alignment>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>EDM TextentryClass</name>
+    <pv_name>$(P)$(R)DownloadStartFrame</pv_name>
+    <x>135</x>
+    <y>230</y>
+    <width>50</width>
+    <font>
+      <font family="Liberation Sans" style="BOLD" size="12.0">
+      </font>
+    </font>
+    <foreground_color>
+      <color name="Controller" red="0" green="0" blue="255">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="GLOBAL canvas" red="200" green="200" blue="200">
+      </color>
+    </background_color>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>EDM activeXTextClass</name>
+    <text>Download from:</text>
+    <x>20</x>
+    <y>235</y>
+    <width>84</width>
+    <height>14</height>
+    <font>
+      <font family="Liberation Sans" style="BOLD" size="11.0">
+      </font>
+    </font>
+    <foreground_color>
+      <color name="black-14" red="0" green="0" blue="0">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="GLOBAL canvas" red="200" green="200" blue="200">
+      </color>
+    </background_color>
+    <auto_size>true</auto_size>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>EDM TextentryClass</name>
+    <pv_name>$(P)$(R)DownloadEndFrame</pv_name>
+    <x>260</x>
+    <y>230</y>
+    <width>50</width>
+    <font>
+      <font family="Liberation Sans" style="BOLD" size="12.0">
+      </font>
+    </font>
+    <foreground_color>
+      <color name="Controller" red="0" green="0" blue="255">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="GLOBAL canvas" red="200" green="200" blue="200">
+      </color>
+    </background_color>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>EDM TextupdateClass</name>
+    <pv_name>$(P)$(R)DownloadEndFrame_RBV</pv_name>
+    <x>310</x>
+    <y>230</y>
+    <width>50</width>
+    <font>
+      <font family="Liberation Sans" style="BOLD" size="12.0">
+      </font>
+    </font>
+    <foreground_color>
+      <color name="green-16" red="0" green="224" blue="0">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="Wid-bg/Anno-pri" red="105" green="105" blue="105">
+      </color>
+    </background_color>
+    <horizontal_alignment>1</horizontal_alignment>
+    <vertical_alignment>1</vertical_alignment>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>EDM activeXTextClass</name>
+    <text>to:</text>
+    <x>240</x>
+    <y>235</y>
+    <width>15</width>
+    <height>14</height>
+    <font>
+      <font family="Liberation Sans" style="BOLD" size="11.0">
+      </font>
+    </font>
+    <foreground_color>
+      <color name="black-14" red="0" green="0" blue="0">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="GLOBAL canvas" red="200" green="200" blue="200">
+      </color>
+    </background_color>
+    <auto_size>true</auto_size>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>EDM TextupdateClass</name>
+    <pv_name>$(P)$(R)DownloadCount_RBV</pv_name>
+    <x>145</x>
+    <y>255</y>
+    <width>85</width>
+    <font>
+      <font family="Liberation Sans" style="BOLD" size="12.0">
+      </font>
+    </font>
+    <foreground_color>
+      <color name="green-16" red="0" green="224" blue="0">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="Wid-bg/Anno-pri" red="105" green="105" blue="105">
+      </color>
+    </background_color>
+    <horizontal_alignment>1</horizontal_alignment>
+    <vertical_alignment>1</vertical_alignment>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>EDM activeXTextClass</name>
+    <text>Download counter:</text>
+    <x>20</x>
+    <y>260</y>
+    <height>14</height>
+    <font>
+      <font family="Liberation Sans" style="BOLD" size="11.0">
+      </font>
+    </font>
+    <foreground_color>
+      <color name="black-14" red="0" green="0" blue="0">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="GLOBAL canvas" red="200" green="200" blue="200">
+      </color>
+    </background_color>
+    <auto_size>true</auto_size>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>EDM Group 1</name>
+    <x>270</x>
+    <y>330</y>
+    <width>95</width>
+    <height>40</height>
+    <style>3</style>
+    <transparent>true</transparent>
+    <rules>
+      <rule name="EDM visibility" prop_id="visible" out_exp="false">
+        <exp bool_exp="pv0&gt;=0.0 &amp;&amp; pv0&lt;1.0">
+          <value>false</value>
+        </exp>
+        <exp bool_exp="true">
+          <value>true</value>
+        </exp>
+        <pv_name>$(P)$(R)DownloadCount_RBV</pv_name>
+      </rule>
+    </rules>
+    <widget type="label" version="2.0.0">
+      <name>EDM activeXTextClass</name>
+      <text>Download in
+progress.</text>
+      <x>5</x>
+      <y>5</y>
+      <width>85</width>
+      <height>30</height>
+      <font>
+        <font family="Liberation Sans" style="BOLD" size="12.0">
+        </font>
+      </font>
+      <foreground_color>
+        <color name="Monitor: MAJOR" red="255" green="0" blue="0">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="GLOBAL canvas" red="200" green="200" blue="200">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>EDM Group 2</name>
+    <x>270</x>
+    <y>330</y>
+    <width>95</width>
+    <height>40</height>
+    <style>3</style>
+    <transparent>true</transparent>
+    <rules>
+      <rule name="EDM visibility" prop_id="visible" out_exp="false">
+        <exp bool_exp="pv0&gt;=0.0 &amp;&amp; pv0&lt;1.0">
+          <value>true</value>
+        </exp>
+        <exp bool_exp="true">
+          <value>false</value>
+        </exp>
+        <pv_name>$(P)$(R)DownloadCount_RBV</pv_name>
+      </rule>
+    </rules>
+    <widget type="action_button" version="3.0.0">
+      <name>EDM activeMessageButtonClass</name>
+      <actions>
+        <action type="write_pv">
+          <description>Download</description>
+          <pv_name>$(pv_name)</pv_name>
+          <value>$(cine)</value>
+        </action>
+      </actions>
+      <pv_name>$(P)$(R)Download</pv_name>
+      <text>Download</text>
+      <x>5</x>
+      <y>5</y>
+      <width>85</width>
+      <font>
+        <font family="Liberation Sans" style="BOLD" size="12.0">
+        </font>
+      </font>
+      <foreground_color>
+        <color name="Monitor: MAJOR" red="255" green="0" blue="0">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="GLOBAL canvas" red="200" green="200" blue="200">
+        </color>
+      </background_color>
+    </widget>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>EDM Group 3</name>
+    <x>270</x>
+    <y>295</y>
+    <width>95</width>
+    <height>40</height>
+    <style>3</style>
+    <transparent>true</transparent>
+    <rules>
+      <rule name="EDM visibility" prop_id="visible" out_exp="false">
+        <exp bool_exp="pv0&gt;=0.0 &amp;&amp; pv0&lt;1.0">
+          <value>false</value>
+        </exp>
+        <exp bool_exp="true">
+          <value>true</value>
+        </exp>
+        <pv_name>$(P)$(R)DownloadCount_RBV</pv_name>
+      </rule>
+    </rules>
+    <widget type="action_button" version="3.0.0">
+      <name>EDM activeMessageButtonClass</name>
+      <actions>
+        <action type="write_pv">
+          <description>Abort</description>
+          <pv_name>$(pv_name)</pv_name>
+          <value>1</value>
+        </action>
+      </actions>
+      <pv_name>$(P)$(R)AbortDownload</pv_name>
+      <text>Abort</text>
+      <x>5</x>
+      <y>5</y>
+      <width>85</width>
+      <font>
+        <font family="Liberation Sans" style="BOLD" size="12.0">
+        </font>
+      </font>
+      <foreground_color>
+        <color name="Monitor: MAJOR" red="255" green="0" blue="0">
+        </color>
+      </foreground_color>
+      <background_color>
+        <color name="GLOBAL canvas" red="200" green="200" blue="200">
+        </color>
+      </background_color>
+    </widget>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>EDM activeXTextClass</name>
+    <text>Pixel Token:</text>
+    <x>20</x>
+    <y>310</y>
+    <width>92</width>
+    <font>
+      <font family="Liberation Sans" style="BOLD" size="12.0">
+      </font>
+    </font>
+    <foreground_color>
+      <color name="black-14" red="0" green="0" blue="0">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="GLOBAL canvas" red="200" green="200" blue="200">
+      </color>
+    </background_color>
+    <vertical_alignment>1</vertical_alignment>
+  </widget>
+  <widget type="combo" version="2.0.0">
+    <name>EDM activeMenuButtonClass</name>
+    <pv_name>$(P)$(R)SelectPixelDataFormat</pv_name>
+    <x>135</x>
+    <y>310</y>
+    <width>74</width>
+    <height>20</height>
+    <font>
+      <font family="Liberation Sans" style="BOLD" size="12.0">
+      </font>
+    </font>
+    <foreground_color>
+      <color name="black-14" red="0" green="0" blue="0">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="GLOBAL canvas" red="200" green="200" blue="200">
+      </color>
+    </background_color>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>EDM activeXTextClass</name>
+    <text>Download Speed:</text>
+    <x>20</x>
+    <y>340</y>
+    <width>110</width>
+    <font>
+      <font family="Liberation Sans" style="BOLD" size="12.0">
+      </font>
+    </font>
+    <foreground_color>
+      <color name="black-14" red="0" green="0" blue="0">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="GLOBAL canvas" red="200" green="200" blue="200">
+      </color>
+    </background_color>
+    <vertical_alignment>1</vertical_alignment>
+  </widget>
+  <widget type="combo" version="2.0.0">
+    <name>EDM activeMenuButtonClass</name>
+    <pv_name>$(P)$(R)DownloadSpeed</pv_name>
+    <x>135</x>
+    <y>340</y>
+    <width>74</width>
+    <height>20</height>
+    <font>
+      <font family="Liberation Sans" style="BOLD" size="12.0">
+      </font>
+    </font>
+    <foreground_color>
+      <color name="black-14" red="0" green="0" blue="0">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="GLOBAL canvas" red="200" green="200" blue="200">
+      </color>
+    </background_color>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>EDM activeXTextClass</name>
+    <text>Dropped packets:</text>
+    <x>20</x>
+    <y>285</y>
+    <width>93</width>
+    <height>14</height>
+    <font>
+      <font family="Liberation Sans" style="BOLD" size="11.0">
+      </font>
+    </font>
+    <foreground_color>
+      <color name="black-14" red="0" green="0" blue="0">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="GLOBAL canvas" red="200" green="200" blue="200">
+      </color>
+    </background_color>
+    <auto_size>true</auto_size>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>EDM TextupdateClass</name>
+    <pv_name>$(P)$(R)DroppedPackets_RBV</pv_name>
+    <x>145</x>
+    <y>280</y>
+    <width>85</width>
+    <font>
+      <font family="Liberation Sans" style="BOLD" size="12.0">
+      </font>
+    </font>
+    <foreground_color>
+      <color name="green-16" red="0" green="224" blue="0">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="Wid-bg/Anno-pri" red="105" green="105" blue="105">
+      </color>
+    </background_color>
+    <horizontal_alignment>1</horizontal_alignment>
+    <vertical_alignment>1</vertical_alignment>
+  </widget>
+</display>
