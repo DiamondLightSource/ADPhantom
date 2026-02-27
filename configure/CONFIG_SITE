@@ -1,3 +1,5 @@
+
+
 # CONFIG_SITE
 
 # Make any application-specific changes to the EPICS build
@@ -19,7 +21,7 @@ CHECK_RELEASE = YES
 # Set this when you only want to compile this application
 #   for a subset of the cross-compiled target architectures
 #   that Base is built for.
-CROSS_COMPILER_TARGET_ARCHS = 
+#CROSS_COMPILER_TARGET_ARCHS = vxWorks-68040
 
 # To install files into a location other than $(TOP) define
 #   INSTALL_LOCATION here.
@@ -32,34 +34,13 @@ CROSS_COMPILER_TARGET_ARCHS =
 #   take effect.
 #IOCS_APPL_TOP = </IOC/path/to/application/top>
 
-USR_CPPFLAGS_Linux += -std=c++11
-USR_CPPFLAGS_Linux += -O3
-
-#Switch these on for debugging
-HOST_OPT=NO
-CROSS_OPT=NO
-#USR_CXXFLAGS=-g
-#USR_LDFLAGS=-g
-#USR_CPPFLAGS_Linux += -g
-#USR_CFLAGS_Linux += -g
-#USR_LDFLAGS_Linux += -g
-STATIC_BUILD=YES
-
-#Switch these on for gprof profiling
-#USR_CXXFLAGS=-pg
-#USR_LDFLAGS=-pg
-#USR_CPPFLAGS_Linux += -pg
-#USR_CPPFLAGS_Linux += -Og
-#USR_CFLAGS_Linux += -pg
-#USR_LDFLAGS_Linux += -pg
-
-USR_CXXFLAHS=-O3
-
 # Get settings from AREA_DETECTOR, so we only have to configure once for all detectors if we want to
-#-include $(AREA_DETECTOR)/configure/CONFIG_SITE
-#-include $(AREA_DETECTOR)/configure/CONFIG_SITE.$(EPICS_HOST_ARCH)
-#-include $(AREA_DETECTOR)/configure/CONFIG_SITE.$(EPICS_HOST_ARCH).Common
-#ifdef T_A
-#  -include $(AREA_DETECTOR)/configure/CONFIG_SITE.Common.$(T_A)
-#  -include $(AREA_DETECTOR)/configure/CONFIG_SITE.$(EPICS_HOST_ARCH).$(T_A)
-#endif
+-include $(AREA_DETECTOR)/configure/CONFIG_SITE
+-include $(AREA_DETECTOR)/configure/CONFIG_SITE.$(EPICS_HOST_ARCH)
+-include $(AREA_DETECTOR)/configure/CONFIG_SITE.$(EPICS_HOST_ARCH).Common
+ifdef T_A
+  -include $(AREA_DETECTOR)/configure/CONFIG_SITE.Common.$(T_A)
+  -include $(AREA_DETECTOR)/configure/CONFIG_SITE.$(EPICS_HOST_ARCH).$(T_A)
+endif
+
+-include $(TOP)/configure/CONFIG_SITE.local

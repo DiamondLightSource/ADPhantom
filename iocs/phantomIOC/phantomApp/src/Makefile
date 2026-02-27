@@ -16,6 +16,7 @@ $(PROD_NAME)_SRCS += $(PROD_NAME)_registerRecordDeviceDriver.cpp $(PROD_NAME)Mai
 
 # Add locally compiled object code
 $(PROD_NAME)_LIBS += phantom
+$(PROD_NAME)_SYS_LIBS += pcap
 
 # Gets dbd and lib files required for standard areaDetector driver
 include $(ADCORE)/ADApp/commonDriverMakefile

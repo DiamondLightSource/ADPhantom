@@ -33,14 +33,13 @@ CHECK_RELEASE = YES
 #IOCS_APPL_TOP = </IOC/path/to/application/top>
 
 # Get settings from AREA DETECTOR, so we only have to configure once for all detectors if we want to
--include $(AREADETECTOR)/configure/CONFIG_SITE
--include $(AREADETECTOR)/configure/CONFIG_SITE.$(EPICS_HOST_ARCH)
--include $(AREADETECTOR)/configure/CONFIG_SITE.$(EPICS_HOST_ARCH).Common
+-include $(AREA_DETECTOR)/configure/CONFIG_SITE
+-include $(AREA_DETECTOR)/configure/CONFIG_SITE.$(EPICS_HOST_ARCH)
+-include $(AREA_DETECTOR)/configure/CONFIG_SITE.$(EPICS_HOST_ARCH).Common
 ifdef T_A
-  -include $(AREADETECTOR)/configure/CONFIG_SITE.Common.$(T_A)
-  -include $(AREADETECTOR)/configure/CONFIG_SITE.$(EPICS_HOST_ARCH).$(T_A)
+  -include $(AREA_DETECTOR)/configure/CONFIG_SITE.Common.$(T_A)
+  -include $(AREA_DETECTOR)/configure/CONFIG_SITE.$(EPICS_HOST_ARCH).$(T_A)
 endif
 
-#Set this for Channel access only
-WITH_PVA = NO
-
+-include $(ADXSPD)/configure/CONFIG_SITE.local
+-include $(TOP)/configure/CONFIG_SITE.local

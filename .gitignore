@@ -1,3 +1,4 @@
+envPaths
 *~
 O.*
 bin
@@ -7,6 +8,5 @@ data
 documentation
 lib
 .svn*
-iocs/*IOC*
-iocs/example
 .idea
+*.local

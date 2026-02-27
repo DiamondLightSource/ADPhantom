@@ -18,6 +18,29 @@ record(calcout, "$(P)$(R)AcqNotify")
   field(SCAN,  "1 second")
 }
 
+record(ao, "$(P)$(R)AcquireTimeMs") {
+  field(DTYP, "Soft Channel")
+  field(DESC, "Acquisition time in milliseconds")
+  field(FLNK, "$(P)$(R)CalcAcquireTime PP NMS")
+  field(EGU, "ms")
+}
+
+record(calcout, "$(P)$(R)CalcAcquireTime") {
+  field(DTYP, "Soft Channel")
+  field(INPA, "$(P)$(R)AcquireTimeMs")
+  field(CALC, "A / 1000")
+  field(OOPT, "On Change")
+  field(OUT, "$(P)$(R)AcquireTime PP NMS")
+}
+
+record(calcout, "$(P)$(R)AcquireTimeMs_RBV") {
+  field(DTYP, "Soft Channel")
+  field(INPA, "$(P)$(R)AcquireTime_RBV")
+  field(CALC, "A * 1000")
+  field(EGU, "ms")
+  field(SCAN, "1 second")
+}
+
 ################################################################
 ###
 ### Partition and Cine Count
@@ -647,6 +670,7 @@ record(longout, "$(P)$(R)EDR")
 {
   field(DESC, "Extended Dynamic Range in ns")
   field(DTYP, "asynInt32")
+  field(EGU, "ns")
   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_EDR")
 }
 
@@ -654,6 +678,7 @@ record(longin, "$(P)$(R)EDR_RBV")
 {
   field(DESC, "Extended Dynamic Range in ns")
   field(DTYP, "asynInt32")
+  field(EGU, "ns")
   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_EDR")
   field(SCAN, "I/O Intr")
 }
@@ -662,6 +687,7 @@ record(longout, "$(P)$(R)FrameDelay")
 {
   field(DESC, "Frame Delay in us")
   field(DTYP, "asynInt32")
+  field(EGU, "us")
   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_FRAME_DELAY")
 }
 
@@ -669,6 +695,7 @@ record(longin, "$(P)$(R)FrameDelay_RBV")
 {
   field(DESC, "Frame Delay in us")
   field(DTYP, "asynInt32")
+  field(EGU, "us")
   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PHANTOM_FRAME_DELAY")
   field(SCAN, "I/O Intr")
 }

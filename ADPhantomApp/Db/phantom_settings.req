@@ -1,0 +1,37 @@
+file "ADBase_settings.req", P=$(P),  R=$(R)
+
+# ADPhantom specific settings
+$(P)$(R)AcquireTimeMs
+$(P)$(R)PostTrigFrames
+$(P)$(R)AutoAdvance
+$(P)$(R)AutoSave
+$(P)$(R)AutoRestart
+$(P)$(R)AutoBref
+$(P)$(R)CineName
+$(P)$(R)SelectedCine
+$(P)$(R)DownloadStartFrame
+$(P)$(R)DownloadEndFrame
+$(P)$(R)DownloadStartCine
+$(P)$(R)DownloadEndCine
+$(P)$(R)DownloadFrameMode
+$(P)$(R)DownloadSpeed
+$(P)$(R)MarkCineSaved
+$(P)$(R)ExtSyncType
+$(P)$(R)EDR
+$(P)$(R)FrameDelay
+$(P)$(R)TriggerEdge
+$(P)$(R)TriggerFilter
+$(P)$(R)ReadySignal
+$(P)$(R)Aux1PinMode
+$(P)$(R)Aux2PinMode
+$(P)$(R)Aux4PinMode
+$(P)$(R)QuietFan
+$(P)$(R)AutoTriggerX
+$(P)$(R)AutoTriggerY
+$(P)$(R)AutoTriggerW
+$(P)$(R)AutoTriggerH
+$(P)$(R)AutoTriggerThresh
+$(P)$(R)AutoTriggerArea
+$(P)$(R)AutoTriggerInterval
+$(P)$(R)AutoTriggerMode
+$(P)$(R)SelectPixelDataFormat
